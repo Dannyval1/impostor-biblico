@@ -1,0 +1,2025 @@
+[
+    {
+        "id": "pb_001",
+        "word": "Adán",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Primer hombre creado por Dios"
+    },
+    {
+        "id": "pb_002",
+        "word": "Eva",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Primera mujer y esposa de Adán"
+    },
+    {
+        "id": "pb_003",
+        "word": "Noé",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Construyó un arca para el diluvio"
+    },
+    {
+        "id": "pb_004",
+        "word": "Abraham",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Padre de la fe, llamado por Dios"
+    },
+    {
+        "id": "pb_005",
+        "word": "Sara",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Esposa de Abraham, madre de Isaac"
+    },
+    {
+        "id": "pb_006",
+        "word": "Isaac",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Hijo de Abraham y Sara"
+    },
+    {
+        "id": "pb_007",
+        "word": "Jacob",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Tuvo 12 hijos, padres de las tribus"
+    },
+    {
+        "id": "pb_008",
+        "word": "José",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Vendido por sus hermanos, gobernó Egipto"
+    },
+    {
+        "id": "pb_009",
+        "word": "Moisés",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Líder del Éxodo, recibió los mandamientos"
+    },
+    {
+        "id": "pb_010",
+        "word": "Aarón",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hermano de Moisés, primer sumo sacerdote"
+    },
+    {
+        "id": "pb_011",
+        "word": "Josué",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Conquistó Jericó y la tierra prometida"
+    },
+    {
+        "id": "pb_012",
+        "word": "Sansón",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Juez con fuerza sobrenatural en su cabello"
+    },
+    {
+        "id": "pb_013",
+        "word": "Rut",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Moabita leal a Noemí, bisabuela de David"
+    },
+    {
+        "id": "pb_014",
+        "word": "Samuel",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Último juez, ungió a los primeros reyes"
+    },
+    {
+        "id": "pb_015",
+        "word": "Saúl",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Primer rey de Israel"
+    },
+    {
+        "id": "pb_016",
+        "word": "David",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Rey pastor, venció a Goliat"
+    },
+    {
+        "id": "pb_017",
+        "word": "Betsabé",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Esposa de David, madre de Salomón"
+    },
+    {
+        "id": "pb_018",
+        "word": "Salomón",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Rey sabio, construyó el templo"
+    },
+    {
+        "id": "pb_019",
+        "word": "Elías",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Profeta que ascendió al cielo en un torbellino"
+    },
+    {
+        "id": "pb_020",
+        "word": "Eliseo",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Discípulo de Elías, hizo muchos milagros"
+    },
+    {
+        "id": "pb_021",
+        "word": "Isaías",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta que vio al Señor en el templo"
+    },
+    {
+        "id": "pb_022",
+        "word": "Jeremías",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta llorón que anunció el exilio"
+    },
+    {
+        "id": "pb_023",
+        "word": "Ezequiel",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta que vio el valle de huesos secos"
+    },
+    {
+        "id": "pb_024",
+        "word": "Daniel",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Sobrevivió al foso de los leones"
+    },
+    {
+        "id": "pb_025",
+        "word": "Jonás",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Profeta tragado por un gran pez"
+    },
+    {
+        "id": "pb_026",
+        "word": "Ester",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Reina que salvó a su pueblo"
+    },
+    {
+        "id": "pb_027",
+        "word": "Job",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Hombre justo que sufrió grandes pérdidas"
+    },
+    {
+        "id": "pb_028",
+        "word": "Nehemías",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Reconstruyó las murallas de Jerusalén"
+    },
+    {
+        "id": "pb_029",
+        "word": "Esdras",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Sacerdote y escriba que restauró la ley"
+    },
+    {
+        "id": "pb_030",
+        "word": "Débora",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Única mujer juez de Israel"
+    },
+    {
+        "id": "pb_031",
+        "word": "Gedeón",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Juez que venció con 300 hombres"
+    },
+    {
+        "id": "pb_032",
+        "word": "Ana",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Madre de Samuel, oró por un hijo"
+    },
+    {
+        "id": "pb_033",
+        "word": "Natán",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta que confrontó a David"
+    },
+    {
+        "id": "pb_034",
+        "word": "Goliat",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Gigante filisteo derrotado por David"
+    },
+    {
+        "id": "pb_035",
+        "word": "Absalón",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hijo rebelde de David"
+    },
+    {
+        "id": "pb_036",
+        "word": "Jezabel",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Reina malvada esposa de Acab"
+    },
+    {
+        "id": "pb_037",
+        "word": "Naamán",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "General sirio sanado de lepra"
+    },
+    {
+        "id": "pb_038",
+        "word": "Ezequías",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Rey justo, se le añadieron 15 años de vida"
+    },
+    {
+        "id": "pb_039",
+        "word": "Josías",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Rey niño que restauró el templo"
+    },
+    {
+        "id": "pb_040",
+        "word": "Melquisedec",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Rey y sacerdote que bendijo a Abraham"
+    },
+    {
+        "id": "pb_041",
+        "word": "Jesús",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Hijo de Dios, Salvador del mundo"
+    },
+    {
+        "id": "pb_042",
+        "word": "María",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Madre virgen de Jesús"
+    },
+    {
+        "id": "pb_043",
+        "word": "José",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Padre terrenal de Jesús, carpintero"
+    },
+    {
+        "id": "pb_044",
+        "word": "Juan el Bautista",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Predicador que bautizó a Jesús"
+    },
+    {
+        "id": "pb_045",
+        "word": "Pedro",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol pescador, recibió las llaves"
+    },
+    {
+        "id": "pb_046",
+        "word": "Juan",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol amado, escribió el Apocalipsis"
+    },
+    {
+        "id": "pb_047",
+        "word": "Santiago",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol hermano de Juan"
+    },
+    {
+        "id": "pb_048",
+        "word": "Andrés",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Apóstol hermano de Pedro"
+    },
+    {
+        "id": "pb_049",
+        "word": "Felipe",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Apóstol de Betsaida"
+    },
+    {
+        "id": "pb_050",
+        "word": "Tomás",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol que dudó de la resurrección"
+    },
+    {
+        "id": "pb_051",
+        "word": "Mateo",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol cobrador de impuestos"
+    },
+    {
+        "id": "pb_052",
+        "word": "Judas Iscariote",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol que traicionó a Jesús"
+    },
+    {
+        "id": "pb_053",
+        "word": "Pablo",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Apóstol perseguidor convertido"
+    },
+    {
+        "id": "pb_054",
+        "word": "Bernabé",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Compañero misionero de Pablo"
+    },
+    {
+        "id": "pb_055",
+        "word": "Timoteo",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Joven discípulo y colaborador de Pablo"
+    },
+    {
+        "id": "pb_056",
+        "word": "Silas",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Compañero de Pablo, cantó en la cárcel"
+    },
+    {
+        "id": "pb_057",
+        "word": "Lucas",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Médico y evangelista compañero de Pablo"
+    },
+    {
+        "id": "pb_058",
+        "word": "Marcos",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Evangelista, sobrino de Bernabé"
+    },
+    {
+        "id": "pb_059",
+        "word": "Esteban",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Primer mártir cristiano"
+    },
+    {
+        "id": "pb_060",
+        "word": "Felipe el evangelista",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Diácono que evangelizó en Samaria"
+    },
+    {
+        "id": "pb_061",
+        "word": "María Magdalena",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Primera en ver a Jesús resucitado"
+    },
+    {
+        "id": "pb_062",
+        "word": "Lázaro",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Amigo de Jesús, resucitado después de 4 días"
+    },
+    {
+        "id": "pb_063",
+        "word": "Marta",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hermana de María y Lázaro, servidora"
+    },
+    {
+        "id": "pb_064",
+        "word": "Nicodemo",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Fariseo que visitó a Jesús de noche"
+    },
+    {
+        "id": "pb_065",
+        "word": "Zaqueo",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Publicano que se subió a un árbol"
+    },
+    {
+        "id": "pb_066",
+        "word": "Herodes",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Rey que ordenó matar a los niños"
+    },
+    {
+        "id": "pb_067",
+        "word": "Pilato",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Gobernador que condenó a Jesús"
+    },
+    {
+        "id": "pb_068",
+        "word": "Caifás",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Sumo sacerdote en el juicio de Jesús"
+    },
+    {
+        "id": "pb_069",
+        "word": "Barrabás",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Prisionero liberado en lugar de Jesús"
+    },
+    {
+        "id": "pb_070",
+        "word": "Ananías y Safira",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Pareja que mintió al Espíritu Santo"
+    },
+    {
+        "id": "pb_071",
+        "word": "Cornelio",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Primer gentil convertido"
+    },
+    {
+        "id": "pb_072",
+        "word": "Lidia",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Vendedora de púrpura convertida en Filipos"
+    },
+    {
+        "id": "pb_073",
+        "word": "Priscila y Aquila",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Pareja misionera fabricantes de tiendas"
+    },
+    {
+        "id": "pb_074",
+        "word": "Apolos",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Predicador elocuente instruido por Priscila"
+    },
+    {
+        "id": "pb_075",
+        "word": "Onésimo",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Esclavo fugitivo convertido por Pablo"
+    },
+    {
+        "id": "pb_076",
+        "word": "Filemón",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Amo de Onésimo, recibió carta de Pablo"
+    },
+    {
+        "id": "pb_077",
+        "word": "Tito",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Discípulo de Pablo en Creta"
+    },
+    {
+        "id": "pb_078",
+        "word": "Epafrodito",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Mensajero de la iglesia de Filipos"
+    },
+    {
+        "id": "pb_079",
+        "word": "Dorcas",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Mujer resucitada por Pedro, cosía túnicas"
+    },
+    {
+        "id": "pb_080",
+        "word": "Eutico",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Joven que se durmió y cayó de la ventana"
+    },
+    {
+        "id": "pb_081",
+        "word": "Gamaliel",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Maestro fariseo que defendió a los apóstoles"
+    },
+    {
+        "id": "pb_082",
+        "word": "Simón el mago",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Intentó comprar el poder del Espíritu Santo"
+    },
+    {
+        "id": "pb_083",
+        "word": "Elimas",
+        "category": "personajes_biblicos",
+        "difficulty": "hard",
+        "hint": "Mago cegado por Pablo en Chipre"
+    },
+    {
+        "id": "pb_084",
+        "word": "Jairo",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Principal de sinagoga cuya hija resucitó Jesús"
+    },
+    {
+        "id": "pb_085",
+        "word": "La mujer samaritana",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesús le habló junto al pozo de Jacob"
+    },
+    {
+        "id": "pb_086",
+        "word": "Gabriel",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Ángel que anunció el nacimiento de Jesús"
+    },
+    {
+        "id": "pb_087",
+        "word": "Miguel",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Arcángel guerrero"
+    },
+    {
+        "id": "pb_088",
+        "word": "Satanás",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Adversario, tentó a Jesús en el desierto"
+    },
+    {
+        "id": "pb_089",
+        "word": "Caín",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Primer hijo de Adán, mató a su hermano"
+    },
+    {
+        "id": "pb_090",
+        "word": "Abel",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Segundo hijo de Adán, pastor de ovejas"
+    },
+    {
+        "id": "pb_091",
+        "word": "Set",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Tercer hijo de Adán y Eva"
+    },
+    {
+        "id": "pb_092",
+        "word": "Enoc",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hombre que caminó con Dios y no murió"
+    },
+    {
+        "id": "pb_093",
+        "word": "Matusalén",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hombre más longevo de la Biblia"
+    },
+    {
+        "id": "pb_094",
+        "word": "Lot",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Sobrino de Abraham, escapó de Sodoma"
+    },
+    {
+        "id": "pb_095",
+        "word": "Ismael",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hijo de Abraham y Agar"
+    },
+    {
+        "id": "pb_096",
+        "word": "Esaú",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hermano gemelo de Jacob, vendió primogenitura"
+    },
+    {
+        "id": "pb_097",
+        "word": "Raquel",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Esposa amada de Jacob, madre de José"
+    },
+    {
+        "id": "pb_098",
+        "word": "Lea",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Primera esposa de Jacob, hermana de Raquel"
+    },
+    {
+        "id": "pb_099",
+        "word": "Benjamín",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Hijo menor de Jacob y Raquel"
+    },
+    {
+        "id": "pb_100",
+        "word": "Faraón",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Gobernante de Egipto en tiempos de Moisés"
+    },
+    {
+        "id": "lb_001",
+        "word": "Génesis",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Primer libro, relata la creación"
+    },
+    {
+        "id": "lb_002",
+        "word": "Éxodo",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Salida de Egipto y los diez mandamientos"
+    },
+    {
+        "id": "lb_003",
+        "word": "Levítico",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Leyes para los levitas y sacerdotes"
+    },
+    {
+        "id": "lb_004",
+        "word": "Números",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Censo del pueblo en el desierto"
+    },
+    {
+        "id": "lb_005",
+        "word": "Deuteronomio",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Segunda ley, discursos de Moisés"
+    },
+    {
+        "id": "lb_006",
+        "word": "Josué",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Conquista de la tierra prometida"
+    },
+    {
+        "id": "lb_007",
+        "word": "Jueces",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Líderes de Israel antes de los reyes"
+    },
+    {
+        "id": "lb_008",
+        "word": "Rut",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Historia de una moabita fiel"
+    },
+    {
+        "id": "lb_009",
+        "word": "1 Samuel",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Nacimiento de Samuel y reinado de Saúl"
+    },
+    {
+        "id": "lb_010",
+        "word": "2 Samuel",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Reinado del rey David"
+    },
+    {
+        "id": "lb_011",
+        "word": "1 Reyes",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Salomón y división del reino"
+    },
+    {
+        "id": "lb_012",
+        "word": "2 Reyes",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Historia de los reinos hasta el exilio"
+    },
+    {
+        "id": "lb_013",
+        "word": "1 Crónicas",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Genealogías y reinado de David"
+    },
+    {
+        "id": "lb_014",
+        "word": "2 Crónicas",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Desde Salomón hasta el exilio"
+    },
+    {
+        "id": "lb_015",
+        "word": "Esdras",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Regreso del exilio y reconstrucción"
+    },
+    {
+        "id": "lb_016",
+        "word": "Nehemías",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Reconstrucción de las murallas"
+    },
+    {
+        "id": "lb_017",
+        "word": "Ester",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Reina que salvó a su pueblo"
+    },
+    {
+        "id": "lb_018",
+        "word": "Job",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Hombre justo que sufrió"
+    },
+    {
+        "id": "lb_019",
+        "word": "Salmos",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "150 cánticos y oraciones"
+    },
+    {
+        "id": "lb_020",
+        "word": "Proverbios",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Sabiduría práctica de Salomón"
+    },
+    {
+        "id": "lb_021",
+        "word": "Eclesiastés",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Vanidad de vanidades, todo es vanidad"
+    },
+    {
+        "id": "lb_022",
+        "word": "Cantares",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Poema de amor de Salomón"
+    },
+    {
+        "id": "lb_023",
+        "word": "Isaías",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Profecías sobre el Mesías"
+    },
+    {
+        "id": "lb_024",
+        "word": "Jeremías",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta llorón"
+    },
+    {
+        "id": "lb_025",
+        "word": "Lamentaciones",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Lamentos por Jerusalén"
+    },
+    {
+        "id": "lb_026",
+        "word": "Ezequiel",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Visiones del valle de huesos"
+    },
+    {
+        "id": "lb_027",
+        "word": "Daniel",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Profeta en Babilonia, foso de leones"
+    },
+    {
+        "id": "lb_028",
+        "word": "Oseas",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta del amor fiel de Dios"
+    },
+    {
+        "id": "lb_029",
+        "word": "Joel",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Profecía de plaga de langostas"
+    },
+    {
+        "id": "lb_030",
+        "word": "Amós",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Profeta pastor de justicia social"
+    },
+    {
+        "id": "lb_031",
+        "word": "Abdías",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Libro más corto del Antiguo Testamento"
+    },
+    {
+        "id": "lb_032",
+        "word": "Jonás",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Profeta tragado por gran pez"
+    },
+    {
+        "id": "lb_033",
+        "word": "Miqueas",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Profecía del lugar de nacimiento del Mesías"
+    },
+    {
+        "id": "lb_034",
+        "word": "Nahúm",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Profecía contra Nínive"
+    },
+    {
+        "id": "lb_035",
+        "word": "Habacuc",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "El justo por su fe vivirá"
+    },
+    {
+        "id": "lb_036",
+        "word": "Sofonías",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Profecía del día del Señor"
+    },
+    {
+        "id": "lb_037",
+        "word": "Hageo",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Reconstrucción del templo post-exilio"
+    },
+    {
+        "id": "lb_038",
+        "word": "Zacarías",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Visiones y profecías mesiánicas"
+    },
+    {
+        "id": "lb_039",
+        "word": "Malaquías",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Último libro del Antiguo Testamento"
+    },
+    {
+        "id": "lb_040",
+        "word": "Mateo",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Evangelio para los judíos"
+    },
+    {
+        "id": "lb_041",
+        "word": "Marcos",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Evangelio más corto y rápido"
+    },
+    {
+        "id": "lb_042",
+        "word": "Lucas",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Evangelio médico e histórico"
+    },
+    {
+        "id": "lb_043",
+        "word": "Juan",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "En el principio era el Verbo"
+    },
+    {
+        "id": "lb_044",
+        "word": "Hechos",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Historia de la iglesia primitiva"
+    },
+    {
+        "id": "lb_045",
+        "word": "Romanos",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Epístola sobre justificación por fe"
+    },
+    {
+        "id": "lb_046",
+        "word": "1 Corintios",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Carta sobre problemas en la iglesia"
+    },
+    {
+        "id": "lb_047",
+        "word": "2 Corintios",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Pablo defiende su apostolado"
+    },
+    {
+        "id": "lb_048",
+        "word": "Gálatas",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Libertad en Cristo vs legalismo"
+    },
+    {
+        "id": "lb_049",
+        "word": "Efesios",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Carta sobre la iglesia como cuerpo"
+    },
+    {
+        "id": "lb_050",
+        "word": "Filipenses",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Carta de gozo desde la cárcel"
+    },
+    {
+        "id": "lb_051",
+        "word": "Colosenses",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Supremacía de Cristo"
+    },
+    {
+        "id": "lb_052",
+        "word": "1 Tesalonicenses",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Segunda venida de Cristo"
+    },
+    {
+        "id": "lb_053",
+        "word": "2 Tesalonicenses",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Más sobre la segunda venida"
+    },
+    {
+        "id": "lb_054",
+        "word": "1 Timoteo",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Carta pastoral a un joven líder"
+    },
+    {
+        "id": "lb_055",
+        "word": "2 Timoteo",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Última carta de Pablo"
+    },
+    {
+        "id": "lb_056",
+        "word": "Tito",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Carta sobre liderazgo en la iglesia"
+    },
+    {
+        "id": "lb_057",
+        "word": "Filemón",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Carta sobre un esclavo fugitivo"
+    },
+    {
+        "id": "lb_058",
+        "word": "Hebreos",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesús superior a los ángeles y profetas"
+    },
+    {
+        "id": "lb_059",
+        "word": "Santiago",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Fe sin obras está muerta"
+    },
+    {
+        "id": "lb_060",
+        "word": "1 Pedro",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Esperanza en medio del sufrimiento"
+    },
+    {
+        "id": "lb_061",
+        "word": "2 Pedro",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Advertencia contra falsos maestros"
+    },
+    {
+        "id": "lb_062",
+        "word": "1 Juan",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Dios es amor"
+    },
+    {
+        "id": "lb_063",
+        "word": "2 Juan",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Carta breve sobre el amor y la verdad"
+    },
+    {
+        "id": "lb_064",
+        "word": "3 Juan",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Carta a Gayo sobre hospitalidad"
+    },
+    {
+        "id": "lb_065",
+        "word": "Judas",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Advertencia contra la apostasía"
+    },
+    {
+        "id": "lb_066",
+        "word": "Apocalipsis",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Revelación del fin de los tiempos"
+    },
+    {
+        "id": "lb_067",
+        "word": "Pentateuco",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Primeros cinco libros de la Biblia"
+    },
+    {
+        "id": "lb_068",
+        "word": "Torá",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Nombre hebreo del Pentateuco"
+    },
+    {
+        "id": "lb_069",
+        "word": "Evangelios",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Cuatro relatos de la vida de Jesús"
+    },
+    {
+        "id": "lb_075",
+        "word": "Antiguo Testamento",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Primera parte de la Biblia, 39 libros"
+    },
+    {
+        "id": "lb_076",
+        "word": "Nuevo Testamento",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Segunda parte de la Biblia, 27 libros"
+    },
+    {
+        "id": "lb_080",
+        "word": "Sinópticos",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Mateo, Marcos y Lucas"
+    },
+    {
+        "id": "lb_081",
+        "word": "Septuaginta",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Traducción griega del Antiguo Testamento"
+    },
+    {
+        "id": "lb_082",
+        "word": "Biblia",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Palabra de Dios escrita"
+    },
+    {
+        "id": "lb_083",
+        "word": "Escrituras",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Textos sagrados inspirados"
+    },
+    {
+        "id": "lb_084",
+        "word": "Palabra de Dios",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Revelación escrita del Creador"
+    },
+    {
+        "id": "lb_085",
+        "word": "Manuscritos",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Copias antiguas de textos bíblicos"
+    },
+    {
+        "id": "lb_086",
+        "word": "Canon",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Libros aceptados como Escritura"
+    },
+    {
+        "id": "lb_087",
+        "word": "Apócrifos",
+        "category": "libros_biblicos",
+        "difficulty": "hard",
+        "hint": "Libros deuterocanónicos"
+    },
+    {
+        "id": "lb_089",
+        "word": "Pergamino",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Material de escritura de piel animal"
+    },
+    {
+        "id": "lb_090",
+        "word": "Papiro",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Planta usada para hacer papel antiguo"
+    },
+    {
+        "id": "lb_091",
+        "word": "Rollo",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Forma antigua de libro enrollado"
+    },
+    {
+        "id": "lb_092",
+        "word": "Traducción",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Versión en otro idioma"
+    },
+    {
+        "id": "lb_093",
+        "word": "Versículo",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Pequeña división numerada"
+    },
+    {
+        "id": "lb_094",
+        "word": "Capítulo",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "División principal de un libro"
+    },
+    {
+        "id": "lb_095",
+        "word": "Concordancia",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Índice de palabras bíblicas"
+    },
+    {
+        "id": "lb_097",
+        "word": "Parábola",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Historia con enseñanza espiritual"
+    },
+    {
+        "id": "lb_098",
+        "word": "Profecía",
+        "category": "libros_biblicos",
+        "difficulty": "easy",
+        "hint": "Mensaje revelado por Dios"
+    },
+    {
+        "id": "lb_099",
+        "word": "Genealogía",
+        "category": "libros_biblicos",
+        "difficulty": "medium",
+        "hint": "Registro de descendientes"
+    },
+    {
+        "id": "ob_001",
+        "word": "Cruz",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Símbolo cristiano principal"
+    },
+    {
+        "id": "ob_002",
+        "word": "Arca del Pacto",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Caja sagrada con las tablas de la ley"
+    },
+    {
+        "id": "ob_003",
+        "word": "Arca de Noé",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Barco gigante del diluvio"
+    },
+    {
+        "id": "ob_004",
+        "word": "Tablas de la Ley",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Piedras con los Diez Mandamientos"
+    },
+    {
+        "id": "ob_005",
+        "word": "Manto",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Capa de Elías y Eliseo"
+    },
+    {
+        "id": "ob_006",
+        "word": "Vara de Moisés",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Bastón que se convirtió en serpiente"
+    },
+    {
+        "id": "ob_007",
+        "word": "Honda",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Arma que David usó contra Goliat"
+    },
+    {
+        "id": "ob_008",
+        "word": "Lira",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Instrumento musical de David"
+    },
+    {
+        "id": "ob_009",
+        "word": "Trompeta",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Instrumento que derribó Jericó"
+    },
+    {
+        "id": "ob_010",
+        "word": "Corona de espinas",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Puesta a Jesús en la crucifixión"
+    },
+    {
+        "id": "ob_011",
+        "word": "Clavos",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Usados en la crucifixión"
+    },
+    {
+        "id": "ob_012",
+        "word": "Lanza",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Arma que traspasó el costado de Jesús"
+    },
+    {
+        "id": "ob_013",
+        "word": "Copa",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Usada en la última cena"
+    },
+    {
+        "id": "ob_014",
+        "word": "Pan",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Cuerpo de Cristo en la comunión"
+    },
+    {
+        "id": "ob_015",
+        "word": "Vino",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Sangre de Cristo en la comunión"
+    },
+    {
+        "id": "ob_016",
+        "word": "Aceite",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Usado para ungir reyes y enfermos"
+    },
+    {
+        "id": "ob_017",
+        "word": "Incienso",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Perfume usado en el templo"
+    },
+    {
+        "id": "ob_018",
+        "word": "Altar",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Lugar donde se ofrecían sacrificios"
+    },
+    {
+        "id": "ob_019",
+        "word": "Candelabro",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Menorá de siete brazos"
+    },
+    {
+        "id": "ob_020",
+        "word": "Velo del templo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Cortina que se rasgó al morir Jesús"
+    },
+    {
+        "id": "ob_021",
+        "word": "Arca",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Caja para transportar cosas sagradas"
+    },
+    {
+        "id": "ob_022",
+        "word": "Túnica",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Vestido largo sin costuras de Jesús"
+    },
+    {
+        "id": "ob_023",
+        "word": "Manto de José",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Túnica de colores regalada por Jacob"
+    },
+    {
+        "id": "ob_024",
+        "word": "Anillo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Símbolo de autoridad del hijo pródigo"
+    },
+    {
+        "id": "ob_025",
+        "word": "Saco",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Tela áspera de luto y arrepentimiento"
+    },
+    {
+        "id": "ob_026",
+        "word": "Ceniza",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Símbolo de duelo y humildad"
+    },
+    {
+        "id": "ob_027",
+        "word": "Piedra",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "David eligió cinco para Goliat"
+    },
+    {
+        "id": "ob_028",
+        "word": "Trono",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Asiento del rey"
+    },
+    {
+        "id": "ob_029",
+        "word": "Cetro",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Bastón de autoridad real"
+    },
+    {
+        "id": "ob_030",
+        "word": "Espada",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Arma de guerra y símbolo de la Palabra"
+    },
+    {
+        "id": "ob_031",
+        "word": "Escudo",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Protección del guerrero, símbolo de fe"
+    },
+    {
+        "id": "ob_032",
+        "word": "Armadura",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Protección completa del soldado"
+    },
+    {
+        "id": "ob_033",
+        "word": "Casco",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Protección de la cabeza, salvación"
+    },
+    {
+        "id": "ob_034",
+        "word": "Red",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Usada por pescadores como Pedro"
+    },
+    {
+        "id": "ob_035",
+        "word": "Barca",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Barco pequeño de los discípulos"
+    },
+    {
+        "id": "ob_036",
+        "word": "Ancla",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Símbolo de esperanza firme"
+    },
+    {
+        "id": "ob_037",
+        "word": "Timón",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Dirige el barco, como la lengua"
+    },
+    {
+        "id": "ob_038",
+        "word": "Odre",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Recipiente de cuero para líquidos"
+    },
+    {
+        "id": "ob_039",
+        "word": "Tinaja",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Vasija grande de agua en Caná"
+    },
+    {
+        "id": "ob_040",
+        "word": "Cántaro",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Recipiente para llevar agua del pozo"
+    },
+    {
+        "id": "ob_041",
+        "word": "Pozo",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Fuente de agua, encuentro de Jacob y Jesús"
+    },
+    {
+        "id": "ob_042",
+        "word": "Fuente",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Manantial de agua viva"
+    },
+    {
+        "id": "ob_043",
+        "word": "Lámpara",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Luz que no se pone bajo el almud"
+    },
+    {
+        "id": "ob_044",
+        "word": "Linterna",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Luz portátil de los soldados"
+    },
+    {
+        "id": "ob_045",
+        "word": "Antorcha",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Palo encendido de Gedeón"
+    },
+    {
+        "id": "ob_046",
+        "word": "Aceite para lámparas",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Combustible de las vírgenes prudentes"
+    },
+    {
+        "id": "ob_047",
+        "word": "Molino",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Piedras para moler grano"
+    },
+    {
+        "id": "ob_048",
+        "word": "Horno",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Donde cocinaban pan y ardieron los jóvenes"
+    },
+    {
+        "id": "ob_049",
+        "word": "Yugo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Carga sobre bueyes, símbolo de servidumbre"
+    },
+    {
+        "id": "ob_050",
+        "word": "Arado",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Herramienta para labrar la tierra"
+    },
+    {
+        "id": "ob_051",
+        "word": "Hoz",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Herramienta para cosechar"
+    },
+    {
+        "id": "ob_052",
+        "word": "Azada",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Herramienta para cavar"
+    },
+    {
+        "id": "ob_053",
+        "word": "Hacha",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Herramienta que flotó para Eliseo"
+    },
+    {
+        "id": "ob_054",
+        "word": "Martillo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Herramienta de carpintero"
+    },
+    {
+        "id": "ob_055",
+        "word": "Serrucho",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Herramienta para cortar madera"
+    },
+    {
+        "id": "ob_056",
+        "word": "Cincel",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Herramienta para tallar piedra"
+    },
+    {
+        "id": "ob_057",
+        "word": "Balanza",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Instrumento para pesar, símbolo de justicia"
+    },
+    {
+        "id": "ob_058",
+        "word": "Denario",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Moneda romana de plata"
+    },
+    {
+        "id": "ob_059",
+        "word": "Siclo",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Moneda y medida de peso hebrea"
+    },
+    {
+        "id": "ob_060",
+        "word": "Talento",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Medida de peso grande, parábola"
+    },
+    {
+        "id": "ob_061",
+        "word": "Sello",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Marca de autenticidad y propiedad"
+    },
+    {
+        "id": "ob_062",
+        "word": "Pergamino",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Material para escribir de piel"
+    },
+    {
+        "id": "ob_063",
+        "word": "Tinta",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Líquido para escribir las Escrituras"
+    },
+    {
+        "id": "ob_064",
+        "word": "Pluma",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Instrumento para escribir"
+    },
+    {
+        "id": "ob_065",
+        "word": "Rollo",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Libro enrollado de las Escrituras"
+    },
+    {
+        "id": "ob_066",
+        "word": "Sábana",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Tela que envolvió el cuerpo de Jesús"
+    },
+    {
+        "id": "ob_067",
+        "word": "Lienzo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Tela del sudario de Jesús"
+    },
+    {
+        "id": "ob_068",
+        "word": "Perfume",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Ungüento costoso de María"
+    },
+    {
+        "id": "ob_069",
+        "word": "Mirra",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Regalo de los magos, para embalsamar"
+    },
+    {
+        "id": "ob_070",
+        "word": "Oro",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Metal precioso, regalo de los magos"
+    },
+    {
+        "id": "ob_071",
+        "word": "Becerro de oro",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Ídolo hecho por Israel en el desierto"
+    },
+    {
+        "id": "ob_072",
+        "word": "Ídolo",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Imagen adorada como falso dios"
+    },
+    {
+        "id": "ob_073",
+        "word": "Tienda",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Casa portátil de nómadas como Abraham"
+    },
+    {
+        "id": "ob_074",
+        "word": "Tabernáculo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Tienda santuario en el desierto"
+    },
+    {
+        "id": "ob_075",
+        "word": "Templo",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Casa permanente de Dios en Jerusalén"
+    },
+    {
+        "id": "ob_076",
+        "word": "Sinagoga",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Lugar de reunión judío"
+    },
+    {
+        "id": "ob_077",
+        "word": "Piedra angular",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Primera piedra del edificio, Cristo"
+    },
+    {
+        "id": "ob_078",
+        "word": "Columna",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Pilar de soporte, Sansón las derribó"
+    },
+    {
+        "id": "ob_079",
+        "word": "Puerta",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Entrada, Jesús es la del redil"
+    },
+    {
+        "id": "ob_080",
+        "word": "Reja",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Ventana con barras de la cárcel"
+    },
+    {
+        "id": "ob_081",
+        "word": "Cadenas",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Ataduras de Pedro en la cárcel"
+    },
+    {
+        "id": "ob_082",
+        "word": "Grilletes",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Argollas para pies de prisioneros"
+    },
+    {
+        "id": "ob_083",
+        "word": "Látigo",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Azote usado en la flagelación de Jesús"
+    },
+    {
+        "id": "ob_084",
+        "word": "Vara",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Bastón de pastor y disciplina"
+    },
+    {
+        "id": "ob_085",
+        "word": "Cayado",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Bastón curvo del pastor"
+    },
+    {
+        "id": "ob_086",
+        "word": "Flauta",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Instrumento de viento pastoral"
+    },
+    {
+        "id": "ob_087",
+        "word": "Arpa",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Instrumento de cuerdas de David"
+    },
+    {
+        "id": "ob_088",
+        "word": "Címbalos",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Platillos musicales del templo"
+    },
+    {
+        "id": "ob_089",
+        "word": "Campana",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Cascabel en el vestido del sumo sacerdote"
+    },
+    {
+        "id": "ob_090",
+        "word": "Granada decorativa",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Adorno en el vestido sacerdotal"
+    },
+    {
+        "id": "ob_091",
+        "word": "Mitra",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Turbante del sumo sacerdote"
+    },
+    {
+        "id": "ob_092",
+        "word": "Pectoral",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Pieza con 12 piedras del sumo sacerdote"
+    },
+    {
+        "id": "ob_093",
+        "word": "Efod",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Vestidura sacerdotal con hombreras"
+    },
+    {
+        "id": "ob_094",
+        "word": "Urim y Tumim",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Objetos para consultar la voluntad de Dios"
+    },
+    {
+        "id": "ob_095",
+        "word": "Querubín",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Figura de ángel sobre el arca"
+    },
+    {
+        "id": "ob_096",
+        "word": "Propiciatorio",
+        "category": "objetos_biblicos",
+        "difficulty": "hard",
+        "hint": "Tapa del arca del pacto"
+    },
+    {
+        "id": "ob_097",
+        "word": "Cortina",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Separación del lugar santísimo"
+    },
+    {
+        "id": "ob_098",
+        "word": "Mesa de los panes",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Mueble del tabernáculo con panes"
+    },
+    {
+        "id": "ob_099",
+        "word": "Maná",
+        "category": "objetos_biblicos",
+        "difficulty": "easy",
+        "hint": "Pan del cielo en el desierto"
+    },
+    {
+        "id": "ob_100",
+        "word": "Bastón de Aarón",
+        "category": "objetos_biblicos",
+        "difficulty": "medium",
+        "hint": "Vara que floreció milagrosamente"
+    }
+]

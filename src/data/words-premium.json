@@ -1,0 +1,1052 @@
+[
+    {
+        "id": "of_001",
+        "word": "Pescador",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Profesión de Pedro y otros apóstoles"
+    },
+    {
+        "id": "of_002",
+        "word": "Carpintero",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Oficio de José, padre terrenal de Jesús"
+    },
+    {
+        "id": "of_003",
+        "word": "Pastor",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Cuidaba ovejas, profesión de David"
+    },
+    {
+        "id": "of_004",
+        "word": "Fariseo",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Líder religioso judío, experto en la ley"
+    },
+    {
+        "id": "of_005",
+        "word": "Publicano",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Cobrador de impuestos, como Mateo"
+    },
+    {
+        "id": "of_006",
+        "word": "Saduceo",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Partido religioso que negaba la resurrección"
+    },
+    {
+        "id": "of_007",
+        "word": "Escriba",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Copiaba y enseñaba las Escrituras"
+    },
+    {
+        "id": "of_008",
+        "word": "Sacerdote",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Ministraba en el templo, ofrecía sacrificios"
+    },
+    {
+        "id": "of_009",
+        "word": "Levita",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Tribu encargada del servicio del templo"
+    },
+    {
+        "id": "of_010",
+        "word": "Sumo sacerdote",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Máximo líder religioso judío"
+    },
+    {
+        "id": "of_011",
+        "word": "Profeta",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Hablaba mensajes de Dios al pueblo"
+    },
+    {
+        "id": "of_012",
+        "word": "Rey",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Gobernante de Israel o Judá"
+    },
+    {
+        "id": "of_013",
+        "word": "Juez",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Líder de Israel antes de los reyes"
+    },
+    {
+        "id": "of_014",
+        "word": "Soldado",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Militar del ejército"
+    },
+    {
+        "id": "of_015",
+        "word": "Centurión",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Oficial romano a cargo de 100 soldados"
+    },
+    {
+        "id": "of_016",
+        "word": "Médico",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Profesión de Lucas el evangelista"
+    },
+    {
+        "id": "of_017",
+        "word": "Apóstol",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Enviado, los 12 discípulos de Jesús"
+    },
+    {
+        "id": "of_018",
+        "word": "Discípulo",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Seguidor y aprendiz de un maestro"
+    },
+    {
+        "id": "of_019",
+        "word": "Diácono",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Servidor en la iglesia primitiva"
+    },
+    {
+        "id": "of_020",
+        "word": "Anciano",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Líder de la congregación"
+    },
+    {
+        "id": "of_021",
+        "word": "Pastor de iglesia",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Líder espiritual de la congregación"
+    },
+    {
+        "id": "of_022",
+        "word": "Maestro",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Enseñaba la palabra de Dios"
+    },
+    {
+        "id": "of_023",
+        "word": "Evangelista",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Predicaba el evangelio"
+    },
+    {
+        "id": "of_024",
+        "word": "Viñador",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Cuidaba viñedos y hacía vino"
+    },
+    {
+        "id": "of_025",
+        "word": "Labrador",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Agricultor que trabajaba la tierra"
+    },
+    {
+        "id": "of_026",
+        "word": "Alfarero",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Hacía vasijas de barro"
+    },
+    {
+        "id": "of_027",
+        "word": "Panadero",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Hacía pan, mencionado en José"
+    },
+    {
+        "id": "of_028",
+        "word": "Curtidor",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Trabajaba cuero, como Simón en Joppe"
+    },
+    {
+        "id": "of_029",
+        "word": "Fabricante de tiendas",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Oficio de Pablo, Priscila y Aquila"
+    },
+    {
+        "id": "of_030",
+        "word": "Platero",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Hacía ídolos de plata, como Demetrio"
+    },
+    {
+        "id": "of_031",
+        "word": "Copero",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Servía vino al rey, como Nehemías"
+    },
+    {
+        "id": "of_032",
+        "word": "Eunuco",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Oficial de la corte"
+    },
+    {
+        "id": "of_033",
+        "word": "Intérprete de sueños",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "José y Daniel lo hacían"
+    },
+    {
+        "id": "of_034",
+        "word": "Sabio",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Consejero del rey, como Daniel"
+    },
+    {
+        "id": "of_035",
+        "word": "Mago",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Practicante de artes ocultas"
+    },
+    {
+        "id": "of_036",
+        "word": "Mercader",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Comerciante de mercancías"
+    },
+    {
+        "id": "of_037",
+        "word": "Vendedor de púrpura",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Oficio de Lidia en Filipos"
+    },
+    {
+        "id": "of_038",
+        "word": "Armero",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Fabricaba armas y armaduras"
+    },
+    {
+        "id": "of_039",
+        "word": "Constructor",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Edificaba casas y edificios"
+    },
+    {
+        "id": "of_040",
+        "word": "Músico",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Tocaba instrumentos en el templo"
+    },
+    {
+        "id": "of_041",
+        "word": "Cantante",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Alababa a Dios con cánticos"
+    },
+    {
+        "id": "of_042",
+        "word": "Portero",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Guardián de las puertas del templo"
+    },
+    {
+        "id": "of_043",
+        "word": "Guardia",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Protegía al rey o prisioneros"
+    },
+    {
+        "id": "of_044",
+        "word": "Herrero",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Trabajaba el hierro"
+    },
+    {
+        "id": "of_045",
+        "word": "Orfebre",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Trabajaba oro y joyas"
+    },
+    {
+        "id": "of_046",
+        "word": "Tejedor",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Hacía telas y ropa"
+    },
+    {
+        "id": "of_047",
+        "word": "Tintoreo",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Teñía telas de colores"
+    },
+    {
+        "id": "of_048",
+        "word": "Pregonero",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Anunciaba decretos del rey"
+    },
+    {
+        "id": "of_049",
+        "word": "Tesorero",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Administraba las finanzas"
+    },
+    {
+        "id": "of_050",
+        "word": "Gobernador",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Autoridad romana como Pilato"
+    },
+    {
+        "id": "lu_001",
+        "word": "Edén",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Jardín donde vivían Adán y Eva"
+    },
+    {
+        "id": "lu_002",
+        "word": "Ararat",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Monte donde reposó el arca de Noé"
+    },
+    {
+        "id": "lu_003",
+        "word": "Babel",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Ciudad de la torre, idiomas confundidos"
+    },
+    {
+        "id": "lu_004",
+        "word": "Ur",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Ciudad de origen de Abraham"
+    },
+    {
+        "id": "lu_005",
+        "word": "Canaán",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Tierra prometida a Abraham"
+    },
+    {
+        "id": "lu_006",
+        "word": "Sodoma",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Ciudad malvada destruida con fuego"
+    },
+    {
+        "id": "lu_007",
+        "word": "Gomorra",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Ciudad destruida junto con Sodoma"
+    },
+    {
+        "id": "lu_008",
+        "word": "Beerseba",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Lugar del pacto entre Abraham y Abimelec"
+    },
+    {
+        "id": "lu_009",
+        "word": "Betel",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Casa de Dios, donde Jacob vio la escalera"
+    },
+    {
+        "id": "lu_010",
+        "word": "Egipto",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "País donde José gobernó e Israel fue esclavo"
+    },
+    {
+        "id": "lu_011",
+        "word": "Gosén",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Región de Egipto donde vivió Israel"
+    },
+    {
+        "id": "lu_012",
+        "word": "Mar Rojo",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Dios lo dividió para que Israel pasara"
+    },
+    {
+        "id": "lu_013",
+        "word": "Monte Sinaí",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Donde Moisés recibió las tablas de la ley"
+    },
+    {
+        "id": "lu_014",
+        "word": "Desierto",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Israel vagó 40 años allí"
+    },
+    {
+        "id": "lu_015",
+        "word": "Jericó",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Primera ciudad conquistada, murallas cayeron"
+    },
+    {
+        "id": "lu_016",
+        "word": "Jerusalén",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Ciudad santa, capital de Israel"
+    },
+    {
+        "id": "lu_017",
+        "word": "Belén",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Ciudad natal de David y Jesús"
+    },
+    {
+        "id": "lu_018",
+        "word": "Nazaret",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Ciudad donde Jesús creció"
+    },
+    {
+        "id": "lu_019",
+        "word": "Capernaum",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Ciudad base del ministerio de Jesús"
+    },
+    {
+        "id": "lu_020",
+        "word": "Galilea",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Región del norte donde Jesús ministró"
+    },
+    {
+        "id": "lu_021",
+        "word": "Judea",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Región del sur con Jerusalén"
+    },
+    {
+        "id": "lu_022",
+        "word": "Samaria",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Región entre Galilea y Judea"
+    },
+    {
+        "id": "lu_023",
+        "word": "Mar de Galilea",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Lago donde Jesús calmó la tempestad"
+    },
+    {
+        "id": "lu_024",
+        "word": "Río Jordán",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Donde Juan bautizaba"
+    },
+    {
+        "id": "lu_025",
+        "word": "Monte de los Olivos",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Donde Jesús ascendió al cielo"
+    },
+    {
+        "id": "lu_026",
+        "word": "Getsemaní",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Huerto donde Jesús oró antes de ser arrestado"
+    },
+    {
+        "id": "lu_027",
+        "word": "Gólgota",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Lugar de la calavera, donde crucificaron a Jesús"
+    },
+    {
+        "id": "lu_028",
+        "word": "Betania",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Pueblo de Lázaro, Marta y María"
+    },
+    {
+        "id": "lu_029",
+        "word": "Betsaida",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Ciudad natal de Pedro, Andrés y Felipe"
+    },
+    {
+        "id": "lu_030",
+        "word": "Caná",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Donde Jesús convirtió agua en vino"
+    },
+    {
+        "id": "lu_031",
+        "word": "Monte Carmelo",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Donde Elías confrontó a los profetas de Baal"
+    },
+    {
+        "id": "lu_032",
+        "word": "Monte Hermón",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Posible lugar de la transfiguración"
+    },
+    {
+        "id": "lu_033",
+        "word": "Monte Sión",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Colina en Jerusalén, ciudad de David"
+    },
+    {
+        "id": "lu_034",
+        "word": "Templo de Jerusalén",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Casa de Dios construida por Salomón"
+    },
+    {
+        "id": "lu_035",
+        "word": "Tabernáculo",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Tienda de reunión en el desierto"
+    },
+    {
+        "id": "lu_036",
+        "word": "Emaús",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Camino donde Jesús se apareció resucitado"
+    },
+    {
+        "id": "lu_037",
+        "word": "Damasco",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Donde Pablo fue convertido"
+    },
+    {
+        "id": "lu_038",
+        "word": "Antioquía",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Donde se llamó cristianos por primera vez"
+    },
+    {
+        "id": "lu_039",
+        "word": "Corinto",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Ciudad griega donde Pablo escribió cartas"
+    },
+    {
+        "id": "lu_040",
+        "word": "Éfeso",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Ciudad con templo de Diana"
+    },
+    {
+        "id": "lu_041",
+        "word": "Filipos",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Donde Pablo y Silas fueron encarcelados"
+    },
+    {
+        "id": "lu_042",
+        "word": "Roma",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Capital del imperio, Pablo fue prisionero allí"
+    },
+    {
+        "id": "lu_043",
+        "word": "Atenas",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Donde Pablo predicó en el Areópago"
+    },
+    {
+        "id": "lu_044",
+        "word": "Tesalónica",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Iglesia receptora de cartas de Pablo"
+    },
+    {
+        "id": "lu_045",
+        "word": "Babilonia",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Imperio que llevó a Judá al exilio"
+    },
+    {
+        "id": "lu_046",
+        "word": "Nínive",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Ciudad a donde Jonás fue enviado"
+    },
+    {
+        "id": "lu_047",
+        "word": "Asiria",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Imperio que conquistó el reino del norte"
+    },
+    {
+        "id": "lu_048",
+        "word": "Persia",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Imperio de Ciro, Daniel y Ester"
+    },
+    {
+        "id": "lu_049",
+        "word": "Patmos",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Isla donde Juan escribió Apocalipsis"
+    },
+    {
+        "id": "lu_050",
+        "word": "Cielo",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Morada de Dios y destino de los salvos"
+    },
+    {
+        "id": "ct_001",
+        "word": "Gracia",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Favor inmerecido de Dios"
+    },
+    {
+        "id": "ct_002",
+        "word": "Fe",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Certeza de lo que se espera"
+    },
+    {
+        "id": "ct_003",
+        "word": "Salvación",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Liberación del pecado por Cristo"
+    },
+    {
+        "id": "ct_004",
+        "word": "Redención",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Compra de vuelta mediante un precio"
+    },
+    {
+        "id": "ct_005",
+        "word": "Justificación",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Declarado justo ante Dios por fe"
+    },
+    {
+        "id": "ct_006",
+        "word": "Santificación",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Proceso de ser hecho santo"
+    },
+    {
+        "id": "ct_007",
+        "word": "Glorificación",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Transformación final en la eternidad"
+    },
+    {
+        "id": "ct_008",
+        "word": "Expiación",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Pago por el pecado mediante sacrificio"
+    },
+    {
+        "id": "ct_009",
+        "word": "Propiciación",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Satisfacción de la ira de Dios"
+    },
+    {
+        "id": "ct_010",
+        "word": "Reconciliación",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Restauración de la relación con Dios"
+    },
+    {
+        "id": "ct_011",
+        "word": "Adopción",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Ser hecho hijo de Dios"
+    },
+    {
+        "id": "ct_012",
+        "word": "Regeneración",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Nacer de nuevo espiritualmente"
+    },
+    {
+        "id": "ct_013",
+        "word": "Conversión",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Volverse a Dios desde el pecado"
+    },
+    {
+        "id": "ct_014",
+        "word": "Arrepentimiento",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Cambio de mente sobre el pecado"
+    },
+    {
+        "id": "ct_015",
+        "word": "Perdón",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Cancelación de la deuda del pecado"
+    },
+    {
+        "id": "ct_016",
+        "word": "Trinidad",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Padre, Hijo y Espíritu Santo"
+    },
+    {
+        "id": "ct_017",
+        "word": "Encarnación",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios se hizo hombre en Jesús"
+    },
+    {
+        "id": "ct_018",
+        "word": "Resurrección",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Jesús volvió a la vida al tercer día"
+    },
+    {
+        "id": "ct_019",
+        "word": "Ascensión",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Jesús subió al cielo"
+    },
+    {
+        "id": "ct_020",
+        "word": "Segunda venida",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Regreso prometido de Cristo"
+    },
+    {
+        "id": "ct_021",
+        "word": "Juicio final",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Dios juzgará a toda la humanidad"
+    },
+    {
+        "id": "ct_022",
+        "word": "Eternidad",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Vida sin fin con Dios"
+    },
+    {
+        "id": "ct_023",
+        "word": "Pecado",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Desobediencia a Dios"
+    },
+    {
+        "id": "ct_024",
+        "word": "Pecado",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Lo cometido por Adán"
+    },
+    {
+        "id": "ct_025",
+        "word": "Tentación",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Incitación al pecado"
+    },
+    {
+        "id": "ct_026",
+        "word": "Santidad",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Pureza moral y separación del pecado"
+    },
+    {
+        "id": "ct_027",
+        "word": "Justicia",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Rectitud conforme a la ley de Dios"
+    },
+    {
+        "id": "ct_028",
+        "word": "Misericordia",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Compasión de Dios hacia el pecador"
+    },
+    {
+        "id": "ct_029",
+        "word": "Amor ágape",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Amor sacrificial e incondicional"
+    },
+    {
+        "id": "ct_030",
+        "word": "Esperanza",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Confianza en las promesas de Dios"
+    },
+    {
+        "id": "ct_031",
+        "word": "Revelación",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios se da a conocer al hombre"
+    },
+    {
+        "id": "ct_032",
+        "word": "Inspiración",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios guió la escritura de la Biblia"
+    },
+    {
+        "id": "ct_033",
+        "word": "Providencia",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Cuidado y gobierno de Dios sobre todo"
+    },
+    {
+        "id": "ct_034",
+        "word": "Soberanía",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Supremo gobierno de Dios"
+    },
+    {
+        "id": "ct_035",
+        "word": "Omnipotencia",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios es todopoderoso"
+    },
+    {
+        "id": "ct_036",
+        "word": "Omnisciencia",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios lo sabe todo"
+    },
+    {
+        "id": "ct_037",
+        "word": "Omnipresencia",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios está en todas partes"
+    },
+    {
+        "id": "ct_038",
+        "word": "Inmutabilidad",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Dios no cambia"
+    },
+    {
+        "id": "ct_039",
+        "word": "Eternidad de Dios",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Dios no tiene principio ni fin"
+    },
+    {
+        "id": "ct_040",
+        "word": "Pacto",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Acuerdo solemne entre Dios y el hombre"
+    },
+    {
+        "id": "ct_041",
+        "word": "Nuevo pacto",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Establecido por la sangre de Cristo"
+    },
+    {
+        "id": "ct_042",
+        "word": "Iglesia",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Cuerpo de creyentes en Cristo"
+    },
+    {
+        "id": "ct_043",
+        "word": "Comunión de los santos",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Unidad espiritual de los creyentes"
+    },
+    {
+        "id": "ct_044",
+        "word": "Bautismo",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Sacramento de iniciación cristiana"
+    },
+    {
+        "id": "ct_045",
+        "word": "Santa Cena",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Conmemoración de la muerte de Cristo"
+    },
+    {
+        "id": "ct_046",
+        "word": "Discipulado",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Proceso de seguir y aprender de Jesús"
+    },
+    {
+        "id": "ct_047",
+        "word": "Evangelización",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Predicar el evangelio a otros"
+    },
+    {
+        "id": "ct_048",
+        "word": "Misiones",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Envío a predicar el evangelio"
+    },
+    {
+        "id": "ct_049",
+        "word": "Reino de Dios",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Gobierno y soberanía de Dios"
+    },
+    {
+        "id": "ct_050",
+        "word": "Unicidad",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Un solo Dios sin divisiones"
+    }
+]
