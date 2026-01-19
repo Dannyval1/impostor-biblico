@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import {
     TouchableOpacity,
     Animated,
-    StyleSheet,
     StyleProp,
     ViewStyle,
     GestureResponderEvent

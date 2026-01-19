@@ -23,9 +23,19 @@ type SettingsModalProps = {
 const { width } = Dimensions.get('window');
 const APP_VERSION = '1.0.0';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
-    const { state, toggleMusic, toggleSounds, setLanguage, playClick } = useGame();
+    const { state, toggleMusic, toggleSounds, setLanguage, setDifficulty, playClick } = useGame();
     const { t } = useTranslation();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+    // TODO: Connect this to real premium check
+    // TODO: Connect this to real premium check
+    // ENABLED FOR TESTING
+    const isPremium = false;
 
     const handleShare = async () => {
         playClick();
@@ -97,6 +107,7 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                         />
                     </View>
 
+
                     <View style={styles.settingItemCol}>
                         <View style={styles.settingLabelContainer}>
                             <Ionicons name="language-outline" size={24} color="#5B7FDB" />
@@ -124,6 +135,56 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                         </View>
                     </View>
 
+
+                    <View style={styles.settingItemCol}>
+                        <View style={styles.settingLabelContainer}>
+                            <Ionicons name="speedometer-outline" size={24} color="#5B7FDB" />
+                            <Text style={styles.settingLabel}>{t.settings.difficulty_level}</Text>
+                        </View>
+                        <View style={styles.difficultyContainer}>
+                            <View style={styles.difficultyRow}>
+                                <TouchableOpacity
+                                    style={[styles.difficultyOption, state.settings.difficulty === 'easy' && styles.difficultyOptionSelected]}
+                                    onPress={() => {
+                                        playClick();
+                                        setDifficulty('easy');
+                                    }}
+                                >
+                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'easy' && styles.difficultyTextSelected]}>{t.settings.easy}</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.difficultyOption, state.settings.difficulty === 'medium' && styles.difficultyOptionSelected]}
+                                    onPress={() => {
+                                        playClick();
+                                        setDifficulty('medium');
+                                    }}
+                                >
+                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'medium' && styles.difficultyTextSelected]}>{t.settings.medium}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.difficultyRow}>
+                                <TouchableOpacity
+                                    style={[styles.difficultyOption, state.settings.difficulty === 'hard' && styles.difficultyOptionSelected]}
+                                    onPress={() => {
+                                        playClick();
+                                        setDifficulty('hard');
+                                    }}
+                                >
+                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'hard' && styles.difficultyTextSelected]}>{t.settings.hard}</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.difficultyOption, state.settings.difficulty === 'all' && styles.difficultyOptionSelected]}
+                                    onPress={() => {
+                                        playClick();
+                                        setDifficulty('all');
+                                    }}
+                                >
+                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'all' && styles.difficultyTextSelected]}>{t.settings.all}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+
                     <View style={styles.divider} />
 
                     <TouchableOpacity style={styles.actionItem} onPress={handleRateUs}>
@@ -141,7 +202,7 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                     </View>
                 </View>
             </View>
-        </Modal>
+        </Modal >
     );
 }
 
@@ -222,6 +283,41 @@ const styles = StyleSheet.create({
     langTextSelected: {
         color: '#5B7FDB',
     },
+    difficultyContainer: {
+        marginTop: 12,
+        gap: 8,
+    },
+    difficultyRow: {
+        flexDirection: 'row',
+        gap: 8,
+    },
+    difficultyOption: {
+        flex: 1,
+        backgroundColor: '#F7FAFC',
+        paddingVertical: 10,
+        alignItems: 'center',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'transparent',
+    },
+    difficultyOptionSelected: {
+        backgroundColor: '#FFF',
+        borderColor: '#5B7FDB',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    difficultyText: {
+        fontSize: 13,
+        color: '#718096',
+        fontWeight: '600',
+    },
+    difficultyTextSelected: {
+        color: '#5B7FDB',
+        fontWeight: '700',
+    },
     divider: {
         height: 1,
         backgroundColor: '#E2E8F0',
@@ -241,5 +337,14 @@ const styles = StyleSheet.create({
     versionTextModal: {
         fontSize: 12,
         color: '#CBD5E0',
+    },
+    premiumBadge: {
+        backgroundColor: '#E53E3E',
+        borderRadius: 8,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        marginLeft: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

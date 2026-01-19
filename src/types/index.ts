@@ -4,13 +4,22 @@ export type GamePhase = 'setup' | 'reveal' | 'discussion' | 'voting' | 'results'
 
 export type PlayerRole = 'civilian' | 'impostor';
 
-export type Category =
+export type StandardCategory =
     | 'personajes_biblicos'
     | 'libros_biblicos'
     | 'objetos_biblicos'
     | 'oficios_biblicos'
     | 'lugares_biblicos'
     | 'conceptos_teologicos';
+
+export type Category = StandardCategory | (string & {});
+
+export interface CustomCategory {
+    id: string;
+    name: string;
+    words: string[];
+    language: 'es' | 'en';
+}
 
 export type Avatar = `avatar_${number}`;
 
@@ -43,6 +52,7 @@ export interface GameSettings {
     musicEnabled: boolean;
     soundsEnabled: boolean;
     language: 'es' | 'en';
+    difficulty: 'easy' | 'medium' | 'hard' | 'all';
 }
 
 export interface GameState {
@@ -54,6 +64,8 @@ export interface GameState {
     roundNumber: number;
     votes: Record<string, string>;
     hasLoaded: boolean;
+    customCategories: CustomCategory[];
+    gamesPlayed: number;
 }
 
 export type GameAction =
@@ -73,6 +85,12 @@ export type GameAction =
     | { type: 'TOGGLE_MUSIC'; payload: boolean }
     | { type: 'TOGGLE_SOUNDS'; payload: boolean }
     | { type: 'SET_LANGUAGE'; payload: 'es' | 'en' }
+    | { type: 'SET_DIFFICULTY'; payload: 'easy' | 'medium' | 'hard' | 'all' }
     | { type: 'SET_HAS_LOADED' }
+    | { type: 'PLAY_CLICK' }
     | { type: 'SET_GAME_PHASE'; payload: GamePhase }
-    | { type: 'PLAY_CLICK' };
+    | { type: 'ADD_CUSTOM_CATEGORY'; payload: CustomCategory }
+    | { type: 'DELETE_CUSTOM_CATEGORY'; payload: string }
+    | { type: 'SET_CUSTOM_CATEGORIES'; payload: CustomCategory[] }
+    | { type: 'INCREMENT_GAMES_PLAYED' }
+    | { type: 'SET_GAMES_PLAYED'; payload: number };

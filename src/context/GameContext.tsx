@@ -2,7 +2,8 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { useAudioPlayer } from 'expo-audio';
 import { getLocales } from 'expo-localization';
-import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar } from '../types';
+import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar, CustomCategory } from '../types';
+import { saveCustomCategories, loadCustomCategories, saveGamesPlayed, loadGamesPlayed } from '../utils/storage';
 
 // Importar las palabras
 import freeWordsDataEs from '../data/words-free-es.json';
@@ -38,23 +39,47 @@ function getNextAvatar(currentPlayers: Player[]): Avatar {
     return available[randomIndex];
 }
 
-// Helper: Obtener palabra aleatoria de las categorías seleccionadas
-function getRandomWord(categories: Category[], language: 'es' | 'en'): Word {
+function getRandomWord(categories: Category[], language: 'es' | 'en', customCategories: CustomCategory[] = [], difficulty: 'easy' | 'medium' | 'hard' | 'all' = 'all'): Word {
+    const standardCategories: Category[] = [];
+    const activeCustomCategoryIds: string[] = [];
+
+    categories.forEach(cat => {
+        if (typeof cat === 'string' && customCategories.some(c => c.id === cat)) {
+            activeCustomCategoryIds.push(cat);
+        } else {
+            standardCategories.push(cat);
+        }
+    });
+
     const freeWords = (language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
+    let availableWords = freeWords.filter(w => standardCategories.includes(w.category));
 
-    // Filtrar por categorías seleccionadas
-    const filtered = freeWords.filter(w => categories.includes(w.category));
+    if (difficulty !== 'all') {
+        availableWords = availableWords.filter(w => w.difficulty === difficulty);
+    }
 
-    if (filtered.length === 0) {
-        // Fallback: devolver la primera palabra disponible
+    activeCustomCategoryIds.forEach(id => {
+        const customCat = customCategories.find(c => c.id === id);
+        if (customCat && customCat.words.length > 0) {
+            const customWords: Word[] = customCat.words.map(w => ({
+                id: `${id}_${Math.random().toString(36).substr(2, 9)}`, // Temporary ID
+                word: w,
+                category: id as Category, // Cast string to Category
+                difficulty: 'medium',
+                hint: ''
+            }));
+            availableWords = [...availableWords, ...customWords];
+        }
+    });
+
+    if (availableWords.length === 0) {
         return freeWords[0];
     }
 
-    const randomIndex = Math.floor(Math.random() * filtered.length);
-    return filtered[randomIndex];
+    const randomIndex = Math.floor(Math.random() * availableWords.length);
+    return availableWords[randomIndex];
 }
 
-// Estado inicial
 const deviceLanguage = getLocales()[0]?.languageCode === 'es' ? 'es' : 'en';
 
 const initialState: GameState = {
@@ -66,7 +91,8 @@ const initialState: GameState = {
         gameDuration: null, // Unlimited by default
         musicEnabled: false,
         soundsEnabled: true,
-        language: deviceLanguage
+        language: deviceLanguage,
+        difficulty: 'all',
     },
     currentWord: null,
     currentImpostor: null,
@@ -75,14 +101,14 @@ const initialState: GameState = {
     roundNumber: 1,
     votes: {},
     hasLoaded: false,
+    customCategories: [],
+    gamesPlayed: 0,
 };
 
-// Reducer
 function gameReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
         case 'ADD_PLAYER': {
             const newId = Date.now().toString();
-            // Assign avatar based on count
             const selectedAvatar = getNextAvatar(state.settings.players);
 
             const newPlayer: Player = {
@@ -117,7 +143,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             const isSelected = state.settings.selectedCategories.includes(category);
 
             if (isSelected) {
-                // No permitir deseleccionar si solo queda una categoría
                 if (state.settings.selectedCategories.length <= 1) {
                     return state;
                 }
@@ -161,19 +186,21 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             const playerCount = state.settings.players.length;
             const impostorCount = state.settings.impostorCount;
 
-            // Seleccionar impostores aleatoriamente
             const shuffled = [...state.settings.players].sort(() => Math.random() - 0.5);
             const impostorIds = shuffled.slice(0, impostorCount).map(p => p.id);
 
-            // Asignar roles
             const playersWithRoles = state.settings.players.map(player => ({
                 ...player,
                 role: (impostorIds.includes(player.id) ? 'impostor' : 'civilian') as PlayerRole,
                 hasSeenWord: false,
             }));
 
-            // Cargar palabra aleatoria
-            const word = getRandomWord(state.settings.selectedCategories, state.settings.language);
+            const word = getRandomWord(
+                state.settings.selectedCategories,
+                state.settings.language,
+                state.customCategories,
+                state.settings.difficulty
+            );
 
             return {
                 ...state,
@@ -182,15 +209,20 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                     players: playersWithRoles,
                 },
                 currentWord: word,
-                currentImpostor: impostorIds[0], // Por compatibilidad
+                currentImpostor: impostorIds[0],
                 currentImpostors: impostorIds,
                 gamePhase: 'reveal',
+                gamesPlayed: state.gamesPlayed + 1,
             };
         }
 
         case 'LOAD_NEW_WORD': {
-            // Cargar una nueva palabra aleatoria
-            const word = getRandomWord(state.settings.selectedCategories, state.settings.language);
+            const word = getRandomWord(
+                state.settings.selectedCategories,
+                state.settings.language,
+                state.customCategories,
+                state.settings.difficulty
+            );
             return {
                 ...state,
                 currentWord: word,
@@ -231,7 +263,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             };
 
         case 'NEXT_ROUND': {
-            // Resetear jugadores para nueva ronda
             const resetPlayers = state.settings.players.map(p => ({
                 ...p,
                 hasSeenWord: false,
@@ -264,7 +295,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             };
 
         case 'RESET_GAME': {
-            // Reset players but keep their names/avatars/ids
             const resetPlayers = state.settings.players.map(p => ({
                 ...p,
                 score: 0,
@@ -280,8 +310,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 settings: {
                     ...state.settings,
                     players: resetPlayers
-                }, // Preserve settings but reset players stats
-                hasLoaded: true // Keep loaded state
+                },
+                hasLoaded: true,
+                customCategories: state.customCategories,
+                gamesPlayed: state.gamesPlayed
             };
         }
 
@@ -300,6 +332,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 settings: {
                     ...state.settings,
                     soundsEnabled: action.payload,
+                },
+            };
+
+        case 'SET_DIFFICULTY':
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    difficulty: action.payload,
                 },
             };
 
@@ -327,6 +368,42 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         case 'PLAY_CLICK':
             return state;
 
+        case 'ADD_CUSTOM_CATEGORY':
+            return {
+                ...state,
+                customCategories: [...state.customCategories, action.payload],
+            };
+
+        case 'DELETE_CUSTOM_CATEGORY': {
+            const idToDelete = action.payload;
+            return {
+                ...state,
+                customCategories: state.customCategories.filter(c => c.id !== idToDelete),
+                settings: {
+                    ...state.settings,
+                    selectedCategories: state.settings.selectedCategories.filter(c => c !== idToDelete),
+                },
+            };
+        }
+
+        case 'SET_CUSTOM_CATEGORIES':
+            return {
+                ...state,
+                customCategories: action.payload,
+            };
+
+        case 'INCREMENT_GAMES_PLAYED':
+            return {
+                ...state,
+                gamesPlayed: state.gamesPlayed + 1,
+            };
+
+        case 'SET_GAMES_PLAYED':
+            return {
+                ...state,
+                gamesPlayed: action.payload,
+            };
+
         default:
             return state;
     }
@@ -350,6 +427,7 @@ const GameContext = createContext<{
     resetGame: () => void;
     toggleMusic: (enabled: boolean) => void;
     toggleSounds: (enabled: boolean) => void;
+    setDifficulty: (difficulty: 'easy' | 'medium' | 'hard' | 'all') => void;
     setLanguage: (lang: 'es' | 'en') => void;
     setHasLoaded: () => void;
     playClick: () => void;
@@ -357,6 +435,10 @@ const GameContext = createContext<{
     playFailure: () => void;
     playIntro: () => void;
     setGamePhase: (phase: import('../types').GamePhase) => void;
+    addCustomCategory: (category: CustomCategory) => void;
+    deleteCustomCategory: (id: string) => void;
+    incrementGamesPlayed: () => void;
+    resetGamesPlayed: () => void;
 } | null>(null);
 
 // Provider
@@ -385,7 +467,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
             // Logic based on game phase
             // Only play during 'voting' as requested by user
             if (state.gamePhase === 'voting') {
-                console.log('Starting Game Music (Voting Phase)');
                 try {
                     gameMusicPlayer.seekTo(0);
                     gameMusicPlayer.play();
@@ -411,10 +492,44 @@ export function GameProvider({ children }: { children: ReactNode }) {
         };
     }, [state.gamePhase, state.settings.musicEnabled]);
 
+    // Load custom categories on mount
+    React.useEffect(() => {
+        const loadCategories = async () => {
+            const categories = await loadCustomCategories();
+            dispatch({ type: 'SET_CUSTOM_CATEGORIES', payload: categories });
+        };
+        loadCategories();
+    }, []);
+
+    // Save custom categories whenever they change
+    React.useEffect(() => {
+        if (state.hasLoaded) { // Only save if we have loaded at least once or some other check?
+            // Actually, we should check if initial load is done to avoid overwriting with empty
+            // But here we rely on the fact that SET_CUSTOM_CATEGORIES runs once.
+            // Let's rely on checking if it's different or just save.
+            saveCustomCategories(state.customCategories);
+        }
+    }, [state.customCategories, state.hasLoaded]);
+
+    // Load gamesPlayed on mount
+    React.useEffect(() => {
+        const loadGames = async () => {
+            const count = await loadGamesPlayed();
+            dispatch({ type: 'SET_GAMES_PLAYED', payload: count });
+        };
+        loadGames();
+    }, []);
+
+    // Save gamesPlayed whenever it changes
+    React.useEffect(() => {
+        if (state.hasLoaded) {
+            saveGamesPlayed(state.gamesPlayed);
+        }
+    }, [state.gamesPlayed, state.hasLoaded]);
+
     // Expose intro player control
     const playIntro = () => {
         if (state.settings.musicEnabled) {
-            console.log('Playing Intro');
             try {
                 introPlayer.loop = false; // Ensure it doesn't loop
                 introPlayer.seekTo(0);
@@ -427,7 +542,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
     const playClick = () => {
         if (state.settings.soundsEnabled) {
-            console.log('Attempting to play click sound');
             try {
                 clickPlayer.seekTo(0);
                 clickPlayer.play();
@@ -441,7 +555,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
     const playSuccess = () => {
         if (state.settings.soundsEnabled) {
-            console.log('Attempting to play success sound');
             try {
                 successPlayer.seekTo(0);
                 successPlayer.play();
@@ -455,7 +568,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
     const playFailure = () => {
         if (state.settings.soundsEnabled) {
-            console.log('Attempting to play failure sound');
             try {
                 failurePlayer.seekTo(0);
                 failurePlayer.play();
@@ -486,6 +598,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         resetGame: () => dispatch({ type: 'RESET_GAME' }),
         toggleMusic: (enabled: boolean) => dispatch({ type: 'TOGGLE_MUSIC', payload: enabled }),
         toggleSounds: (enabled: boolean) => dispatch({ type: 'TOGGLE_SOUNDS', payload: enabled }),
+        setDifficulty: (difficulty: 'easy' | 'medium' | 'hard' | 'all') => dispatch({ type: 'SET_DIFFICULTY', payload: difficulty }),
         setLanguage: (lang: 'es' | 'en') => dispatch({ type: 'SET_LANGUAGE', payload: lang }),
         setHasLoaded: () => dispatch({ type: 'SET_HAS_LOADED' }),
         playClick,
@@ -493,6 +606,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
         playFailure,
         playIntro,
         setGamePhase: (phase: import('../types').GamePhase) => dispatch({ type: 'SET_GAME_PHASE', payload: phase }),
+        addCustomCategory: (category: CustomCategory) => dispatch({ type: 'ADD_CUSTOM_CATEGORY', payload: category }),
+        deleteCustomCategory: (id: string) => dispatch({ type: 'DELETE_CUSTOM_CATEGORY', payload: id }),
+        incrementGamesPlayed: () => dispatch({ type: 'INCREMENT_GAMES_PLAYED' }),
+        resetGamesPlayed: () => dispatch({ type: 'SET_GAMES_PLAYED', payload: 0 }),
     };
 
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

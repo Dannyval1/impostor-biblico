@@ -26,6 +26,8 @@ import { getAvatarSource, TOTAL_AVATARS } from '../utils/avatarAssets';
 import { GameModal } from '../components/GameModal';
 import { SettingsModal } from '../components/SettingsModal';
 import { ScaleButton } from '../components/ScaleButton';
+import { CreateCategoryModal } from '../components/CreateCategoryModal';
+import { ComponentProps } from 'react';
 
 type SetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Setup'>;
@@ -76,12 +78,15 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         setGameDuration,
         startGame,
         loadNewWord,
-        playClick
+        playClick,
+        deleteCustomCategory,
+        resetGamesPlayed
     } = useGame();
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [showCreateCategory, setShowCreateCategory] = useState(false);
 
     // Modal State
     const [modalVisible, setModalVisible] = useState(false);
@@ -148,6 +153,18 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleStartGame = () => {
         if (state.settings.players.length < 3) {
             showGameModal('Error', t.setup.min_players_alert, 'danger', 'OK');
+            return;
+        }
+
+        if (state.settings.selectedCategories.length === 0) {
+            showGameModal('Error', t.setup.category_required_alert || 'Selecciona al menos una categoría', 'danger', 'OK');
+            return;
+        }
+
+        // Ad Logic: Check every 3 games
+        if (state.gamesPlayed >= 3) {
+            resetGamesPlayed();
+            navigation.navigate('Ad');
             return;
         }
 
@@ -381,6 +398,87 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                     </TouchableOpacity>
                                 );
                             })}
+
+                            {/* Custom Categories */}
+                            {state.customCategories.map((category) => {
+                                const isSelected = state.settings.selectedCategories.includes(category.id);
+                                return (
+                                    <TouchableOpacity
+                                        key={category.id}
+                                        style={[
+                                            styles.categoryCard,
+                                            { backgroundColor: '#A0AEC0' }, // Different color for customization
+                                            isSelected && styles.categoryCardSelected,
+                                            !isSelected && styles.categoryCardUnselected,
+                                        ]}
+                                        onPress={() => {
+                                            playClick();
+                                            toggleCategory(category.id as any);
+                                        }}
+                                        activeOpacity={0.8}
+                                    >
+                                        <View style={styles.customIconContainer}>
+                                            <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
+                                        </View>
+
+                                        <View style={styles.categoryNamePill}>
+                                            <Text style={styles.categoryNameText} numberOfLines={2}>
+                                                {category.name} ({category.words.length})
+                                            </Text>
+                                        </View>
+
+                                        {isSelected && (
+                                            <View style={styles.categoryCheckBadge}>
+                                                <Ionicons name="checkmark" size={12} color="#FFF" />
+                                            </View>
+                                        )}
+
+                                        <TouchableOpacity
+                                            style={styles.deleteCategoryButton}
+                                            onPress={() => {
+                                                playClick();
+                                                showGameModal(
+                                                    'Borrar Categoría',
+                                                    `¿Estás seguro que quieres borrar "${category.name}"?`,
+                                                    'danger',
+                                                    'Borrar',
+                                                    () => deleteCustomCategory(category.id)
+                                                );
+                                            }}
+                                        >
+                                            <Ionicons name="trash-outline" size={16} color="#FFF" />
+                                        </TouchableOpacity>
+                                    </TouchableOpacity>
+                                );
+                            })}
+
+                            <TouchableOpacity
+                                style={[styles.categoryCard, styles.addCategoryCard]}
+                                onPress={() => {
+                                    playClick();
+                                    // Premium Check for Custom Categories
+                                    // TODO: Connect to real user premium status
+                                    const isPro = false;
+
+                                    if (!isPro && state.customCategories.length >= 1) {
+                                        navigation.navigate('Paywall');
+                                        return;
+                                    }
+
+                                    setShowCreateCategory(true);
+                                }}
+                            >
+                                <Ionicons name="add-circle-outline" size={40} color="#CBD5E0" />
+                                <Text style={styles.addCategoryText}>{t.setup.add}</Text>
+                                {/* Lock icon for indication */}
+                                {state.customCategories.length >= 1 && (
+                                    <Image
+                                        source={require('../../assets/blocked_level_1.png')}
+                                        style={styles.miniLockedIcon}
+                                        resizeMode="contain"
+                                    />
+                                )}
+                            </TouchableOpacity>
                         </View>
                     </View>
 
@@ -424,12 +522,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 <Text style={styles.impostorControlButtonText}>+</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.impostorHint}>
-                            {state.settings.players.length < 3
-                                ? ''
-                                : `${maxImpostors} max.`
-                            }
-                        </Text>
+
                     </View>
 
                     {/* Botón Iniciar */}
@@ -499,7 +592,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 visible={showSettings}
                 onClose={() => setShowSettings(false)}
             />
-        </SafeAreaView>
+            <CreateCategoryModal
+                visible={showCreateCategory}
+                onClose={() => setShowCreateCategory(false)}
+            />
+        </SafeAreaView >
     );
 }
 
@@ -796,6 +893,55 @@ const styles = StyleSheet.create({
         zIndex: 10,
         borderWidth: 2,
         borderColor: '#FFF',
+    },
+    customIconContainer: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'rgba(255,255,255,0.3)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    customIconText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FFF',
+    },
+    addCategoryCard: {
+        backgroundColor: '#F7FAFC',
+        borderWidth: 2,
+        borderColor: '#E2E8F0',
+        borderStyle: 'dashed',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 0,
+    },
+    addCategoryText: {
+        marginTop: 8,
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#A0AEC0',
+    },
+    deleteCategoryButton: {
+        position: 'absolute',
+        top: 8,
+        left: 8,
+        backgroundColor: '#E53E3E',
+        width: 28,
+        height: 28,
+        borderRadius: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+    },
+    miniLockedIcon: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        width: 24,
+        height: 24,
+        zIndex: 10,
     },
     lockedIcon: {
         position: 'absolute',

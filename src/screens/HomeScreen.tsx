@@ -160,7 +160,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     <ScaleButton
                         style={styles.primaryButton}
                         onPress={() => {
-                            console.log('JUGAR pressed');
                             playClick();
                             navigation.navigate('Setup');
                         }}
