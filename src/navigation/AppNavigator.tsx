@@ -8,6 +8,7 @@ import VotingScreen from '../screens/VotingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 
 import PaywallScreen from '../screens/PaywallScreen';
+import AdScreen from '../screens/AdScreen';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
     Voting: undefined;
     Results: undefined;
     Paywall: undefined;
+    Ad: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -26,7 +28,7 @@ export default function AppNavigator() {
             <Stack.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    headerShown: false, // Sin header, diseño custom
+                    headerShown: false,
                 }}
             >
                 <Stack.Screen name="Home" component={HomeScreen} />
@@ -35,6 +37,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="Voting" component={VotingScreen} />
                 <Stack.Screen name="Results" component={ResultsScreen} />
                 <Stack.Screen name="Paywall" component={PaywallScreen} />
+                <Stack.Screen name="Ad" component={AdScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

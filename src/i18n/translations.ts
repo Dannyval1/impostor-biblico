@@ -26,6 +26,11 @@ export const translations = {
             english: 'English',
             share_friends: 'Compartir con amigos',
             rate_us: 'Califícanos',
+            difficulty_level: 'Nivel de Dificultad',
+            easy: 'Fácil',
+            medium: 'Intermedio',
+            hard: 'Difícil',
+            all: 'Todos',
         },
         setup: {
             title: 'Impostor Bíblico',
@@ -100,12 +105,25 @@ export const translations = {
             next_player: 'SIGUIENTE JUGADOR',
         },
         paywall: {
-            title: 'Desbloquea Todo',
-            subtitle: 'Obtén acceso a todas las categorías',
-            features: [
-                'Todas las categorías desbloqueadas',
-                'Sin anuncios (Próximamente)',
-                'Apoya a los desarrolladores'
+            title: 'IMPOSTOR BÍBLICO PREMIUM',
+            subtitle: 'Lleva tus reuniones al siguiente nivel',
+            sections: [
+                {
+                    title: '✨ 3 nuevas categorías bíblicas',
+                    items: [
+                        '📋 Oficios bíblicos (50 palabras)',
+                        '🏛️ Lugares bíblicos (50 palabras)',
+                        '💭 Conceptos teológicos (50 palabras)'
+                    ]
+                },
+                {
+                    title: '✨ Crea categorías personalizadas',
+                    items: [
+                        '📝 Palabras de tu iglesia local',
+                        '👥 Nombres de tu grupo de jóvenes',
+                        '📖 Versículos favoritos'
+                    ]
+                }
             ],
             buy_now: 'Desbloquear por $2.99',
             restore: 'Restaurar Compras',
@@ -113,6 +131,20 @@ export const translations = {
             success_message: 'Has desbloqueado todo el contenido.',
             error_title: 'Error',
             error_message: 'No se pudo completar la compra.'
+        },
+        custom_category: {
+            title: 'Crear Categoría',
+            name_label: 'Nombre de la Categoría',
+            name_placeholder: 'Ej. Mis Amigos, Frutas...',
+            add_words_label: 'Añadir Palabras (Mínimo 3)',
+            word_placeholder: 'Escribe una palabra',
+            words_added: 'palabras añadidas',
+            no_words: 'No hay palabras aún',
+            save: 'Guardar Categoría',
+            error_title: 'Error',
+            error_duplicate: 'Esta palabra ya está en la lista',
+            error_name_required: 'Por favor ingresa un nombre de categoría',
+            error_min_words: 'Por favor añade al menos 3 palabras',
         }
     },
     en: {
@@ -140,6 +172,11 @@ export const translations = {
             english: 'English',
             rate_us: 'Rate Us',
             share_friends: 'Share with Friends',
+            difficulty_level: 'Difficulty Level',
+            easy: 'Easy',
+            medium: 'Medium',
+            hard: 'Hard',
+            all: 'All',
         },
         setup: {
             title: 'Biblical Impostor',
@@ -214,12 +251,25 @@ export const translations = {
             next_player: 'NEXT PLAYER',
         },
         paywall: {
-            title: 'Unlock Everything',
-            subtitle: 'Get access to all categories',
-            features: [
-                'All categories unlocked',
-                'No ads (Coming Soon)',
-                'Support the developers'
+            title: 'BIBLICAL IMPOSTOR PREMIUM',
+            subtitle: 'Take your gatherings to the next level',
+            sections: [
+                {
+                    title: '✨ 3 New Biblical Categories',
+                    items: [
+                        '📋 Biblical Jobs (50 words)',
+                        '🏛️ Biblical Places (50 words)',
+                        '💭 Theological Concepts (50 words)'
+                    ]
+                },
+                {
+                    title: '✨ Create Custom Categories',
+                    items: [
+                        '📝 Words from your local church',
+                        '👥 Usernames of your youth group',
+                        '📖 Favorite verses'
+                    ]
+                }
             ],
             buy_now: 'Unlock for $2.99',
             restore: 'Restore Purchases',
@@ -227,6 +277,20 @@ export const translations = {
             success_message: 'You have unlocked all content.',
             error_title: 'Error',
             error_message: 'Could not complete purchase.'
+        },
+        custom_category: {
+            title: 'Create Category',
+            name_label: 'Category Name',
+            name_placeholder: 'Ex. My Friends, Fruits...',
+            add_words_label: 'Add Words (Minimum 3)',
+            word_placeholder: 'Type a word',
+            words_added: 'words added',
+            no_words: 'No words yet',
+            save: 'Save Category',
+            error_title: 'Error',
+            error_duplicate: 'This word is already in the list',
+            error_name_required: 'Please enter a category name',
+            error_min_words: 'Please add at least 3 words',
         }
     }
 };

@@ -74,17 +74,21 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
 
                 <ScrollView contentContainerStyle={styles.content}>
                     <View style={styles.iconContainer}>
-                        <Ionicons name="diamond" size={80} color="#FFD700" />
+                        <Ionicons name="diamond" size={50} color="#FFD700" />
                     </View>
 
                     <Text style={styles.title}>{t.paywall.title}</Text>
                     <Text style={styles.subtitle}>{t.paywall.subtitle}</Text>
 
                     <View style={styles.featuresContainer}>
-                        {t.paywall.features.map((feature: string, index: number) => (
-                            <View key={index} style={styles.featureRow}>
-                                <Ionicons name="checkmark-circle" size={24} color="#48BB78" />
-                                <Text style={styles.featureText}>{feature}</Text>
+                        {t.paywall.sections.map((section: any, sectionIndex: number) => (
+                            <View key={sectionIndex} style={styles.sectionContainer}>
+                                <Text style={styles.sectionTitle}>{section.title}</Text>
+                                {section.items.map((item: string, itemIndex: number) => (
+                                    <View key={itemIndex} style={styles.featureRow}>
+                                        <Text style={styles.featureText}>{item}</Text>
+                                    </View>
+                                ))}
                             </View>
                         ))}
                     </View>
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     iconContainer: {
-        marginTop: 20,
+        marginTop: -20,
         marginBottom: 20,
         backgroundColor: 'rgba(255,255,255,0.1)',
         padding: 30,
@@ -151,17 +155,17 @@ const styles = StyleSheet.create({
         borderColor: '#FFD700',
     },
     title: {
-        fontSize: 32,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#FFF',
         textAlign: 'center',
-        marginBottom: 10,
+        marginBottom: 0,
     },
     subtitle: {
-        fontSize: 18,
+        fontSize: 16,
         color: '#CBD5E0',
         textAlign: 'center',
-        marginBottom: 40,
+        marginBottom: 10,
     },
     featuresContainer: {
         width: '100%',
@@ -169,16 +173,26 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 24,
     },
+    sectionContainer: {
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: '#FFD700',
+        marginBottom: 8,
+    },
     featureRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 16,
+        marginBottom: 8,
+        marginLeft: 8,
     },
     featureText: {
-        fontSize: 18,
+        fontSize: 16,
         color: '#FFF',
-        marginLeft: 16,
-        fontWeight: '500',
+        marginLeft: 8,
+        fontWeight: '400',
     },
     spacer: {
         flex: 1,

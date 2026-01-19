@@ -11,7 +11,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Results'>;
 
 export default function ResultsScreen() {
     const { t } = useTranslation();
-    const { nextRound, resetGame, playClick } = useGame();
+    const { nextRound, resetGame, playClick, incrementGamesPlayed } = useGame();
     const navigation = useNavigation<NavigationProp>();
 
     const handleNextRound = () => {
