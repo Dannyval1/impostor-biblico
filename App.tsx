@@ -41,6 +41,9 @@ async function loadResourcesAsync() {
     require('./assets/cat_oficios_biblicos.png'),
     require('./assets/cat_lugares_biblicos.png'),
     require('./assets/cat_conceptos_teologicos.png'),
+    require('./assets/impostor_home_x.webp'),
+    require('./assets/logo_es.png'),
+    require('./assets/logo_en.png'),
   ];
 
   await Asset.loadAsync([...avatarImages, ...categoryImages]);

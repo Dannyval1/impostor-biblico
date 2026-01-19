@@ -7,6 +7,7 @@ import {
     ScrollView,
     Alert,
     Image,
+    StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,7 +28,7 @@ type VotingScreenProps = {
 // Removed local AVATAR_IMAGES logic
 
 export default function VotingScreen({ navigation }: VotingScreenProps) {
-    const { state, resetGame, eliminatePlayer, playClick, playSuccess, playFailure } = useGame();
+    const { state, resetGame, eliminatePlayer, playClick, playSuccess, playFailure, setGamePhase } = useGame();
     const { t } = useTranslation();
     const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
     const [timeLeft, setTimeLeft] = useState(state.settings.gameDuration); // Usar duración configurada
@@ -36,6 +37,14 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
     const [winner, setWinner] = useState<'civilians' | 'impostor' | null>(null);
     const [eliminatedImpostors, setEliminatedImpostors] = useState<string[]>([]);
     const [showTimerExpiredAlert, setShowTimerExpiredAlert] = useState(false);
+
+    // Set Phase to Voting on Mount
+    useEffect(() => {
+        setGamePhase('voting');
+        return () => {
+            // Cleanup if needed, but usually handled by navigation or next screen
+        };
+    }, []);
 
     // Modal State
     const [modalVisible, setModalVisible] = useState(false);
@@ -113,6 +122,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                     {
                         text: t.setup.unlimited,
                         onPress: () => {
+                            playClick();
                             setTimeLeft(state.settings.gameDuration);
                             setShowTimerExpiredAlert(false);
                         }
@@ -120,6 +130,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                     {
                         text: t.voting.eliminate,
                         onPress: () => {
+                            playClick();
                             setShowTimerExpiredAlert(false);
                         }
                     }
@@ -149,9 +160,13 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 setWinner('civilians');
                 setResultMessage(t.voting.impostor_found);
                 playSuccess();
+                setResultMessage(t.voting.impostor_found);
+                playSuccess();
                 setGameFinished(true);
+                setGamePhase('results');
             } else {
                 // More impostors remain
+                playSuccess(); // Sonido de éxito al encontrar uno
                 const remaining = state.settings.impostorCount - newEliminatedImpostors.length;
                 showGameModal(
                     t.voting.impostor_found,
@@ -168,6 +183,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         } else {
             // Incorrect Vote: Eliminate Innocent Player
             const playerToEliminate = state.settings.players.find((p: Player) => p.id === selectedPlayerId)?.name || 'Jugador';
+            playFailure(); // Play immediately
 
             showGameModal(
                 t.voting.civilian_eliminated,
@@ -175,9 +191,9 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 'danger',
                 'Continuar',
                 () => {
+                    playClick();
                     if (selectedPlayerId) {
                         eliminatePlayer(selectedPlayerId);
-                        playFailure();
                     }
 
                     // Check win/lose conditions after elimination
@@ -185,7 +201,9 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                     if (remainingPlayersCount < 3) {
                         setWinner('impostor');
                         setResultMessage(t.voting.winner_impostors);
+                        playFailure(); // Audio correcto para cuando ganan los impostores
                         setGameFinished(true);
+                        setGamePhase('results');
                         return;
                     }
 
@@ -197,6 +215,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
     };
 
     const handleReveal = () => {
+        playClick();
         showGameModal(
             t.voting.game_over,
             '',
@@ -206,12 +225,15 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 setWinner(null); // No winner declared
                 setResultMessage(t.voting.game_over);
                 setGameFinished(true);
+                setGamePhase('results');
             }
         );
     };
 
     const handlePlayAgain = () => {
+        playClick();
         resetGame();
+        setGamePhase('setup');
         navigation.reset({
             index: 0,
             routes: [{ name: 'Setup' }],
@@ -219,6 +241,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
     };
 
     const handleClose = () => {
+        playClick();
         showGameModal(
             t.voting.game_over,
             t.voting.exit_confirm || '¿Estás seguro de que quieres salir?',
@@ -235,6 +258,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
             {/* Header with Close Button */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
@@ -278,7 +302,10 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                                             { backgroundColor: '#F0F4FF' },
                                             selectedPlayerId === player.id && styles.playerCardSelected
                                         ]}
-                                        onPress={() => setSelectedPlayerId(player.id)}
+                                        onPress={() => {
+                                            playClick();
+                                            setSelectedPlayerId(player.id);
+                                        }}
                                     >
                                         <Image source={avatarImage} style={styles.avatarImage} resizeMode="contain" />
 

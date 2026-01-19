@@ -8,9 +8,10 @@ import {
     ScrollView,
     Image,
     KeyboardAvoidingView,
-    Platform,
     Keyboard,
+    Platform,
     Modal,
+    StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -23,6 +24,8 @@ import { Category, Avatar, Player } from '../types';
 import { startTransition } from 'react';
 import { getAvatarSource, TOTAL_AVATARS } from '../utils/avatarAssets';
 import { GameModal } from '../components/GameModal';
+import { SettingsModal } from '../components/SettingsModal';
+import { ScaleButton } from '../components/ScaleButton';
 
 type SetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Setup'>;
@@ -78,6 +81,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     // Modal State
     const [modalVisible, setModalVisible] = useState(false);
@@ -157,6 +161,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     };
 
     const handleDecreaseImpostors = () => {
+        playClick();
         if (state.settings.impostorCount <= 1) {
             // No alert needed for hitting min
             return;
@@ -165,6 +170,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     };
 
     const handleIncreaseImpostors = () => {
+        playClick();
         if (state.settings.impostorCount >= maxImpostors) {
             // No alert needed for hitting max
             return;
@@ -187,6 +193,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={{ flex: 1 }}
@@ -201,12 +208,25 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                     <View style={styles.header}>
                         <TouchableOpacity
                             style={styles.backButton}
-                            onPress={() => navigation.navigate('Home')}
+                            onPress={() => {
+                                playClick();
+                                navigation.navigate('Home');
+                            }}
                         >
-                            <Text style={styles.backButtonText}>←</Text>
+                            <Ionicons name="arrow-back" size={28} color="#333" />
                         </TouchableOpacity>
+
                         <Text style={styles.title}>{t.setup.title}</Text>
-                        <View style={{ width: 60 }} />
+
+                        <TouchableOpacity
+                            style={styles.settingsButton}
+                            onPress={() => {
+                                playClick();
+                                setShowSettings(true);
+                            }}
+                        >
+                            <Ionicons name="settings-outline" size={26} color="#333" />
+                        </TouchableOpacity>
                     </View>
 
                     {/* Modo de juego */}
@@ -262,7 +282,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                         <View key={player.id} style={[styles.playerCard, { backgroundColor: '#F0F4FF' }]}>
                                             <TouchableOpacity
                                                 style={styles.removeButtonPosition}
-                                                onPress={() => removePlayer(player.id)}
+                                                onPress={() => {
+                                                    playClick();
+                                                    removePlayer(player.id);
+                                                }}
                                             >
                                                 <Text style={styles.removeButton}>×</Text>
                                             </TouchableOpacity>
@@ -318,14 +341,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                         ]}
                                         onPress={() => {
                                             if (isPremium) {
-                                                showGameModal(
-                                                    t.setup.premium_title,
-                                                    t.setup.premium_category_alert,
-                                                    'info',
-                                                    'OK'
-                                                );
+                                                playClick();
+                                                navigation.navigate('Paywall');
                                                 return;
                                             }
+                                            playClick();
                                             toggleCategory(category.id);
                                         }}
                                         activeOpacity={isPremium ? 1 : 0.8}
@@ -413,7 +433,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                     </View>
 
                     {/* Botón Iniciar */}
-                    <TouchableOpacity
+                    <ScaleButton
                         style={[
                             styles.startButton,
                             state.settings.players.length < 3 && styles.startButtonDisabled,
@@ -422,7 +442,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         disabled={state.settings.players.length < 3}
                     >
                         <Text style={styles.startButtonText}>{t.setup.start_game}</Text>
-                    </TouchableOpacity>
+                    </ScaleButton>
                 </ScrollView>
             </KeyboardAvoidingView>
 
@@ -448,6 +468,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                     state.settings.gameDuration === option.value && styles.modalOptionSelected
                                 ]}
                                 onPress={() => {
+                                    playClick();
                                     setGameDuration(option.value);
                                     setShowDurationPicker(false);
                                 }}
@@ -474,6 +495,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 buttonText={modalConfig.buttonText}
                 onClose={modalConfig.onClose}
             />
+            <SettingsModal
+                visible={showSettings}
+                onClose={() => setShowSettings(false)}
+            />
         </SafeAreaView>
     );
 }
@@ -493,6 +518,9 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     backButton: {
+        padding: 8,
+    },
+    settingsButton: {
         padding: 8,
     },
     backButtonText: {

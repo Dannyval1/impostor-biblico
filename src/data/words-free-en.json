@@ -1,0 +1,100 @@
+[
+    {
+        "id": "pb_001",
+        "word": "Adam",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "First man created by God"
+    },
+    {
+        "id": "pb_002",
+        "word": "Eve",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "First woman and Adam's wife"
+    },
+    {
+        "id": "pb_003",
+        "word": "Noah",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Built an ark for the flood"
+    },
+    {
+        "id": "pb_004",
+        "word": "Abraham",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Father of faith, called by God"
+    },
+    {
+        "id": "pb_005",
+        "word": "Sarah",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Abraham's wife, mother of Isaac"
+    },
+    {
+        "id": "pb_006",
+        "word": "Isaac",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Son of Abraham and Sarah"
+    },
+    {
+        "id": "pb_007",
+        "word": "Jacob",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Had 12 sons, fathers of the tribes"
+    },
+    {
+        "id": "pb_008",
+        "word": "Joseph",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Sold by his brothers, ruled Egypt"
+    },
+    {
+        "id": "pb_009",
+        "word": "Moses",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Leader of the Exodus, received the commandments"
+    },
+    {
+        "id": "pb_010",
+        "word": "Aaron",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Moses' brother, first high priest"
+    },
+    {
+        "id": "pb_011",
+        "word": "Joshua",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Conquered Jericho and the promised land"
+    },
+    {
+        "id": "pb_012",
+        "word": "Samson",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Judge with supernatural strength in his hair"
+    },
+    {
+        "id": "pb_013",
+        "word": "Ruth",
+        "category": "personajes_biblicos",
+        "difficulty": "medium",
+        "hint": "Moabite loyal to Naomi, David's great-grandmother"
+    },
+    {
+        "id": "pb_014",
+        "word": "Samuel",
+        "category": "personajes_biblicos",
+        "difficulty": "easy",
+        "hint": "Last judge, anointed the first kings"
+    }
+]

@@ -4,13 +4,18 @@ export const translations = {
     es: {
         home: {
             title: 'Impostor Bíblico',
-            subtitle: '¡Descubre al impostor!',
+            subtitle: '¡Encuentra al impostor!',
             play: 'JUGAR',
             settings: 'Ajustes',
             share: 'Compartir',
+            rate_us: 'Califícanos',
             version: 'Versión',
             loading: 'Cargando...',
             share_message: '¡Descarga Impostor Bíblico y descubre quién es el impostor! 🕵️‍♂️📖',
+        },
+        common: {
+            play_again: 'Jugar de Nuevo',
+            exit: 'Salir',
         },
         settings: {
             title: 'Ajustes',
@@ -19,8 +24,8 @@ export const translations = {
             language: 'Idioma',
             spanish: 'Español',
             english: 'English',
-            rate_us: 'Califícanos',
             share_friends: 'Compartir con amigos',
+            rate_us: 'Califícanos',
         },
         setup: {
             title: 'Impostor Bíblico',
@@ -85,24 +90,46 @@ export const translations = {
             impostor_secret: '¡No sabes cuál es la palabra!',
             impostor_strategy: 'Escucha las pistas de los demás y trata de descubrir la palabra sin que te descubran.',
             impostor_team: 'Son %{count} impostores trabajando juntos',
+            shout_is: 'ES',
+            shout_impostor: 'IMPOSTOR',
             hint: 'Pista',
             memorize: 'MEMORIZA Y DISIMULA',
             watch_out: '¡Cuidado! Hay %{count} impostores',
             change_word: 'Cambiar Palabra',
             start_game: 'COMENZAR JUEGO',
             next_player: 'SIGUIENTE JUGADOR',
+        },
+        paywall: {
+            title: 'Desbloquea Todo',
+            subtitle: 'Obtén acceso a todas las categorías',
+            features: [
+                'Todas las categorías desbloqueadas',
+                'Sin anuncios (Próximamente)',
+                'Apoya a los desarrolladores'
+            ],
+            buy_now: 'Desbloquear por $2.99',
+            restore: 'Restaurar Compras',
+            success_title: '¡Gracias!',
+            success_message: 'Has desbloqueado todo el contenido.',
+            error_title: 'Error',
+            error_message: 'No se pudo completar la compra.'
         }
     },
     en: {
         home: {
-            title: 'Bible Impostor',
+            title: 'Biblical Impostor',
             subtitle: 'Find the impostor!',
             play: 'PLAY',
             settings: 'Settings',
             share: 'Share',
+            rate_us: 'Rate Us',
             version: 'Version',
             loading: 'Loading...',
-            share_message: 'Download Bible Impostor and find out who the impostor is! 🕵️‍♂️📖',
+            share_message: 'Download Biblical Impostor and find out who the impostor is! 🕵️‍♂️📖',
+        },
+        common: {
+            play_again: 'Play Again',
+            exit: 'Exit',
         },
         settings: {
             title: 'Settings',
@@ -115,7 +142,7 @@ export const translations = {
             share_friends: 'Share with Friends',
         },
         setup: {
-            title: 'Bible Impostor',
+            title: 'Biblical Impostor',
             mode: 'Mode',
             classic: 'Classic',
             classic_desc: 'Meet in person',
@@ -177,12 +204,29 @@ export const translations = {
             impostor_secret: "You don't know the secret word!",
             impostor_strategy: 'Listen to clues from others and try to figure out the word without being caught.',
             impostor_team: 'There are %{count} impostors working together',
+            shout_is: 'IS',
+            shout_impostor: 'IMPOSTOR',
             hint: 'Hint',
             memorize: 'MEMORIZE AND BLEND IN',
             watch_out: 'Watch out! There are %{count} impostors',
             change_word: 'Change Word',
             start_game: 'START GAME',
             next_player: 'NEXT PLAYER',
+        },
+        paywall: {
+            title: 'Unlock Everything',
+            subtitle: 'Get access to all categories',
+            features: [
+                'All categories unlocked',
+                'No ads (Coming Soon)',
+                'Support the developers'
+            ],
+            buy_now: 'Unlock for $2.99',
+            restore: 'Restore Purchases',
+            success_title: 'Thank You!',
+            success_message: 'You have unlocked all content.',
+            error_title: 'Error',
+            error_message: 'Could not complete purchase.'
         }
     }
 };

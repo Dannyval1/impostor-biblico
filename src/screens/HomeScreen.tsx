@@ -8,11 +8,8 @@ import {
     StatusBar,
     Animated,
     Dimensions,
-    Modal,
-    Switch,
-    Share,
-    Linking,
-    Platform
+    Platform,
+    Share
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -20,6 +17,8 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
+import { SettingsModal } from '../components/SettingsModal';
+import { ScaleButton } from '../components/ScaleButton';
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -31,7 +30,7 @@ const { height, width } = Dimensions.get('window');
 const APP_VERSION = '1.0.0';
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
-    const { state, toggleMusic, toggleSounds, setLanguage, setHasLoaded, playClick } = useGame();
+    const { state, setHasLoaded, playClick, playIntro } = useGame();
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(!state.hasLoaded);
     const [showSettings, setShowSettings] = useState(false);
@@ -53,6 +52,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             duration: 3000,
             useNativeDriver: false,
         }).start(() => {
+            // Play sound immediately when loading finishes
+            playIntro();
+
             // 2. On Finish: Fade out loading bar & Slide up Bottom Sheet
             Animated.parallel([
                 Animated.timing(fadeAnim, {
@@ -72,30 +74,18 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         });
     }, [state.hasLoaded]);
 
+
+    // Share and Rate functions removed as they are now in SettingsModal or handled there
     const handleShare = async () => {
+        playClick();
         try {
             await Share.share({
                 message: t.home.share_message,
-                url: 'https://impostorbíblico.com', // Replace with real URL
+                url: 'https://impostorbíblico.com',
             });
         } catch (error) {
             console.log(error);
         }
-    };
-
-    const handleRateUs = () => {
-        const url = Platform.OS === 'ios'
-            ? 'itms-apps://itunes.apple.com/app/idYOUR_APP_ID'
-            : 'market://details?id=YOUR_PACKAGE_NAME';
-
-        Linking.canOpenURL(url).then(supported => {
-            if (supported) {
-                Linking.openURL(url);
-            } else {
-                // Fallback for browser
-                Linking.openURL('https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME');
-            }
-        });
     };
 
     const widthInterpolate = progressAnim.interpolate({
@@ -124,7 +114,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
                 {/* Logo */}
                 <Animated.Image
-                    source={require('../../assets/logo_1.png')}
+                    source={
+                        state.settings.language === 'en'
+                            ? require('../../assets/logo_en.png')
+                            : require('../../assets/logo_es.png')
+                    }
                     style={[styles.logo, { opacity: fadeAnim }]}
                     resizeMode="contain"
                 />
@@ -163,16 +157,16 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     <Text style={styles.title}>{t.home.title}</Text>
                     <Text style={styles.subtitle}>{t.home.subtitle}</Text>
 
-                    <TouchableOpacity
+                    <ScaleButton
                         style={styles.primaryButton}
                         onPress={() => {
+                            console.log('JUGAR pressed');
                             playClick();
                             navigation.navigate('Setup');
                         }}
-                        activeOpacity={0.85}
                     >
                         <Text style={styles.primaryButtonText}>{t.home.play}</Text>
-                    </TouchableOpacity>
+                    </ScaleButton>
 
                     <View style={styles.secondaryButtonsRow}>
                         <TouchableOpacity
@@ -202,84 +196,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             </Animated.View>
 
             {/* Settings Modal */}
-            <Modal
+            <SettingsModal
                 visible={showSettings}
-                transparent={true}
-                animationType="slide"
-                onRequestClose={() => setShowSettings(false)}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>{t.settings.title}</Text>
-                            <TouchableOpacity onPress={() => setShowSettings(false)}>
-                                <Ionicons name="close" size={24} color="#333" />
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.settingItem}>
-                            <View style={styles.settingLabelContainer}>
-                                <Ionicons name="musical-notes-outline" size={24} color="#5B7FDB" />
-                                <Text style={styles.settingLabel}>{t.settings.music}</Text>
-                            </View>
-                            <Switch
-                                value={state.settings.musicEnabled}
-                                onValueChange={toggleMusic}
-                                trackColor={{ false: '#CBD5E0', true: '#5B7FDB' }}
-                            />
-                        </View>
-
-                        <View style={styles.settingItem}>
-                            <View style={styles.settingLabelContainer}>
-                                <Ionicons name="volume-medium-outline" size={24} color="#5B7FDB" />
-                                <Text style={styles.settingLabel}>{t.settings.effects}</Text>
-                            </View>
-                            <Switch
-                                value={state.settings.soundsEnabled}
-                                onValueChange={toggleSounds}
-                                trackColor={{ false: '#CBD5E0', true: '#5B7FDB' }}
-                            />
-                        </View>
-
-                        <View style={styles.settingItemCol}>
-                            <View style={styles.settingLabelContainer}>
-                                <Ionicons name="language-outline" size={24} color="#5B7FDB" />
-                                <Text style={styles.settingLabel}>{t.settings.language}</Text>
-                            </View>
-                            <View style={styles.langSelector}>
-                                <TouchableOpacity
-                                    style={[styles.langOption, state.settings.language === 'es' && styles.langOptionSelected]}
-                                    onPress={() => setLanguage('es')}
-                                >
-                                    <Text style={[styles.langText, state.settings.language === 'es' && styles.langTextSelected]}>{t.settings.spanish}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.langOption, state.settings.language === 'en' && styles.langOptionSelected]}
-                                    onPress={() => setLanguage('en')}
-                                >
-                                    <Text style={[styles.langText, state.settings.language === 'en' && styles.langTextSelected]}>{t.settings.english}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                        <View style={styles.divider} />
-
-                        <TouchableOpacity style={styles.actionItem} onPress={handleRateUs}>
-                            <Ionicons name="star-outline" size={22} color="#4A5568" />
-                            <Text style={styles.actionText}>{t.settings.rate_us}</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.actionItem} onPress={handleShare}>
-                            <Ionicons name="share-social-outline" size={22} color="#4A5568" />
-                            <Text style={styles.actionText}>{t.settings.share_friends}</Text>
-                        </TouchableOpacity>
-
-                        <View style={{ marginTop: 20, alignItems: 'center' }}>
-                            <Text style={styles.versionTextModal}>{t.home.version} {APP_VERSION}</Text>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                onClose={() => setShowSettings(false)}
+            />
         </View>
     );
 }
