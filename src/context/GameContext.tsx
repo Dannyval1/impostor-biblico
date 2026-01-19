@@ -1,15 +1,20 @@
 // src/context/GameContext.tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import * as Audio from 'expo-audio';
+import { useAudioPlayer } from 'expo-audio';
+import { getLocales } from 'expo-localization';
 import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar } from '../types';
 
 // Importar las palabras
-import freeWordsData from '../data/words-free.json';
+import freeWordsDataEs from '../data/words-free-es.json';
+import freeWordsDataEn from '../data/words-free-en.json';
 import { TOTAL_AVATARS } from '../utils/avatarAssets';
 
 const clickSound = require('../../assets/sounds/click.mp3');
-const successSound = require('../../assets/sounds/success.mp3');
+const successSound = require('../../assets/sounds/victory.mp3');
 const failureSound = require('../../assets/sounds/failure.mp3');
+// Using old success sound as intro since original intro.mp3 was corrupted
+const introSound = require('../../assets/sounds/success.mp3');
+const gameMusicSound = require('../../assets/sounds/game_mode.mp3');
 
 // Helper to get next available avatar or cycle
 function getNextAvatar(currentPlayers: Player[]): Avatar {
@@ -34,8 +39,8 @@ function getNextAvatar(currentPlayers: Player[]): Avatar {
 }
 
 // Helper: Obtener palabra aleatoria de las categorías seleccionadas
-function getRandomWord(categories: Category[]): Word {
-    const freeWords = freeWordsData as Word[];
+function getRandomWord(categories: Category[], language: 'es' | 'en'): Word {
+    const freeWords = (language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
 
     // Filtrar por categorías seleccionadas
     const filtered = freeWords.filter(w => categories.includes(w.category));
@@ -50,16 +55,18 @@ function getRandomWord(categories: Category[]): Word {
 }
 
 // Estado inicial
+const deviceLanguage = getLocales()[0]?.languageCode === 'es' ? 'es' : 'en';
+
 const initialState: GameState = {
     settings: {
         mode: 'classic',
         players: [],
         selectedCategories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
         impostorCount: 1,
-        gameDuration: 300, // 5 minutos por defecto
-        musicEnabled: true,
+        gameDuration: null, // Unlimited by default
+        musicEnabled: false,
         soundsEnabled: true,
-        language: 'es'
+        language: deviceLanguage
     },
     currentWord: null,
     currentImpostor: null,
@@ -166,7 +173,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             }));
 
             // Cargar palabra aleatoria
-            const word = getRandomWord(state.settings.selectedCategories);
+            const word = getRandomWord(state.settings.selectedCategories, state.settings.language);
 
             return {
                 ...state,
@@ -183,7 +190,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
         case 'LOAD_NEW_WORD': {
             // Cargar una nueva palabra aleatoria
-            const word = getRandomWord(state.settings.selectedCategories);
+            const word = getRandomWord(state.settings.selectedCategories, state.settings.language);
             return {
                 ...state,
                 currentWord: word,
@@ -230,6 +237,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 hasSeenWord: false,
                 clue: undefined,
                 votedFor: undefined,
+                isEliminated: false,
             }));
 
             return {
@@ -255,17 +263,27 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 },
             };
 
-        case 'RESET_GAME':
+        case 'RESET_GAME': {
+            // Reset players but keep their names/avatars/ids
+            const resetPlayers = state.settings.players.map(p => ({
+                ...p,
+                score: 0,
+                role: 'civilian' as PlayerRole,
+                hasSeenWord: false,
+                clue: undefined,
+                votedFor: undefined,
+                isEliminated: false
+            }));
+
             return {
-                ...state,
+                ...initialState,
                 settings: {
-                    ...initialState.settings,
-                    players: state.settings.players.map(p => ({
-                        ...p,
-                        isEliminated: false // Reset elimination status
-                    }))
-                }
+                    ...state.settings,
+                    players: resetPlayers
+                }, // Preserve settings but reset players stats
+                hasLoaded: true // Keep loaded state
             };
+        }
 
         case 'TOGGLE_MUSIC':
             return {
@@ -300,6 +318,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 hasLoaded: true,
             };
 
+        case 'SET_GAME_PHASE':
+            return {
+                ...state,
+                gamePhase: action.payload,
+            };
+
         case 'PLAY_CLICK':
             return state;
 
@@ -331,43 +355,115 @@ const GameContext = createContext<{
     playClick: () => void;
     playSuccess: () => void;
     playFailure: () => void;
+    playIntro: () => void;
+    setGamePhase: (phase: import('../types').GamePhase) => void;
 } | null>(null);
 
 // Provider
 export function GameProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(gameReducer, initialState);
 
-    // Audio logic
-    const playClick = async () => {
-        if (state.settings.soundsEnabled) {
+    // Audio logic with persistent players
+    const clickPlayer = useAudioPlayer(clickSound);
+    const successPlayer = useAudioPlayer(successSound);
+    const failurePlayer = useAudioPlayer(failureSound);
+    const introPlayer = useAudioPlayer(introSound);
+    const gameMusicPlayer = useAudioPlayer(gameMusicSound);
+
+    // Music Logic
+    React.useEffect(() => {
+        // Stop all music first
+        try {
+            gameMusicPlayer.pause();
+        } catch (e) {
+            console.log('Error pausing music (safe to ignore):', e);
+        }
+
+        gameMusicPlayer.loop = true;
+
+        if (state.settings.musicEnabled) {
+            // Logic based on game phase
+            // Only play during 'voting' as requested by user
+            if (state.gamePhase === 'voting') {
+                console.log('Starting Game Music (Voting Phase)');
+                try {
+                    gameMusicPlayer.seekTo(0);
+                    gameMusicPlayer.play();
+                } catch (e) {
+                    console.log('Error playing game music:', e);
+                }
+            } else {
+                console.log('Stopping Game Music (Not in Voting Phase)');
+                // Music is already paused by default at start of effect, 
+                // but we rely on that pause call above.
+            }
+        } else {
+            console.log('Music disabled in settings');
+        }
+
+        return () => {
             try {
-                const sound = Audio.createAudioPlayer(clickSound);
-                sound.play();
-            } catch (error) {
-                console.log('Error playing click sound:', error);
+                gameMusicPlayer.pause();
+            } catch (e) {
+                // Expected error on cleanup (NativeSharedObjectNotFoundException)
+                // console.log('Error cleaning up music:', e);
+            }
+        };
+    }, [state.gamePhase, state.settings.musicEnabled]);
+
+    // Expose intro player control
+    const playIntro = () => {
+        if (state.settings.musicEnabled) {
+            console.log('Playing Intro');
+            try {
+                introPlayer.loop = false; // Ensure it doesn't loop
+                introPlayer.seekTo(0);
+                introPlayer.play();
+            } catch (e) {
+                console.log('Error playing intro:', e);
             }
         }
     };
 
-    const playSuccess = async () => {
+    const playClick = () => {
         if (state.settings.soundsEnabled) {
+            console.log('Attempting to play click sound');
             try {
-                const sound = Audio.createAudioPlayer(successSound);
-                sound.play();
-            } catch (error) {
-                console.log('Error playing success sound:', error);
+                clickPlayer.seekTo(0);
+                clickPlayer.play();
+            } catch (e) {
+                console.log('Error playing click sound:', e);
             }
+        } else {
+            console.log('Click sound skipped (disabled)');
         }
     };
 
-    const playFailure = async () => {
+    const playSuccess = () => {
         if (state.settings.soundsEnabled) {
+            console.log('Attempting to play success sound');
             try {
-                const sound = Audio.createAudioPlayer(failureSound);
-                sound.play();
-            } catch (error) {
-                console.log('Error playing failure sound:', error);
+                successPlayer.seekTo(0);
+                successPlayer.play();
+            } catch (e) {
+                console.log('Error playing success sound:', e);
             }
+        } else {
+            console.log('Success sound skipped (disabled)');
+        }
+    };
+
+    const playFailure = () => {
+        if (state.settings.soundsEnabled) {
+            console.log('Attempting to play failure sound');
+            try {
+                failurePlayer.seekTo(0);
+                failurePlayer.play();
+            } catch (e) {
+                console.log('Error playing failure sound:', e);
+            }
+        } else {
+            console.log('Failure sound skipped (disabled)');
         }
     };
 
@@ -395,6 +491,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
         playClick,
         playSuccess,
         playFailure,
+        playIntro,
+        setGamePhase: (phase: import('../types').GamePhase) => dispatch({ type: 'SET_GAME_PHASE', payload: phase }),
     };
 
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

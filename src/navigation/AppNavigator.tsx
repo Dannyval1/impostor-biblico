@@ -7,12 +7,15 @@ import RevealScreen from '../screens/RevealScreen';
 import VotingScreen from '../screens/VotingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 
+import PaywallScreen from '../screens/PaywallScreen';
+
 export type RootStackParamList = {
     Home: undefined;
     Setup: undefined;
     Reveal: undefined;
     Voting: undefined;
     Results: undefined;
+    Paywall: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,6 +34,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="Reveal" component={RevealScreen} />
                 <Stack.Screen name="Voting" component={VotingScreen} />
                 <Stack.Screen name="Results" component={ResultsScreen} />
+                <Stack.Screen name="Paywall" component={PaywallScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

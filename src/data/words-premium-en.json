@@ -1,0 +1,212 @@
+[
+    {
+        "id": "of_001",
+        "word": "Fisherman",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Peter's profession"
+    },
+    {
+        "id": "of_002",
+        "word": "Carpenter",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Profession of Joseph, Jesus' earthly father"
+    },
+    {
+        "id": "of_003",
+        "word": "Shepherd",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Cared for sheep, David's profession"
+    },
+    {
+        "id": "of_004",
+        "word": "Pharisee",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Jewish religious leader, expert in the law"
+    },
+    {
+        "id": "of_005",
+        "word": "Tax Collector",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Publican, like Matthew"
+    },
+    {
+        "id": "of_008",
+        "word": "Priest",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Ministered in the temple, offered sacrifices"
+    },
+    {
+        "id": "of_011",
+        "word": "Prophet",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Spoke God's messages to the people"
+    },
+    {
+        "id": "of_012",
+        "word": "King",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Ruler of Israel or Judah"
+    },
+    {
+        "id": "of_014",
+        "word": "Soldier",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Military man"
+    },
+    {
+        "id": "of_017",
+        "word": "Apostle",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Sent one, the 12 disciples of Jesus"
+    },
+    {
+        "id": "lu_001",
+        "word": "Eden",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Garden where Adam and Eve lived"
+    },
+    {
+        "id": "lu_003",
+        "word": "Babel",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "City of the tower, confused languages"
+    },
+    {
+        "id": "lu_005",
+        "word": "Canaan",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Promised land to Abraham"
+    },
+    {
+        "id": "lu_006",
+        "word": "Sodom",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Wicked city destroyed with fire"
+    },
+    {
+        "id": "lu_010",
+        "word": "Egypt",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Country where Joseph ruled and Israel was enslaved"
+    },
+    {
+        "id": "lu_012",
+        "word": "Red Sea",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "God divided it for Israel to cross"
+    },
+    {
+        "id": "lu_013",
+        "word": "Mount Sinai",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Where Moses received the tablets of the law"
+    },
+    {
+        "id": "lu_015",
+        "word": "Jericho",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "First conquered city, walls fell down"
+    },
+    {
+        "id": "lu_016",
+        "word": "Jerusalem",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Holy City, capital of Israel"
+    },
+    {
+        "id": "lu_017",
+        "word": "Bethlehem",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Birthplace of David and Jesus"
+    },
+    {
+        "id": "ct_001",
+        "word": "Grace",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "God's unmerited favor"
+    },
+    {
+        "id": "ct_002",
+        "word": "Faith",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Assurance of things hoped for"
+    },
+    {
+        "id": "ct_003",
+        "word": "Salvation",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Deliverance from sin by Christ"
+    },
+    {
+        "id": "ct_005",
+        "word": "Justification",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Declared righteous before God by faith"
+    },
+    {
+        "id": "ct_006",
+        "word": "Sanctification",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Process of being made holy"
+    },
+    {
+        "id": "ct_011",
+        "word": "Adoption",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Being made a child of God"
+    },
+    {
+        "id": "ct_013",
+        "word": "Conversion",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Turning to God from sin"
+    },
+    {
+        "id": "ct_014",
+        "word": "Repentance",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Change of mind about sin"
+    },
+    {
+        "id": "ct_015",
+        "word": "Trinity",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "One God in three persons"
+    },
+    {
+        "id": "ct_016",
+        "word": "Resurrection",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Coming back to life"
+    }
+]

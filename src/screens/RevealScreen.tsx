@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
+    StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -63,6 +64,7 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
             <ScrollView contentContainerStyle={styles.content}>
                 {/* Header */}
                 <View style={styles.header}>
@@ -110,8 +112,8 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                                 // ES IMPOSTOR
                                 <View style={styles.impostorContainer}>
                                     <Text style={styles.impostorIcon}>🎭</Text>
-                                    <Text style={styles.impostorTitle}>ES</Text>
-                                    <Text style={styles.impostorTitleBig}>IMPOSTOR</Text>
+                                    <Text style={styles.impostorTitle}>{t.reveal.shout_is}</Text>
+                                    <Text style={styles.impostorTitleBig}>{t.reveal.shout_impostor}</Text>
 
                                     <View style={styles.impostorInfoBox}>
                                         <Text style={styles.impostorInfoText}>

@@ -74,4 +74,5 @@ export type GameAction =
     | { type: 'TOGGLE_SOUNDS'; payload: boolean }
     | { type: 'SET_LANGUAGE'; payload: 'es' | 'en' }
     | { type: 'SET_HAS_LOADED' }
+    | { type: 'SET_GAME_PHASE'; payload: GamePhase }
     | { type: 'PLAY_CLICK' };
