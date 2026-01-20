@@ -21,7 +21,7 @@ const ConfettiPiece = ({ index }: ConfettiPieceProps) => {
         const driftDistance = Math.random() * 100 - 50;
         const delay = index * 100;
 
-        Animated.loop(
+        const animation = Animated.loop(
             Animated.sequence([
                 Animated.delay(delay),
                 Animated.parallel([
@@ -59,7 +59,11 @@ const ConfettiPiece = ({ index }: ConfettiPieceProps) => {
                     }),
                 ]),
             ])
-        ).start();
+        );
+
+        animation.start();
+
+        return () => animation.stop();
     }, [index, initialX]);
 
     const rotation = rotateAnim.interpolate({

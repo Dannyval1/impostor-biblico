@@ -19,25 +19,18 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
-import { Category, Avatar, Player } from '../types';
-
-import { startTransition } from 'react';
+import { Category, Player } from '../types';
 import { getAvatarSource, TOTAL_AVATARS } from '../utils/avatarAssets';
 import { GameModal } from '../components/GameModal';
 import { SettingsModal } from '../components/SettingsModal';
 import { ScaleButton } from '../components/ScaleButton';
 import { CreateCategoryModal } from '../components/CreateCategoryModal';
-import { ComponentProps } from 'react';
 
 type SetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Setup'>;
 };
 
-// Removed local AVATAR_IMAGES since we use the utility now
-
 const CATEGORY_IMAGES: Record<Category, any> = {
-    // ... existing category images
-
     'personajes_biblicos': require('../../assets/cat_personajes_biblicos.png'),
     'libros_biblicos': require('../../assets/cat_libros_biblicos.png'),
     'objetos_biblicos': require('../../assets/cat_objetos_biblicos.png'),
@@ -64,9 +57,6 @@ const CATEGORIES: { id: Category; label: string }[] = [
     { id: 'conceptos_teologicos', label: 'Conceptos teológicos' },
 ];
 
-// Opciones de duración movidas dentro del componente para localización
-
-
 export default function SetupScreen({ navigation }: SetupScreenProps) {
     const { t } = useTranslation();
     const {
@@ -80,7 +70,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         loadNewWord,
         playClick,
         deleteCustomCategory,
-        resetGamesPlayed
     } = useGame();
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
@@ -88,7 +77,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const [showSettings, setShowSettings] = useState(false);
     const [showCreateCategory, setShowCreateCategory] = useState(false);
 
-    // Modal State
     const [modalVisible, setModalVisible] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
         title: string;
@@ -124,7 +112,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         setModalVisible(true);
     };
 
-    // Cargar palabra inicial cuando cambien las categorías
     useEffect(() => {
         if (state.settings.selectedCategories.length > 0 && !state.currentWord) {
             loadNewWord();
@@ -140,7 +127,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         }
 
         if (state.settings.players.length >= TOTAL_AVATARS) {
-            // Already handled by UI disabling adding, but safe check
             return;
         }
 
@@ -172,14 +158,9 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         navigation.navigate('Reveal');
     };
 
-    const handleChangeWord = () => {
-        loadNewWord();
-    };
-
     const handleDecreaseImpostors = () => {
         playClick();
         if (state.settings.impostorCount <= 1) {
-            // No alert needed for hitting min
             return;
         }
         setImpostorCount(state.settings.impostorCount - 1);
@@ -220,7 +201,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled"
                 >
-                    {/* Header */}
                     <View style={styles.header}>
                         <TouchableOpacity
                             style={styles.backButton}
@@ -245,7 +225,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Modo de juego */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>{t.setup.mode}</Text>
                         <View style={styles.modeContainer}>

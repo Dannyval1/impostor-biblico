@@ -84,7 +84,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 url: 'https://impostorbíblico.com',
             });
         } catch (error) {
-            console.log(error);
+            console.error('Share failed:', error);
+            // Optional: fallback UI or alert could be added here
         }
     };
 
