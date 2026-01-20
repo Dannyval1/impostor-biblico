@@ -145,6 +145,10 @@ export const translations = {
             error_duplicate: 'Esta palabra ya está en la lista',
             error_name_required: 'Por favor ingresa un nombre de categoría',
             error_min_words: 'Por favor añade al menos 3 palabras',
+        },
+        ads: {
+            loading: 'Cargando anuncio...',
+            wait: 'Si tarda demasiado, espera un momento...',
         }
     },
     en: {
@@ -291,6 +295,10 @@ export const translations = {
             error_duplicate: 'This word is already in the list',
             error_name_required: 'Please enter a category name',
             error_min_words: 'Please add at least 3 words',
+        },
+        ads: {
+            loading: 'Loading ad...',
+            wait: 'If it takes too long, please wait...',
         }
     }
 };

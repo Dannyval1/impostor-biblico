@@ -17,6 +17,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { useTranslation } from '../hooks/useTranslation';
 import { ScaleButton } from '../components/ScaleButton';
 import { useGame } from '../context/GameContext';
+import { usePurchase } from '../context/PurchaseContext';
 
 type PaywallScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Paywall'>;
@@ -24,28 +25,49 @@ type PaywallScreenProps = {
 
 export default function PaywallScreen({ navigation }: PaywallScreenProps) {
     const { t } = useTranslation();
-    const { playClick } = useGame();
-    const [isLoading, setIsLoading] = useState(false);
+    const { playClick, playSuccess, playFailure } = useGame();
+    const { purchasePackage, restorePurchases, packages, isLoading: isPurchasesLoading } = usePurchase();
+    const [isBuying, setIsBuying] = useState(false);
+
+    // Get the first available package (Lifetime or Subscription)
+    // Adjust logic if you have multiple packages
+    const currentPackage = packages.length > 0 ? packages[0] : null;
+    const priceString = currentPackage?.product.priceString || '$2.99';
 
     const handleBuy = async () => {
         playClick();
-        setIsLoading(true);
+        if (!currentPackage) {
+            Alert.alert(t.paywall.error_title, 'No products available');
+            return;
+        }
 
-        // Simulation of purchase delay
-        setTimeout(() => {
-            setIsLoading(false);
-            Alert.alert(
-                t.paywall.error_title,
-                t.paywall.error_message + ' (Mock: Payment not implemented)',
-                [{ text: 'OK' }]
-            );
-        }, 1500);
+        setIsBuying(true);
+        try {
+            await purchasePackage(currentPackage);
+            playSuccess();
+            Alert.alert(t.paywall.success_title, t.paywall.success_message, [
+                { text: 'OK', onPress: () => navigation.goBack() }
+            ]);
+        } catch (e) {
+            playFailure();
+            // Error is already handled/alerted in context, but we could add more here
+        } finally {
+            setIsBuying(false);
+        }
     };
 
-    const handleRestore = () => {
+    const handleRestore = async () => {
         playClick();
-        Alert.alert('Restore', 'Mock: Restore functionality checked.');
+        setIsBuying(true);
+        try {
+            await restorePurchases();
+            // Check context for success logic or just alert
+        } finally {
+            setIsBuying(false);
+        }
     };
+
+    const loading = isPurchasesLoading || isBuying;
 
     return (
         <View style={styles.container}>
@@ -86,6 +108,9 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
                                 <Text style={styles.sectionTitle}>{section.title}</Text>
                                 {section.items.map((item: string, itemIndex: number) => (
                                     <View key={itemIndex} style={styles.featureRow}>
+                                        <View style={{ marginRight: 8 }}>
+                                            <Ionicons name="checkmark-circle" size={20} color="#48BB78" />
+                                        </View>
                                         <Text style={styles.featureText}>{item}</Text>
                                     </View>
                                 ))}
@@ -98,16 +123,22 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
                     <ScaleButton
                         style={styles.buyButton}
                         onPress={handleBuy}
-                        disabled={isLoading}
+                        disabled={loading}
                     >
-                        {isLoading ? (
+                        {loading ? (
                             <ActivityIndicator color="#000" />
                         ) : (
-                            <Text style={styles.buyButtonText}>{t.paywall.buy_now}</Text>
+                            <Text style={styles.buyButtonText}>
+                                {t.paywall.buy_now.replace('$2.99', priceString)}
+                            </Text>
                         )}
                     </ScaleButton>
 
-                    <TouchableOpacity style={styles.restoreButton} onPress={handleRestore}>
+                    <TouchableOpacity
+                        style={styles.restoreButton}
+                        onPress={handleRestore}
+                        disabled={loading}
+                    >
                         <Text style={styles.restoreButtonText}>{t.paywall.restore}</Text>
                     </TouchableOpacity>
                 </ScrollView>

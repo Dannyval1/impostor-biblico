@@ -66,6 +66,7 @@ export interface GameState {
     hasLoaded: boolean;
     customCategories: CustomCategory[];
     gamesPlayed: number;
+    isPremium: boolean;
 }
 
 export type GameAction =
@@ -93,4 +94,5 @@ export type GameAction =
     | { type: 'DELETE_CUSTOM_CATEGORY'; payload: string }
     | { type: 'SET_CUSTOM_CATEGORIES'; payload: CustomCategory[] }
     | { type: 'INCREMENT_GAMES_PLAYED' }
-    | { type: 'SET_GAMES_PLAYED'; payload: number };
+    | { type: 'SET_GAMES_PLAYED'; payload: number }
+    | { type: 'SET_PREMIUM_STATUS'; payload: boolean };
