@@ -11,14 +11,12 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Results'>;
 
 export default function ResultsScreen() {
     const { t } = useTranslation();
-    const { nextRound, resetGame, playClick, incrementGamesPlayed } = useGame();
+    const { nextRound, resetGame, playClick } = useGame();
     const navigation = useNavigation<NavigationProp>();
 
     const handleNextRound = () => {
         playClick();
         nextRound();
-        // Return to Setup but keeping players/scores/settings
-        // Since nextRound sets gamePhase to 'setup', we should navigate there
         navigation.reset({
             index: 0,
             routes: [{ name: 'Setup' }],

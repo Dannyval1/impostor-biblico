@@ -102,7 +102,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [gameFinished, timeLeft]); // Add timeLeft dependency to restart correctly
+    }, [gameFinished]);
 
     // Format timer
     const formatTime = (seconds: number | null) => {
@@ -149,14 +149,12 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         const isImpostor = state.currentImpostors.includes(selectedPlayerId);
 
         if (isImpostor) {
-            // Eliminate this impostor
             eliminatePlayer(selectedPlayerId);
             const newEliminatedImpostors = [...eliminatedImpostors, selectedPlayerId];
             setEliminatedImpostors(newEliminatedImpostors);
 
             // Check if ALL impostors are eliminated
             if (newEliminatedImpostors.length >= state.settings.impostorCount) {
-                // All impostors found - Civilians Win
                 setWinner('civilians');
                 setResultMessage(t.voting.impostor_found);
                 playSuccess();
@@ -181,7 +179,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 );
             }
         } else {
-            // Incorrect Vote: Eliminate Innocent Player
             const playerToEliminate = state.settings.players.find((p: Player) => p.id === selectedPlayerId)?.name || 'Jugador';
             playFailure(); // Play immediately
 
@@ -196,12 +193,11 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                         eliminatePlayer(selectedPlayerId);
                     }
 
-                    // Check win/lose conditions after elimination
                     const remainingPlayersCount = activePlayers.length - 1;
                     if (remainingPlayersCount < 3) {
                         setWinner('impostor');
                         setResultMessage(t.voting.winner_impostors);
-                        playFailure(); // Audio correcto para cuando ganan los impostores
+                        playFailure();
                         setGameFinished(true);
                         setGamePhase('results');
                         return;
@@ -222,7 +218,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             'warning',
             'Ver Resultado',
             () => {
-                setWinner(null); // No winner declared
+                setWinner(null);
                 setResultMessage(t.voting.game_over);
                 setGameFinished(true);
                 setGamePhase('results');
@@ -259,7 +255,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
-            {/* Header with Close Button */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
                     <Ionicons name="close-circle-outline" size={32} color="#666" />
@@ -270,7 +265,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
                 {!gameFinished ? (
                     <>
-                        {/* TIMER SECTION */}
                         {timeLeft !== null && (
                             <View style={styles.timerContainer}>
                                 <Text style={styles.timerLabel}>
@@ -289,7 +283,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                             {t.voting.vote_title}
                         </Text>
 
-                        {/* PLAYER LIST - Only Active Players */}
                         <View style={styles.playersGrid}>
                             {activePlayers.map((player) => {
                                 const avatarImage = getAvatarSource(player.avatar);
@@ -356,7 +349,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                         </TouchableOpacity>
                     </>
                 ) : (
-                    /* RESULT SECTION */
                     <View style={styles.resultContainer}>
                         <Text style={styles.resultTitle}>{resultMessage}</Text>
 

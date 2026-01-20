@@ -28,7 +28,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
     const currentPlayer = players[currentPlayerIndex];
     const isImpostor = currentPlayer?.role === 'impostor';
 
-    // Contador de jugadores que ya vieron
     const playersWhoSaw = players.filter((p: Player) => p.hasSeenWord).length;
 
     const handleReveal = () => {
@@ -38,17 +37,11 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
 
     const handleNext = () => {
         playClick();
-        // Marcar que este jugador ya vio
         markPlayerSeenWord(currentPlayer.id);
 
-        // Si es el último jugador, navegar directamente a VotingScreen
         if (currentPlayerIndex === players.length - 1) {
-            // Pequeño delay para que Context actualice
-            setTimeout(() => {
-                navigation.replace('Voting');
-            }, 500);
+            navigation.replace('Voting');
         } else {
-            // Pasar al siguiente jugador
             setCurrentPlayerIndex(currentPlayerIndex + 1);
             setIsRevealed(false);
         }
@@ -66,7 +59,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
             <ScrollView contentContainerStyle={styles.content}>
-                {/* Header */}
                 <View style={styles.header}>
                     <Text style={styles.roundText}>{t.reveal.round} {state.roundNumber}</Text>
                     <Text style={styles.progressText}>
@@ -74,10 +66,8 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                     </Text>
                 </View>
 
-                {/* Contenido Principal */}
                 <View style={styles.mainContent}>
                     {!isRevealed ? (
-                        // ANTES DE REVELAR
                         <>
                             <Text style={styles.playerName}>{t.reveal.player}:</Text>
                             <Text style={styles.playerNameBig}>{currentPlayer.name}</Text>
@@ -106,10 +96,8 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                             </Text>
                         </>
                     ) : (
-                        // DESPUÉS DE REVELAR
                         <>
                             {isImpostor ? (
-                                // ES IMPOSTOR
                                 <View style={styles.impostorContainer}>
                                     <Text style={styles.impostorIcon}>🎭</Text>
                                     <Text style={styles.impostorTitle}>{t.reveal.shout_is}</Text>
@@ -133,7 +121,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                                     </View>
                                 </View>
                             ) : (
-                                // ES CIVILIAN
                                 <View style={styles.wordContainer}>
                                     <Text style={styles.wordLabel}>{t.reveal.your_word}</Text>
 
@@ -171,8 +158,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                                             style={styles.changeWordButton}
                                             onPress={() => {
                                                 loadNewWord();
-                                                // Optional: Feedback
-                                                // Alert.alert('¡Palabra cambiada!');
                                             }}
                                         >
                                             <Text style={styles.changeWordButtonText}>🔄 {t.reveal.change_word}</Text>
@@ -181,7 +166,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                                 </View>
                             )}
 
-                            {/* Botón Siguiente */}
                             <TouchableOpacity
                                 style={styles.nextButton}
                                 onPress={handleNext}
@@ -198,19 +182,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
             </ScrollView>
         </SafeAreaView>
     );
-}
-
-// Helper para mostrar categorías en español legible
-function getCategoryLabel(category: string): string {
-    const labels: Record<string, string> = {
-        'personajes_biblicos': 'Personajes Bíblicos',
-        'libros_biblicos': 'Libros Bíblicos',
-        'objetos_biblicos': 'Objetos Bíblicos',
-        'oficios_biblicos': 'Oficios Bíblicos',
-        'lugares_biblicos': 'Lugares Bíblicos',
-        'conceptos_teologicos': 'Conceptos Teológicos',
-    };
-    return labels[category] || category;
 }
 
 const styles = StyleSheet.create({
@@ -304,7 +275,6 @@ const styles = StyleSheet.create({
         color: '#999',
     },
 
-    // IMPOSTOR
     impostorContainer: {
         alignItems: 'center',
         width: '100%',
@@ -360,7 +330,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
-    // CIVILIAN (PALABRA)
     wordContainer: {
         alignItems: 'center',
         width: '100%',
@@ -437,7 +406,6 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
 
-    // BOTÓN SIGUIENTE
     nextButton: {
         backgroundColor: '#5B7FDB',
         paddingVertical: 16,
