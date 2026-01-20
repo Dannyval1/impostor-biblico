@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset';
 import AppNavigator from './src/navigation/AppNavigator';
 import { GameProvider } from './src/context/GameContext';
+import { PurchaseProvider } from './src/context/PurchaseContext';
 
 // Keep splash screen visible while loading
 SplashScreen.preventAutoHideAsync();
@@ -73,9 +74,11 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <GameProvider>
-        <AppNavigator />
-      </GameProvider>
+      <PurchaseProvider>
+        <GameProvider>
+          <AppNavigator />
+        </GameProvider>
+      </PurchaseProvider>
     </SafeAreaProvider>
   );
 }

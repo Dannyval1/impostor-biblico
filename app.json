@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "impostor-cristiano",
-    "slug": "impostor-cristiano",
+    "name": "Impostor Biblico",
+    "slug": "impostor-biblico",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,10 +10,15 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2C1A0E"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "deviceFamily": [
+        "iPhone"
+      ],
+      "requireFullScreen": true,
+      "bundleIdentifier": "com.dannyv12.impostor-biblico"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,14 +26,25 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [],
+      "supportsTablet": false,
+      "screenOrientation": "portrait",
+      "package": "com.dannyv12.impostorbiblico"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-asset",
-      "expo-audio"
+      "expo-audio",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "iosAppId": "ca-app-pub-3940256099942544~1458002511"
+        }
+      ]
     ]
   }
 }

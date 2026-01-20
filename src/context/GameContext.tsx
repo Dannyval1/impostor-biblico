@@ -8,6 +8,8 @@ import { saveCustomCategories, loadCustomCategories, saveGamesPlayed, loadGamesP
 // Importar las palabras
 import freeWordsDataEs from '../data/words-free-es.json';
 import freeWordsDataEn from '../data/words-free-en.json';
+import premiumWordsDataEs from '../data/words-premium.json';
+import premiumWordsDataEn from '../data/words-premium-en.json';
 import { TOTAL_AVATARS } from '../utils/avatarAssets';
 
 const clickSound = require('../../assets/sounds/click.mp3');
@@ -52,7 +54,12 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
     });
 
     const freeWords = (language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
-    let availableWords = freeWords.filter(w => standardCategories.includes(w.category));
+    const premiumWords = (language === 'en' ? premiumWordsDataEn : premiumWordsDataEs) as Word[];
+
+    // Merge both datasets
+    const allWords = [...freeWords, ...premiumWords];
+
+    let availableWords = allWords.filter(w => standardCategories.includes(w.category));
 
     if (difficulty !== 'all') {
         availableWords = availableWords.filter(w => w.difficulty === difficulty);
@@ -73,6 +80,13 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
     });
 
     if (availableWords.length === 0) {
+        // Fallback: If no words found (e.g. strict difficulty filter on small category), return random from all valid categories ignoring difficulty
+        const fallbackWords = allWords.filter(w => standardCategories.includes(w.category));
+        if (fallbackWords.length > 0) {
+            const randomIndex = Math.floor(Math.random() * fallbackWords.length);
+            return fallbackWords[randomIndex];
+        }
+        // Ultimate fallback if absolutely nothing works (should not happen)
         return freeWords[0];
     }
 
@@ -103,6 +117,7 @@ const initialState: GameState = {
     hasLoaded: false,
     customCategories: [],
     gamesPlayed: 0,
+    isPremium: false,
 };
 
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -313,7 +328,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 },
                 hasLoaded: true,
                 customCategories: state.customCategories,
-                gamesPlayed: state.gamesPlayed
+                gamesPlayed: state.gamesPlayed,
+                isPremium: state.isPremium
             };
         }
 
@@ -404,6 +420,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 gamesPlayed: action.payload,
             };
 
+        case 'SET_PREMIUM_STATUS':
+            return {
+                ...state,
+                // We don't have isPremium in state yet, let's add it to settings or root
+                // For now, let's assume valid action and we will add type later
+                isPremium: action.payload,
+            };
+
         default:
             return state;
     }
@@ -441,13 +465,22 @@ const GameContext = createContext<{
     resetGamesPlayed: () => void;
 } | null>(null);
 
+import { usePurchase } from './PurchaseContext';
+
 // Provider
 export function GameProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(gameReducer, initialState);
+    const { isPremium } = usePurchase();
+
+    // Sync Premium Status
+    React.useEffect(() => {
+        dispatch({ type: 'SET_PREMIUM_STATUS', payload: isPremium });
+    }, [isPremium]);
 
     // Audio logic with persistent players
     const clickPlayer = useAudioPlayer(clickSound);
     const successPlayer = useAudioPlayer(successSound);
+    // ...
     const failurePlayer = useAudioPlayer(failureSound);
     const introPlayer = useAudioPlayer(introSound);
     const gameMusicPlayer = useAudioPlayer(gameMusicSound);

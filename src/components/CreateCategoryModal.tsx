@@ -61,7 +61,7 @@ export function CreateCategoryModal({ visible, onClose }: CreateCategoryModalPro
             return;
         }
 
-        playSuccess();
+
         const newCategory: CustomCategory = {
             id: `custom_${Date.now()}`,
             name: name.trim(),

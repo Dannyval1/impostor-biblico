@@ -161,9 +161,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
             return;
         }
 
-        // Ad Logic: Check every 3 games
-        if (state.gamesPlayed >= 3) {
-            resetGamesPlayed();
+        // Ad Logic: Check every 3 games (Only if NOT Premium)
+        if (!state.isPremium && state.gamesPlayed >= 3) {
             navigation.navigate('Ad');
             return;
         }
@@ -345,19 +344,20 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         <View style={styles.categoriesGrid}>
                             {CATEGORIES.map((category) => {
                                 const isSelected = state.settings.selectedCategories.includes(category.id);
-                                const isPremium = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
+                                const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
+                                const isLocked = isPremiumCategory && !state.isPremium;
 
                                 return (
                                     <TouchableOpacity
                                         key={category.id}
                                         style={[
                                             styles.categoryCard,
-                                            { backgroundColor: isPremium ? '#E2E8F0' : CATEGORY_COLORS[category.id] },
+                                            { backgroundColor: isLocked ? '#E2E8F0' : CATEGORY_COLORS[category.id] },
                                             isSelected && styles.categoryCardSelected,
-                                            (!isSelected || isPremium) && styles.categoryCardUnselected,
+                                            (!isSelected || isLocked) && styles.categoryCardUnselected,
                                         ]}
                                         onPress={() => {
-                                            if (isPremium) {
+                                            if (isLocked) {
                                                 playClick();
                                                 navigation.navigate('Paywall');
                                                 return;
@@ -365,13 +365,13 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             playClick();
                                             toggleCategory(category.id);
                                         }}
-                                        activeOpacity={isPremium ? 1 : 0.8}
+                                        activeOpacity={isLocked ? 1 : 0.8}
                                     >
                                         <Image
                                             source={CATEGORY_IMAGES[category.id]}
                                             style={[
                                                 styles.categoryImage,
-                                                isPremium && { opacity: 0.3 }
+                                                isLocked && { opacity: 0.3 }
                                             ]}
                                             resizeMode="contain"
                                         />
@@ -388,7 +388,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             </View>
                                         )}
 
-                                        {isPremium && (
+                                        {isLocked && (
                                             <Image
                                                 source={require('../../assets/blocked_level_1.png')}
                                                 style={styles.lockedIcon}
@@ -457,8 +457,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 onPress={() => {
                                     playClick();
                                     // Premium Check for Custom Categories
-                                    // TODO: Connect to real user premium status
-                                    const isPro = false;
+                                    const isPro = state.isPremium;
 
                                     if (!isPro && state.customCategories.length >= 1) {
                                         navigation.navigate('Paywall');
@@ -471,7 +470,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 <Ionicons name="add-circle-outline" size={40} color="#CBD5E0" />
                                 <Text style={styles.addCategoryText}>{t.setup.add}</Text>
                                 {/* Lock icon for indication */}
-                                {state.customCategories.length >= 1 && (
+                                {!state.isPremium && state.customCategories.length >= 1 && (
                                     <Image
                                         source={require('../../assets/blocked_level_1.png')}
                                         style={styles.miniLockedIcon}
