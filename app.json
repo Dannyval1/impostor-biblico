@@ -45,6 +45,11 @@
           "iosAppId": "ca-app-pub-3940256099942544~1458002511"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3a938f3c-6fa6-454b-9b10-9f64fa213a3e"
+      }
+    }
   }
 }

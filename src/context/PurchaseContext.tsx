@@ -74,6 +74,7 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
             if (!e.userCancelled) {
                 Alert.alert('Error', e.message);
             }
+            throw e; // Rethrow to let the component know it failed/cancelled
         }
     };
 
