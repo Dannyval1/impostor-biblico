@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#A0AEC0',
         marginTop: 'auto',
-        marginBottom: 10,
+        marginBottom: Platform.OS === 'android' ? 50 : 10,
     },
     // Modal Styles
     modalOverlay: {

@@ -354,7 +354,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             styles.categoryCard,
                                             { backgroundColor: isLocked ? '#E2E8F0' : CATEGORY_COLORS[category.id] },
                                             isSelected && styles.categoryCardSelected,
-                                            (!isSelected || isLocked) && styles.categoryCardUnselected,
                                         ]}
                                         onPress={() => {
                                             if (isLocked) {
@@ -375,6 +374,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             ]}
                                             resizeMode="contain"
                                         />
+
+                                        {(!isSelected && !isLocked) && (
+                                            <View style={styles.inactiveOverlay} />
+                                        )}
 
                                         <View style={styles.categoryNamePill}>
                                             <Text style={styles.categoryNameText} numberOfLines={2}>
@@ -409,7 +412,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             styles.categoryCard,
                                             { backgroundColor: '#A0AEC0' }, // Different color for customization
                                             isSelected && styles.categoryCardSelected,
-                                            !isSelected && styles.categoryCardUnselected,
+                                            // Removed opacity from style to avoid pill artifacts
                                         ]}
                                         onPress={() => {
                                             playClick();
@@ -846,8 +849,11 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         transform: [{ scale: 1.02 }],
     },
-    categoryCardUnselected: {
-        opacity: 0.6,
+    inactiveOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(245, 245, 245, 0.4)',
+        borderRadius: 20,
+        zIndex: 1,
     },
     categoryImage: {
         width: '90%',
@@ -870,7 +876,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
-        zIndex: 5,
+        zIndex: 10, // Ensure it sits above the overlay
         minHeight: 44,
     },
     categoryNameText: {

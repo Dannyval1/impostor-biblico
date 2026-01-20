@@ -48,9 +48,10 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
             Alert.alert(t.paywall.success_title, t.paywall.success_message, [
                 { text: 'OK', onPress: () => navigation.goBack() }
             ]);
-        } catch (e) {
+        } catch (e: any) {
             playFailure();
-            // Error is already handled/alerted in context, but we could add more here
+            // Error is already handled/alerted in context, but we ensure we don't show success here
+            // If it was a user cancellation, we just silently stop.
         } finally {
             setIsBuying(false);
         }
@@ -96,7 +97,7 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
 
                 <ScrollView contentContainerStyle={styles.content}>
                     <View style={styles.iconContainer}>
-                        <Ionicons name="diamond" size={50} color="#FFD700" />
+                        <Ionicons name="diamond" size={28} color="#FFD700" />
                     </View>
 
                     <Text style={styles.title}>{t.paywall.title}</Text>
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
         padding: 24,
     },
     sectionContainer: {
-        marginBottom: 20,
+        marginBottom: 10,
     },
     sectionTitle: {
         fontSize: 17,

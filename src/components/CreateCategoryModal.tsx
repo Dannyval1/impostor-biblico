@@ -110,6 +110,7 @@ export function CreateCategoryModal({ visible, onClose }: CreateCategoryModalPro
                         <TextInput
                             style={styles.input}
                             placeholder={t.custom_category.name_placeholder}
+                            placeholderTextColor="#A0AEC0"
                             value={name}
                             onChangeText={setName}
                             maxLength={30}
@@ -122,6 +123,7 @@ export function CreateCategoryModal({ visible, onClose }: CreateCategoryModalPro
                             <TextInput
                                 style={[styles.input, { flex: 1, marginBottom: 0 }]}
                                 placeholder={t.custom_category.word_placeholder}
+                                placeholderTextColor="#A0AEC0"
                                 value={currentWord}
                                 onChangeText={setCurrentWord}
                                 onSubmitEditing={handleAddWord}

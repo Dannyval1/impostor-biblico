@@ -165,8 +165,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 setGameFinished(true);
                 setGamePhase('results');
             } else {
-                // More impostors remain
-                playSuccess(); // Sonido de éxito al encontrar uno
                 const remaining = state.settings.impostorCount - newEliminatedImpostors.length;
                 showGameModal(
                     t.voting.impostor_found,
@@ -183,7 +181,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         } else {
             // Incorrect Vote: Eliminate Innocent Player
             const playerToEliminate = state.settings.players.find((p: Player) => p.id === selectedPlayerId)?.name || 'Jugador';
-            playFailure(); // Play immediately
+            playFailure();
 
             showGameModal(
                 t.voting.civilian_eliminated,
