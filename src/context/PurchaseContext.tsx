@@ -14,6 +14,8 @@ interface PurchaseContextType {
     purchasePackage: (pack: PurchasesPackage) => Promise<void>;
     restorePurchases: () => Promise<void>;
     isLoading: boolean;
+    hasShownInitialPaywall: boolean;
+    setHasShownInitialPaywall: (shown: boolean) => void;
 }
 
 const PurchaseContext = createContext<PurchaseContextType | null>(null);
@@ -22,6 +24,7 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
     const [isPremium, setIsPremium] = useState(false); // Default to false
     const [packages, setPackages] = useState<PurchasesPackage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [hasShownInitialPaywall, setHasShownInitialPaywall] = useState(false);
 
     useEffect(() => {
         const init = async () => {
@@ -94,7 +97,15 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <PurchaseContext.Provider value={{ isPremium, packages, purchasePackage, restorePurchases, isLoading }}>
+        <PurchaseContext.Provider value={{
+            isPremium,
+            packages,
+            purchasePackage,
+            restorePurchases,
+            isLoading,
+            hasShownInitialPaywall,
+            setHasShownInitialPaywall
+        }}>
             {children}
         </PurchaseContext.Provider>
     );

@@ -19,6 +19,8 @@ interface GameModalProps {
     buttonText: string;
     onClose: () => void;
     type?: 'success' | 'danger' | 'info' | 'warning';
+    secondaryButtonText?: string;
+    onSecondaryPress?: () => void;
 }
 
 export const GameModal = ({
@@ -28,6 +30,8 @@ export const GameModal = ({
     buttonText,
     onClose,
     type = 'info',
+    secondaryButtonText,
+    onSecondaryPress,
 }: GameModalProps) => {
     const getIcon = () => {
         switch (type) {
@@ -61,13 +65,28 @@ export const GameModal = ({
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.message}>{message}</Text>
 
-                    <TouchableOpacity
-                        style={[styles.button, { backgroundColor: icon.color }]}
-                        onPress={onClose}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={styles.buttonText}>{buttonText}</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonContainer}>
+                        {secondaryButtonText && (
+                            <TouchableOpacity
+                                style={[styles.button, styles.secondaryButton]}
+                                onPress={onSecondaryPress}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={styles.secondaryButtonText}>{secondaryButtonText}</Text>
+                            </TouchableOpacity>
+                        )}
+                        <TouchableOpacity
+                            style={[
+                                styles.button,
+                                { backgroundColor: icon.color },
+                                secondaryButtonText ? styles.buttonHalf : { width: '100%' }
+                            ]}
+                            onPress={onClose}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.buttonText}>{buttonText}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -104,7 +123,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
         color: '#1A202C',
         marginBottom: 12,
@@ -117,16 +136,34 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         marginBottom: 30,
     },
-    button: {
-        paddingVertical: 16,
-        paddingHorizontal: 32,
-        borderRadius: 16,
+    buttonContainer: {
         width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 12,
+    },
+    button: {
+        paddingVertical: 14,
+        paddingHorizontal: 16,
+        borderRadius: 16,
         alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonHalf: {
+        flex: 1,
+    },
+    secondaryButton: {
+        flex: 1,
+        backgroundColor: '#EDF2F7',
     },
     buttonText: {
         color: '#FFF',
-        fontSize: 18,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    secondaryButtonText: {
+        color: '#4A5568',
+        fontSize: 16,
         fontWeight: 'bold',
     },
 });

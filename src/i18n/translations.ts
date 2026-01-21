@@ -12,10 +12,12 @@ export const translations = {
             version: 'Versión',
             loading: 'Cargando...',
             share_message: '¡Descarga Impostor Bíblico y descubre quién es el impostor! 🕵️‍♂️📖',
+            how_to_play: 'Cómo jugar',
         },
         common: {
             play_again: 'Jugar de Nuevo',
             exit: 'Salir',
+            cancel: 'Cancelar',
         },
         settings: {
             title: 'Ajustes',
@@ -78,6 +80,7 @@ export const translations = {
             back_home: 'VOLVER AL INICIO',
             next_round: 'SIGUIENTE RONDA',
             remaining_impostors: 'Impostores restantes',
+            reveal_confirm: 'REVELAR',
             exit_confirm: '¿Estás seguro de que quieres salir?',
         },
         reveal: {
@@ -134,6 +137,7 @@ export const translations = {
         },
         custom_category: {
             title: 'Crear Categoría',
+            edit_title: 'Editar Categoría',
             name_label: 'Nombre de la Categoría',
             name_placeholder: 'Ej. Mis Amigos, Frutas...',
             add_words_label: 'Añadir Palabras (Mínimo 3)',
@@ -149,6 +153,25 @@ export const translations = {
         ads: {
             loading: 'Cargando anuncio...',
             wait: 'Si tarda demasiado, espera un momento...',
+        },
+        how_to_play_modal: {
+            title: '¿Cómo se juega?',
+            step1_title: '1. Configuración',
+            step1_desc: 'Elige el número de jugadores, impostores y categorías. Selecciona el tiempo de discusión y pasa el teléfono.',
+            step2_title: '2. Tu Palabra Secreta',
+            step2_desc: 'Pasa el teléfono a cada jugador. Todos verán una **palabra secreta**, ¡excepto los impostores! Ellos deben disimular.',
+            step3_title: '3. Discusión',
+            step3_desc: 'Todos dicen una palabra o frase relacionada con la palabra secreta. ¡Los impostores deben mentir para encajar!',
+            step4_title: '4. Votación',
+            step4_desc: 'Al terminar el tiempo, voten para expulsar a quien crean que es el impostor.',
+            win_title: '¿Quién gana?',
+            win_civilians_prefix: 'Los ',
+            win_civilians_bold: 'Civiles',
+            win_civilians_suffix: ' ganan si descubren a todos los impostores.',
+            win_impostors_prefix: 'Los ',
+            win_impostors_bold: 'Impostores',
+            win_impostors_suffix: ' ganan si no son descubiertos o si quedan igual número de civiles que impostores.',
+            got_it: '¡Entendido!'
         }
     },
     en: {
@@ -162,10 +185,12 @@ export const translations = {
             version: 'Version',
             loading: 'Loading...',
             share_message: 'Download Biblical Impostor and find out who the impostor is! 🕵️‍♂️📖',
+            how_to_play: 'How to Play',
         },
         common: {
             play_again: 'Play Again',
             exit: 'Exit',
+            cancel: 'Cancel',
         },
         settings: {
             title: 'Settings',
@@ -228,6 +253,7 @@ export const translations = {
             back_home: 'BACK HOME',
             next_round: 'NEXT ROUND',
             remaining_impostors: 'Impostors remaining',
+            reveal_confirm: 'REVEAL',
             exit_confirm: 'Are you sure you want to exit?',
         },
         reveal: {
@@ -284,6 +310,7 @@ export const translations = {
         },
         custom_category: {
             title: 'Create Category',
+            edit_title: 'Edit Category',
             name_label: 'Category Name',
             name_placeholder: 'Ex. My Friends, Fruits...',
             add_words_label: 'Add Words (Minimum 3)',
@@ -299,6 +326,25 @@ export const translations = {
         ads: {
             loading: 'Loading ad...',
             wait: 'If it takes too long, please wait...',
+        },
+        how_to_play_modal: {
+            title: 'How to play?',
+            step1_title: '1. Setup',
+            step1_desc: 'Choose the number of players, impostors, and categories. Set the discussion time and pass the phone.',
+            step2_title: '2. Your Secret Word',
+            step2_desc: 'Pass the phone to each player. Everyone will see a **secret word**, except the impostors! They must blend in.',
+            step3_title: '3. Discussion',
+            step3_desc: 'Everyone says a word or phrase related to the secret word. Impostors must lie to fit in!',
+            step4_title: '4. Voting',
+            step4_desc: 'When time is up, vote to eliminate who you think the impostor is.',
+            win_title: 'Who wins?',
+            win_civilians_prefix: '',
+            win_civilians_bold: 'Civilians',
+            win_civilians_suffix: ' win if they find all the impostors.',
+            win_impostors_prefix: '',
+            win_impostors_bold: 'Impostors',
+            win_impostors_suffix: ' win if they are not caught or if the number of civilians equals impostors.',
+            got_it: 'Got it!'
         }
     }
 };

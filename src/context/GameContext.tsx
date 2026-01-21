@@ -402,6 +402,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             };
         }
 
+        case 'EDIT_CUSTOM_CATEGORY':
+            return {
+                ...state,
+                customCategories: state.customCategories.map(c =>
+                    c.id === action.payload.id ? action.payload : c
+                ),
+            };
+
         case 'SET_CUSTOM_CATEGORIES':
             return {
                 ...state,
@@ -460,6 +468,7 @@ const GameContext = createContext<{
     playIntro: () => void;
     setGamePhase: (phase: import('../types').GamePhase) => void;
     addCustomCategory: (category: CustomCategory) => void;
+    editCustomCategory: (category: CustomCategory) => void;
     deleteCustomCategory: (id: string) => void;
     incrementGamesPlayed: () => void;
     resetGamesPlayed: () => void;
@@ -640,6 +649,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         playIntro,
         setGamePhase: (phase: import('../types').GamePhase) => dispatch({ type: 'SET_GAME_PHASE', payload: phase }),
         addCustomCategory: (category: CustomCategory) => dispatch({ type: 'ADD_CUSTOM_CATEGORY', payload: category }),
+        editCustomCategory: (category: CustomCategory) => dispatch({ type: 'EDIT_CUSTOM_CATEGORY', payload: category }),
         deleteCustomCategory: (id: string) => dispatch({ type: 'DELETE_CUSTOM_CATEGORY', payload: id }),
         incrementGamesPlayed: () => dispatch({ type: 'INCREMENT_GAMES_PLAYED' }),
         resetGamesPlayed: () => dispatch({ type: 'SET_GAMES_PLAYED', payload: 0 }),

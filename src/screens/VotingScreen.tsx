@@ -25,8 +25,6 @@ type VotingScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Voting'>;
 };
 
-// Removed local AVATAR_IMAGES logic
-
 export default function VotingScreen({ navigation }: VotingScreenProps) {
     const { state, resetGame, eliminatePlayer, playClick, playSuccess, playFailure, setGamePhase } = useGame();
     const { t } = useTranslation();
@@ -38,7 +36,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
     const [eliminatedImpostors, setEliminatedImpostors] = useState<string[]>([]);
     const [showTimerExpiredAlert, setShowTimerExpiredAlert] = useState(false);
 
-    // Set Phase to Voting on Mount
     useEffect(() => {
         setGamePhase('voting');
         return () => {
@@ -46,7 +43,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         };
     }, []);
 
-    // Modal State
     const [modalVisible, setModalVisible] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
         title: string;
@@ -54,6 +50,8 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         type: 'success' | 'danger' | 'info' | 'warning';
         buttonText: string;
         onClose: () => void;
+        secondaryButtonText?: string;
+        onSecondaryPress?: () => void;
     }>({
         title: '',
         message: '',
@@ -67,7 +65,9 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         message: string,
         type: 'success' | 'danger' | 'info' | 'warning',
         buttonText: string,
-        onPress?: () => void
+        onPress?: () => void,
+        secondaryButtonText?: string,
+        onSecondaryPress?: () => void
     ) => {
         setModalConfig({
             title,
@@ -78,14 +78,17 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 setModalVisible(false);
                 if (onPress) onPress();
             },
+            secondaryButtonText,
+            onSecondaryPress: () => {
+                setModalVisible(false);
+                if (onSecondaryPress) onSecondaryPress();
+            }
         });
         setModalVisible(true);
     };
 
-    // Filter active players (not eliminated)
     const activePlayers = state.settings.players.filter((p: Player) => !p.isEliminated);
 
-    // Timer logic
     useEffect(() => {
         if (gameFinished || timeLeft === null) return;
 
@@ -104,7 +107,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         return () => clearInterval(timer);
     }, [gameFinished]);
 
-    // Format timer
     const formatTime = (seconds: number | null) => {
         if (seconds === null) return '--:--';
         const mins = Math.floor(seconds / 60);
@@ -112,7 +114,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
-    // Show alert when timer expires
     useEffect(() => {
         if (showTimerExpiredAlert && !gameFinished) {
             Alert.alert(
@@ -214,12 +215,16 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             t.voting.game_over,
             '',
             'warning',
-            'Ver Resultado',
+            t.voting?.reveal_confirm || 'REVELAR',
             () => {
                 setWinner(null);
                 setResultMessage(t.voting.game_over);
                 setGameFinished(true);
                 setGamePhase('results');
+            },
+            t.common?.cancel || 'Cancelar',
+            () => {
+                playClick();
             }
         );
     };
@@ -229,8 +234,8 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         resetGame();
         setGamePhase('setup');
         navigation.reset({
-            index: 0,
-            routes: [{ name: 'Setup' }],
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Setup' }],
         });
     };
 
@@ -241,7 +246,11 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             t.voting.exit_confirm || '¿Estás seguro de que quieres salir?',
             'warning',
             'Salir',
-            handlePlayAgain
+            handlePlayAgain,
+            t.common?.cancel || 'Cancelar',
+            () => {
+                playClick();
+            }
         );
     };
 
@@ -391,6 +400,8 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 type={modalConfig.type}
                 buttonText={modalConfig.buttonText}
                 onClose={modalConfig.onClose}
+                secondaryButtonText={modalConfig.secondaryButtonText}
+                onSecondaryPress={modalConfig.onSecondaryPress}
             />
         </SafeAreaView>
     );
