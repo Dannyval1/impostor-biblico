@@ -30,8 +30,11 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
     const [isBuying, setIsBuying] = useState(false);
 
     // Get the first available package (Lifetime or Subscription)
-    // Adjust logic if you have multiple packages
-    const currentPackage = packages.length > 0 ? packages[0] : null;
+    // Find the 'impostor_premium_lifetime' package explicitly
+    // This ensures we sell exactly what we configured in stores
+    const currentPackage = packages.find(
+        (pkg) => pkg.product.identifier === 'impostor_premium_lifetime'
+    ) || (packages.length > 0 ? packages[0] : null);
     const priceString = currentPackage?.product.priceString || '$2.99';
 
     const handleBuy = async () => {
@@ -97,7 +100,7 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
 
                 <ScrollView contentContainerStyle={styles.content}>
                     <View style={styles.iconContainer}>
-                        <Ionicons name="diamond" size={28} color="#FFD700" />
+                        <Ionicons name="diamond" size={25} color="#FFD700" />
                     </View>
 
                     <Text style={styles.title}>{t.paywall.title}</Text>
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     sectionTitle: {
-        fontSize: 17,
+        fontSize: 16,
         fontWeight: 'bold',
         color: '#FFD700',
         marginBottom: 8,
@@ -221,7 +224,7 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
     featureText: {
-        fontSize: 16,
+        fontSize: 15,
         color: '#FFF',
         marginLeft: 8,
         fontWeight: '400',

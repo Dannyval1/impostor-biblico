@@ -4,8 +4,8 @@ import Purchases, { PurchasesPackage, CustomerInfo, PurchasesOffering } from 're
 
 // TODO: REPLACE WITH YOUR ACTUAL REVENUECAT API KEYS
 const API_KEYS = {
-    apple: 'test_OkGLKrVtyFpGbdrvnVuFcxOfYVp',
-    google: 'test_OkGLKrVtyFpGbdrvnVuFcxOfYVp'
+    apple: 'test_OkGLKrVtyFpGbdrvnVuFcxOfYVp', // Yet testing
+    google: 'goog_BXcFKYvqJnBsFkSfNodPqFwQgEz'
 };
 
 interface PurchaseContextType {

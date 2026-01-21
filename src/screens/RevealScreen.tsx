@@ -111,13 +111,7 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                                             {t.reveal.impostor_strategy}
                                         </Text>
 
-                                        {state.settings.impostorCount > 1 && (
-                                            <View style={styles.teamInfoBox}>
-                                                <Text style={styles.teamInfoText}>
-                                                    🤝 {t.reveal.impostor_team.replace('%{count}', state.settings.impostorCount.toString())}
-                                                </Text>
-                                            </View>
-                                        )}
+
                                     </View>
                                 </View>
                             ) : (
@@ -146,11 +140,7 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
                                         <Text style={styles.reminderText}>
                                             ⚠️ {t.reveal.memorize}
                                         </Text>
-                                        {state.settings.impostorCount > 1 && (
-                                            <Text style={styles.reminderSubtext}>
-                                                {t.reveal.watch_out.replace('%{count}', state.settings.impostorCount.toString())}
-                                            </Text>
-                                        )}
+
                                     </View>
 
                                     {currentPlayerIndex === 0 && (
