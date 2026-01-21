@@ -19,10 +19,11 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
-import { Category, Player } from '../types';
+import { Category, Player, CustomCategory } from '../types';
 import { getAvatarSource, TOTAL_AVATARS } from '../utils/avatarAssets';
 import { GameModal } from '../components/GameModal';
 import { SettingsModal } from '../components/SettingsModal';
+import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
 import { CreateCategoryModal } from '../components/CreateCategoryModal';
 
@@ -75,7 +76,9 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const scrollViewRef = useRef<ScrollView>(null);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
-    const [showCreateCategory, setShowCreateCategory] = useState(false);
+    const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
+    const [editingCategory, setEditingCategory] = useState<CustomCategory | null>(null);
+    const [showHowToPlay, setShowHowToPlay] = useState(false);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
@@ -203,17 +206,19 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 >
                     <View style={styles.header}>
                         <TouchableOpacity
-                            style={styles.backButton}
                             onPress={() => {
                                 playClick();
-                                navigation.navigate('Home');
+                                if (navigation.canGoBack()) {
+                                    navigation.goBack();
+                                } else {
+                                    navigation.replace('Home');
+                                }
                             }}
+                            style={styles.backButton}
                         >
                             <Ionicons name="arrow-back" size={28} color="#333" />
                         </TouchableOpacity>
-
-                        <Text style={styles.title}>{t.setup.title}</Text>
-
+                        <Text style={styles.headerTitle}>{t.setup.title}</Text>
                         <TouchableOpacity
                             style={styles.settingsButton}
                             onPress={() => {
@@ -226,7 +231,18 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                     </View>
 
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>{t.setup.mode}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Text style={[styles.sectionTitle, { marginBottom: 0 }]}>{t.setup.mode}</Text>
+                            <TouchableOpacity
+                                style={styles.helpButtonInternal}
+                                onPress={() => {
+                                    playClick();
+                                    setShowHowToPlay(true);
+                                }}
+                            >
+                                <Ionicons name="help-circle-outline" size={24} color="#5B7FDB" />
+                            </TouchableOpacity>
+                        </View>
                         <View style={styles.modeContainer}>
                             <TouchableOpacity
                                 style={[styles.modeCard, styles.modeCardSelected]}
@@ -435,6 +451,17 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                         >
                                             <Ionicons name="trash-outline" size={16} color="#FFF" />
                                         </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            style={styles.editCategoryButton}
+                                            onPress={() => {
+                                                playClick();
+                                                setEditingCategory(category);
+                                                setShowCreateCategoryModal(true);
+                                            }}
+                                        >
+                                            <Ionicons name="pencil" size={16} color="#FFF" />
+                                        </TouchableOpacity>
                                     </TouchableOpacity>
                                 );
                             })}
@@ -450,7 +477,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                         return;
                                     }
 
-                                    setShowCreateCategory(true);
+                                    setShowCreateCategoryModal(true);
                                 }}
                             >
                                 <Ionicons name="add-circle-outline" size={40} color="#CBD5E0" />
@@ -575,8 +602,17 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 onClose={() => setShowSettings(false)}
             />
             <CreateCategoryModal
-                visible={showCreateCategory}
-                onClose={() => setShowCreateCategory(false)}
+                visible={showCreateCategoryModal}
+                onClose={() => {
+                    setShowCreateCategoryModal(false);
+                    setEditingCategory(null);
+                }}
+                initialCategory={editingCategory}
+            />
+
+            <HowToPlayModal
+                visible={showHowToPlay}
+                onClose={() => setShowHowToPlay(false)}
             />
         </SafeAreaView >
     );
@@ -606,10 +642,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#000',
     },
-    title: {
+    headerTitle: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+    },
+    helpButton: {
+        padding: 4,
+    },
+    helpButtonInternal: {
+        padding: 4,
     },
     section: {
         marginBottom: 24,
@@ -914,6 +956,18 @@ const styles = StyleSheet.create({
         top: 8,
         left: 8,
         backgroundColor: '#E53E3E',
+        width: 28,
+        height: 28,
+        borderRadius: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+    },
+    editCategoryButton: {
+        position: 'absolute',
+        top: 8,
+        left: 44, // Offset from delete button
+        backgroundColor: '#4299E1',
         width: 28,
         height: 28,
         borderRadius: 14,

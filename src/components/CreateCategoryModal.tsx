@@ -22,14 +22,28 @@ const { width, height } = Dimensions.get('window');
 type CreateCategoryModalProps = {
     visible: boolean;
     onClose: () => void;
+    initialCategory?: CustomCategory | null;
 };
 
-export function CreateCategoryModal({ visible, onClose }: CreateCategoryModalProps) {
-    const { addCustomCategory, playClick, playSuccess, playFailure, state } = useGame();
+export function CreateCategoryModal({ visible, onClose, initialCategory }: CreateCategoryModalProps) {
+    const { addCustomCategory, editCustomCategory, playClick, playSuccess, playFailure, state } = useGame();
     const { t } = useTranslation();
+
     const [name, setName] = useState('');
     const [currentWord, setCurrentWord] = useState('');
     const [words, setWords] = useState<string[]>([]);
+    React.useEffect(() => {
+        if (visible) {
+            if (initialCategory) {
+                setName(initialCategory.name);
+                setWords(initialCategory.words);
+            } else {
+                setName('');
+                setWords([]);
+            }
+            setCurrentWord('');
+        }
+    }, [visible, initialCategory]);
 
     const handleAddWord = () => {
         if (!currentWord.trim()) return;
@@ -61,16 +75,26 @@ export function CreateCategoryModal({ visible, onClose }: CreateCategoryModalPro
             return;
         }
 
+        if (initialCategory) {
+            // Edit Mode
+            const updatedCategory: CustomCategory = {
+                ...initialCategory,
+                name: name.trim(),
+                words: words,
+            };
+            editCustomCategory(updatedCategory);
+        } else {
+            // Create Mode
+            const newCategory: CustomCategory = {
+                id: `custom_${Date.now()}`,
+                name: name.trim(),
+                words: words,
+                language: state.settings.language,
+            };
+            addCustomCategory(newCategory);
+        }
 
-        const newCategory: CustomCategory = {
-            id: `custom_${Date.now()}`,
-            name: name.trim(),
-            words: words,
-            language: state.settings.language,
-        };
-
-        addCustomCategory(newCategory);
-        resetForm();
+        playSuccess();
         onClose();
     };
 
@@ -99,7 +123,11 @@ export function CreateCategoryModal({ visible, onClose }: CreateCategoryModalPro
             >
                 <View style={styles.modalContent}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>{t.custom_category.title}</Text>
+                        <Text style={styles.modalTitle}>
+                            {initialCategory
+                                ? t.custom_category?.edit_title
+                                : t.custom_category?.title}
+                        </Text>
                         <TouchableOpacity onPress={handleClose}>
                             <Ionicons name="close" size={24} color="#333" />
                         </TouchableOpacity>

@@ -16,8 +16,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { usePurchase } from '../context/PurchaseContext';
 import { Ionicons } from '@expo/vector-icons';
 import { SettingsModal } from '../components/SettingsModal';
+import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
 
 type HomeScreenProps = {
@@ -29,12 +31,28 @@ const { height, width } = Dimensions.get('window');
 export default function HomeScreen({ navigation }: HomeScreenProps) {
     const { state, setHasLoaded, playClick, playIntro } = useGame();
     const { t } = useTranslation();
+    const { isPremium, hasShownInitialPaywall, setHasShownInitialPaywall } = usePurchase();
     const [isLoading, setIsLoading] = useState(!state.hasLoaded);
     const [showSettings, setShowSettings] = useState(false);
+    const [showHowToPlay, setShowHowToPlay] = useState(false);
 
     const slideAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : height)).current; // 0 if loaded, height if not
     const fadeAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : 1)).current; // 0 if loaded, 1 if not
     const progressAnim = useRef(new Animated.Value(state.hasLoaded ? 1 : 0)).current; // 1 if loaded, 0 if not
+
+
+
+    // Initial Paywall Check
+    useEffect(() => {
+        if (!isLoading && !isPremium && !hasShownInitialPaywall) {
+            // Small delay to ensure smooth transition
+            const timer = setTimeout(() => {
+                navigation.navigate('Paywall');
+                setHasShownInitialPaywall(true);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [isLoading, isPremium, hasShownInitialPaywall]);
 
     useEffect(() => {
         if (state.hasLoaded) {
@@ -120,13 +138,19 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     </View>
                 </Animated.View>
 
+                {/* Settings Button Only (Top Right) */}
                 {!isLoading && (
-                    <TouchableOpacity
-                        style={styles.settingsButton}
-                        onPress={() => setShowSettings(true)}
-                    >
-                        <Ionicons name="settings-outline" size={28} color="#FFF" />
-                    </TouchableOpacity>
+                    <View style={styles.topButtonsContainer}>
+                        <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() => {
+                                playClick();
+                                setShowSettings(true);
+                            }}
+                        >
+                            <Ionicons name="settings-outline" size={28} color="rgba(255,255,255,0.8)" />
+                        </TouchableOpacity>
+                    </View>
                 )}
             </View>
 
@@ -175,6 +199,18 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                             <Text style={styles.secondaryButtonIcon}>📢</Text>
                             <Text style={styles.secondaryButtonText}>{t.home.share}</Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.secondaryButton}
+                            activeOpacity={0.7}
+                            onPress={() => {
+                                playClick();
+                                setShowHowToPlay(true);
+                            }}
+                        >
+                            <Text style={styles.secondaryButtonIcon}>❓</Text>
+                            <Text style={styles.secondaryButtonText}>{t.home?.how_to_play || 'Ayuda'}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Animated.View>
@@ -182,6 +218,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             <SettingsModal
                 visible={showSettings}
                 onClose={() => setShowSettings(false)}
+            />
+
+            <HowToPlayModal
+                visible={showHowToPlay}
+                onClose={() => setShowHowToPlay(false)}
             />
         </View>
     );
@@ -246,21 +287,30 @@ const styles = StyleSheet.create({
         backgroundColor: '#fdf6cd',
         borderRadius: 10,
     },
-    settingsButton: {
+    topButtonsContainer: {
         position: 'absolute',
-        top: '6%',
-        right: '6%',
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        padding: 10,
-        borderRadius: 30,
+        top: 50,
+        right: 20,
+        flexDirection: 'row',
+        gap: 12,
         zIndex: 20,
+    },
+    iconButton: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.3)',
     },
     bottomSheet: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        height: '38%',
+        height: '42%',
         backgroundColor: '#FFFFFF',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -5 },
@@ -325,7 +375,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        gap: 16,
+        gap: 12,
         marginBottom: 0,
     },
     secondaryButton: {
@@ -334,25 +384,21 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: '#F7FAFC',
         borderWidth: 1,
         borderColor: '#E2E8F0',
+        gap: 6,
     },
     secondaryButtonIcon: {
-        fontSize: 18,
-        marginRight: 8,
+        fontSize: 24,
+        marginRight: 0,
     },
     secondaryButtonText: {
         color: '#4A5568',
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    versionText: {
         fontSize: 12,
-        color: '#A0AEC0',
-        marginTop: 'auto',
-        marginBottom: Platform.OS === 'android' ? 50 : 10,
+        fontWeight: '600',
+        textAlign: 'center',
     },
     // Modal Styles
     modalOverlay: {
