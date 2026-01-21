@@ -28,6 +28,9 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "supportsTablet": false,
       "screenOrientation": "portrait",
       "package": "com.dannyv12.impostorbiblico"
