@@ -26,16 +26,12 @@ type HomeScreenProps = {
 
 const { height, width } = Dimensions.get('window');
 
-// APP VERSION
-const APP_VERSION = '1.0.0';
-
 export default function HomeScreen({ navigation }: HomeScreenProps) {
     const { state, setHasLoaded, playClick, playIntro } = useGame();
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(!state.hasLoaded);
     const [showSettings, setShowSettings] = useState(false);
 
-    // Animations
     const slideAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : height)).current; // 0 if loaded, height if not
     const fadeAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : 1)).current; // 0 if loaded, 1 if not
     const progressAnim = useRef(new Animated.Value(state.hasLoaded ? 1 : 0)).current; // 1 if loaded, 0 if not
@@ -46,16 +42,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             return;
         }
 
-        // 1. Animate Progress Bar (3 seconds)
         Animated.timing(progressAnim, {
             toValue: 1,
             duration: 3000,
             useNativeDriver: false,
         }).start(() => {
-            // Play sound immediately when loading finishes
             playIntro();
 
-            // 2. On Finish: Fade out loading bar & Slide up Bottom Sheet
             Animated.parallel([
                 Animated.timing(fadeAnim, {
                     toValue: 0,
@@ -74,8 +67,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         });
     }, [state.hasLoaded]);
 
-
-    // Share and Rate functions removed as they are now in SettingsModal or handled there
     const handleShare = async () => {
         playClick();
         try {
@@ -85,7 +76,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             });
         } catch (error) {
             console.error('Share failed:', error);
-            // Optional: fallback UI or alert could be added here
         }
     };
 
@@ -104,7 +94,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         <View style={styles.container}>
             <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
 
-            {/* Top Image Section */}
             <View style={styles.imageContainer}>
                 <Animated.Image
                     source={require('../../assets/impostor_home_x.webp')}
@@ -113,7 +102,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 />
                 <View style={styles.overlay} />
 
-                {/* Logo */}
                 <Animated.Image
                     source={
                         state.settings.language === 'en'
@@ -132,7 +120,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     </View>
                 </Animated.View>
 
-                {/* Settings Button */}
                 {!isLoading && (
                     <TouchableOpacity
                         style={styles.settingsButton}
@@ -143,7 +130,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 )}
             </View>
 
-            {/* Bottom Content Section */}
             <Animated.View style={[styles.bottomSheet, { transform: [{ translateY: slideAnim }] }]}>
                 <View style={styles.waveContainer}>
                     <Svg height="100%" width="100%" viewBox="0 0 1440 320" preserveAspectRatio="none">
@@ -190,12 +176,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                             <Text style={styles.secondaryButtonText}>{t.home.share}</Text>
                         </TouchableOpacity>
                     </View>
-
-                    <Text style={styles.versionText}>{t.home.version} {APP_VERSION}</Text>
                 </View>
             </Animated.View>
 
-            {/* Settings Modal */}
             <SettingsModal
                 visible={showSettings}
                 onClose={() => setShowSettings(false)}

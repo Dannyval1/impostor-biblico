@@ -11,8 +11,7 @@ type AdScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Ad'>;
 };
 
-// Use TestId for development
-const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyy';
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-4782245353460263/7142735566';
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,

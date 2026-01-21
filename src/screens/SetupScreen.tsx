@@ -259,7 +259,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         </View>
                     </View>
 
-                    {/* Jugadores */}
                     <View style={styles.section}>
                         <View style={styles.playersHeader}>
                             <Text style={styles.sectionTitle}>{t.setup.players}</Text>
@@ -317,7 +316,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         )}
                     </View>
 
-                    {/* Categorías */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>{t.setup.categories}</Text>
                         <View style={styles.categoriesGrid}>
@@ -370,6 +368,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             </View>
                                         )}
 
+                                        {(!isSelected || isLocked) && (
+                                            <View style={styles.inactiveOverlay} />
+                                        )}
+
                                         {isLocked && (
                                             <Image
                                                 source={require('../../assets/blocked_level_1.png')}
@@ -381,7 +383,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 );
                             })}
 
-                            {/* Custom Categories */}
                             {state.customCategories.map((category) => {
                                 const isSelected = state.settings.selectedCategories.includes(category.id);
                                 return (
@@ -402,6 +403,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                         <View style={styles.customIconContainer}>
                                             <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
                                         </View>
+
+                                        {!isSelected && (
+                                            <View style={styles.inactiveOverlay} />
+                                        )}
 
                                         <View style={styles.categoryNamePill}>
                                             <Text style={styles.categoryNameText} numberOfLines={2}>
@@ -438,7 +443,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 style={[styles.categoryCard, styles.addCategoryCard]}
                                 onPress={() => {
                                     playClick();
-                                    // Premium Check for Custom Categories
                                     const isPro = state.isPremium;
 
                                     if (!isPro && state.customCategories.length >= 1) {
@@ -451,7 +455,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                             >
                                 <Ionicons name="add-circle-outline" size={40} color="#CBD5E0" />
                                 <Text style={styles.addCategoryText}>{t.setup.add}</Text>
-                                {/* Lock icon for indication */}
                                 {!state.isPremium && state.customCategories.length >= 1 && (
                                     <Image
                                         source={require('../../assets/blocked_level_1.png')}
@@ -463,7 +466,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         </View>
                     </View>
 
-                    {/* Duración del juego */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>{t.setup.duration}</Text>
                         <TouchableOpacity
@@ -475,7 +477,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Impostores */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>{t.setup.impostors}</Text>
                         <View style={styles.impostorControlContainer}>
@@ -828,9 +829,10 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         transform: [{ scale: 1.02 }],
     },
+    categoryCardUnselected: {},
     inactiveOverlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(245, 245, 245, 0.4)',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
         borderRadius: 20,
         zIndex: 1,
     },

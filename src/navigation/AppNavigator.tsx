@@ -5,7 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SetupScreen from '../screens/SetupScreen';
 import RevealScreen from '../screens/RevealScreen';
 import VotingScreen from '../screens/VotingScreen';
-import ResultsScreen from '../screens/ResultsScreen';
+
 
 import PaywallScreen from '../screens/PaywallScreen';
 import AdScreen from '../screens/AdScreen';
@@ -15,7 +15,6 @@ export type RootStackParamList = {
     Setup: undefined;
     Reveal: undefined;
     Voting: undefined;
-    Results: undefined;
     Paywall: undefined;
     Ad: undefined;
 };
@@ -35,7 +34,6 @@ export default function AppNavigator() {
                 <Stack.Screen name="Setup" component={SetupScreen} />
                 <Stack.Screen name="Reveal" component={RevealScreen} />
                 <Stack.Screen name="Voting" component={VotingScreen} />
-                <Stack.Screen name="Results" component={ResultsScreen} />
                 <Stack.Screen name="Paywall" component={PaywallScreen} />
                 <Stack.Screen name="Ad" component={AdScreen} />
             </Stack.Navigator>

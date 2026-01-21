@@ -18,7 +18,7 @@
         "iPhone"
       ],
       "requireFullScreen": true,
-      "bundleIdentifier": "com.dannyv12.impostor-biblico"
+      "bundleIdentifier": "com.dannyv12.impostorbiblico"
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +41,7 @@
       [
         "react-native-google-mobile-ads",
         {
-          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "androidAppId": "ca-app-pub-4782245353460263~2331254404",
           "iosAppId": "ca-app-pub-3940256099942544~1458002511"
         }
       ]

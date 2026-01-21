@@ -287,6 +287,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
                                 return (
                                     <TouchableOpacity
+                                        activeOpacity={0.9}
                                         key={player.id}
                                         style={[
                                             styles.playerCard,
