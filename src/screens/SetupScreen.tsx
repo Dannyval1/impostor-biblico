@@ -163,6 +163,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     const handleDecreaseImpostors = () => {
         playClick();
+        if (state.settings.players.length < 3) {
+            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK');
+            return;
+        }
+
         if (state.settings.impostorCount <= 1) {
             return;
         }
@@ -171,6 +176,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     const handleIncreaseImpostors = () => {
         playClick();
+        if (state.settings.players.length < 3) {
+            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK');
+            return;
+        }
+
         if (state.settings.impostorCount >= maxImpostors) {
             // No alert needed for hitting max
             return;

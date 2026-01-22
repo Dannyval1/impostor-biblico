@@ -35,7 +35,7 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
     const currentPackage = packages.find(
         (pkg) => pkg.product.identifier === 'impostor_premium_lifetime'
     ) || (packages.length > 0 ? packages[0] : null);
-    const priceString = currentPackage?.product.priceString || '$2.99';
+    const priceString = currentPackage?.product.priceString;
 
     const handleBuy = async () => {
         playClick();
@@ -133,7 +133,7 @@ export default function PaywallScreen({ navigation }: PaywallScreenProps) {
                             <ActivityIndicator color="#000" />
                         ) : (
                             <Text style={styles.buyButtonText}>
-                                {t.paywall.buy_now.replace('$2.99', priceString)}
+                                {t.paywall.buy_now.replace('%{price}', priceString || '...')}
                             </Text>
                         )}
                     </ScaleButton>
