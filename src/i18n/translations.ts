@@ -128,7 +128,7 @@ export const translations = {
                     ]
                 }
             ],
-            buy_now: 'Desbloquear por $2.99',
+            buy_now: 'Desbloquear por %{price}',
             restore: 'Restaurar Compras',
             success_title: '¡Gracias!',
             success_message: 'Has desbloqueado todo el contenido.',
@@ -149,6 +149,8 @@ export const translations = {
             error_duplicate: 'Esta palabra ya está en la lista',
             error_name_required: 'Por favor ingresa un nombre de categoría',
             error_min_words: 'Por favor añade al menos 3 palabras',
+            error_max_length: 'La palabra no puede tener más de %{count} caracteres',
+            error_max_words_free: 'Usuarios gratuitos pueden añadir máximo %{count} palabras. ¡Hazte Premium para palabras ilimitadas!',
         },
         ads: {
             loading: 'Cargando anuncio...',
@@ -301,7 +303,7 @@ export const translations = {
                     ]
                 }
             ],
-            buy_now: 'Unlock for $2.99',
+            buy_now: 'Unlock for %{price}',
             restore: 'Restore Purchases',
             success_title: 'Thank You!',
             success_message: 'You have unlocked all content.',
@@ -322,6 +324,8 @@ export const translations = {
             error_duplicate: 'This word is already in the list',
             error_name_required: 'Please enter a category name',
             error_min_words: 'Please add at least 3 words',
+            error_max_length: 'Word cannot be longer than %{count} characters',
+            error_max_words_free: 'Free users can add up to %{count} words. Go Premium for unlimited words!',
         },
         ads: {
             loading: 'Loading ad...',

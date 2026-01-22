@@ -19,6 +19,15 @@ import { useTranslation } from '../hooks/useTranslation';
 
 const { width, height } = Dimensions.get('window');
 
+const MAX_WORDS_FREE = 8;
+const MAX_WORD_LENGTH = 25;
+
+const normalizeWord = (word: string): string => {
+    const trimmed = word.trim();
+    if (!trimmed) return '';
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+};
+
 type CreateCategoryModalProps = {
     visible: boolean;
     onClose: () => void;
@@ -49,12 +58,29 @@ export function CreateCategoryModal({ visible, onClose, initialCategory }: Creat
         if (!currentWord.trim()) return;
 
         playClick();
-        if (words.includes(currentWord.trim())) {
+
+        const normalizedWord = normalizeWord(currentWord);
+
+        if (normalizedWord.length > MAX_WORD_LENGTH) {
+            Alert.alert(t.custom_category.error_title, t.custom_category.error_max_length.replace('%{count}', MAX_WORD_LENGTH.toString()));
+            return;
+        }
+
+        const normalizedWords = words.map(w => normalizeWord(w));
+        if (normalizedWords.includes(normalizedWord)) {
             Alert.alert(t.custom_category.error_title, t.custom_category.error_duplicate);
             return;
         }
 
-        setWords([...words, currentWord.trim()]);
+        if (!state.isPremium && words.length >= MAX_WORDS_FREE) {
+            Alert.alert(
+                t.custom_category.error_title,
+                t.custom_category.error_max_words_free.replace('%{count}', MAX_WORDS_FREE.toString())
+            );
+            return;
+        }
+
+        setWords([...words, normalizedWord]);
         setCurrentWord('');
     };
 
@@ -156,6 +182,7 @@ export function CreateCategoryModal({ visible, onClose, initialCategory }: Creat
                                 onChangeText={setCurrentWord}
                                 onSubmitEditing={handleAddWord}
                                 returnKeyType="done"
+                                maxLength={MAX_WORD_LENGTH}
                             />
                             <TouchableOpacity
                                 style={[styles.addButton, !currentWord.trim() && styles.disabledButton]}
