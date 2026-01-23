@@ -42,7 +42,7 @@ Players receive a secret biblical word, except for the impostor(s) who must blen
 
 ### ✨ Features
 
-- 🎮 **Local Multiplayer** - Play with 3-15 players on a single device
+- 🎮 **Local Multiplayer** - Play with 3-20 players on a single device
 - 📚 **450+ Biblical Words** - Across 6 categories (Characters, Books, Objects, Jobs, Places, Theological Concepts)
 - 🌍 **Bilingual** - Full support for English and Spanish
 - 🎨 **Custom Categories** - Create your own word lists
@@ -128,7 +128,7 @@ eas build --platform ios --profile production
 
 ### 🎯 How to Play
 
-1. **Setup** - Add players (3-15), choose categories, set the number of impostors and discussion time
+1. **Setup** - Add players (3-20), choose categories, set the number of impostors and discussion time
 2. **Reveal** - Pass the phone to each player to see their secret word (impostors don't see the word!)
 3. **Discussion** - Each player gives a clue about the word. Impostors must bluff!
 4. **Voting** - Vote to eliminate who you think is the impostor
@@ -177,7 +177,7 @@ Los jugadores reciben una palabra bíblica secreta, excepto el/los impostor(es) 
 
 ### ✨ Características
 
-- 🎮 **Multijugador Local** - Juega con 3-15 jugadores en un solo dispositivo
+- 🎮 **Multijugador Local** - Juega con 3-20 jugadores en un solo dispositivo
 - 📚 **450+ Palabras Bíblicas** - En 6 categorías (Personajes, Libros, Objetos, Oficios, Lugares, Conceptos Teológicos)
 - 🌍 **Bilingüe** - Soporte completo para Español e Inglés
 - 🎨 **Categorías Personalizadas** - Crea tus propias listas de palabras
@@ -263,7 +263,7 @@ eas build --platform ios --profile production
 
 ### 🎯 Cómo Jugar
 
-1. **Configuración** - Añade jugadores (3-15), elige categorías, establece el número de impostores y tiempo de discusión
+1. **Configuración** - Añade jugadores (3-20), elige categorías, establece el número de impostores y tiempo de discusión
 2. **Revelar** - Pasa el teléfono a cada jugador para ver su palabra secreta (¡los impostores no ven la palabra!)
 3. **Discusión** - Cada jugador da una pista sobre la palabra. ¡Los impostores deben mentir!
 4. **Votación** - Vota para eliminar a quien creas que es el impostor
