@@ -287,7 +287,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                         )}
 
                         <Text style={styles.question}>
-                            {t.voting.vote_title}
+                            {t.voting.vote_subtitle}:
                         </Text>
 
                         <View style={styles.playersGrid}>
