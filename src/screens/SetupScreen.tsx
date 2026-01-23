@@ -12,6 +12,7 @@ import {
     Platform,
     Modal,
     StatusBar,
+    Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -79,6 +80,26 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
     const [editingCategory, setEditingCategory] = useState<CustomCategory | null>(null);
     const [showHowToPlay, setShowHowToPlay] = useState(false);
+    const bounceAnim = useRef(new Animated.Value(1)).current;
+    const playersSectionY = useRef<number>(0);
+
+    const triggerBounce = () => {
+        // Scroll to the top
+        scrollViewRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+        });
+
+        // Add a small delay for the scroll to start before bouncing
+        setTimeout(() => {
+            Animated.sequence([
+                Animated.timing(bounceAnim, { toValue: 1.1, duration: 150, useNativeDriver: true }),
+                Animated.timing(bounceAnim, { toValue: 1.0, duration: 150, useNativeDriver: true }),
+                Animated.timing(bounceAnim, { toValue: 1.05, duration: 150, useNativeDriver: true }),
+                Animated.timing(bounceAnim, { toValue: 1.0, duration: 150, useNativeDriver: true }),
+            ]).start();
+        }, 300);
+    };
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
@@ -141,7 +162,9 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     const handleStartGame = () => {
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'danger', 'OK');
+            showGameModal('Error', t.setup.min_players_alert, 'danger', 'OK', () => {
+                triggerBounce();
+            });
             return;
         }
 
@@ -164,7 +187,9 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleDecreaseImpostors = () => {
         playClick();
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK');
+            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK', () => {
+                triggerBounce();
+            });
             return;
         }
 
@@ -177,12 +202,13 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleIncreaseImpostors = () => {
         playClick();
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK');
+            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK', () => {
+                triggerBounce();
+            });
             return;
         }
 
         if (state.settings.impostorCount >= maxImpostors) {
-            // No alert needed for hitting max
             return;
         }
         setImpostorCount(state.settings.impostorCount + 1);
@@ -211,7 +237,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
             >
                 <ScrollView
                     ref={scrollViewRef}
-                    contentContainerStyle={styles.scrollContent}
+                    contentContainerStyle={[styles.scrollContent, { paddingBottom: 100 }]}
                     keyboardShouldPersistTaps="handled"
                 >
                     <View style={styles.header}>
@@ -285,7 +311,12 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         </View>
                     </View>
 
-                    <View style={styles.section}>
+                    <Animated.View
+                        style={[styles.section, { transform: [{ scale: bounceAnim }] }]}
+                        onLayout={(event) => {
+                            playersSectionY.current = event.nativeEvent.layout.y;
+                        }}
+                    >
                         <View style={styles.playersHeader}>
                             <Text style={styles.sectionTitle}>{t.setup.players}</Text>
                             <Text style={styles.playerCount}>
@@ -340,7 +371,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 </TouchableOpacity>
                             </View>
                         )}
-                    </View>
+                    </Animated.View>
 
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>{t.setup.categories}</Text>
@@ -544,19 +575,22 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
                     </View>
 
-                    {/* Botón Iniciar */}
-                    <ScaleButton
-                        style={[
-                            styles.startButton,
-                            state.settings.players.length < 3 && styles.startButtonDisabled,
-                        ]}
-                        onPress={handleStartGame}
-                        disabled={state.settings.players.length < 3}
-                    >
-                        <Text style={styles.startButtonText}>{t.setup.start_game}</Text>
-                    </ScaleButton>
                 </ScrollView>
             </KeyboardAvoidingView>
+
+            {/* Bottom Sticky Button Container */}
+            <View style={styles.bottomContainer}>
+                <ScaleButton
+                    style={[
+                        styles.startButton,
+                        state.settings.players.length < 3 && styles.startButtonDisabled,
+                    ]}
+                    onPress={handleStartGame}
+                >
+                    <Text style={styles.startButtonText}>{t.setup.start_game}</Text>
+                </ScaleButton>
+            </View>
+
 
             {/* Duration Picker Modal */}
             <Modal
@@ -632,6 +666,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5F5F5',
+    },
+    bottomContainer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#F5F5F5',
+        paddingHorizontal: 20,
+        paddingTop: 10,
+        paddingBottom: Platform.OS === 'ios' ? 20 : 20,
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(0,0,0,0.05)',
     },
     scrollContent: {
         padding: 20,

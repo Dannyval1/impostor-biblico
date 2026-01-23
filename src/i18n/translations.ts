@@ -70,6 +70,7 @@ export const translations = {
             discussion_time: 'Tiempo de Discusión',
             unlimited_time: 'Tiempo Ilimitado',
             vote_title: '¿Quién es el impostor?',
+            vote_subtitle: 'Selecciona al impostor',
             eliminate: 'ELIMINAR',
             impostor_found: '¡Impostor Encontrado!',
             impostor_escaped: '¡El Impostor ha escapado!',
@@ -112,11 +113,11 @@ export const translations = {
             subtitle: 'Lleva tus reuniones al siguiente nivel',
             sections: [
                 {
-                    title: '✨ 3 nuevas categorías bíblicas',
+                    title: '✨ Nuevas categorías bíblicas',
                     items: [
-                        '📋 Oficios bíblicos (50 palabras)',
-                        '🏛️ Lugares bíblicos (50 palabras)',
-                        '💭 Conceptos teológicos (50 palabras)'
+                        '📋 Oficios bíblicos',
+                        '🏛️ Lugares bíblicos',
+                        '💭 Conceptos teológicos'
                     ]
                 },
                 {
@@ -245,6 +246,7 @@ export const translations = {
             discussion_time: 'Discussion Time',
             unlimited_time: 'Unlimited Time',
             vote_title: 'Who is the impostor?',
+            vote_subtitle: 'Select the impostor',
             eliminate: 'ELIMINATE',
             impostor_found: 'Impostor Found!',
             impostor_escaped: 'The Impostor escaped!',
@@ -287,11 +289,11 @@ export const translations = {
             subtitle: 'Take your gatherings to the next level',
             sections: [
                 {
-                    title: '✨ 3 New Biblical Categories',
+                    title: '✨ New Biblical Categories',
                     items: [
-                        '📋 Biblical Jobs (50 words)',
-                        '🏛️ Biblical Places (50 words)',
-                        '💭 Theological Concepts (50 words)'
+                        '📋 Biblical Jobs',
+                        '🏛️ Biblical Places',
+                        '💭 Theological Concepts'
                     ]
                 },
                 {
