@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { Platform, Alert } from 'react-native';
-import Purchases, { PurchasesPackage, CustomerInfo, PurchasesOffering } from 'react-native-purchases';
+import Purchases, { PurchasesPackage, CustomerInfo } from 'react-native-purchases';
 
-// TODO: REPLACE WITH YOUR ACTUAL REVENUECAT API KEYS
 const API_KEYS = {
-    apple: 'test_OkGLKrVtyFpGbdrvnVuFcxOfYVp', // Yet testing
+    apple: 'appl_VEjFXaIepMokwHVqxdPTdpHalko',
     google: 'goog_BXcFKYvqJnBsFkSfNodPqFwQgEz'
 };
 
