@@ -14,7 +14,7 @@ import {
     StatusBar,
     Animated,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
@@ -61,6 +61,7 @@ const CATEGORIES: { id: Category; label: string }[] = [
 
 export default function SetupScreen({ navigation }: SetupScreenProps) {
     const { t } = useTranslation();
+    const insets = useSafeAreaInsets();
     const {
         state,
         addPlayer,
@@ -579,7 +580,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
             </KeyboardAvoidingView>
 
             {/* Bottom Sticky Button Container */}
-            <View style={styles.bottomContainer}>
+            <View style={[styles.bottomContainer, { paddingBottom: Math.max(20, insets.bottom + 10) }]}>
                 <ScaleButton
                     style={[
                         styles.startButton,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -11,7 +11,11 @@ type AdScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Ad'>;
 };
 
-const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-4782245353460263/7142735566';
+const adUnitId = __DEV__
+    ? TestIds.INTERSTITIAL
+    : Platform.OS === 'ios'
+        ? 'ca-app-pub-4782245353460263/8334790472'
+        : 'ca-app-pub-4782245353460263/7142735566'; // Android
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
