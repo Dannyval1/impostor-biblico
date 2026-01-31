@@ -10,6 +10,9 @@
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green?style=for-the-badge)]()
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)]()
 
+[![App Store](https://img.shields.io/badge/App_Store-Available-0D96F6?style=for-the-badge&logo=app-store&logoColor=white)](https://apps.apple.com/app/id6758225650)
+[![Google Play](https://img.shields.io/badge/Google_Play-Coming_Soon-34A853?style=for-the-badge&logo=google-play&logoColor=white)]()
+
 [English](#english) • [Español](#español)
 
 <img src="./assets/icon.png" alt="Impostor Bíblico Logo" width="150"/>
