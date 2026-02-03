@@ -11,7 +11,7 @@ export const translations = {
             rate_us: 'Califícanos',
             version: 'Versión',
             loading: 'Cargando...',
-            share_message: '¡Descarga Impostor Bíblico y descubre quién es el impostor! 🕵️‍♂️📖',
+            share_message: '¡Descarga Impostor Bíblico y descubre quién es el impostor! 🕵️‍♂️📖. Juega con tu familia y amigos.',
             how_to_play: 'Cómo jugar',
         },
         common: {
@@ -83,6 +83,7 @@ export const translations = {
             remaining_impostors: 'Impostores restantes',
             reveal_confirm: 'REVELAR',
             exit_confirm: '¿Estás seguro de que quieres salir?',
+            starts: 'Esta ronda la empieza:',
         },
         reveal: {
             round: 'Ronda',
@@ -259,6 +260,7 @@ export const translations = {
             remaining_impostors: 'Impostors remaining',
             reveal_confirm: 'REVEAL',
             exit_confirm: 'Are you sure you want to exit?',
+            starts: 'This round starts with:',
         },
         reveal: {
             round: 'Round',
