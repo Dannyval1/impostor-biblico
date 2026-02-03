@@ -96,4 +96,6 @@ export type GameAction =
     | { type: 'INCREMENT_GAMES_PLAYED' }
     | { type: 'SET_GAMES_PLAYED'; payload: number }
     | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
-    | { type: 'EDIT_CUSTOM_CATEGORY'; payload: CustomCategory };
+    | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
+    | { type: 'EDIT_CUSTOM_CATEGORY'; payload: CustomCategory }
+    | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } };

@@ -73,6 +73,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         loadNewWord,
         playClick,
         deleteCustomCategory,
+        updatePlayerName,
     } = useGame();
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
@@ -81,6 +82,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
     const [editingCategory, setEditingCategory] = useState<CustomCategory | null>(null);
     const [showHowToPlay, setShowHowToPlay] = useState(false);
+
+    // Player Name Editing
+    const [showEditNameModal, setShowEditNameModal] = useState(false);
+    const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
+    const [editingPlayerName, setEditingPlayerName] = useState('');
     const bounceAnim = useRef(new Animated.Value(1)).current;
     const playersSectionY = useRef<number>(0);
 
@@ -345,7 +351,18 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                             <Image source={avatarImage} style={styles.avatarImage} resizeMode="contain" />
 
                                             <View style={styles.namePill}>
-                                                <Text style={styles.playerName} numberOfLines={1}>{player.name}</Text>
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        playClick();
+                                                        setEditingPlayerId(player.id);
+                                                        setEditingPlayerName(player.name);
+                                                        setShowEditNameModal(true);
+                                                    }}
+                                                >
+                                                    <Text style={styles.playerName} numberOfLines={1}>
+                                                        {player.name} <Ionicons name="pencil" size={10} color="#666" />
+                                                    </Text>
+                                                </TouchableOpacity>
                                             </View>
                                         </View>
                                     );
@@ -659,6 +676,69 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 visible={showHowToPlay}
                 onClose={() => setShowHowToPlay(false)}
             />
+
+            <Modal
+                visible={showEditNameModal}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setShowEditNameModal(false)}
+            >
+                <TouchableOpacity
+                    style={styles.modalOverlay}
+                    activeOpacity={1}
+                    onPress={() => {
+                        setShowEditNameModal(false);
+                        Keyboard.dismiss();
+                    }}
+                >
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        style={styles.modalContent}
+                    >
+                        <Text style={styles.modalTitle}>Editar Nombre</Text>
+                        <TextInput
+                            style={styles.modalInput}
+                            value={editingPlayerName}
+                            onChangeText={setEditingPlayerName}
+                            autoFocus={true}
+                            maxLength={15}
+                            placeholder="Nombre del jugador"
+                            placeholderTextColor="#A0AEC0"
+                            onSubmitEditing={() => {
+                                if (editingPlayerId && editingPlayerName.trim()) {
+                                    updatePlayerName(editingPlayerId, editingPlayerName.trim());
+                                    setShowEditNameModal(false);
+                                    playClick();
+                                }
+                            }}
+                        />
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setShowEditNameModal(false);
+                                    playClick();
+                                }}
+                                style={styles.modalButtonCancel}
+                            >
+                                <Text style={styles.modalButtonCancelText}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if (editingPlayerId && editingPlayerName.trim()) {
+                                        updatePlayerName(editingPlayerId, editingPlayerName.trim());
+                                        setShowEditNameModal(false);
+                                        playClick();
+                                    }
+                                }}
+                                style={styles.modalButtonSave}
+                            >
+                                <Text style={styles.modalButtonSaveText}>Guardar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </KeyboardAvoidingView>
+                </TouchableOpacity>
+            </Modal>
+
         </SafeAreaView >
     );
 }
@@ -1159,6 +1239,49 @@ const styles = StyleSheet.create({
     modalOptionTextSelected: {
         fontWeight: '600',
         color: '#5B7FDB',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginTop: 24,
+        gap: 12,
+        marginBottom: 8,
+    },
+    modalButtonCancel: {
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+    },
+    modalButtonCancelText: {
+        color: '#718096',
+        fontWeight: '600',
+        fontSize: 16,
+    },
+    modalButtonSave: {
+        backgroundColor: '#5B7FDB',
+        paddingVertical: 10,
+        paddingHorizontal: 24,
+        borderRadius: 10,
+        shadowColor: '#5B7FDB',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 2,
+    },
+    modalButtonSaveText: {
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    modalInput: {
+        backgroundColor: '#F7FAFC',
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+        borderRadius: 12,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        fontSize: 18,
+        color: '#2D3748',
+        marginBottom: 8,
     },
     // Impostors
     impostorControlContainer: {

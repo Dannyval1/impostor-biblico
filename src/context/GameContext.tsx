@@ -99,7 +99,11 @@ const deviceLanguage = getLocales()[0]?.languageCode === 'es' ? 'es' : 'en';
 const initialState: GameState = {
     settings: {
         mode: 'classic',
-        players: [],
+        players: [
+            { id: '1', name: 'Jugador 1', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
+            { id: '2', name: 'Jugador 2', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
+            { id: '3', name: 'Jugador 3', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
+        ],
         selectedCategories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
         impostorCount: 1,
         gameDuration: null, // Unlimited by default
@@ -150,6 +154,17 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 settings: {
                     ...state.settings,
                     players: state.settings.players.filter(p => p.id !== action.payload),
+                },
+            };
+
+        case 'UPDATE_PLAYER_NAME':
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    players: state.settings.players.map(p =>
+                        p.id === action.payload.id ? { ...p, name: action.payload.name } : p
+                    ),
                 },
             };
 
@@ -446,6 +461,7 @@ const GameContext = createContext<{
     state: GameState;
     addPlayer: (name: string) => void;
     removePlayer: (id: string) => void;
+    updatePlayerName: (id: string, name: string) => void;
     toggleCategory: (category: Category) => void;
     setImpostorCount: (count: number) => void;
     setGameDuration: (duration: number | null) => void;
@@ -625,6 +641,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         state,
         addPlayer: (name: string) => dispatch({ type: 'ADD_PLAYER', payload: name }),
         removePlayer: (id: string) => dispatch({ type: 'REMOVE_PLAYER', payload: id }),
+        updatePlayerName: (id: string, name: string) => dispatch({ type: 'UPDATE_PLAYER_NAME', payload: { id, name } }),
         toggleCategory: (category: Category) => dispatch({ type: 'TOGGLE_CATEGORY', payload: category }),
         setImpostorCount: (count: number) => dispatch({ type: 'SET_IMPOSTOR_COUNT', payload: count }),
         setGameDuration: (duration: number | null) => dispatch({ type: 'SET_GAME_DURATION', payload: duration }),

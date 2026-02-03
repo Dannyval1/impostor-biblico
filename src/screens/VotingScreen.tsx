@@ -36,12 +36,21 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
     const [eliminatedImpostors, setEliminatedImpostors] = useState<string[]>([]);
     const [showTimerExpiredAlert, setShowTimerExpiredAlert] = useState(false);
 
+    const activePlayers = state.settings.players.filter((p: Player) => !p.isEliminated);
+
+    const [startingPlayer, setStartingPlayer] = useState<string>('');
+
     useEffect(() => {
         setGamePhase('voting');
+        // Select random starter
+        if (activePlayers.length > 0) {
+            const randomPlayer = activePlayers[Math.floor(Math.random() * activePlayers.length)];
+            setStartingPlayer(randomPlayer.name);
+        }
         return () => {
-            // Cleanup if needed, but usually handled by navigation or next screen
+            // Cleanup if needed
         };
-    }, []);
+    }, []); // Run once on mount
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalConfig, setModalConfig] = useState<{
@@ -86,8 +95,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         });
         setModalVisible(true);
     };
-
-    const activePlayers = state.settings.players.filter((p: Player) => !p.isEliminated);
 
     useEffect(() => {
         if (gameFinished || timeLeft === null) return;
@@ -272,19 +279,28 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
                 {!gameFinished ? (
                     <>
-                        {timeLeft !== null && (
-                            <View style={styles.timerContainer}>
-                                <Text style={styles.timerLabel}>
-                                    {t.voting.discussion_time}
-                                </Text>
-                                <Text style={[
-                                    styles.timer,
-                                    timeLeft !== null && timeLeft < 30 && styles.timerWarning
-                                ]}>
-                                    {formatTime(timeLeft)}
-                                </Text>
-                            </View>
-                        )}
+                        <View style={styles.timerContainer}>
+                            {timeLeft !== null && (
+                                <>
+                                    <Text style={styles.timerLabel}>
+                                        {t.voting.discussion_time}
+                                    </Text>
+                                    <Text style={[
+                                        styles.timer,
+                                        timeLeft !== null && timeLeft < 30 && styles.timerWarning
+                                    ]}>
+                                        {formatTime(timeLeft)}
+                                    </Text>
+                                </>
+                            )}
+
+                            {startingPlayer !== '' && (
+                                <View style={styles.starterContainer}>
+                                    <Text style={styles.starterLabel}>{t.voting?.starts}</Text>
+                                    <Text style={styles.starterName}>{startingPlayer}</Text>
+                                </View>
+                            )}
+                        </View>
 
                         <Text style={styles.question}>
                             {t.voting.vote_subtitle}:
@@ -444,6 +460,27 @@ const styles = StyleSheet.create({
     },
     timerWarning: {
         color: '#E53E3E',
+    },
+    starterContainer: {
+        marginTop: 16,
+        alignItems: 'center',
+        padding: 8,
+        backgroundColor: '#E6FFFA',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#38B2AC',
+        minWidth: 200,
+    },
+    starterLabel: {
+        fontSize: 14,
+        color: '#2C7A7B',
+        marginBottom: 4,
+        fontWeight: '600',
+    },
+    starterName: {
+        fontSize: 20,
+        color: '#234E52',
+        fontWeight: 'bold',
     },
     question: {
         fontSize: 20,

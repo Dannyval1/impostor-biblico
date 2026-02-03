@@ -21,7 +21,7 @@ type SettingsModalProps = {
 };
 
 const { width } = Dimensions.get('window');
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -40,9 +40,13 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
     const handleShare = async () => {
         playClick();
         try {
+            const url = Platform.OS === 'ios'
+                ? 'https://apps.apple.com/app/id6758225650'
+                : 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
+
             await Share.share({
                 message: t.home.share_message,
-                url: 'https://impostorbíblico.com', // Replace with real URL
+                url: url,
             });
         } catch (error) {
             console.log(error);
@@ -52,14 +56,15 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
     const handleRateUs = () => {
         playClick();
         const url = Platform.OS === 'ios'
-            ? 'itms-apps://itunes.apple.com/app/idYOUR_APP_ID'
-            : 'market://details?id=YOUR_PACKAGE_NAME';
+            ? 'https://apps.apple.com/app/id6758225650?action=write-review'
+            : 'market://details?id=com.dannyv12.impostorbiblico'; // Opens Play Store directly
 
         Linking.canOpenURL(url).then(supported => {
             if (supported) {
                 Linking.openURL(url);
             } else {
-                Linking.openURL('https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME');
+                // Fallback for Android if market:// fails or for testing on simulator
+                Linking.openURL('https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico');
             }
         });
     };

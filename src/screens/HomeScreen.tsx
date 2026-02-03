@@ -4,7 +4,6 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Image,
     StatusBar,
     Animated,
     Dimensions,
@@ -36,16 +35,12 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const [showSettings, setShowSettings] = useState(false);
     const [showHowToPlay, setShowHowToPlay] = useState(false);
 
-    const slideAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : height)).current; // 0 if loaded, height if not
-    const fadeAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : 1)).current; // 0 if loaded, 1 if not
-    const progressAnim = useRef(new Animated.Value(state.hasLoaded ? 1 : 0)).current; // 1 if loaded, 0 if not
+    const slideAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : height)).current;
+    const fadeAnim = useRef(new Animated.Value(state.hasLoaded ? 0 : 1)).current;
+    const progressAnim = useRef(new Animated.Value(state.hasLoaded ? 1 : 0)).current;
 
-
-
-    // Initial Paywall Check
     useEffect(() => {
         if (!isLoading && !isPremium && !hasShownInitialPaywall) {
-            // Small delay to ensure smooth transition
             const timer = setTimeout(() => {
                 navigation.navigate('Paywall');
                 setHasShownInitialPaywall(true);
@@ -88,9 +83,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const handleShare = async () => {
         playClick();
         try {
+            const url = Platform.OS === 'ios'
+                ? 'https://apps.apple.com/app/id6758225650'
+                : 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
+
             await Share.share({
                 message: t.home.share_message,
-                url: 'https://impostorbíblico.com',
+                url: url,
             });
         } catch (error) {
             console.error('Share failed:', error);

@@ -60,7 +60,6 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
             <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
             <ScrollView contentContainerStyle={styles.content}>
                 <View style={styles.header}>
-                    <Text style={styles.roundText}>{t.reveal.round} {state.roundNumber}</Text>
                     <Text style={styles.progressText}>
                         {playersWhoSaw}/{players.length} {t.reveal.players}
                     </Text>
