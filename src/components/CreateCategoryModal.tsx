@@ -32,9 +32,10 @@ type CreateCategoryModalProps = {
     visible: boolean;
     onClose: () => void;
     initialCategory?: CustomCategory | null;
+    categoryType?: 'biblical' | 'general';
 };
 
-export function CreateCategoryModal({ visible, onClose, initialCategory }: CreateCategoryModalProps) {
+export function CreateCategoryModal({ visible, onClose, initialCategory, categoryType = 'biblical' }: CreateCategoryModalProps) {
     const { addCustomCategory, editCustomCategory, playClick, playSuccess, playFailure, state } = useGame();
     const { t } = useTranslation();
 
@@ -116,6 +117,7 @@ export function CreateCategoryModal({ visible, onClose, initialCategory }: Creat
                 name: name.trim(),
                 words: words,
                 language: state.settings.language,
+                type: categoryType,
             };
             addCustomCategory(newCategory);
         }

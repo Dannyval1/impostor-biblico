@@ -12,13 +12,23 @@ export type StandardCategory =
     | 'lugares_biblicos'
     | 'conceptos_teologicos';
 
-export type Category = StandardCategory | (string & {});
+export type GenericCategory =
+    | 'animales'
+    | 'deportes'
+    | 'comida'
+    | 'profesiones'
+    | 'herramientas'
+    | 'acciones'
+    | 'objetos';
+
+export type Category = StandardCategory | GenericCategory | (string & {});
 
 export interface CustomCategory {
     id: string;
     name: string;
     words: string[];
     language: 'es' | 'en';
+    type?: 'biblical' | 'general';
 }
 
 export type Avatar = `avatar_${number}`;

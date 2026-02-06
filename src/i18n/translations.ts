@@ -65,6 +65,8 @@ export const translations = {
                 lugares_biblicos: 'Lugares bíblicos',
                 conceptos_teologicos: 'Conceptos teológicos',
             },
+            general_tab: 'Genéricas',
+            biblical_tab: 'Bíblicas',
         },
         voting: {
             discussion_time: 'Tiempo de Discusión',
@@ -242,6 +244,8 @@ export const translations = {
                 lugares_biblicos: 'Biblical Places',
                 conceptos_teologicos: 'Theological Concepts',
             },
+            general_tab: 'Generic',
+            biblical_tab: 'Biblical',
         },
         voting: {
             discussion_time: 'Discussion Time',

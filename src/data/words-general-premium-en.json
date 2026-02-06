@@ -1,0 +1,555 @@
+[
+    {
+        "id": "gen_an_001",
+        "word": "Lion",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "King of the jungle with mane"
+    },
+    {
+        "id": "gen_an_002",
+        "word": "Dog",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Man's best friend"
+    },
+    {
+        "id": "gen_an_003",
+        "word": "Cat",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Feline pet that meows"
+    },
+    {
+        "id": "gen_an_004",
+        "word": "Elephant",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Giant mammal with trunk"
+    },
+    {
+        "id": "gen_an_005",
+        "word": "Tiger",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Orange feline with black stripes"
+    },
+    {
+        "id": "gen_an_006",
+        "word": "Horse",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Animal that neighs and gallops"
+    },
+    {
+        "id": "gen_an_007",
+        "word": "Cow",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Animal that gives milk"
+    },
+    {
+        "id": "gen_an_008",
+        "word": "Rabbit",
+        "category": "animales",
+        "difficulty": "easy",
+        "hint": "Animal that hops and eats carrots"
+    },
+    {
+        "id": "gen_an_009",
+        "word": "Giraffe",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Tallest animal in the world"
+    },
+    {
+        "id": "gen_an_010",
+        "word": "Hippopotamus",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Very heavy aquatic mammal"
+    },
+    {
+        "id": "gen_an_011",
+        "word": "Rhinoceros",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Gray animal with horn on nose"
+    },
+    {
+        "id": "gen_an_012",
+        "word": "Kangaroo",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Marsupial that hops and has pouch"
+    },
+    {
+        "id": "gen_an_013",
+        "word": "Penguin",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Bird that doesn't fly but swims well"
+    },
+    {
+        "id": "gen_an_014",
+        "word": "Dolphin",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Very intelligent marine mammal"
+    },
+    {
+        "id": "gen_an_015",
+        "word": "Bear",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Large mammal that hibernates"
+    },
+    {
+        "id": "gen_an_016",
+        "word": "Snake",
+        "category": "animales",
+        "difficulty": "medium",
+        "hint": "Legless reptile that slithers"
+    },
+    {
+        "id": "gen_an_017",
+        "word": "Platypus",
+        "category": "animales",
+        "difficulty": "hard",
+        "hint": "Strange mammal with duck bill"
+    },
+    {
+        "id": "gen_an_018",
+        "word": "Koala",
+        "category": "animales",
+        "difficulty": "hard",
+        "hint": "Australian marsupial that eats eucalyptus"
+    },
+    {
+        "id": "gen_an_019",
+        "word": "Armadillo",
+        "category": "animales",
+        "difficulty": "hard",
+        "hint": "Mammal with natural armor"
+    },
+    {
+        "id": "gen_an_020",
+        "word": "Lemur",
+        "category": "animales",
+        "difficulty": "hard",
+        "hint": "Madagascar primate with ringed tail"
+    },
+    {
+        "id": "gen_fo_001",
+        "word": "Pizza",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Italian food with dough and cheese"
+    },
+    {
+        "id": "gen_fo_002",
+        "word": "Hamburger",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Meat between two buns"
+    },
+    {
+        "id": "gen_fo_003",
+        "word": "Pasta",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Italian noodles with sauce"
+    },
+    {
+        "id": "gen_fo_004",
+        "word": "Rice",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "White grain staple from Asia"
+    },
+    {
+        "id": "gen_fo_005",
+        "word": "Chicken",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Popular poultry meat"
+    },
+    {
+        "id": "gen_fo_006",
+        "word": "Bread",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Basic wheat food"
+    },
+    {
+        "id": "gen_fo_007",
+        "word": "Egg",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Oval product from chickens"
+    },
+    {
+        "id": "gen_fo_008",
+        "word": "Apple",
+        "category": "comida",
+        "difficulty": "easy",
+        "hint": "Common red or green fruit"
+    },
+    {
+        "id": "gen_fo_009",
+        "word": "Sushi",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Japanese food with raw fish"
+    },
+    {
+        "id": "gen_fo_010",
+        "word": "Tacos",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Mexican food with tortilla"
+    },
+    {
+        "id": "gen_fo_011",
+        "word": "Paella",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Spanish dish with rice and seafood"
+    },
+    {
+        "id": "gen_fo_012",
+        "word": "Lasagna",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Layered Italian pasta with meat"
+    },
+    {
+        "id": "gen_fo_013",
+        "word": "Enchiladas",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Stuffed Mexican tortillas"
+    },
+    {
+        "id": "gen_fo_014",
+        "word": "Croissant",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "French crescent-shaped pastry"
+    },
+    {
+        "id": "gen_fo_015",
+        "word": "Empanadas",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Stuffed and baked dough"
+    },
+    {
+        "id": "gen_fo_016",
+        "word": "Curry",
+        "category": "comida",
+        "difficulty": "medium",
+        "hint": "Spicy Indian food"
+    },
+    {
+        "id": "gen_fo_017",
+        "word": "Gazpacho",
+        "category": "comida",
+        "difficulty": "hard",
+        "hint": "Cold Spanish tomato soup"
+    },
+    {
+        "id": "gen_fo_018",
+        "word": "Ratatouille",
+        "category": "comida",
+        "difficulty": "hard",
+        "hint": "French vegetable stew"
+    },
+    {
+        "id": "gen_fo_019",
+        "word": "Ceviche",
+        "category": "comida",
+        "difficulty": "hard",
+        "hint": "Raw fish marinated in lime"
+    },
+    {
+        "id": "gen_fo_020",
+        "word": "Mole",
+        "category": "comida",
+        "difficulty": "hard",
+        "hint": "Mexican sauce with chocolate"
+    },
+    {
+        "id": "gen_pr_001",
+        "word": "Doctor",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Professional who cures diseases"
+    },
+    {
+        "id": "gen_pr_002",
+        "word": "Teacher",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Educates children in school"
+    },
+    {
+        "id": "gen_pr_003",
+        "word": "Police officer",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Maintains order and safety"
+    },
+    {
+        "id": "gen_pr_004",
+        "word": "Firefighter",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Puts out fires and rescues people"
+    },
+    {
+        "id": "gen_pr_005",
+        "word": "Chef",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Prepares food in restaurants"
+    },
+    {
+        "id": "gen_pr_006",
+        "word": "Nurse",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Cares for patients in hospitals"
+    },
+    {
+        "id": "gen_pr_007",
+        "word": "Pilot",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Flies airplanes through the sky"
+    },
+    {
+        "id": "gen_pr_008",
+        "word": "Mechanic",
+        "category": "profesiones",
+        "difficulty": "easy",
+        "hint": "Repairs cars and engines"
+    },
+    {
+        "id": "gen_pr_009",
+        "word": "Engineer",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Designs and builds technical systems"
+    },
+    {
+        "id": "gen_pr_010",
+        "word": "Programmer",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Creates software and applications"
+    },
+    {
+        "id": "gen_pr_011",
+        "word": "Journalist",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Reports news and events"
+    },
+    {
+        "id": "gen_pr_012",
+        "word": "Pharmacist",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Prepares and sells medicines"
+    },
+    {
+        "id": "gen_pr_013",
+        "word": "Psychologist",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Studies mind and behavior"
+    },
+    {
+        "id": "gen_pr_014",
+        "word": "Electrician",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Installs and repairs electrical systems"
+    },
+    {
+        "id": "gen_pr_015",
+        "word": "Scientist",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Researches natural phenomena"
+    },
+    {
+        "id": "gen_pr_016",
+        "word": "Musician",
+        "category": "profesiones",
+        "difficulty": "medium",
+        "hint": "Plays instruments and composes"
+    },
+    {
+        "id": "gen_pr_017",
+        "word": "Anthropologist",
+        "category": "profesiones",
+        "difficulty": "hard",
+        "hint": "Studies human cultures and societies"
+    },
+    {
+        "id": "gen_pr_018",
+        "word": "Archaeologist",
+        "category": "profesiones",
+        "difficulty": "hard",
+        "hint": "Excavates and studies ancient civilizations"
+    },
+    {
+        "id": "gen_pr_019",
+        "word": "Meteorologist",
+        "category": "profesiones",
+        "difficulty": "hard",
+        "hint": "Predicts climate and weather"
+    },
+    {
+        "id": "gen_pr_020",
+        "word": "Neurosurgeon",
+        "category": "profesiones",
+        "difficulty": "hard",
+        "hint": "Operates on brain and nervous system"
+    },
+    {
+        "id": "gen_to_001",
+        "word": "Hammer",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Hits nails with metal head"
+    },
+    {
+        "id": "gen_to_002",
+        "word": "Screwdriver",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Screws and unscrews screws"
+    },
+    {
+        "id": "gen_to_003",
+        "word": "Wrench",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Adjusts nuts and bolts"
+    },
+    {
+        "id": "gen_to_004",
+        "word": "Saw",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Cuts wood with teeth"
+    },
+    {
+        "id": "gen_to_005",
+        "word": "Knife",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Cuts with sharp blade"
+    },
+    {
+        "id": "gen_to_006",
+        "word": "Scissors",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Cuts paper with two blades"
+    },
+    {
+        "id": "gen_to_007",
+        "word": "Shovel",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Digs earth with long handle"
+    },
+    {
+        "id": "gen_to_008",
+        "word": "Brush",
+        "category": "herramientas",
+        "difficulty": "easy",
+        "hint": "Paints with bristles at tip"
+    },
+    {
+        "id": "gen_to_009",
+        "word": "Drill",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Makes holes by spinning fast"
+    },
+    {
+        "id": "gen_to_010",
+        "word": "Welder",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Joins metals with extreme heat"
+    },
+    {
+        "id": "gen_to_011",
+        "word": "Pliers",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Grips objects with jaws"
+    },
+    {
+        "id": "gen_to_013",
+        "word": "File",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Wears down surfaces with roughness"
+    },
+    {
+        "id": "gen_to_014",
+        "word": "Chisel",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Carves stone or wood with edge"
+    },
+    {
+        "id": "gen_to_015",
+        "word": "Car jack",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Lifts cars to change tires"
+    },
+    {
+        "id": "gen_to_016",
+        "word": "Compressor",
+        "category": "herramientas",
+        "difficulty": "medium",
+        "hint": "Generates pressurized air"
+    },
+    {
+        "id": "gen_to_017",
+        "word": "Caliper",
+        "category": "herramientas",
+        "difficulty": "hard",
+        "hint": "Measures with extreme precision"
+    },
+    {
+        "id": "gen_to_018",
+        "word": "Multimeter",
+        "category": "herramientas",
+        "difficulty": "hard",
+        "hint": "Measures voltage, current and resistance"
+    },
+    {
+        "id": "gen_to_019",
+        "word": "Milling machine",
+        "category": "herramientas",
+        "difficulty": "hard",
+        "hint": "Machine that cuts metal precisely"
+    },
+    {
+        "id": "gen_to_020",
+        "word": "Lathe",
+        "category": "herramientas",
+        "difficulty": "hard",
+        "hint": "Machine that spins pieces to shape them"
+    }
+]

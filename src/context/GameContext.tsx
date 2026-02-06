@@ -1,25 +1,24 @@
-// src/context/GameContext.tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { useAudioPlayer } from 'expo-audio';
 import { getLocales } from 'expo-localization';
 import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar, CustomCategory } from '../types';
 import { saveCustomCategories, loadCustomCategories, saveGamesPlayed, loadGamesPlayed } from '../utils/storage';
-
-// Importar las palabras
 import freeWordsDataEs from '../data/words-free-es.json';
 import freeWordsDataEn from '../data/words-free-en.json';
 import premiumWordsDataEs from '../data/words-premium.json';
 import premiumWordsDataEn from '../data/words-premium-en.json';
+import generalWordsDataEs from '../data/words-general-es.json';
+import generalWordsDataEn from '../data/words-general-en.json';
+import generalPremiumWordsDataEs from '../data/words-general-premium-es.json';
+import generalPremiumWordsDataEn from '../data/words-general-premium-en.json';
 import { TOTAL_AVATARS } from '../utils/avatarAssets';
 
 const clickSound = require('../../assets/sounds/click.mp3');
 const successSound = require('../../assets/sounds/victory.mp3');
 const failureSound = require('../../assets/sounds/failure.mp3');
-// Using old success sound as intro since original intro.mp3 was corrupted
 const introSound = require('../../assets/sounds/success.mp3');
 const gameMusicSound = require('../../assets/sounds/game_mode.mp3');
 
-// Helper to get next available avatar or cycle
 function getNextAvatar(currentPlayers: Player[]): Avatar {
     const usedAvatars = new Set(currentPlayers.map(p => p.avatar));
     const available: Avatar[] = [];
@@ -31,7 +30,6 @@ function getNextAvatar(currentPlayers: Player[]): Avatar {
         }
     }
 
-    // Should not happen if limit is enforced, but safe fallback
     if (available.length === 0) {
         const randomIndex = Math.floor(Math.random() * TOTAL_AVATARS) + 1;
         return `avatar_${randomIndex}` as Avatar;
@@ -55,9 +53,10 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
 
     const freeWords = (language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
     const premiumWords = (language === 'en' ? premiumWordsDataEn : premiumWordsDataEs) as Word[];
+    const generalWords = (language === 'en' ? generalWordsDataEn : generalWordsDataEs) as Word[];
+    const generalPremiumWords = (language === 'en' ? generalPremiumWordsDataEn : generalPremiumWordsDataEs) as Word[];
 
-    // Merge both datasets
-    const allWords = [...freeWords, ...premiumWords];
+    const allWords = [...freeWords, ...premiumWords, ...generalWords, ...generalPremiumWords];
 
     let availableWords = allWords.filter(w => standardCategories.includes(w.category));
 
@@ -80,13 +79,11 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
     });
 
     if (availableWords.length === 0) {
-        // Fallback: If no words found (e.g. strict difficulty filter on small category), return random from all valid categories ignoring difficulty
         const fallbackWords = allWords.filter(w => standardCategories.includes(w.category));
         if (fallbackWords.length > 0) {
             const randomIndex = Math.floor(Math.random() * fallbackWords.length);
             return fallbackWords[randomIndex];
         }
-        // Ultimate fallback if absolutely nothing works (should not happen)
         return freeWords[0];
     }
 
@@ -213,7 +210,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             };
 
         case 'START_GAME': {
-            const playerCount = state.settings.players.length;
             const impostorCount = state.settings.impostorCount;
 
             const shuffled = [...state.settings.players].sort(() => Math.random() - 0.5);
