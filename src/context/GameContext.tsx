@@ -97,9 +97,9 @@ const initialState: GameState = {
     settings: {
         mode: 'classic',
         players: [
-            { id: '1', name: 'Jugador 1', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
-            { id: '2', name: 'Jugador 2', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
-            { id: '3', name: 'Jugador 3', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
+            { id: '1', name: deviceLanguage === 'es' ? 'Jugador 1' : 'Player 1', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
+            { id: '2', name: deviceLanguage === 'es' ? 'Jugador 2' : 'Player 2', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
+            { id: '3', name: deviceLanguage === 'es' ? 'Jugador 3' : 'Player 3', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
         ],
         selectedCategories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
         impostorCount: 1,
@@ -371,14 +371,33 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 },
             };
 
-        case 'SET_LANGUAGE':
+        case 'SET_LANGUAGE': {
+            const newLang = action.payload;
+
+            const updatedPlayers = state.settings.players.map(player => {
+                const jugadorMatch = player.name.match(/^Jugador (\d+)$/);
+                const playerMatch = player.name.match(/^Player (\d+)$/);
+
+                if (jugadorMatch && newLang === 'en') {
+                    // Convert Spanish to English
+                    return { ...player, name: `Player ${jugadorMatch[1]}` };
+                } else if (playerMatch && newLang === 'es') {
+                    // Convert English to Spanish
+                    return { ...player, name: `Jugador ${playerMatch[1]}` };
+                }
+
+                return player;
+            });
+
             return {
                 ...state,
                 settings: {
                     ...state.settings,
-                    language: action.payload,
+                    language: newLang,
+                    players: updatedPlayers,
                 },
             };
+        }
 
         case 'SET_HAS_LOADED':
             return {

@@ -574,10 +574,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                         onPress={() => {
                                                             playClick();
                                                             showGameModal(
-                                                                'Borrar Categoría',
-                                                                `¿Estás seguro que quieres borrar "${category.name}"?`,
+                                                                t.custom_category.delete_title,
+                                                                t.custom_category.delete_confirm.replace('%{name}', category.name),
                                                                 'danger',
-                                                                'Borrar',
+                                                                t.custom_category.delete_button,
                                                                 () => deleteCustomCategory(category.id)
                                                             );
                                                         }}
@@ -668,7 +668,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
                                                 <View style={styles.categoryNamePill}>
                                                     <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                        {category.label}
+                                                        {t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.label}
                                                     </Text>
                                                 </View>
 
@@ -737,10 +737,10 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                         onPress={() => {
                                                             playClick();
                                                             showGameModal(
-                                                                'Borrar Categoría',
-                                                                `¿Estás seguro que quieres borrar "${category.name}"?`,
+                                                                t.custom_category.delete_title,
+                                                                t.custom_category.delete_confirm.replace('%{name}', category.name),
                                                                 'danger',
-                                                                'Borrar',
+                                                                t.custom_category.delete_button,
                                                                 () => deleteCustomCategory(category.id)
                                                             );
                                                         }}
@@ -936,14 +936,14 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                         style={styles.modalContent}
                     >
-                        <Text style={styles.modalTitle}>Editar Nombre</Text>
+                        <Text style={styles.modalTitle}>{t.setup.edit_name_title}</Text>
                         <TextInput
                             style={styles.modalInput}
                             value={editingPlayerName}
                             onChangeText={setEditingPlayerName}
                             autoFocus={true}
                             maxLength={15}
-                            placeholder="Nombre del jugador"
+                            placeholder={t.setup.edit_name_placeholder}
                             placeholderTextColor="#A0AEC0"
                             onSubmitEditing={() => {
                                 if (editingPlayerId && editingPlayerName.trim()) {
@@ -961,7 +961,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 }}
                                 style={styles.modalButtonCancel}
                             >
-                                <Text style={styles.modalButtonCancelText}>Cancelar</Text>
+                                <Text style={styles.modalButtonCancelText}>{t.common.cancel}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => {
@@ -973,7 +973,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 }}
                                 style={styles.modalButtonSave}
                             >
-                                <Text style={styles.modalButtonSaveText}>Guardar</Text>
+                                <Text style={styles.modalButtonSaveText}>{t.setup.save_button}</Text>
                             </TouchableOpacity>
                         </View>
                     </KeyboardAvoidingView>
