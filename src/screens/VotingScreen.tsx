@@ -185,14 +185,14 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 );
             }
         } else {
-            const playerToEliminate = state.settings.players.find((p: Player) => p.id === selectedPlayerId)?.name || 'Jugador';
+            const playerToEliminate = state.settings.players.find((p: Player) => p.id === selectedPlayerId)?.name || t.reveal.player;
             playFailure();
 
             showGameModal(
                 t.voting.civilian_eliminated,
                 `${playerToEliminate}`,
                 'danger',
-                'Continuar',
+                t.voting.continue_button,
                 () => {
                     playClick();
                     if (selectedPlayerId) {
@@ -252,7 +252,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             t.voting.game_over,
             t.voting.exit_confirm || '¿Estás seguro de que quieres salir?',
             'warning',
-            'Salir',
+            t.common?.exit || 'Exit',
             handlePlayAgain,
             t.common?.cancel || 'Cancelar',
             () => {
@@ -362,7 +362,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                             style={styles.secondaryButton}
                             onPress={handleReveal}
                         >
-                            <Text style={styles.secondaryButtonText}>REVELAR</Text>
+                            <Text style={styles.secondaryButtonText}>{t.voting.reveal_confirm}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity

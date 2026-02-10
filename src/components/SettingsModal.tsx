@@ -21,7 +21,7 @@ type SettingsModalProps = {
 };
 
 const { width } = Dimensions.get('window');
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.1.0';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -32,8 +32,6 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
     const { t } = useTranslation();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-    // TODO: Connect this to real premium check
-    // TODO: Connect this to real premium check
     // ENABLED FOR TESTING
     const isPremium = false;
 

@@ -1,0 +1,590 @@
+[
+    {
+        "id": "gen_ac_001",
+        "word": "Run",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Move quickly with your legs"
+    },
+    {
+        "id": "gen_ac_002",
+        "word": "Jump",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Leap up from the ground"
+    },
+    {
+        "id": "gen_ac_003",
+        "word": "Walk",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Move step by step"
+    },
+    {
+        "id": "gen_ac_004",
+        "word": "Swim",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Move through water"
+    },
+    {
+        "id": "gen_ac_005",
+        "word": "Dance",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Move to the rhythm of music"
+    },
+    {
+        "id": "gen_ac_006",
+        "word": "Sing",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Make music with your voice"
+    },
+    {
+        "id": "gen_ac_007",
+        "word": "Write",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Form letters and words"
+    },
+    {
+        "id": "gen_ac_008",
+        "word": "Read",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Interpret written text"
+    },
+    {
+        "id": "gen_ac_009",
+        "word": "Cook",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Prepare food"
+    },
+    {
+        "id": "gen_ac_010",
+        "word": "Sleep",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Rest with eyes closed"
+    },
+    {
+        "id": "gen_ac_011",
+        "word": "Study",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Learn from books"
+    },
+    {
+        "id": "gen_ac_012",
+        "word": "Work",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Do job activities"
+    },
+    {
+        "id": "gen_ac_013",
+        "word": "Draw",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Create images with pencil"
+    },
+    {
+        "id": "gen_ac_014",
+        "word": "Paint",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Apply colors with brush"
+    },
+    {
+        "id": "gen_ac_015",
+        "word": "Climb",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Go up using hands and feet"
+    },
+    {
+        "id": "gen_ac_016",
+        "word": "Whisper",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Speak very softly"
+    },
+    {
+        "id": "gen_ac_017",
+        "word": "Clap",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Strike palms together to celebrate"
+    },
+    {
+        "id": "gen_ac_018",
+        "word": "Whistle",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Make musical sound with lips"
+    },
+    {
+        "id": "gen_ac_019",
+        "word": "Laugh",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Express joy with sounds"
+    },
+    {
+        "id": "gen_ac_020",
+        "word": "Cry",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Shed tears of emotion"
+    },
+    {
+        "id": "gen_ac_021",
+        "word": "Build",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Construct structures"
+    },
+    {
+        "id": "gen_ac_022",
+        "word": "Repair",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Fix something broken"
+    },
+    {
+        "id": "gen_ac_023",
+        "word": "Iron",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Smooth clothes with heat"
+    },
+    {
+        "id": "gen_ac_024",
+        "word": "Meditate",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Reflect in silence"
+    },
+    {
+        "id": "gen_ac_025",
+        "word": "Rock climb",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Scale mountains with gear"
+    },
+    {
+        "id": "gen_ac_026",
+        "word": "Scuba dive",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Swim underwater with tank"
+    },
+    {
+        "id": "gen_ac_027",
+        "word": "Ski",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Glide on snow with boards"
+    },
+    {
+        "id": "gen_ac_028",
+        "word": "Surf",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Ride ocean waves on board"
+    },
+    {
+        "id": "gen_ac_029",
+        "word": "Skydive",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Jump from plane with parachute"
+    },
+    {
+        "id": "gen_ac_030",
+        "word": "Juggle",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Toss and catch multiple objects"
+    },
+    {
+        "id": "gen_ob_001",
+        "word": "Computer",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Machine for processing information"
+    },
+    {
+        "id": "gen_ob_002",
+        "word": "Phone",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Device for communication"
+    },
+    {
+        "id": "gen_ob_003",
+        "word": "Table",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Furniture with flat surface"
+    },
+    {
+        "id": "gen_ob_004",
+        "word": "Chair",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Seat with backrest"
+    },
+    {
+        "id": "gen_ob_005",
+        "word": "Bed",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Furniture for sleeping"
+    },
+    {
+        "id": "gen_ob_006",
+        "word": "Book",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Bound pages for reading"
+    },
+    {
+        "id": "gen_ob_007",
+        "word": "Pencil",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Tool for writing or drawing"
+    },
+    {
+        "id": "gen_ob_008",
+        "word": "Ball",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Sphere for playing sports"
+    },
+    {
+        "id": "gen_ob_009",
+        "word": "Car",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Four-wheeled vehicle"
+    },
+    {
+        "id": "gen_ob_010",
+        "word": "Bicycle",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Two-wheeled vehicle"
+    },
+    {
+        "id": "gen_ob_011",
+        "word": "Watch",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Device that shows time"
+    },
+    {
+        "id": "gen_ob_012",
+        "word": "Mirror",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Surface that reflects image"
+    },
+    {
+        "id": "gen_ob_013",
+        "word": "Guitar",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "String musical instrument"
+    },
+    {
+        "id": "gen_ob_014",
+        "word": "Piano",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Keyboard with black and white keys"
+    },
+    {
+        "id": "gen_ob_015",
+        "word": "Television",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Screen for watching programs"
+    },
+    {
+        "id": "gen_ob_016",
+        "word": "Refrigerator",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Appliance that keeps food cold"
+    },
+    {
+        "id": "gen_ob_017",
+        "word": "Washing machine",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Machine for washing clothes"
+    },
+    {
+        "id": "gen_ob_018",
+        "word": "Microwave",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Appliance for heating food quickly"
+    },
+    {
+        "id": "gen_ob_019",
+        "word": "Vacuum cleaner",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Machine for cleaning carpets"
+    },
+    {
+        "id": "gen_ob_020",
+        "word": "Flashlight",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Portable light for darkness"
+    },
+    {
+        "id": "gen_ob_021",
+        "word": "Umbrella",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Protection against rain"
+    },
+    {
+        "id": "gen_ob_022",
+        "word": "Backpack",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Bag carried on the back"
+    },
+    {
+        "id": "gen_ob_023",
+        "word": "Camera",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Device for taking photographs"
+    },
+    {
+        "id": "gen_ob_024",
+        "word": "Compass",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Instrument that points north"
+    },
+    {
+        "id": "gen_ob_025",
+        "word": "Telescope",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Instrument for seeing distant objects"
+    },
+    {
+        "id": "gen_ob_026",
+        "word": "Microscope",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Instrument for seeing tiny objects"
+    },
+    {
+        "id": "gen_ob_027",
+        "word": "Stethoscope",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Medical tool for listening to heart"
+    },
+    {
+        "id": "gen_ob_028",
+        "word": "Metronome",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Device that marks musical tempo"
+    },
+    {
+        "id": "gen_ob_029",
+        "word": "Portrait",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Picture of a person"
+    },
+    {
+        "id": "gen_ob_030",
+        "word": "Kaleidoscope",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Tube with mirrors creating colorful patterns"
+    },
+    {
+        "id": "gen_sp_001",
+        "word": "Soccer",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with ball and two goals"
+    },
+    {
+        "id": "gen_sp_002",
+        "word": "Basketball",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with hoop and orange ball"
+    },
+    {
+        "id": "gen_sp_003",
+        "word": "Tennis",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with racket and net"
+    },
+    {
+        "id": "gen_sp_004",
+        "word": "Swimming",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport practiced in water"
+    },
+    {
+        "id": "gen_sp_005",
+        "word": "Cycling",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport on two wheels"
+    },
+    {
+        "id": "gen_sp_006",
+        "word": "Baseball",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with bat and bases"
+    },
+    {
+        "id": "gen_sp_007",
+        "word": "Volleyball",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with high net and hand hits"
+    },
+    {
+        "id": "gen_sp_008",
+        "word": "Track and field",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport of running and jumping"
+    },
+    {
+        "id": "gen_sp_009",
+        "word": "Gymnastics",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport of flexibility and acrobatics"
+    },
+    {
+        "id": "gen_sp_010",
+        "word": "Boxing",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Combat sport with fists"
+    },
+    {
+        "id": "gen_sp_011",
+        "word": "Golf",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with clubs and holes"
+    },
+    {
+        "id": "gen_sp_012",
+        "word": "Hockey",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Sport with sticks on ice"
+    },
+    {
+        "id": "gen_sp_013",
+        "word": "Rugby",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Sport similar to American football"
+    },
+    {
+        "id": "gen_sp_014",
+        "word": "Cricket",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "English sport with wickets"
+    },
+    {
+        "id": "gen_sp_016",
+        "word": "Table tennis",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Ping pong with paddles"
+    },
+    {
+        "id": "gen_sp_017",
+        "word": "Squash",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Racket sport against wall"
+    },
+    {
+        "id": "gen_sp_018",
+        "word": "Water polo",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Aquatic sport with ball and goals"
+    },
+    {
+        "id": "gen_sp_020",
+        "word": "Karate",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Martial art of sharp strikes"
+    },
+    {
+        "id": "gen_sp_021",
+        "word": "Taekwondo",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Korean martial art of kicks"
+    },
+    {
+        "id": "gen_sp_022",
+        "word": "Snowboarding",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Snow sport with board"
+    },
+    {
+        "id": "gen_sp_023",
+        "word": "Surfing",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Sport on ocean waves"
+    },
+    {
+        "id": "gen_sp_024",
+        "word": "Skateboarding",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Urban sport with wheeled board"
+    },
+    {
+        "id": "gen_sp_025",
+        "word": "Fencing",
+        "category": "deportes",
+        "difficulty": "hard",
+        "hint": "Combat sport with swords"
+    },
+    {
+        "id": "gen_sp_026",
+        "word": "Polo",
+        "category": "deportes",
+        "difficulty": "hard",
+        "hint": "Sport on horseback with mallets"
+    }
+]

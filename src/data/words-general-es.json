@@ -1,0 +1,555 @@
+[
+    {
+        "id": "gen_ac_001",
+        "word": "Correr",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Moverse rápidamente con las piernas"
+    },
+    {
+        "id": "gen_ac_002",
+        "word": "Saltar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Elevarse del suelo con impulso"
+    },
+    {
+        "id": "gen_ac_003",
+        "word": "Caminar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Moverse paso a paso"
+    },
+    {
+        "id": "gen_ac_004",
+        "word": "Nadar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Moverse en el agua"
+    },
+    {
+        "id": "gen_ac_005",
+        "word": "Bailar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Moverse al ritmo de la música"
+    },
+    {
+        "id": "gen_ac_006",
+        "word": "Cantar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Producir música con la voz"
+    },
+    {
+        "id": "gen_ac_007",
+        "word": "Escribir",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Formar letras y palabras"
+    },
+    {
+        "id": "gen_ac_008",
+        "word": "Leer",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Interpretar texto escrito"
+    },
+    {
+        "id": "gen_ac_009",
+        "word": "Cocinar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Preparar alimentos"
+    },
+    {
+        "id": "gen_ac_010",
+        "word": "Dormir",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Descansar cerrando los ojos"
+    },
+    {
+        "id": "gen_ac_011",
+        "word": "Estudiar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Aprender mediante libros"
+    },
+    {
+        "id": "gen_ac_012",
+        "word": "Trabajar",
+        "category": "acciones",
+        "difficulty": "easy",
+        "hint": "Realizar actividades laborales"
+    },
+    {
+        "id": "gen_ac_013",
+        "word": "Dibujar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Crear imágenes con lápiz"
+    },
+    {
+        "id": "gen_ac_014",
+        "word": "Pintar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Aplicar colores con pincel"
+    },
+    {
+        "id": "gen_ac_015",
+        "word": "Trepar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Subir usando manos y pies"
+    },
+    {
+        "id": "gen_ac_016",
+        "word": "Susurrar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Hablar muy suavemente"
+    },
+    {
+        "id": "gen_ac_017",
+        "word": "Aplaudir",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Golpear las palmas para celebrar"
+    },
+    {
+        "id": "gen_ac_018",
+        "word": "Silbar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Hacer sonido musical con los labios"
+    },
+    {
+        "id": "gen_ac_019",
+        "word": "Reír",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Expresar alegría con sonidos"
+    },
+    {
+        "id": "gen_ac_020",
+        "word": "Llorar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Derramar lágrimas de emoción"
+    },
+    {
+        "id": "gen_ac_021",
+        "word": "Construir",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Edificar o crear estructuras"
+    },
+    {
+        "id": "gen_ac_022",
+        "word": "Reparar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Arreglar algo que está roto"
+    },
+    {
+        "id": "gen_ac_023",
+        "word": "Planchar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Alisar ropa con calor"
+    },
+    {
+        "id": "gen_ac_024",
+        "word": "Meditar",
+        "category": "acciones",
+        "difficulty": "medium",
+        "hint": "Reflexionar en silencio"
+    },
+    {
+        "id": "gen_ac_025",
+        "word": "Escalar",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Subir montañas con equipo"
+    },
+    {
+        "id": "gen_ac_026",
+        "word": "Bucear",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Nadar bajo el agua"
+    },
+    {
+        "id": "gen_ac_027",
+        "word": "Esquiar",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Deslizarse sobre nieve con tablas"
+    },
+    {
+        "id": "gen_ac_028",
+        "word": "Surfear",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Deslizarse sobre olas del mar"
+    },
+    {
+        "id": "gen_ac_029",
+        "word": "Paracaidismo",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Saltar desde avión con paracaídas"
+    },
+    {
+        "id": "gen_ac_030",
+        "word": "Malabarear",
+        "category": "acciones",
+        "difficulty": "hard",
+        "hint": "Lanzar y atrapar varios objetos"
+    },
+    {
+        "id": "gen_ob_001",
+        "word": "Computadora",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Máquina para procesar información"
+    },
+    {
+        "id": "gen_ob_002",
+        "word": "Teléfono",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Dispositivo para comunicarse"
+    },
+    {
+        "id": "gen_ob_003",
+        "word": "Mesa",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Mueble con superficie plana"
+    },
+    {
+        "id": "gen_ob_004",
+        "word": "Silla",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Asiento con respaldo"
+    },
+    {
+        "id": "gen_ob_005",
+        "word": "Cama",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Mueble para dormir"
+    },
+    {
+        "id": "gen_ob_006",
+        "word": "Libro",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Páginas encuadernadas para leer"
+    },
+    {
+        "id": "gen_ob_007",
+        "word": "Lápiz",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Instrumento para escribir o dibujar"
+    },
+    {
+        "id": "gen_ob_008",
+        "word": "Pelota",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Esfera para jugar deportes"
+    },
+    {
+        "id": "gen_ob_009",
+        "word": "Carro",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Vehículo de cuatro ruedas"
+    },
+    {
+        "id": "gen_ob_010",
+        "word": "Bicicleta",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Vehículo de dos ruedas"
+    },
+    {
+        "id": "gen_ob_011",
+        "word": "Reloj",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Dispositivo que marca la hora"
+    },
+    {
+        "id": "gen_ob_012",
+        "word": "Espejo",
+        "category": "objetos",
+        "difficulty": "easy",
+        "hint": "Superficie que refleja la imagen"
+    },
+    {
+        "id": "gen_ob_013",
+        "word": "Guitarra",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Instrumento musical de cuerdas"
+    },
+    {
+        "id": "gen_ob_014",
+        "word": "Piano",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Instrumento de teclas blancas y negras"
+    },
+    {
+        "id": "gen_ob_015",
+        "word": "Televisor",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Pantalla para ver programas"
+    },
+    {
+        "id": "gen_ob_016",
+        "word": "Refrigerador",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Electrodoméstico que mantiene fríos los alimentos"
+    },
+    {
+        "id": "gen_ob_017",
+        "word": "Lavadora",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Máquina para lavar ropa"
+    },
+    {
+        "id": "gen_ob_018",
+        "word": "Microondas",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Aparato para calentar comida rápidamente"
+    },
+    {
+        "id": "gen_ob_019",
+        "word": "Aspiradora",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Máquina para limpiar alfombras"
+    },
+    {
+        "id": "gen_ob_020",
+        "word": "Linterna",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Luz portátil para la oscuridad"
+    },
+    {
+        "id": "gen_ob_021",
+        "word": "Paraguas",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Protección contra la lluvia"
+    },
+    {
+        "id": "gen_ob_022",
+        "word": "Mochila",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Bolsa que se lleva en la espalda"
+    },
+    {
+        "id": "gen_ob_023",
+        "word": "Cámara",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Dispositivo para tomar fotografías"
+    },
+    {
+        "id": "gen_ob_024",
+        "word": "Brújula",
+        "category": "objetos",
+        "difficulty": "medium",
+        "hint": "Instrumento que señala el norte"
+    },
+    {
+        "id": "gen_ob_025",
+        "word": "Telescopio",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Instrumento para ver objetos lejanos"
+    },
+    {
+        "id": "gen_ob_026",
+        "word": "Microscopio",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Instrumento para ver objetos muy pequeños"
+    },
+    {
+        "id": "gen_ob_027",
+        "word": "Estetoscopio",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Instrumento médico para escuchar el corazón"
+    },
+    {
+        "id": "gen_ob_028",
+        "word": "Metrónomo",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Dispositivo que marca el tempo musical"
+    },
+    {
+        "id": "gen_ob_029",
+        "word": "Retrato",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Pintura o dibujo de una persona"
+    },
+    {
+        "id": "gen_ob_030",
+        "word": "Caleidoscopio",
+        "category": "objetos",
+        "difficulty": "hard",
+        "hint": "Tubo con espejos que crea patrones coloridos"
+    },
+    {
+        "id": "gen_sp_001",
+        "word": "Fútbol",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con pelota y dos porterías"
+    },
+    {
+        "id": "gen_sp_002",
+        "word": "Basketball",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con canasta y pelota naranja"
+    },
+    {
+        "id": "gen_sp_003",
+        "word": "Tenis",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con raqueta y red"
+    },
+    {
+        "id": "gen_sp_004",
+        "word": "Natación",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte que se practica en el agua"
+    },
+    {
+        "id": "gen_sp_005",
+        "word": "Ciclismo",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte sobre dos ruedas"
+    },
+    {
+        "id": "gen_sp_006",
+        "word": "Baseball",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con bate y bases"
+    },
+    {
+        "id": "gen_sp_007",
+        "word": "Volleyball",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con red alta y golpes de mano"
+    },
+    {
+        "id": "gen_sp_008",
+        "word": "Atletismo",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte de carreras y saltos"
+    },
+    {
+        "id": "gen_sp_009",
+        "word": "Gimnasia",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte de flexibilidad y acrobacia"
+    },
+    {
+        "id": "gen_sp_010",
+        "word": "Boxeo",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte de combate con puños"
+    },
+    {
+        "id": "gen_sp_011",
+        "word": "Golf",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con palos y hoyos"
+    },
+    {
+        "id": "gen_sp_012",
+        "word": "Hockey",
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Deporte con palos sobre hielo"
+    },
+    {
+        "id": "gen_sp_013",
+        "word": "Rugby",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Deporte similar al fútbol americano"
+    },
+    {
+        "id": "gen_sp_016",
+        "word": "Ping Pong",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Tenis de mesa con paletas"
+    },
+    {
+        "id": "gen_sp_020",
+        "word": "Karate",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Arte marcial de golpes secos"
+    },
+    {
+        "id": "gen_sp_023",
+        "word": "Surf",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Deporte sobre olas del mar"
+    },
+    {
+        "id": "gen_sp_024",
+        "word": "Skateboard",
+        "category": "deportes",
+        "difficulty": "medium",
+        "hint": "Deporte urbano con tabla de ruedas"
+    },
+    {
+        "id": "gen_sp_025",
+        "word": "Esgrima",
+        "category": "deportes",
+        "difficulty": "hard",
+        "hint": "Deporte de combate con espadas"
+    },
+    {
+        "id": "gen_sp_026",
+        "word": "Polo",
+        "category": "deportes",
+        "difficulty": "hard",
+        "hint": "Deporte a caballo con mazos"
+    }
+]
