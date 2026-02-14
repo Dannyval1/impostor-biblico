@@ -109,3 +109,48 @@ export type GameAction =
     | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
     | { type: 'EDIT_CUSTOM_CATEGORY'; payload: CustomCategory }
     | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } };
+
+// Online Mode Types
+
+export type OnlinePlayerRole = 'civilian' | 'impostor';
+
+export interface OnlinePlayer {
+    id: string; // Firebase Auth UID or device ID
+    name: string;
+    avatar: import('./index').Avatar;
+    isHost: boolean;
+    isReady: boolean;
+    role?: OnlinePlayerRole;
+    vote?: string | null; // ID of player voted for
+    isEliminated: boolean;
+    score: number;
+}
+
+export type RoomStatus = 'waiting' | 'playing' | 'voting' | 'finished';
+
+export interface OnlineRoom {
+    id: string; // 6-character code
+    hostId: string;
+    status: RoomStatus;
+    players: Record<string, OnlinePlayer>; // Map of playerId -> Player
+    settings: {
+        impostorCount: number;
+        gameDuration: number | null;
+        language: 'es' | 'en';
+        categories: Category[];
+        customCategories: CustomCategory[];
+        isPremiumRoom: boolean;
+    };
+    currentWord?: Word;
+    currentImpostors?: string[]; // List of IDs
+    createdAt: number;
+    winner?: 'impostors' | 'civilians';
+}
+
+export interface OnlineGameState {
+    roomCode: string | null;
+    playerId: string | null; // Current user's ID
+    isHost: boolean;
+    room: OnlineRoom | null;
+    error: string | null;
+}

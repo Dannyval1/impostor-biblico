@@ -342,16 +342,14 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                             <TouchableOpacity
                                 style={styles.modeCard}
                                 activeOpacity={0.8}
-                                onPress={() => showGameModal(t.setup.online, t.setup.coming_soon, 'info', 'OK')}
+                                onPress={() => navigation.navigate('OnlineLobby')}
                             >
                                 <Image source={require('../../assets/mode_2.png')} style={styles.modeImageStickOut} resizeMode="contain" />
                                 <View style={styles.modeContent}>
                                     <Text style={styles.modeTitle}>{t.setup.online}</Text>
                                     <Text style={styles.modeSubtitle}>{t.setup.online_desc}</Text>
                                 </View>
-                                <View style={styles.comingSoonBadge}>
-                                    <Text style={styles.comingSoonText}>{t.setup.coming_soon}</Text>
-                                </View>
+
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -1148,21 +1146,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    comingSoonBadge: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-        backgroundColor: '#E53E3E',
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        borderRadius: 4,
-        zIndex: 20,
-    },
-    comingSoonText: {
-        color: '#FFF',
-        fontSize: 8,
-        fontWeight: 'bold',
-    },
+
     playersHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',

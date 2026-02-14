@@ -9,6 +9,9 @@ import VotingScreen from '../screens/VotingScreen';
 
 import PaywallScreen from '../screens/PaywallScreen';
 import AdScreen from '../screens/AdScreen';
+import OnlineLobbyScreen from '../screens/OnlineLobbyScreen';
+import OnlineRevealScreen from '../screens/OnlineRevealScreen';
+import OnlineVotingScreen from '../screens/OnlineVotingScreen';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -17,6 +20,9 @@ export type RootStackParamList = {
     Voting: undefined;
     Paywall: undefined;
     Ad: undefined;
+    OnlineLobby: undefined;
+    OnlineReveal: undefined;
+    OnlineVoting: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -36,6 +42,9 @@ export default function AppNavigator() {
                 <Stack.Screen name="Voting" component={VotingScreen} />
                 <Stack.Screen name="Paywall" component={PaywallScreen} />
                 <Stack.Screen name="Ad" component={AdScreen} />
+                <Stack.Screen name="OnlineLobby" component={OnlineLobbyScreen} />
+                <Stack.Screen name="OnlineReveal" component={OnlineRevealScreen} />
+                <Stack.Screen name="OnlineVoting" component={OnlineVotingScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
