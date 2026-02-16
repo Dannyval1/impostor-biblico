@@ -15,7 +15,7 @@ export const translations = {
             how_to_play: 'Cómo jugar',
         },
         common: {
-            play_again: 'Jugar de Nuevo',
+            play_again: 'JUGAR DE NUEVO',
             exit: 'Salir',
             cancel: 'Cancelar',
         },
@@ -97,7 +97,8 @@ export const translations = {
             reveal_confirm: 'REVELAR',
             exit_confirm: '¿Estás seguro de que quieres salir?',
             starts: 'Esta ronda la empieza:',
-            continue_button: 'Continuar',
+            continue_button: 'CONTINUAR',
+            reveal_impostor: 'REVELAR IMPOSTOR',
             exit_button: 'Salir',
         },
         reveal: {
@@ -210,7 +211,7 @@ export const translations = {
             how_to_play: 'How to Play',
         },
         common: {
-            play_again: 'Play Again',
+            play_again: 'PLAY AGAIN',
             exit: 'Exit',
             cancel: 'Cancel',
         },
@@ -292,7 +293,8 @@ export const translations = {
             reveal_confirm: 'REVEAL',
             exit_confirm: 'Are you sure you want to exit?',
             starts: 'This round starts with:',
-            continue_button: 'Continue',
+            continue_button: 'CONTINUE',
+            reveal_impostor: 'REVEAL IMPOSTOR',
             exit_button: 'Exit',
         },
         reveal: {
