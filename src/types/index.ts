@@ -77,6 +77,7 @@ export interface GameState {
     customCategories: CustomCategory[];
     gamesPlayed: number;
     isPremium: boolean;
+    recentImpostors: string[];
 }
 
 export type GameAction =
@@ -105,7 +106,6 @@ export type GameAction =
     | { type: 'SET_CUSTOM_CATEGORIES'; payload: CustomCategory[] }
     | { type: 'INCREMENT_GAMES_PLAYED' }
     | { type: 'SET_GAMES_PLAYED'; payload: number }
-    | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
     | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
     | { type: 'EDIT_CUSTOM_CATEGORY'; payload: CustomCategory }
     | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } };

@@ -26,7 +26,7 @@ type VotingScreenProps = {
 };
 
 export default function VotingScreen({ navigation }: VotingScreenProps) {
-    const { state, resetGame, eliminatePlayer, playClick, playSuccess, playFailure, setGamePhase } = useGame();
+    const { state, resetGame, startGame, eliminatePlayer, playClick, playSuccess, playFailure, setGamePhase } = useGame();
     const { t } = useTranslation();
     const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
     const [timeLeft, setTimeLeft] = useState(state.settings.gameDuration); // Usar duración configurada
@@ -166,8 +166,6 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 setWinner('civilians');
                 setResultMessage(t.voting.impostor_found);
                 playSuccess();
-                setResultMessage(t.voting.impostor_found);
-                playSuccess();
                 setGameFinished(true);
                 setGamePhase('results');
             } else {
@@ -211,6 +209,17 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
                     setSelectedPlayerId(null);
                     setTimeLeft(state.settings.gameDuration);
+                },
+                t.voting.reveal_impostor,
+                () => {
+                    playClick();
+                    if (selectedPlayerId) {
+                        eliminatePlayer(selectedPlayerId);
+                    }
+                    setWinner(null);
+                    setResultMessage(t.voting.game_over);
+                    setGameFinished(true);
+                    setGamePhase('results');
                 }
             );
         }
@@ -244,6 +253,17 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             index: 1,
             routes: [{ name: 'Home' }, { name: 'Setup' }],
         });
+    };
+
+    const handleQuickRestart = () => {
+        playClick();
+        // Check if ad should be shown (same logic as SetupScreen)
+        if (!state.isPremium && state.gamesPlayed >= 3) {
+            navigation.replace('Ad');
+            return;
+        }
+        startGame();
+        navigation.replace('Reveal');
     };
 
     const handleClose = () => {
@@ -399,9 +419,16 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
                         <TouchableOpacity
                             style={styles.playAgainButton}
+                            onPress={handleQuickRestart}
+                        >
+                            <Text style={styles.playAgainText}>{t.common.play_again}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.backHomeButton}
                             onPress={handlePlayAgain}
                         >
-                            <Text style={styles.playAgainText}>{t.voting.back_home}</Text>
+                            <Text style={styles.backHomeText}>{t.voting.back_home}</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -689,5 +716,21 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    backHomeButton: {
+        paddingVertical: 16,
+        paddingHorizontal: 40,
+        borderRadius: 16,
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 12,
+        borderWidth: 2,
+        borderColor: '#5B7FDB',
+        backgroundColor: '#FFF',
+    },
+    backHomeText: {
+        color: '#5B7FDB',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });

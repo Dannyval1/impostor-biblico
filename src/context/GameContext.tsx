@@ -119,6 +119,7 @@ const initialState: GameState = {
     customCategories: [],
     gamesPlayed: 0,
     isPremium: false,
+    recentImpostors: [],
 };
 
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -145,14 +146,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             };
         }
 
-        case 'REMOVE_PLAYER':
+        case 'REMOVE_PLAYER': {
+            const remainingPlayers = state.settings.players.filter(p => p.id !== action.payload);
+            const remainingIds = new Set(remainingPlayers.map(p => p.id));
             return {
                 ...state,
                 settings: {
                     ...state.settings,
-                    players: state.settings.players.filter(p => p.id !== action.payload),
+                    players: remainingPlayers,
                 },
+                // Clean orphaned IDs from impostor history
+                recentImpostors: state.recentImpostors.filter(id => remainingIds.has(id)),
             };
+        }
 
         case 'UPDATE_PLAYER_NAME':
             return {
@@ -212,13 +218,43 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         case 'START_GAME': {
             const impostorCount = state.settings.impostorCount;
 
-            const shuffled = [...state.settings.players].sort(() => Math.random() - 0.5);
-            const impostorIds = shuffled.slice(0, impostorCount).map(p => p.id);
+            const playerCount = state.settings.players.length;
+            const MAX_HISTORY = Math.max(1, Math.min(playerCount - 2, 5));
+            const allPlayerIds = state.settings.players.map(p => p.id);
+
+            // Step 1: Filter players who were NOT impostor recently
+            let eligibleIds = allPlayerIds.filter(
+                id => !state.recentImpostors.includes(id)
+            );
+
+            // Step 2: If not enough eligible, pick the ones who were impostor longest ago
+            if (eligibleIds.length < impostorCount) {
+                eligibleIds = [...allPlayerIds].sort((a, b) => {
+                    const indexA = state.recentImpostors.indexOf(a);
+                    const indexB = state.recentImpostors.indexOf(b);
+                    // Players NOT in history (-1) go first, then oldest (lowest index) first
+                    const scoreA = indexA === -1 ? -1 : indexA;
+                    const scoreB = indexB === -1 ? -1 : indexB;
+                    return scoreA - scoreB;
+                });
+            }
+
+            // Step 3: Randomly select impostors from eligible pool
+            const shuffledEligible = [...eligibleIds].sort(() => Math.random() - 0.5);
+            const impostorIds = shuffledEligible.slice(0, impostorCount);
+
+            // Step 4: Update history (keep only last MAX_HISTORY entries)
+            const updatedHistory = [...state.recentImpostors, ...impostorIds]
+                .slice(-MAX_HISTORY);
+            // --- END ANTI-REPETITION LOGIC ---
 
             const playersWithRoles = state.settings.players.map(player => ({
                 ...player,
                 role: (impostorIds.includes(player.id) ? 'impostor' : 'civilian') as PlayerRole,
                 hasSeenWord: false,
+                isEliminated: false,
+                clue: undefined,
+                votedFor: undefined,
             }));
 
             const word = getRandomWord(
@@ -239,6 +275,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 currentImpostors: impostorIds,
                 gamePhase: 'reveal',
                 gamesPlayed: state.gamesPlayed + 1,
+                recentImpostors: updatedHistory,
             };
         }
 
@@ -340,7 +377,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 hasLoaded: true,
                 customCategories: state.customCategories,
                 gamesPlayed: state.gamesPlayed,
-                isPremium: state.isPremium
+                isPremium: state.isPremium,
+                recentImpostors: state.recentImpostors,
             };
         }
 

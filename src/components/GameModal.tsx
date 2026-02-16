@@ -66,6 +66,16 @@ export const GameModal = ({
                     <Text style={styles.message}>{message}</Text>
 
                     <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={[
+                                styles.button,
+                                { backgroundColor: icon.color, width: '100%' }
+                            ]}
+                            onPress={onClose}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.buttonText}>{buttonText}</Text>
+                        </TouchableOpacity>
                         {secondaryButtonText && (
                             <TouchableOpacity
                                 style={[styles.button, styles.secondaryButton]}
@@ -75,17 +85,6 @@ export const GameModal = ({
                                 <Text style={styles.secondaryButtonText}>{secondaryButtonText}</Text>
                             </TouchableOpacity>
                         )}
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                { backgroundColor: icon.color },
-                                secondaryButtonText ? styles.buttonHalf : { width: '100%' }
-                            ]}
-                            onPress={onClose}
-                            activeOpacity={0.8}
-                        >
-                            <Text style={styles.buttonText}>{buttonText}</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -138,8 +137,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
         gap: 12,
     },
     button: {
@@ -148,12 +146,9 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    buttonHalf: {
-        flex: 1,
+        width: '100%',
     },
     secondaryButton: {
-        flex: 1,
         backgroundColor: '#EDF2F7',
     },
     buttonText: {
