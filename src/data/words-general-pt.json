@@ -4,255 +4,255 @@
         "word": "Correr",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Moverse rápidamente con las piernas",
-        "impostorHint": "Acción"
+        "hint": "Moverse rapidamente com as pernas",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_002",
         "word": "Saltar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Elevarse del suelo con impulso",
-        "impostorHint": "Acción"
+        "hint": "Elevar-se do chão com impulso",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_003",
-        "word": "Caminar",
+        "word": "Caminhar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Moverse paso a paso",
-        "impostorHint": "Acción"
+        "hint": "Mover-se passo a passo",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_004",
         "word": "Nadar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Moverse en el agua",
-        "impostorHint": "Acción"
+        "hint": "Mover-se na água",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_005",
-        "word": "Bailar",
+        "word": "Dançar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Moverse al ritmo de la música",
-        "impostorHint": "Acción"
+        "hint": "Mover-se ao ritmo da música",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_006",
         "word": "Cantar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Producir música con la voz",
-        "impostorHint": "Acción"
+        "hint": "Produzir música com a voz",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_007",
-        "word": "Escribir",
+        "word": "Escrever",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Formar letras y palabras",
-        "impostorHint": "Acción"
+        "hint": "Formar letras e palavras",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_008",
-        "word": "Leer",
+        "word": "Ler",
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Interpretar texto escrito",
-        "impostorHint": "Acción"
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_009",
-        "word": "Cocinar",
+        "word": "Cozinhar",
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Preparar alimentos",
-        "impostorHint": "Acción"
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_010",
         "word": "Dormir",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Descansar cerrando los ojos",
-        "impostorHint": "Acción"
+        "hint": "Descansar fechando os olhos",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_011",
-        "word": "Estudiar",
+        "word": "Estudar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Aprender mediante libros",
-        "impostorHint": "Acción"
+        "hint": "Aprender através de livros",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_012",
-        "word": "Trabajar",
+        "word": "Trabalhar",
         "category": "acciones",
         "difficulty": "easy",
-        "hint": "Realizar actividades laborales",
-        "impostorHint": "Acción"
+        "hint": "Realizar atividades laborais",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_013",
-        "word": "Dibujar",
+        "word": "Desenhar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Crear imágenes con lápiz",
-        "impostorHint": "Acción"
+        "hint": "Criar imagens com lápis",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_014",
         "word": "Pintar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Aplicar colores con pincel",
-        "impostorHint": "Acción"
+        "hint": "Aplicar cores com pincel",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_015",
         "word": "Trepar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Subir usando manos y pies",
-        "impostorHint": "Acción"
+        "hint": "Subir usando mãos e pés",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_016",
-        "word": "Susurrar",
+        "word": "Sussurrar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Hablar muy suavemente",
-        "impostorHint": "Acción"
+        "hint": "Falar muito baixinho",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_017",
         "word": "Aplaudir",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Golpear las palmas para celebrar",
-        "impostorHint": "Acción"
+        "hint": "Bater as palmas para celebrar",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_018",
-        "word": "Silbar",
+        "word": "Assobiar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Hacer sonido musical con los labios",
-        "impostorHint": "Acción"
+        "hint": "Fazer som musical com os lábios",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_019",
-        "word": "Reír",
+        "word": "Rir",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Expresar alegría con sonidos",
-        "impostorHint": "Acción"
+        "hint": "Expressar alegria com sons",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_020",
-        "word": "Llorar",
+        "word": "Chorar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Derramar lágrimas de emoción",
-        "impostorHint": "Acción"
+        "hint": "Derramar lágrimas de emoção",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_021",
         "word": "Construir",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Edificar o crear estructuras",
-        "impostorHint": "Acción"
+        "hint": "Edificar ou criar estruturas",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_022",
-        "word": "Reparar",
+        "word": "Consertar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Arreglar algo que está roto",
-        "impostorHint": "Acción"
+        "hint": "Arrumar algo que está quebrado",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_023",
-        "word": "Planchar",
+        "word": "Passar a ferro",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Alisar ropa con calor",
-        "impostorHint": "Acción"
+        "hint": "Alisar roupa com calor",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_024",
         "word": "Meditar",
         "category": "acciones",
         "difficulty": "medium",
-        "hint": "Reflexionar en silencio",
-        "impostorHint": "Acción"
+        "hint": "Refletir em silêncio",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_025",
         "word": "Escalar",
         "category": "acciones",
         "difficulty": "hard",
-        "hint": "Subir montañas con equipo",
-        "impostorHint": "Acción"
+        "hint": "Subir montanhas com equipamento",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_026",
-        "word": "Bucear",
+        "word": "Mergulhar",
         "category": "acciones",
         "difficulty": "hard",
-        "hint": "Nadar bajo el agua",
-        "impostorHint": "Acción"
+        "hint": "Nadar debaixo d'água",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_027",
         "word": "Esquiar",
         "category": "acciones",
         "difficulty": "hard",
-        "hint": "Deslizarse sobre nieve con tablas",
-        "impostorHint": "Acción"
+        "hint": "Deslizar na neve com esquis",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_028",
-        "word": "Surfear",
+        "word": "Surfar",
         "category": "acciones",
         "difficulty": "hard",
-        "hint": "Deslizarse sobre olas del mar",
-        "impostorHint": "Acción"
+        "hint": "Deslizar nas ondas do mar",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_029",
-        "word": "Paracaidismo",
+        "word": "Paraquedismo",
         "category": "acciones",
         "difficulty": "hard",
-        "hint": "Saltar desde avión con paracaídas",
-        "impostorHint": "Acción"
+        "hint": "Saltar de avião com paraquedas",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ac_030",
-        "word": "Malabarear",
+        "word": "Malabarismo",
         "category": "acciones",
         "difficulty": "hard",
-        "hint": "Lanzar y atrapar varios objetos",
-        "impostorHint": "Acción"
+        "hint": "Jogar e pegar vários objetos",
+        "impostorHint": "Ação"
     },
     {
         "id": "gen_ob_001",
-        "word": "Computadora",
+        "word": "Computador",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Máquina para procesar información",
+        "hint": "Máquina para processar informação",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_002",
-        "word": "Teléfono",
+        "word": "Telefone",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Dispositivo para comunicarse",
+        "hint": "Dispositivo para se comunicar",
         "impostorHint": "Objeto"
     },
     {
@@ -260,15 +260,15 @@
         "word": "Mesa",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Mueble con superficie plana",
+        "hint": "Móvel com superfície plana",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_004",
-        "word": "Silla",
+        "word": "Cadeira",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Asiento con respaldo",
+        "hint": "Assento com encosto",
         "impostorHint": "Objeto"
     },
     {
@@ -276,31 +276,31 @@
         "word": "Cama",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Mueble para dormir",
+        "hint": "Móvel para dormir",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_006",
-        "word": "Libro",
+        "word": "Livro",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Páginas encuadernadas para leer",
+        "hint": "Páginas encadernadas para ler",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_007",
-        "word": "Lápiz",
+        "word": "Lápis",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Instrumento para escribir o dibujar",
+        "hint": "Instrumento para escrever ou desenhar",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_008",
-        "word": "Pelota",
+        "word": "Bola",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Esfera para jugar deportes",
+        "hint": "Esfera para jogar esportes",
         "impostorHint": "Objeto"
     },
     {
@@ -308,7 +308,7 @@
         "word": "Carro",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Vehículo de cuatro ruedas",
+        "hint": "Veículo de quatro rodas",
         "impostorHint": "Objeto"
     },
     {
@@ -316,31 +316,31 @@
         "word": "Bicicleta",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Vehículo de dos ruedas",
+        "hint": "Veículo de duas rodas",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_011",
-        "word": "Reloj",
+        "word": "Relógio",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Dispositivo que marca la hora",
+        "hint": "Dispositivo que marca a hora",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_012",
-        "word": "Espejo",
+        "word": "Espelho",
         "category": "objetos",
         "difficulty": "easy",
-        "hint": "Superficie que refleja la imagen",
+        "hint": "Superfície que reflete a imagem",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_013",
-        "word": "Guitarra",
+        "word": "Violão",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Instrumento musical de cuerdas",
+        "hint": "Instrumento musical de cordas",
         "impostorHint": "Objeto"
     },
     {
@@ -348,63 +348,63 @@
         "word": "Piano",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Instrumento de teclas blancas y negras",
+        "hint": "Instrumento de teclas brancas e pretas",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_015",
-        "word": "Televisor",
+        "word": "Televisão",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Pantalla para ver programas",
+        "hint": "Tela para ver programas",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_016",
-        "word": "Refrigerador",
+        "word": "Geladeira",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Electrodoméstico que mantiene fríos los alimentos",
+        "hint": "Eletrodoméstico que mantém frios os alimentos",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_017",
-        "word": "Lavadora",
+        "word": "Máquina de lavar",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Máquina para lavar ropa",
+        "hint": "Máquina para lavar roupa",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_018",
-        "word": "Microondas",
+        "word": "Micro-ondas",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Aparato para calentar comida rápidamente",
+        "hint": "Aparelho para esquentar comida rapidamente",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_019",
-        "word": "Aspiradora",
+        "word": "Aspirador",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Máquina para limpiar alfombras",
+        "hint": "Máquina para limpar tapetes",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_020",
-        "word": "Linterna",
+        "word": "Lanterna",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Luz portátil para la oscuridad",
+        "hint": "Luz portátil para a escuridão",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_021",
-        "word": "Paraguas",
+        "word": "Guarda-chuva",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Protección contra la lluvia",
+        "hint": "Proteção contra a chuva",
         "impostorHint": "Objeto"
     },
     {
@@ -412,55 +412,55 @@
         "word": "Mochila",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Bolsa que se lleva en la espalda",
+        "hint": "Bolsa que se leva nas costas",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_023",
-        "word": "Cámara",
+        "word": "Câmera",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Dispositivo para tomar fotografías",
+        "hint": "Dispositivo para tirar fotos",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_024",
-        "word": "Brújula",
+        "word": "Bússola",
         "category": "objetos",
         "difficulty": "medium",
-        "hint": "Instrumento que señala el norte",
+        "hint": "Instrumento que aponta o norte",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_025",
-        "word": "Telescopio",
+        "word": "Telescópio",
         "category": "objetos",
         "difficulty": "hard",
-        "hint": "Instrumento para ver objetos lejanos",
+        "hint": "Instrumento para ver objetos distantes",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_026",
-        "word": "Microscopio",
+        "word": "Microscópio",
         "category": "objetos",
         "difficulty": "hard",
-        "hint": "Instrumento para ver objetos muy pequeños",
+        "hint": "Instrumento para ver objetos muito pequenos",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_027",
-        "word": "Estetoscopio",
+        "word": "Estetoscópio",
         "category": "objetos",
         "difficulty": "hard",
-        "hint": "Instrumento médico para escuchar el corazón",
+        "hint": "Instrumento médico para ouvir o coração",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_028",
-        "word": "Metrónomo",
+        "word": "Metrônomo",
         "category": "objetos",
         "difficulty": "hard",
-        "hint": "Dispositivo que marca el tempo musical",
+        "hint": "Dispositivo que marca o tempo musical",
         "impostorHint": "Objeto"
     },
     {
@@ -468,167 +468,167 @@
         "word": "Retrato",
         "category": "objetos",
         "difficulty": "hard",
-        "hint": "Pintura o dibujo de una persona",
+        "hint": "Pintura ou desenho de uma pessoa",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_ob_030",
-        "word": "Caleidoscopio",
+        "word": "Caleidoscópio",
         "category": "objetos",
         "difficulty": "hard",
-        "hint": "Tubo con espejos que crea patrones coloridos",
+        "hint": "Tubo com espelhos que cria padrões coloridos",
         "impostorHint": "Objeto"
     },
     {
         "id": "gen_sp_001",
-        "word": "Fútbol",
+        "word": "Futebol",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con pelota y dos porterías",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com bola e dois gols",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_002",
-        "word": "Basketball",
+        "word": "Basquete",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con canasta y pelota naranja",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com cesta e bola laranja",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_003",
-        "word": "Tenis",
+        "word": "Tênis",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con raqueta y red",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com raquete e rede",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_004",
-        "word": "Natación",
+        "word": "Natação",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte que se practica en el agua",
-        "impostorHint": "Deporte"
+        "hint": "Esporte que se pratica na água",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_005",
         "word": "Ciclismo",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte sobre dos ruedas",
-        "impostorHint": "Deporte"
+        "hint": "Esporte sobre duas rodas",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_006",
-        "word": "Baseball",
+        "word": "Beisebol",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con bate y bases",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com taco e bases",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_007",
-        "word": "Volleyball",
+        "word": "Vôlei",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con red alta y golpes de mano",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com rede alta e toques com a mão",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_008",
         "word": "Atletismo",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte de carreras y saltos",
-        "impostorHint": "Deporte"
+        "hint": "Esporte de corridas e saltos",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_009",
-        "word": "Gimnasia",
+        "word": "Ginástica",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte de flexibilidad y acrobacia",
-        "impostorHint": "Deporte"
+        "hint": "Esporte de flexibilidade e acrobacia",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_010",
-        "word": "Boxeo",
+        "word": "Boxe",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte de combate con puños",
-        "impostorHint": "Deporte"
+        "hint": "Esporte de combate com punhos",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_011",
-        "word": "Golf",
+        "word": "Golfe",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con palos y hoyos",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com tacos e buracos",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_012",
-        "word": "Hockey",
+        "word": "Hóquei",
         "category": "deportes",
         "difficulty": "easy",
-        "hint": "Deporte con palos sobre hielo",
-        "impostorHint": "Deporte"
+        "hint": "Esporte com tacos sobre gelo",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_013",
-        "word": "Rugby",
+        "word": "Rúgbi",
         "category": "deportes",
         "difficulty": "medium",
-        "hint": "Deporte similar al fútbol americano",
-        "impostorHint": "Deporte"
+        "hint": "Esporte similar ao futebol americano",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_016",
-        "word": "Ping Pong",
+        "word": "Pingue-pongue",
         "category": "deportes",
         "difficulty": "medium",
-        "hint": "Tenis de mesa con paletas",
-        "impostorHint": "Deporte"
+        "hint": "Tênis de mesa com raquetes",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_020",
-        "word": "Karate",
+        "word": "Karatê",
         "category": "deportes",
         "difficulty": "medium",
         "hint": "Arte marcial de golpes secos",
-        "impostorHint": "Deporte"
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_023",
-        "word": "Surf",
+        "word": "Surfe",
         "category": "deportes",
         "difficulty": "medium",
-        "hint": "Deporte sobre olas del mar",
-        "impostorHint": "Deporte"
+        "hint": "Esporte sobre ondas do mar",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_024",
-        "word": "Skateboard",
+        "word": "Skate",
         "category": "deportes",
         "difficulty": "medium",
-        "hint": "Deporte urbano con tabla de ruedas",
-        "impostorHint": "Deporte"
+        "hint": "Esporte urbano com prancha de rodinhas",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_025",
         "word": "Esgrima",
         "category": "deportes",
         "difficulty": "hard",
-        "hint": "Deporte de combate con espadas",
-        "impostorHint": "Deporte"
+        "hint": "Esporte de combate com espadas",
+        "impostorHint": "Esporte"
     },
     {
         "id": "gen_sp_026",
         "word": "Polo",
         "category": "deportes",
         "difficulty": "hard",
-        "hint": "Deporte a caballo con mazos",
-        "impostorHint": "Deporte"
+        "hint": "Esporte a cavalo com tacos",
+        "impostorHint": "Esporte"
     }
 ]

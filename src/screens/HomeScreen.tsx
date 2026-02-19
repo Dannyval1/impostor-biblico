@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -28,6 +29,7 @@ type HomeScreenProps = {
 const { height, width } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
+    const insets = useSafeAreaInsets();
     const { state, setHasLoaded, playClick, playIntro } = useGame();
     const { t } = useTranslation();
     const { isPremium, hasShownInitialPaywall, setHasShownInitialPaywall } = usePurchase();
@@ -87,9 +89,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 ? 'https://apps.apple.com/app/id6758225650'
                 : 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
 
+            const message = Platform.OS === 'ios'
+                ? t.home.share_message
+                : `${t.home.share_message} ${url}`;
+
             await Share.share({
-                message: t.home.share_message,
-                url: url,
+                message: message,
+                url: Platform.OS === 'ios' ? url : undefined,
             });
         } catch (error) {
             console.error('Share failed:', error);
@@ -139,7 +145,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
                 {/* Settings Button Only (Top Right) */}
                 {!isLoading && (
-                    <View style={styles.topButtonsContainer}>
+                    <View style={[styles.topButtonsContainer, { top: insets.top + 10 }]}>
                         <TouchableOpacity
                             style={styles.iconButton}
                             onPress={() => {
@@ -163,7 +169,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     </Svg>
                 </View>
 
-                <View style={styles.sheetContent}>
+                <View style={[styles.sheetContent, { paddingBottom: Math.max(insets.bottom, 20) }]}>
                     <Text style={styles.title}>{t.home.title}</Text>
                     <Text style={styles.subtitle}>{t.home.subtitle}</Text>
 
@@ -309,7 +315,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: '42%',
+        height: '35%',
         backgroundColor: '#FFFFFF',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -5 },

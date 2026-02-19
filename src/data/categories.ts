@@ -45,6 +45,13 @@ export const CATEGORIES: CategoryConfig[] = [
         description: 'Ciudades, regiones y sitios bíblicos',
     },
     {
+        id: 'mujeres_biblicas',
+        label: 'Mujeres bíblicas',
+        icon: '👩',
+        isPremium: true,
+        description: 'Mujeres destacadas de la Biblia',
+    },
+    {
         id: 'conceptos_teologicos',
         label: 'Conceptos teológicos',
         icon: '💭',

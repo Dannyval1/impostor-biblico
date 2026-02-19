@@ -4,531 +4,623 @@
         "word": "León",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Rey de la selva con melena"
+        "hint": "Rey de la selva con melena",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_002",
         "word": "Perro",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Mejor amigo del hombre"
+        "hint": "Mejor amigo del hombre",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_003",
         "word": "Gato",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Mascota felina que maúlla"
+        "hint": "Mascota felina que maúlla",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_004",
         "word": "Elefante",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Mamífero gigante con trompa"
+        "hint": "Mamífero gigante con trompa",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_005",
         "word": "Tigre",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Felino naranja con rayas negras"
+        "hint": "Felino naranja con rayas negras",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_006",
         "word": "Caballo",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Animal que relincha y galopa"
+        "hint": "Animal que relincha y galopa",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_007",
         "word": "Vaca",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Animal que da leche"
+        "hint": "Animal que da leche",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_008",
         "word": "Conejo",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Animal que salta y come zanahorias"
+        "hint": "Animal que salta y come zanahorias",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_009",
         "word": "Jirafa",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Animal más alto del mundo"
+        "hint": "Animal más alto del mundo",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_010",
         "word": "Hipopótamo",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Mamífero acuático muy pesado"
+        "hint": "Mamífero acuático muy pesado",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_011",
         "word": "Rinoceronte",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Animal gris con cuerno en la nariz"
+        "hint": "Animal gris con cuerno en la nariz",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_012",
         "word": "Canguro",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Marsupial que salta y tiene bolsa"
+        "hint": "Marsupial que salta y tiene bolsa",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_013",
         "word": "Pingüino",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Ave que no vuela pero nada bien"
+        "hint": "Ave que no vuela pero nada bien",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_014",
         "word": "Delfín",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Mamífero marino muy inteligente"
+        "hint": "Mamífero marino muy inteligente",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_015",
         "word": "Oso",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Mamífero grande que hiberna"
+        "hint": "Mamífero grande que hiberna",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_016",
         "word": "Serpiente",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Reptil sin patas que repta"
+        "hint": "Reptil sin patas que repta",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_017",
         "word": "Ornitorrinco",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Mamífero extraño con pico de pato"
+        "hint": "Mamífero extraño con pico de pato",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_018",
         "word": "Koala",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Marsupial australiano que come eucalipto"
+        "hint": "Marsupial australiano que come eucalipto",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_019",
         "word": "Armadillo",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Mamífero con armadura natural"
+        "hint": "Mamífero con armadura natural",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_an_020",
         "word": "Lemur",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Primate de Madagascar con cola anillada"
+        "hint": "Primate de Madagascar con cola anillada",
+        "impostorHint": "Animal"
     },
     {
         "id": "gen_fo_001",
         "word": "Pizza",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Comida italiana con masa y queso"
+        "hint": "Comida italiana con masa y queso",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_002",
         "word": "Hamburguesa",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Carne entre dos panes"
+        "hint": "Carne entre dos panes",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_003",
         "word": "Pasta",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Fideos italianos con salsa"
+        "hint": "Fideos italianos con salsa",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_004",
         "word": "Arroz",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Grano blanco básico de Asia"
+        "hint": "Grano blanco básico de Asia",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_005",
         "word": "Pollo",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Carne de ave muy popular"
+        "hint": "Carne de ave muy popular",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_006",
         "word": "Pan",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Alimento básico de trigo"
+        "hint": "Alimento básico de trigo",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_007",
         "word": "Huevo",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Producto oval de las gallinas"
+        "hint": "Producto oval de las gallinas",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_008",
         "word": "Manzana",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Fruta roja o verde muy común"
+        "hint": "Fruta roja o verde muy común",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_009",
         "word": "Sushi",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Comida japonesa con pescado crudo"
+        "hint": "Comida japonesa con pescado crudo",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_010",
         "word": "Tacos",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Comida mexicana con tortilla"
+        "hint": "Comida mexicana con tortilla",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_011",
         "word": "Paella",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Plato español con arroz y mariscos"
+        "hint": "Plato español con arroz y mariscos",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_012",
         "word": "Lasagna",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Pasta italiana en capas con carne"
+        "hint": "Pasta italiana en capas con carne",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_013",
         "word": "Enchiladas",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Tortillas mexicanas rellenas"
+        "hint": "Tortillas mexicanas rellenas",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_014",
         "word": "Croissant",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Pan francés en forma de media luna"
+        "hint": "Pan francés en forma de media luna",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_015",
         "word": "Empanadas",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Masa rellena y horneada"
+        "hint": "Masa rellena y horneada",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_016",
         "word": "Curry",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Comida picante de la India"
+        "hint": "Comida picante de la India",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_018",
         "word": "Ratatouille",
         "category": "comida",
         "difficulty": "hard",
-        "hint": "Guiso francés de vegetales"
+        "hint": "Guiso francés de vegetales",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_019",
         "word": "Ceviche",
         "category": "comida",
         "difficulty": "hard",
-        "hint": "Pescado crudo marinado en limón"
+        "hint": "Pescado crudo marinado en limón",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_fo_020",
         "word": "Mole",
         "category": "comida",
         "difficulty": "hard",
-        "hint": "Salsa mexicana con chocolate"
+        "hint": "Salsa mexicana con chocolate",
+        "impostorHint": "Comida"
     },
     {
         "id": "gen_pr_001",
         "word": "Doctor",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Profesional que cura enfermedades"
+        "hint": "Profesional que cura enfermedades",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_002",
         "word": "Maestro",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Enseña a los niños en la escuela"
+        "hint": "Enseña a los niños en la escuela",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_003",
         "word": "Policía",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Mantiene el orden y la seguridad"
+        "hint": "Mantiene el orden y la seguridad",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_004",
         "word": "Bombero",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Apaga incendios y rescata personas"
+        "hint": "Apaga incendios y rescata personas",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_005",
         "word": "Cocinero",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Prepara comida en restaurantes"
+        "hint": "Prepara comida en restaurantes",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_006",
         "word": "Enfermero",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Cuida pacientes en hospitales"
+        "hint": "Cuida pacientes en hospitales",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_007",
         "word": "Piloto",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Conduce aviones por el cielo"
+        "hint": "Conduce aviones por el cielo",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_008",
         "word": "Mecánico",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Repara carros y motores"
+        "hint": "Repara carros y motores",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_009",
         "word": "Ingeniero",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Diseña y construye sistemas técnicos"
+        "hint": "Diseña y construye sistemas técnicos",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_010",
         "word": "Programador",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Crea software y aplicaciones"
+        "hint": "Crea software y aplicaciones",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_011",
         "word": "Periodista",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Informa noticias y eventos"
+        "hint": "Informa noticias y eventos",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_012",
         "word": "Farmacéutico",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Prepara y vende medicinas"
+        "hint": "Prepara y vende medicinas",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_013",
         "word": "Psicólogo",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Estudia la mente y comportamiento"
+        "hint": "Estudia la mente y comportamiento",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_014",
         "word": "Electricista",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Instala y repara sistemas eléctricos"
+        "hint": "Instala y repara sistemas eléctricos",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_015",
         "word": "Científico",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Investiga fenómenos naturales"
+        "hint": "Investiga fenómenos naturales",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_016",
         "word": "Músico",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Toca instrumentos y compone"
+        "hint": "Toca instrumentos y compone",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_017",
         "word": "Antropólogo",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Estudia culturas y sociedades humanas"
+        "hint": "Estudia culturas y sociedades humanas",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_018",
         "word": "Arqueólogo",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Excava y estudia civilizaciones antiguas"
+        "hint": "Excava y estudia civilizaciones antiguas",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_019",
         "word": "Meteorólogo",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Predice el clima y tiempo"
+        "hint": "Predice el clima y tiempo",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_pr_020",
         "word": "Neurocirujano",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Opera el cerebro y sistema nervioso"
+        "hint": "Opera el cerebro y sistema nervioso",
+        "impostorHint": "Profesión"
     },
     {
         "id": "gen_he_001",
         "word": "Martillo",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Golpea clavos con cabeza de metal"
+        "hint": "Golpea clavos con cabeza de metal",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_002",
         "word": "Destornillador",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Atornilla y desatornilla tornillos"
+        "hint": "Atornilla y desatornilla tornillos",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_003",
         "word": "Llave",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Ajusta tuercas y tornillos"
+        "hint": "Ajusta tuercas y tornillos",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_004",
         "word": "Sierra",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Corta madera con dientes"
+        "hint": "Corta madera con dientes",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_005",
         "word": "Cuchillo",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Corta con hoja afilada"
+        "hint": "Corta con hoja afilada",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_006",
         "word": "Tijeras",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Corta papel con dos hojas"
+        "hint": "Corta papel con dos hojas",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_007",
         "word": "Pala",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Cava tierra con mango largo"
+        "hint": "Cava tierra con mango largo",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_008",
         "word": "Pincel",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Pinta con cerdas en la punta"
+        "hint": "Pinta con cerdas en la punta",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_009",
         "word": "Taladro",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Hace agujeros girando rápidamente"
+        "hint": "Hace agujeros girando rápidamente",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_010",
         "word": "Soldador",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Une metales con calor extremo"
+        "hint": "Une metales con calor extremo",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_011",
         "word": "Alicates",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Agarra objetos con mandíbulas"
+        "hint": "Agarra objetos con mandíbulas",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_013",
         "word": "Lima",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Desgasta superficies con rugosidad"
+        "hint": "Desgasta superficies con rugosidad",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_014",
         "word": "Cincel",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Talla piedra o madera con filo"
+        "hint": "Talla piedra o madera con filo",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_015",
         "word": "Gato hidráulico",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Levanta carros para cambiar llantas"
+        "hint": "Levanta carros para cambiar llantas",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_016",
         "word": "Compresor",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Genera aire a presión"
+        "hint": "Genera aire a presión",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_017",
         "word": "Calibrador",
         "category": "herramientas",
         "difficulty": "hard",
-        "hint": "Mide con extrema precisión"
+        "hint": "Mide con extrema precisión",
+        "impostorHint": "Herramienta"
     },
     {
         "id": "gen_he_018",
         "word": "Multímetro",
         "category": "herramientas",
         "difficulty": "hard",
-        "hint": "Mide voltaje, corriente y resistencia"
+        "hint": "Mide voltaje, corriente y resistencia",
+        "impostorHint": "Herramienta"
+    },
+    {
+        "id": "gen_he_019",
+        "word": "Fresadora",
+        "category": "herramientas",
+        "difficulty": "hard",
+        "hint": "Máquina que corta metal con precisión",
+        "impostorHint": "Herramienta"
+    },
+    {
+        "id": "gen_he_020",
+        "word": "Torno",
+        "category": "herramientas",
+        "difficulty": "hard",
+        "hint": "Máquina que gira piezas para darles forma",
+        "impostorHint": "Herramienta"
     }
 ]
