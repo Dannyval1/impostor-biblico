@@ -4,209 +4,1439 @@
         "word": "Fisherman",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Peter's profession"
+        "hint": "Profession of Peter and other apostles",
+        "impostorHint": "Nets"
     },
     {
         "id": "of_002",
         "word": "Carpenter",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Profession of Joseph, Jesus' earthly father"
+        "hint": "Profession of Joseph, Jesus' earthly father",
+        "impostorHint": "Wood"
     },
     {
         "id": "of_003",
         "word": "Shepherd",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Cared for sheep, David's profession"
+        "hint": "Cared for sheep, David's profession",
+        "impostorHint": "Sheep"
     },
     {
         "id": "of_004",
         "word": "Pharisee",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Jewish religious leader, expert in the law"
+        "hint": "Jewish religious leader, expert in the law",
+        "impostorHint": "Law"
     },
     {
         "id": "of_005",
         "word": "Tax Collector",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Publican, like Matthew"
+        "hint": "Publican, like Matthew",
+        "impostorHint": "Taxes"
+    },
+    {
+        "id": "of_006",
+        "word": "Sadducee",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Religious party that denied the resurrection",
+        "impostorHint": "Resurrection"
+    },
+    {
+        "id": "of_007",
+        "word": "Scribe",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Copied and taught the Scriptures",
+        "impostorHint": "Copy"
     },
     {
         "id": "of_008",
         "word": "Priest",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Ministered in the temple, offered sacrifices"
+        "hint": "Ministered in the temple, offered sacrifices",
+        "impostorHint": "Temple"
+    },
+    {
+        "id": "of_009",
+        "word": "Levite",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Tribe in charge of temple service",
+        "impostorHint": "Service"
+    },
+    {
+        "id": "of_010",
+        "word": "High Priest",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Highest Jewish religious leader",
+        "impostorHint": "Atonement"
     },
     {
         "id": "of_011",
         "word": "Prophet",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Spoke God's messages to the people"
+        "hint": "Spoke God's messages to the people",
+        "impostorHint": "Message"
     },
     {
         "id": "of_012",
         "word": "King",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Ruler of Israel or Judah"
+        "hint": "Ruler of Israel or Judah",
+        "impostorHint": "Crown"
+    },
+    {
+        "id": "of_013",
+        "word": "Judge",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Leader of Israel before the kings",
+        "impostorHint": "Leader"
     },
     {
         "id": "of_014",
         "word": "Soldier",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Military man"
+        "hint": "Military man",
+        "impostorHint": "Sword"
+    },
+    {
+        "id": "of_015",
+        "word": "Centurion",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Roman officer in charge of 100 soldiers",
+        "impostorHint": "Faith"
+    },
+    {
+        "id": "of_016",
+        "word": "Physician",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Profession of Luke the Evangelist",
+        "impostorHint": "Heal"
     },
     {
         "id": "of_017",
         "word": "Apostle",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Sent one, the 12 disciples of Jesus"
+        "hint": "Sent one, the 12 disciples of Jesus",
+        "impostorHint": "Sent"
+    },
+    {
+        "id": "of_018",
+        "word": "Disciple",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Follower and learner of a teacher",
+        "impostorHint": "Student"
+    },
+    {
+        "id": "of_019",
+        "word": "Deacon",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Servant in the early church",
+        "impostorHint": "Servant"
+    },
+    {
+        "id": "of_020",
+        "word": "Elder",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Leader of the congregation",
+        "impostorHint": "Leader"
+    },
+    {
+        "id": "of_021",
+        "word": "Pastor",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Spiritual leader of the congregation",
+        "impostorHint": "Office"
+    },
+    {
+        "id": "of_022",
+        "word": "Teacher",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Taught the word of God",
+        "impostorHint": "Teaching"
+    },
+    {
+        "id": "of_023",
+        "word": "Evangelist",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Preached the gospel",
+        "impostorHint": "News"
+    },
+    {
+        "id": "of_024",
+        "word": "Vinedresser",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Cared for vineyards and made wine",
+        "impostorHint": "Grapes"
+    },
+    {
+        "id": "of_025",
+        "word": "Farmer",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Worked the land",
+        "impostorHint": "Land"
+    },
+    {
+        "id": "of_026",
+        "word": "Potter",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Made clay vessels",
+        "impostorHint": "Clay"
+    },
+    {
+        "id": "of_027",
+        "word": "Baker",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Made bread, mentioned in Joseph's story",
+        "impostorHint": "Oven"
+    },
+    {
+        "id": "of_028",
+        "word": "Tanner",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Worked with leather, like Simon in Joppa",
+        "impostorHint": "Skins"
+    },
+    {
+        "id": "of_029",
+        "word": "Tentmaker",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Profession of Paul, Priscilla, and Aquila",
+        "impostorHint": "Paul"
+    },
+    {
+        "id": "of_030",
+        "word": "Silversmith",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Made silver idols, like Demetrius",
+        "impostorHint": "Silver"
+    },
+    {
+        "id": "of_031",
+        "word": "Cupbearer",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Served wine to the king, like Nehemiah",
+        "impostorHint": "Wine"
+    },
+    {
+        "id": "of_032",
+        "word": "Eunuch",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Court official",
+        "impostorHint": "Chariot"
+    },
+    {
+        "id": "of_033",
+        "word": "Dream Interpreter",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Joseph and Daniel did this",
+        "impostorHint": "Joseph"
+    },
+    {
+        "id": "of_034",
+        "word": "Wise Man",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Counselor to the king, like Daniel",
+        "impostorHint": "Magi"
+    },
+    {
+        "id": "of_035",
+        "word": "Magician",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Practitioner of occult arts",
+        "impostorHint": "East"
+    },
+    {
+        "id": "of_036",
+        "word": "Merchant",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Trader of goods",
+        "impostorHint": "Pearls"
+    },
+    {
+        "id": "of_037",
+        "word": "Seller of Purple",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Profession of Lydia in Philippi",
+        "impostorHint": "Lydia"
+    },
+    {
+        "id": "of_038",
+        "word": "Armorer",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Made weapons and armor",
+        "impostorHint": "Shieldbearer"
+    },
+    {
+        "id": "of_039",
+        "word": "Builder",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Built houses and buildings",
+        "impostorHint": "House"
+    },
+    {
+        "id": "of_040",
+        "word": "Musician",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Played instruments in the temple",
+        "impostorHint": "Harp"
+    },
+    {
+        "id": "of_041",
+        "word": "Singer",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Praised God with songs",
+        "impostorHint": "Choir"
+    },
+    {
+        "id": "of_042",
+        "word": "Gatekeeper",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Guardian of the temple gates",
+        "impostorHint": "Gate"
+    },
+    {
+        "id": "of_043",
+        "word": "Guard",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Protected the king or prisoners",
+        "impostorHint": "Tomb"
+    },
+    {
+        "id": "of_044",
+        "word": "Blacksmith",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Worked with iron",
+        "impostorHint": "Iron"
+    },
+    {
+        "id": "of_045",
+        "word": "Goldsmith",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Worked with gold and jewelry",
+        "impostorHint": "Gold"
+    },
+    {
+        "id": "of_046",
+        "word": "Weaver",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Made fabrics and clothes",
+        "impostorHint": "Fabric"
+    },
+    {
+        "id": "of_047",
+        "word": "Dyer",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Dyed fabrics with colors",
+        "impostorHint": "Color"
+    },
+    {
+        "id": "of_048",
+        "word": "Herald",
+        "category": "oficios_biblicos",
+        "difficulty": "hard",
+        "hint": "Announced the king's decrees",
+        "impostorHint": "Voice"
+    },
+    {
+        "id": "of_049",
+        "word": "Treasurer",
+        "category": "oficios_biblicos",
+        "difficulty": "medium",
+        "hint": "Managed finances",
+        "impostorHint": "Ethiopia"
+    },
+    {
+        "id": "of_050",
+        "word": "Governor",
+        "category": "oficios_biblicos",
+        "difficulty": "easy",
+        "hint": "Roman authority like Pilate",
+        "impostorHint": "Province"
     },
     {
         "id": "lu_001",
         "word": "Eden",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Garden where Adam and Eve lived"
+        "hint": "Garden where Adam and Eve lived",
+        "impostorHint": "Garden"
+    },
+    {
+        "id": "lu_002",
+        "word": "Ararat",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Mountain where Noah's ark rested",
+        "impostorHint": "Ark"
     },
     {
         "id": "lu_003",
         "word": "Babel",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "City of the tower, confused languages"
+        "hint": "City of the tower, confused languages",
+        "impostorHint": "Tower"
+    },
+    {
+        "id": "lu_004",
+        "word": "Ur",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "City of Abraham's origin",
+        "impostorHint": "Departure"
     },
     {
         "id": "lu_005",
         "word": "Canaan",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Promised land to Abraham"
+        "hint": "Promised land to Abraham",
+        "impostorHint": "Land"
     },
     {
         "id": "lu_006",
         "word": "Sodom",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Wicked city destroyed with fire"
+        "hint": "Wicked city destroyed with fire",
+        "impostorHint": "Fire"
+    },
+    {
+        "id": "lu_007",
+        "word": "Gomorrah",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "City destroyed along with Sodom",
+        "impostorHint": "Judgment"
+    },
+    {
+        "id": "lu_008",
+        "word": "Beersheba",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Place of the covenant between Abraham and Abimelech",
+        "impostorHint": "Well"
+    },
+    {
+        "id": "lu_009",
+        "word": "Bethel",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "House of God, where Jacob saw the ladder",
+        "impostorHint": "Ladder"
     },
     {
         "id": "lu_010",
         "word": "Egypt",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Country where Joseph ruled and Israel was enslaved"
+        "hint": "Country where Joseph ruled and Israel was enslaved",
+        "impostorHint": "Nile"
+    },
+    {
+        "id": "lu_011",
+        "word": "Goshen",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Region of Egypt where Israel lived",
+        "impostorHint": "Refuge"
     },
     {
         "id": "lu_012",
         "word": "Red Sea",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "God divided it for Israel to cross"
+        "hint": "God divided it for Israel to cross",
+        "impostorHint": "Crossing"
     },
     {
         "id": "lu_013",
         "word": "Mount Sinai",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Where Moses received the tablets of the law"
+        "hint": "Where Moses received the tablets of the law",
+        "impostorHint": "Law"
+    },
+    {
+        "id": "lu_014",
+        "word": "Wilderness",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Israel wandered 40 years there",
+        "impostorHint": "Test"
     },
     {
         "id": "lu_015",
         "word": "Jericho",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "First conquered city, walls fell down"
+        "hint": "First conquered city, walls fell down",
+        "impostorHint": "Walls"
     },
     {
         "id": "lu_016",
         "word": "Jerusalem",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Holy City, capital of Israel"
+        "hint": "Holy City, capital of Israel",
+        "impostorHint": "Peace"
     },
     {
         "id": "lu_017",
         "word": "Bethlehem",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Birthplace of David and Jesus"
+        "hint": "Birthplace of David and Jesus",
+        "impostorHint": "Bread"
+    },
+    {
+        "id": "lu_018",
+        "word": "Nazareth",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "City where Jesus grew up",
+        "impostorHint": "Branch"
+    },
+    {
+        "id": "lu_019",
+        "word": "Capernaum",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Base city of Jesus' ministry",
+        "impostorHint": "Miracles"
+    },
+    {
+        "id": "lu_020",
+        "word": "Galilee",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Northern region where Jesus ministered",
+        "impostorHint": "Lake"
+    },
+    {
+        "id": "lu_021",
+        "word": "Judea",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Southern region with Jerusalem",
+        "impostorHint": "South"
+    },
+    {
+        "id": "lu_022",
+        "word": "Samaria",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Region between Galilee and Judea",
+        "impostorHint": "Well"
+    },
+    {
+        "id": "lu_023",
+        "word": "Sea of Galilee",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Lake where Jesus calmed the storm",
+        "impostorHint": "Fishing"
+    },
+    {
+        "id": "lu_024",
+        "word": "Jordan River",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Where John baptized",
+        "impostorHint": "Baptism"
+    },
+    {
+        "id": "lu_025",
+        "word": "Mount of Olives",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Where Jesus ascended to heaven",
+        "impostorHint": "Prayer"
+    },
+    {
+        "id": "lu_026",
+        "word": "Gethsemane",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Garden where Jesus prayed before arrest",
+        "impostorHint": "Press"
+    },
+    {
+        "id": "lu_027",
+        "word": "Golgotha",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Place of the skull, where Jesus was crucified",
+        "impostorHint": "Skull"
+    },
+    {
+        "id": "lu_028",
+        "word": "Bethany",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Home of Lazarus, Martha, and Mary",
+        "impostorHint": "Friends"
+    },
+    {
+        "id": "lu_029",
+        "word": "Bethsaida",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Hometown of Peter, Andrew, and Philip",
+        "impostorHint": "Blind"
+    },
+    {
+        "id": "lu_030",
+        "word": "Cana",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Where Jesus turned water into wine",
+        "impostorHint": "Wedding"
+    },
+    {
+        "id": "lu_031",
+        "word": "Mount Carmel",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Where Elijah confronted the prophets of Baal",
+        "impostorHint": "Fire"
+    },
+    {
+        "id": "lu_032",
+        "word": "Mount Hermon",
+        "category": "lugares_biblicos",
+        "difficulty": "hard",
+        "hint": "Possible site of the transfiguration",
+        "impostorHint": "Snow"
+    },
+    {
+        "id": "lu_033",
+        "word": "Mount Zion",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Hill in Jerusalem, city of David",
+        "impostorHint": "Fortress"
+    },
+    {
+        "id": "lu_034",
+        "word": "Temple of Jerusalem",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "House of God built by Solomon",
+        "impostorHint": "House"
+    },
+    {
+        "id": "lu_035",
+        "word": "Tabernacle",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Tent of meeting in the wilderness",
+        "impostorHint": "Tent"
+    },
+    {
+        "id": "lu_036",
+        "word": "Emmaus",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Road where Jesus appeared risen",
+        "impostorHint": "Road"
+    },
+    {
+        "id": "lu_037",
+        "word": "Damascus",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Where Paul was converted",
+        "impostorHint": "Light"
+    },
+    {
+        "id": "lu_038",
+        "word": "Antioch",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Where they were first called Christians",
+        "impostorHint": "Christians"
+    },
+    {
+        "id": "lu_039",
+        "word": "Corinth",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Greek city where Paul wrote letters",
+        "impostorHint": "Port"
+    },
+    {
+        "id": "lu_040",
+        "word": "Ephesus",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "City with the temple of Diana",
+        "impostorHint": "Diana"
+    },
+    {
+        "id": "lu_041",
+        "word": "Philippi",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Where Paul and Silas were imprisoned",
+        "impostorHint": "Jail"
+    },
+    {
+        "id": "lu_042",
+        "word": "Rome",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Capital of the empire, Paul was a prisoner there",
+        "impostorHint": "Empire"
+    },
+    {
+        "id": "lu_043",
+        "word": "Athens",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Where Paul preached at the Areopagus",
+        "impostorHint": "God"
+    },
+    {
+        "id": "lu_044",
+        "word": "Thessalonica",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Church receiving Paul's letters",
+        "impostorHint": "Troubles"
+    },
+    {
+        "id": "lu_045",
+        "word": "Babylon",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Empire that took Judah into exile",
+        "impostorHint": "Captivity"
+    },
+    {
+        "id": "lu_046",
+        "word": "Nineveh",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "City Jonah was sent to",
+        "impostorHint": "Fish"
+    },
+    {
+        "id": "lu_047",
+        "word": "Assyria",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Empire that conquered the northern kingdom",
+        "impostorHint": "Empire"
+    },
+    {
+        "id": "lu_048",
+        "word": "Persia",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Empire of Cyrus, Daniel, and Esther",
+        "impostorHint": "Laws"
+    },
+    {
+        "id": "lu_049",
+        "word": "Patmos",
+        "category": "lugares_biblicos",
+        "difficulty": "medium",
+        "hint": "Island where John wrote Revelation",
+        "impostorHint": "Vision"
+    },
+    {
+        "id": "lu_050",
+        "word": "Heaven",
+        "category": "lugares_biblicos",
+        "difficulty": "easy",
+        "hint": "Dwelling place of God and destination of the saved",
+        "impostorHint": "Goal"
     },
     {
         "id": "ct_001",
         "word": "Grace",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "God's unmerited favor"
+        "hint": "God's unmerited favor",
+        "impostorHint": "Gift"
     },
     {
         "id": "ct_002",
         "word": "Faith",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Assurance of things hoped for"
+        "hint": "Assurance of things hoped for",
+        "impostorHint": "Trust"
     },
     {
         "id": "ct_003",
         "word": "Salvation",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Deliverance from sin by Christ"
+        "hint": "Deliverance from sin by Christ",
+        "impostorHint": "Rescue"
+    },
+    {
+        "id": "ct_004",
+        "word": "Redemption",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Buying back through a price",
+        "impostorHint": "Price"
     },
     {
         "id": "ct_005",
         "word": "Justification",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Declared righteous before God by faith"
+        "hint": "Declared righteous before God by faith",
+        "impostorHint": "Declared"
     },
     {
         "id": "ct_006",
         "word": "Sanctification",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Process of being made holy"
+        "hint": "Process of being made holy",
+        "impostorHint": "Process"
+    },
+    {
+        "id": "ct_007",
+        "word": "Glorification",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Final transformation in eternity",
+        "impostorHint": "Future"
+    },
+    {
+        "id": "ct_008",
+        "word": "Atonement",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Payment for sin through sacrifice",
+        "impostorHint": "Cover"
+    },
+    {
+        "id": "ct_009",
+        "word": "Propitiation",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Satisfaction of God's wrath",
+        "impostorHint": "Wrath"
+    },
+    {
+        "id": "ct_010",
+        "word": "Reconciliation",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Restoration of relationship with God",
+        "impostorHint": "Friends"
     },
     {
         "id": "ct_011",
         "word": "Adoption",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Being made a child of God"
+        "hint": "Being made a child of God",
+        "impostorHint": "Sons"
+    },
+    {
+        "id": "ct_012",
+        "word": "Regeneration",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "Being born again spiritually",
+        "impostorHint": "New"
     },
     {
         "id": "ct_013",
         "word": "Conversion",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Turning to God from sin"
+        "hint": "Turning to God from sin",
+        "impostorHint": "Change"
     },
     {
         "id": "ct_014",
         "word": "Repentance",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Change of mind about sin"
+        "hint": "Change of mind about sin",
+        "impostorHint": "Turn"
     },
     {
         "id": "ct_015",
-        "word": "Trinity",
+        "word": "Forgiveness",
         "category": "conceptos_teologicos",
-        "difficulty": "hard",
-        "hint": "One God in three persons"
+        "difficulty": "easy",
+        "hint": "Cancellation of sin's debt",
+        "impostorHint": "Forget"
     },
     {
         "id": "ct_016",
+        "word": "Trinity",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Father, Son, and Holy Spirit",
+        "impostorHint": "Three"
+    },
+    {
+        "id": "ct_017",
+        "word": "Incarnation",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God became man in Jesus",
+        "impostorHint": "Flesh"
+    },
+    {
+        "id": "ct_018",
         "word": "Resurrection",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Coming back to life"
+        "hint": "Jesus came back to life on the third day",
+        "impostorHint": "Life"
+    },
+    {
+        "id": "ct_019",
+        "word": "Ascension",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Jesus went up to heaven",
+        "impostorHint": "Cloud"
+    },
+    {
+        "id": "ct_020",
+        "word": "Second Coming",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Promised return of Christ",
+        "impostorHint": "Promise"
+    },
+    {
+        "id": "ct_021",
+        "word": "Final Judgment",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "God will judge all humanity",
+        "impostorHint": "Throne"
+    },
+    {
+        "id": "ct_022",
+        "word": "Eternity",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Endless life with God",
+        "impostorHint": "Time"
+    },
+    {
+        "id": "ct_023",
+        "word": "Sin",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Disobedience to God",
+        "impostorHint": "Missing"
+    },
+    {
+        "id": "ct_024",
+        "word": "Original Sin",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Inherited from Adam",
+        "impostorHint": "Adam"
+    },
+    {
+        "id": "ct_025",
+        "word": "Temptation",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Enticement to sin",
+        "impostorHint": "Test"
+    },
+    {
+        "id": "ct_026",
+        "word": "Holiness",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Moral purity and separation from sin",
+        "impostorHint": "Set apart"
+    },
+    {
+        "id": "ct_027",
+        "word": "Justice",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Righteousness according to God's law",
+        "impostorHint": "Right"
+    },
+    {
+        "id": "ct_028",
+        "word": "Mercy",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "God's compassion towards the sinner",
+        "impostorHint": "Compassion"
+    },
+    {
+        "id": "ct_029",
+        "word": "Agape Love",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Sacrificial and unconditional love",
+        "impostorHint": "Divine"
+    },
+    {
+        "id": "ct_030",
+        "word": "Hope",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Confidence in God's promises",
+        "impostorHint": "Anchor"
+    },
+    {
+        "id": "ct_031",
+        "word": "Revelation",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God making Himself known to man",
+        "impostorHint": "Unveil"
+    },
+    {
+        "id": "ct_032",
+        "word": "Inspiration",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God guided the writing of the Bible",
+        "impostorHint": "Breath"
+    },
+    {
+        "id": "ct_033",
+        "word": "Providence",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God's care and governance over all",
+        "impostorHint": "Care"
+    },
+    {
+        "id": "ct_034",
+        "word": "Sovereignty",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God's supreme rule",
+        "impostorHint": "Control"
+    },
+    {
+        "id": "ct_035",
+        "word": "Omnipotence",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God is all-powerful",
+        "impostorHint": "Power"
+    },
+    {
+        "id": "ct_036",
+        "word": "Omniscience",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God knows everything",
+        "impostorHint": "Knowing"
+    },
+    {
+        "id": "ct_037",
+        "word": "Omnipresence",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God is everywhere",
+        "impostorHint": "Present"
+    },
+    {
+        "id": "ct_038",
+        "word": "Immutability",
+        "category": "conceptos_teologicos",
+        "difficulty": "hard",
+        "hint": "God does not change",
+        "impostorHint": "Change"
+    },
+    {
+        "id": "ct_039",
+        "word": "Eternity of God",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "God has no beginning or end",
+        "impostorHint": "Always"
+    },
+    {
+        "id": "ct_040",
+        "word": "Covenant",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Solemn agreement between God and man",
+        "impostorHint": "Promise"
+    },
+    {
+        "id": "ct_041",
+        "word": "New Covenant",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Established by the blood of Christ",
+        "impostorHint": "Blood"
+    },
+    {
+        "id": "ct_042",
+        "word": "Church",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Body of believers in Christ",
+        "impostorHint": "Body"
+    },
+    {
+        "id": "ct_043",
+        "word": "Communion of Saints",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Spiritual unity of believers",
+        "impostorHint": "Unity"
+    },
+    {
+        "id": "ct_044",
+        "word": "Baptism",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Sacrament of Christian initiation",
+        "impostorHint": "Water"
+    },
+    {
+        "id": "ct_045",
+        "word": "Lord's Supper",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Commemoration of Christ's death",
+        "impostorHint": "Memory"
+    },
+    {
+        "id": "ct_046",
+        "word": "Discipleship",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Process of following and learning from Jesus",
+        "impostorHint": "Follow"
+    },
+    {
+        "id": "ct_047",
+        "word": "Evangelism",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Preaching the gospel to others",
+        "impostorHint": "Good News"
+    },
+    {
+        "id": "ct_048",
+        "word": "Missions",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "Sending out to preach the gospel",
+        "impostorHint": "Go"
+    },
+    {
+        "id": "ct_049",
+        "word": "Kingdom of God",
+        "category": "conceptos_teologicos",
+        "difficulty": "easy",
+        "hint": "God's rule and sovereignty",
+        "impostorHint": "Rule"
+    },
+    {
+        "id": "ct_050",
+        "word": "Oneness",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "One God without divisions",
+        "impostorHint": "One"
+    },
+    {
+        "id": "mb_001",
+        "word": "Eve",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "First woman, mother of all living",
+        "impostorHint": "Life"
+    },
+    {
+        "id": "mb_002",
+        "word": "Sarah",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Abraham's wife, laughed at the promise",
+        "impostorHint": "Mother"
+    },
+    {
+        "id": "mb_003",
+        "word": "Rebekah",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Isaac's wife, mother of Jacob and Esau",
+        "impostorHint": "Wife"
+    },
+    {
+        "id": "mb_004",
+        "word": "Rachel",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Jacob's beloved wife, mother of Joseph",
+        "impostorHint": "Beloved"
+    },
+    {
+        "id": "mb_005",
+        "word": "Leah",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Jacob's first wife, tender eyes",
+        "impostorHint": "Eyes"
+    },
+    {
+        "id": "mb_006",
+        "word": "Miriam",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Moses' sister, played the tambourine",
+        "impostorHint": "Music"
+    },
+    {
+        "id": "mb_007",
+        "word": "Deborah",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Prophetess and only female judge of Israel",
+        "impostorHint": "Judge"
+    },
+    {
+        "id": "mb_008",
+        "word": "Ruth",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Moabite loyal to Naomi, David's great-grandmother",
+        "impostorHint": "Loyalty"
+    },
+    {
+        "id": "mb_009",
+        "word": "Hannah",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Samuel's mother, prayed fervently",
+        "impostorHint": "Prayer"
+    },
+    {
+        "id": "mb_010",
+        "word": "Esther",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Persian queen who saved her people",
+        "impostorHint": "Queen"
+    },
+    {
+        "id": "mb_011",
+        "word": "Mary",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Mother of Jesus, chosen virgin",
+        "impostorHint": "Chosen"
+    },
+    {
+        "id": "mb_012",
+        "word": "Elizabeth",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "John the Baptist's mother, Mary's cousin",
+        "impostorHint": "Miracle"
+    },
+    {
+        "id": "mb_013",
+        "word": "Mary Magdalene",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Follower of Jesus, first to see Him resurrected",
+        "impostorHint": "Witness"
+    },
+    {
+        "id": "mb_014",
+        "word": "Martha",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Lazarus' sister, worried about service",
+        "impostorHint": "Service"
+    },
+    {
+        "id": "mb_015",
+        "word": "Naomi",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Ruth's mother-in-law, changed name to Mara",
+        "impostorHint": "Bitterness"
+    },
+    {
+        "id": "mb_016",
+        "word": "Rahab",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Hid the spies in Jericho",
+        "impostorHint": "Walls"
+    },
+    {
+        "id": "mb_017",
+        "word": "Delilah",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Discovered the secret of Samson's strength",
+        "impostorHint": "Cut"
+    },
+    {
+        "id": "mb_018",
+        "word": "Jezebel",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Wicked queen, enemy of Elijah",
+        "impostorHint": "Queen"
+    },
+    {
+        "id": "mb_019",
+        "word": "Hagar",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Sarah's servant, mother of Ishmael",
+        "impostorHint": "Desert"
+    },
+    {
+        "id": "mb_020",
+        "word": "Dinah",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Jacob's daughter",
+        "impostorHint": "Daughter"
+    },
+    {
+        "id": "mb_021",
+        "word": "Tamar",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Judah's daughter-in-law, fought for justice",
+        "impostorHint": "Justice"
+    },
+    {
+        "id": "mb_022",
+        "word": "Zipporah",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Moses' wife",
+        "impostorHint": "Wife"
+    },
+    {
+        "id": "mb_023",
+        "word": "Jochebed",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Moses' mother, put him in a basket",
+        "impostorHint": "Basket"
+    },
+    {
+        "id": "mb_024",
+        "word": "Abigail",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Wise wife of Nabal, then David",
+        "impostorHint": "Wisdom"
+    },
+    {
+        "id": "mb_025",
+        "word": "Bathsheba",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Uriah's wife, then David's, Solomon's mother",
+        "impostorHint": "King"
+    },
+    {
+        "id": "mb_026",
+        "word": "Shunammite",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Hospitable woman who prepared a room for Elisha",
+        "impostorHint": "House"
+    },
+    {
+        "id": "mb_027",
+        "word": "Priscilla",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Wife of Aquila, teacher of Apollos",
+        "impostorHint": "Teacher"
+    },
+    {
+        "id": "mb_028",
+        "word": "Phoebe",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Deaconess of the church in Cenchrea",
+        "impostorHint": "Deaconess"
+    },
+    {
+        "id": "mb_029",
+        "word": "Lydia",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Seller of purple, first convert in Europe",
+        "impostorHint": "Purple"
+    },
+    {
+        "id": "mb_030",
+        "word": "Dorcas",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Made tunics for the poor, raised by Peter",
+        "impostorHint": "Clothes"
     }
 ]

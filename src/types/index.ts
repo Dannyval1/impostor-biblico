@@ -4,12 +4,15 @@ export type GamePhase = 'setup' | 'reveal' | 'discussion' | 'voting' | 'results'
 
 export type PlayerRole = 'civilian' | 'impostor';
 
+export type Language = 'es' | 'en' | 'pt';
+
 export type StandardCategory =
     | 'personajes_biblicos'
     | 'libros_biblicos'
     | 'objetos_biblicos'
     | 'oficios_biblicos'
     | 'lugares_biblicos'
+    | 'mujeres_biblicas'
     | 'conceptos_teologicos';
 
 export type GenericCategory =
@@ -27,7 +30,7 @@ export interface CustomCategory {
     id: string;
     name: string;
     words: string[];
-    language: 'es' | 'en';
+    language: Language;
     type?: 'biblical' | 'general';
 }
 
@@ -51,6 +54,7 @@ export interface Word {
     category: Category;
     difficulty: 'easy' | 'medium' | 'hard';
     hint?: string;
+    impostorHint?: string;
 }
 
 export interface GameSettings {
@@ -61,8 +65,9 @@ export interface GameSettings {
     gameDuration: number | null; // null = unlimited time
     musicEnabled: boolean;
     soundsEnabled: boolean;
-    language: 'es' | 'en';
+    language: Language;
     difficulty: 'easy' | 'medium' | 'hard' | 'all';
+    impostorHintEnabled: boolean;
 }
 
 export interface GameState {
@@ -96,7 +101,7 @@ export type GameAction =
     | { type: 'RESET_GAME' }
     | { type: 'TOGGLE_MUSIC'; payload: boolean }
     | { type: 'TOGGLE_SOUNDS'; payload: boolean }
-    | { type: 'SET_LANGUAGE'; payload: 'es' | 'en' }
+    | { type: 'SET_LANGUAGE'; payload: Language }
     | { type: 'SET_DIFFICULTY'; payload: 'easy' | 'medium' | 'hard' | 'all' }
     | { type: 'SET_HAS_LOADED' }
     | { type: 'PLAY_CLICK' }
@@ -108,4 +113,5 @@ export type GameAction =
     | { type: 'SET_GAMES_PLAYED'; payload: number }
     | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
     | { type: 'EDIT_CUSTOM_CATEGORY'; payload: CustomCategory }
-    | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } };
+    | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } }
+    | { type: 'TOGGLE_IMPOSTOR_HINT'; payload: boolean };

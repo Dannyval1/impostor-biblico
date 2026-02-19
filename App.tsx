@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset';
+import * as NavigationBar from 'expo-navigation-bar';
 import AppNavigator from './src/navigation/AppNavigator';
 import { GameProvider } from './src/context/GameContext';
 import { PurchaseProvider } from './src/context/PurchaseContext';
@@ -63,6 +65,10 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
+        if (Platform.OS === 'android') {
+          await NavigationBar.setVisibilityAsync("hidden");
+          await NavigationBar.setBehaviorAsync("overlay-swipe");
+        }
         await loadResourcesAsync();
       } catch (e) {
         console.warn(e);

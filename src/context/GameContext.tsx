@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { useAudioPlayer } from 'expo-audio';
 import { getLocales } from 'expo-localization';
-import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar, CustomCategory } from '../types';
+import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar, CustomCategory, Language } from '../types';
 import { saveCustomCategories, loadCustomCategories, saveGamesPlayed, loadGamesPlayed } from '../utils/storage';
 import freeWordsDataEs from '../data/words-free-es.json';
 import freeWordsDataEn from '../data/words-free-en.json';
@@ -11,6 +11,10 @@ import generalWordsDataEs from '../data/words-general-es.json';
 import generalWordsDataEn from '../data/words-general-en.json';
 import generalPremiumWordsDataEs from '../data/words-general-premium-es.json';
 import generalPremiumWordsDataEn from '../data/words-general-premium-en.json';
+import freeWordsDataPt from '../data/words-free-pt.json';
+import premiumWordsDataPt from '../data/words-premium-pt.json';
+import generalWordsDataPt from '../data/words-general-pt.json';
+import generalPremiumWordsDataPt from '../data/words-general-premium-pt.json';
 import { TOTAL_AVATARS } from '../utils/avatarAssets';
 
 const clickSound = require('../../assets/sounds/click.mp3');
@@ -39,7 +43,8 @@ function getNextAvatar(currentPlayers: Player[]): Avatar {
     return available[randomIndex];
 }
 
-function getRandomWord(categories: Category[], language: 'es' | 'en', customCategories: CustomCategory[] = [], difficulty: 'easy' | 'medium' | 'hard' | 'all' = 'all'): Word {
+// Helper to get random word based on language and category
+const getRandomWord = (categories: Category[], language: Language, customCategories: CustomCategory[] = [], difficulty: 'easy' | 'medium' | 'hard' | 'all' = 'all'): Word => {
     const standardCategories: Category[] = [];
     const activeCustomCategoryIds: string[] = [];
 
@@ -51,10 +56,10 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
         }
     });
 
-    const freeWords = (language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
-    const premiumWords = (language === 'en' ? premiumWordsDataEn : premiumWordsDataEs) as Word[];
-    const generalWords = (language === 'en' ? generalWordsDataEn : generalWordsDataEs) as Word[];
-    const generalPremiumWords = (language === 'en' ? generalPremiumWordsDataEn : generalPremiumWordsDataEs) as Word[];
+    const freeWords = (language === 'en' ? freeWordsDataEn : language === 'pt' ? freeWordsDataPt : freeWordsDataEs) as Word[];
+    const premiumWords = (language === 'en' ? premiumWordsDataEn : language === 'pt' ? premiumWordsDataPt : premiumWordsDataEs) as Word[];
+    const generalWords = (language === 'en' ? generalWordsDataEn : language === 'pt' ? generalWordsDataPt : generalWordsDataEs) as Word[];
+    const generalPremiumWords = (language === 'en' ? generalPremiumWordsDataEn : language === 'pt' ? generalPremiumWordsDataPt : generalPremiumWordsDataEs) as Word[];
 
     const allWords = [...freeWords, ...premiumWords, ...generalWords, ...generalPremiumWords];
 
@@ -84,22 +89,29 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
             const randomIndex = Math.floor(Math.random() * fallbackWords.length);
             return fallbackWords[randomIndex];
         }
-        return freeWords[0];
+        return freeWords[0]; // Fallback to a default word if nothing else is found
     }
 
     const randomIndex = Math.floor(Math.random() * availableWords.length);
     return availableWords[randomIndex];
-}
+};
 
-const deviceLanguage = getLocales()[0]?.languageCode === 'es' ? 'es' : 'en';
+const getDeviceLanguage = (): Language => {
+    const code = getLocales()[0]?.languageCode;
+    if (code === 'es') return 'es';
+    if (code === 'pt') return 'pt';
+    return 'en';
+};
+
+const deviceLanguage = getDeviceLanguage();
 
 const initialState: GameState = {
     settings: {
         mode: 'classic',
         players: [
-            { id: '1', name: deviceLanguage === 'es' ? 'Jugador 1' : 'Player 1', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
-            { id: '2', name: deviceLanguage === 'es' ? 'Jugador 2' : 'Player 2', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
-            { id: '3', name: deviceLanguage === 'es' ? 'Jugador 3' : 'Player 3', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
+            { id: '1', name: deviceLanguage === 'es' ? 'Jugador 1' : (deviceLanguage === 'pt' ? 'Jogador 1' : 'Player 1'), role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
+            { id: '2', name: deviceLanguage === 'es' ? 'Jugador 2' : (deviceLanguage === 'pt' ? 'Jogador 2' : 'Player 2'), role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
+            { id: '3', name: deviceLanguage === 'es' ? 'Jugador 3' : (deviceLanguage === 'pt' ? 'Jogador 3' : 'Player 3'), role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
         ],
         selectedCategories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
         impostorCount: 1,
@@ -108,6 +120,7 @@ const initialState: GameState = {
         soundsEnabled: true,
         language: deviceLanguage,
         difficulty: 'all',
+        impostorHintEnabled: false,
     },
     currentWord: null,
     currentImpostor: null,
@@ -400,6 +413,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 },
             };
 
+        case 'TOGGLE_IMPOSTOR_HINT':
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    impostorHintEnabled: action.payload,
+                },
+            };
+
         case 'SET_DIFFICULTY':
             return {
                 ...state,
@@ -415,13 +437,17 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             const updatedPlayers = state.settings.players.map(player => {
                 const jugadorMatch = player.name.match(/^Jugador (\d+)$/);
                 const playerMatch = player.name.match(/^Player (\d+)$/);
+                const jogadorMatch = player.name.match(/^Jogador (\d+)$/);
 
-                if (jugadorMatch && newLang === 'en') {
-                    // Convert Spanish to English
-                    return { ...player, name: `Player ${jugadorMatch[1]}` };
-                } else if (playerMatch && newLang === 'es') {
-                    // Convert English to Spanish
-                    return { ...player, name: `Jugador ${playerMatch[1]}` };
+                if (newLang === 'en') {
+                    if (jugadorMatch) return { ...player, name: `Player ${jugadorMatch[1]}` };
+                    if (jogadorMatch) return { ...player, name: `Player ${jogadorMatch[1]}` };
+                } else if (newLang === 'es') {
+                    if (playerMatch) return { ...player, name: `Jugador ${playerMatch[1]}` };
+                    if (jogadorMatch) return { ...player, name: `Jugador ${jogadorMatch[1]}` };
+                } else if (newLang === 'pt') {
+                    if (playerMatch) return { ...player, name: `Jogador ${playerMatch[1]}` };
+                    if (jugadorMatch) return { ...player, name: `Jogador ${jugadorMatch[1]}` };
                 }
 
                 return player;
@@ -528,8 +554,9 @@ const GameContext = createContext<{
     resetGame: () => void;
     toggleMusic: (enabled: boolean) => void;
     toggleSounds: (enabled: boolean) => void;
+    toggleImpostorHint: (enabled: boolean) => void;
     setDifficulty: (difficulty: 'easy' | 'medium' | 'hard' | 'all') => void;
-    setLanguage: (lang: 'es' | 'en') => void;
+    setLanguage: (lang: Language) => void;
     setHasLoaded: () => void;
     playClick: () => void;
     playSuccess: () => void;
@@ -710,8 +737,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
         resetGame: () => dispatch({ type: 'RESET_GAME' }),
         toggleMusic: (enabled: boolean) => dispatch({ type: 'TOGGLE_MUSIC', payload: enabled }),
         toggleSounds: (enabled: boolean) => dispatch({ type: 'TOGGLE_SOUNDS', payload: enabled }),
+        toggleImpostorHint: (enabled: boolean) => dispatch({ type: 'TOGGLE_IMPOSTOR_HINT', payload: enabled }),
         setDifficulty: (difficulty: 'easy' | 'medium' | 'hard' | 'all') => dispatch({ type: 'SET_DIFFICULTY', payload: difficulty }),
-        setLanguage: (lang: 'es' | 'en') => dispatch({ type: 'SET_LANGUAGE', payload: lang }),
+        setLanguage: (lang: import('../types').Language) => dispatch({ type: 'SET_LANGUAGE', payload: lang }),
         setHasLoaded: () => dispatch({ type: 'SET_HAS_LOADED' }),
         playClick,
         playSuccess,

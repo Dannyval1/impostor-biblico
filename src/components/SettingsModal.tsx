@@ -21,7 +21,7 @@ type SettingsModalProps = {
 };
 
 const { width } = Dimensions.get('window');
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -42,9 +42,13 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                 ? 'https://apps.apple.com/app/id6758225650'
                 : 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
 
+            const message = Platform.OS === 'ios'
+                ? t.home.share_message
+                : `${t.home.share_message} ${url}`;
+
             await Share.share({
-                message: t.home.share_message,
-                url: url,
+                message: message,
+                url: Platform.OS === 'ios' ? url : undefined,
             });
         } catch (error) {
             console.log(error);
@@ -125,6 +129,7 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                                 }}
                             >
                                 <Text style={[styles.langText, state.settings.language === 'es' && styles.langTextSelected]}>🇪🇸 {t.settings.spanish}</Text>
+                                {state.settings.language === 'es' && <Ionicons name="checkmark" size={20} color="#5B7FDB" />}
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.langOption, state.settings.language === 'en' && styles.langOptionSelected]}
@@ -134,6 +139,17 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                                 }}
                             >
                                 <Text style={[styles.langText, state.settings.language === 'en' && styles.langTextSelected]}>🇺🇸 {t.settings.english}</Text>
+                                {state.settings.language === 'en' && <Ionicons name="checkmark" size={20} color="#5B7FDB" />}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.langOption, state.settings.language === 'pt' && styles.langOptionSelected]}
+                                onPress={() => {
+                                    playClick();
+                                    setLanguage('pt');
+                                }}
+                            >
+                                <Text style={[styles.langText, state.settings.language === 'pt' && styles.langTextSelected]}>🇧🇷 {t.settings.portuguese}</Text>
+                                {state.settings.language === 'pt' && <Ionicons name="checkmark" size={20} color="#5B7FDB" />}
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -258,16 +274,20 @@ const styles = StyleSheet.create({
         marginLeft: 12,
     },
     langSelector: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: '#F7FAFC',
         borderRadius: 12,
         padding: 4,
         marginTop: 12,
+        gap: 8,
     },
     langOption: {
-        flex: 1,
-        paddingVertical: 8,
+        width: '100%',
+        paddingVertical: 12,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        paddingHorizontal: 16,
         borderRadius: 10,
     },
     langOptionSelected: {
@@ -279,7 +299,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     langText: {
-        fontSize: 14,
+        fontSize: 16,
         color: '#718096',
         fontWeight: '600',
     },

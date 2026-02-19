@@ -65,7 +65,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         title: '',
         message: '',
         type: 'info',
-        buttonText: 'OK',
+        buttonText: t.ok,
         onClose: () => setModalVisible(false),
     });
 
@@ -174,7 +174,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                     t.voting.impostor_found,
                     `${t.voting.remaining_impostors}: ${remaining}`,
                     'success',
-                    'OK',
+                    t.ok,
                     () => {
                         playClick();
                         setSelectedPlayerId(null);
@@ -231,14 +231,14 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             t.voting.game_over,
             '',
             'warning',
-            t.voting?.reveal_confirm || 'REVELAR',
+            t.voting?.reveal_confirm,
             () => {
                 setWinner(null);
                 setResultMessage(t.voting.game_over);
                 setGameFinished(true);
                 setGamePhase('results');
             },
-            t.common?.cancel || 'Cancelar',
+            t.cancel,
             () => {
                 playClick();
             }
@@ -270,11 +270,11 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         playClick();
         showGameModal(
             t.voting.game_over,
-            t.voting.exit_confirm || '¿Estás seguro de que quieres salir?',
+            t.voting.exit_confirm,
             'warning',
-            t.common?.exit || 'Exit',
+            t.exit,
             handlePlayAgain,
-            t.common?.cancel || 'Cancelar',
+            t.cancel,
             () => {
                 playClick();
             }
@@ -421,7 +421,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                             style={styles.playAgainButton}
                             onPress={handleQuickRestart}
                         >
-                            <Text style={styles.playAgainText}>{t.common.play_again}</Text>
+                            <Text style={styles.playAgainText}>{t.play_again}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity

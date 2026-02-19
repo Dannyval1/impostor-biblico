@@ -1,6 +1,6 @@
 {
   "name": "impostor-cristiano",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
@@ -18,6 +18,7 @@
     "expo-audio": "~1.1.1",
     "expo-dev-client": "~6.0.20",
     "expo-localization": "^17.0.8",
+    "expo-navigation-bar": "~5.0.10",
     "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
