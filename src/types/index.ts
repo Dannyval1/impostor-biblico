@@ -13,7 +13,9 @@ export type StandardCategory =
     | 'oficios_biblicos'
     | 'lugares_biblicos'
     | 'mujeres_biblicas'
-    | 'conceptos_teologicos';
+    | 'conceptos_teologicos'
+    | 'milagros_biblicos'
+    | 'parabolas_jesus';
 
 export type GenericCategory =
     | 'animales'
@@ -22,7 +24,9 @@ export type GenericCategory =
     | 'profesiones'
     | 'herramientas'
     | 'acciones'
-    | 'objetos';
+    | 'objetos'
+    | 'marcas'
+    | 'famosos';
 
 export type Category = StandardCategory | GenericCategory | (string & {});
 
@@ -114,4 +118,5 @@ export type GameAction =
     | { type: 'SET_PREMIUM_STATUS'; payload: boolean }
     | { type: 'EDIT_CUSTOM_CATEGORY'; payload: CustomCategory }
     | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } }
-    | { type: 'TOGGLE_IMPOSTOR_HINT'; payload: boolean };
+    | { type: 'TOGGLE_IMPOSTOR_HINT'; payload: boolean }
+    | { type: 'FORCE_REMOVE_CATEGORY'; payload: Category };

@@ -209,7 +209,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 };
             }
         }
-
         case 'SET_IMPOSTOR_COUNT':
             return {
                 ...state,
@@ -218,6 +217,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                     impostorCount: action.payload,
                 },
             };
+
+        case 'FORCE_REMOVE_CATEGORY': {
+            const category = action.payload;
+            const newCategories = state.settings.selectedCategories.filter(c => c !== category);
+            // If the user runs out of categories, gracefully fallback to one free category
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    selectedCategories: newCategories.length === 0 ? ['personajes_biblicos'] : newCategories,
+                },
+            };
+        }
 
         case 'SET_GAME_DURATION':
             return {
@@ -252,8 +264,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 });
             }
 
-            // Step 3: Randomly select impostors from eligible pool
-            const shuffledEligible = [...eligibleIds].sort(() => Math.random() - 0.5);
+            // Step 3: Randomly select impostors from eligible pool (Fisher-Yates Shuffle)
+            const shuffledEligible = [...eligibleIds];
+            for (let i = shuffledEligible.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledEligible[i], shuffledEligible[j]] = [shuffledEligible[j], shuffledEligible[i]];
+            }
             const impostorIds = shuffledEligible.slice(0, impostorCount);
 
             // Step 4: Update history (keep only last MAX_HISTORY entries)
@@ -542,6 +558,7 @@ const GameContext = createContext<{
     removePlayer: (id: string) => void;
     updatePlayerName: (id: string, name: string) => void;
     toggleCategory: (category: Category) => void;
+    forceRemoveCategory: (category: Category) => void;
     setImpostorCount: (count: number) => void;
     setGameDuration: (duration: number | null) => void;
     startGame: () => void;
@@ -723,6 +740,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         removePlayer: (id: string) => dispatch({ type: 'REMOVE_PLAYER', payload: id }),
         updatePlayerName: (id: string, name: string) => dispatch({ type: 'UPDATE_PLAYER_NAME', payload: { id, name } }),
         toggleCategory: (category: Category) => dispatch({ type: 'TOGGLE_CATEGORY', payload: category }),
+        forceRemoveCategory: (category: Category) => dispatch({ type: 'FORCE_REMOVE_CATEGORY', payload: category }),
         setImpostorCount: (count: number) => dispatch({ type: 'SET_IMPOSTOR_COUNT', payload: count }),
         setGameDuration: (duration: number | null) => dispatch({ type: 'SET_GAME_DURATION', payload: duration }),
         startGame: () => dispatch({ type: 'START_GAME' }),
