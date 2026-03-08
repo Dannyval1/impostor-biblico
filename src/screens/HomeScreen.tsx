@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SettingsModal } from '../components/SettingsModal';
 import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
+import { UpdateModal } from '../components/UpdateModal';
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -229,6 +230,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 visible={showHowToPlay}
                 onClose={() => setShowHowToPlay(false)}
             />
+
+            {/* Version update checker — shown 3s after load */}
+            {!isLoading && <UpdateModal delayMs={3000} />}
         </View>
     );
 }
@@ -315,7 +319,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: '35%',
+        height: '42%',
         backgroundColor: '#FFFFFF',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -5 },

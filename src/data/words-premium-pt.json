@@ -1438,5 +1438,645 @@
         "difficulty": "medium",
         "hint": "Fazia túnicas para os pobres, ressuscitada por Pedro",
         "impostorHint": "Roupas"
+    },
+    {
+        "id": "mi_001",
+        "word": "Divisão do Mar Vermelho",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Moisés estendeu a mão e o mar se abriu",
+        "impostorHint": "Êxodo"
+    },
+    {
+        "id": "mi_002",
+        "word": "Água transformada em vinho",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Primeiro milagre de Jesus em um casamento",
+        "impostorHint": "Casamento"
+    },
+    {
+        "id": "mi_003",
+        "word": "Ressurreição de Lázaro",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus o chamou após quatro dias",
+        "impostorHint": "Tumba"
+    },
+    {
+        "id": "mi_004",
+        "word": "Multiplicação dos pães",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "5 pães e 2 peixes alimentaram 5000",
+        "impostorHint": "Cesta"
+    },
+    {
+        "id": "mi_005",
+        "word": "Maná do céu",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Alimento que Deus deu no deserto",
+        "impostorHint": "Pão"
+    },
+    {
+        "id": "mi_006",
+        "word": "Caminhar sobre as águas",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus e Pedro fizeram isso no lago",
+        "impostorHint": "Fé"
+    },
+    {
+        "id": "mi_007",
+        "word": "Cura do cego de nascença",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesus fez lama e devolveu a visão",
+        "impostorHint": "Lama"
+    },
+    {
+        "id": "mi_008",
+        "word": "Ressurreição de Jesus",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "No terceiro dia a tumba estava vazia",
+        "impostorHint": "Domingo"
+    },
+    {
+        "id": "mi_009",
+        "word": "A transfiguração",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesus brilhou como o sol no monte",
+        "impostorHint": "Luz"
+    },
+    {
+        "id": "mi_010",
+        "word": "Acalmar a tempestade",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus mandou o vento e o mar ficarem quietos",
+        "impostorHint": "Vento"
+    },
+    {
+        "id": "mi_011",
+        "word": "Cura do leproso",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus o tocou e ele foi purificado",
+        "impostorHint": "Pele"
+    },
+    {
+        "id": "mi_012",
+        "word": "O dilúvio universal",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Deus inundou a terra e salvou Noé",
+        "impostorHint": "Arco-íris"
+    },
+    {
+        "id": "mi_013",
+        "word": "As dez pragas do Egito",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Deus as enviou para libertar Israel",
+        "impostorHint": "Faraó"
+    },
+    {
+        "id": "mi_014",
+        "word": "A coluna de fogo",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Guiava Israel pelo deserto à noite",
+        "impostorHint": "Noite"
+    },
+    {
+        "id": "mi_015",
+        "word": "A sarça ardente",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Deus falou com Moisés através dela",
+        "impostorHint": "Fogo"
+    },
+    {
+        "id": "mi_016",
+        "word": "O sol parado",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Josué pediu que parasse durante a batalha",
+        "impostorHint": "Josué"
+    },
+    {
+        "id": "mi_017",
+        "word": "Pentecostes",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "O Espírito Santo desceu como línguas de fogo",
+        "impostorHint": "Vento"
+    },
+    {
+        "id": "mi_018",
+        "word": "Daniel na cova dos leões",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Os leões não o tocaram",
+        "impostorHint": "Anjo"
+    },
+    {
+        "id": "mi_019",
+        "word": "A fornalha ardente",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Sadraque, Mesaque e Abede-Nego saíram ilesos",
+        "impostorHint": "Quarto"
+    },
+    {
+        "id": "mi_020",
+        "word": "Jonas e o grande peixe",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Ficou três dias dentro do peixe",
+        "impostorHint": "Baleia"
+    },
+    {
+        "id": "mi_021",
+        "word": "O azeite da viúva",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "O azeite não acabou graças ao profeta Elias",
+        "impostorHint": "Vasilhas"
+    },
+    {
+        "id": "mi_022",
+        "word": "Fogo do céu de Elias",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Consumiu o altar encharcado de água",
+        "impostorHint": "Baal"
+    },
+    {
+        "id": "mi_023",
+        "word": "Elias levado ao céu",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Subiu ao céu em uma carruagem de fogo",
+        "impostorHint": "Carruagem"
+    },
+    {
+        "id": "mi_024",
+        "word": "Ressurreição do filho da sunamita",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "O profeta Eliseu a realizou",
+        "impostorHint": "Criança"
+    },
+    {
+        "id": "mi_025",
+        "word": "O machado flutuante",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Eliseu fez um machado de ferro flutuar",
+        "impostorHint": "Pau"
+    },
+    {
+        "id": "mi_026",
+        "word": "Cura de Naamã",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "General sírio curado de lepra no Jordão",
+        "impostorHint": "Sete"
+    },
+    {
+        "id": "mi_027",
+        "word": "Paulo e Silas libertados da prisão",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Um terremoto abriu as portas da prisão",
+        "impostorHint": "Cânticos"
+    },
+    {
+        "id": "mi_028",
+        "word": "Conversão de Paulo",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Uma grande luz o derrubou no caminho",
+        "impostorHint": "Cegueira"
+    },
+    {
+        "id": "mi_029",
+        "word": "Cura do paralítico",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Seus amigos o desceram pelo telhado",
+        "impostorHint": "Telhado"
+    },
+    {
+        "id": "mi_030",
+        "word": "Cura do servo do centurião",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesus curou à distância pela fé do oficial",
+        "impostorHint": "Autoridade"
+    },
+    {
+        "id": "mi_031",
+        "word": "Ascensão de Jesus",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Subiu ao céu diante de seus discípulos",
+        "impostorHint": "Nuvem"
+    },
+    {
+        "id": "mi_032",
+        "word": "Água da rocha",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Moisés bateu na rocha e jorrou água",
+        "impostorHint": "Sede"
+    },
+    {
+        "id": "mi_033",
+        "word": "Queda dos muros de Jericó",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Os israelitas marcharam e tocaram trombetas",
+        "impostorHint": "Trombeta"
+    },
+    {
+        "id": "mi_034",
+        "word": "A criação do mundo",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Deus fez tudo em seis dias",
+        "impostorHint": "Gênesis"
+    },
+    {
+        "id": "mi_035",
+        "word": "Ressurreição de Dorcas",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Pedro orou e a mulher voltou à vida",
+        "impostorHint": "Pedro"
+    },
+    {
+        "id": "mi_036",
+        "word": "A estrela de Belém",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Guiou os magos ao menino Jesus",
+        "impostorHint": "Magos"
+    },
+    {
+        "id": "mi_037",
+        "word": "O velo de Gideão",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Estava molhado enquanto o chão estava seco",
+        "impostorHint": "Sinal"
+    },
+    {
+        "id": "mi_038",
+        "word": "A moeda na boca do peixe",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Pedro pescou para pagar o imposto do templo",
+        "impostorHint": "Moeda"
+    },
+    {
+        "id": "mi_039",
+        "word": "Ressurreição do filho da viúva de Naim",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Jesus parou o cortejo fúnebre",
+        "impostorHint": "Cortejo"
+    },
+    {
+        "id": "mi_040",
+        "word": "A mão leprosa de Moisés",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Deus a deu como sinal do seu poder",
+        "impostorHint": "Sinal"
+    },
+    {
+        "id": "pa_001",
+        "word": "O filho pródigo",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Um filho desperdiçou sua herança e voltou arrependido",
+        "impostorHint": "Regresso"
+    },
+    {
+        "id": "pa_002",
+        "word": "O bom samaritano",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Um estrangeiro ajudou o ferido que outros ignoraram",
+        "impostorHint": "Próximo"
+    },
+    {
+        "id": "pa_003",
+        "word": "O semeador",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A semente caiu em diferentes tipos de solo",
+        "impostorHint": "Solo"
+    },
+    {
+        "id": "pa_004",
+        "word": "A semente de mostarda",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A menor cresce até ser a maior árvore",
+        "impostorHint": "Pequeno"
+    },
+    {
+        "id": "pa_005",
+        "word": "A pérola de grande valor",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Um mercador vendeu tudo para comprá-la",
+        "impostorHint": "Venda"
+    },
+    {
+        "id": "pa_006",
+        "word": "O tesouro escondido",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Um homem vendeu tudo para comprar o campo",
+        "impostorHint": "Campo"
+    },
+    {
+        "id": "pa_007",
+        "word": "As dez virgens",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Cinco tinham azeite e cinco não",
+        "impostorHint": "Azeite"
+    },
+    {
+        "id": "pa_008",
+        "word": "Os talentos",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Cada servo recebeu uma quantia diferente para multiplicar",
+        "impostorHint": "Multiplicar"
+    },
+    {
+        "id": "pa_009",
+        "word": "O servo sem misericórdia",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Foi perdoado mas não perdoou seu devedor",
+        "impostorHint": "Dívida"
+    },
+    {
+        "id": "pa_010",
+        "word": "Os trabalhadores da vinha",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Todos receberam o mesmo salário independente da hora",
+        "impostorHint": "Salário"
+    },
+    {
+        "id": "pa_011",
+        "word": "Os lavradores maus",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Mataram o filho do dono da vinha",
+        "impostorHint": "Vinha"
+    },
+    {
+        "id": "pa_012",
+        "word": "O banquete de casamento",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Os convidados recusaram e outros foram chamados",
+        "impostorHint": "Convidados"
+    },
+    {
+        "id": "pa_013",
+        "word": "O fermento",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Um pouco fermenta toda a massa",
+        "impostorHint": "Pão"
+    },
+    {
+        "id": "pa_014",
+        "word": "A rede de peixes",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Os bons e os maus foram separados",
+        "impostorHint": "Mar"
+    },
+    {
+        "id": "pa_015",
+        "word": "A ovelha perdida",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "O pastor deixou 99 para procurar uma",
+        "impostorHint": "Pastor"
+    },
+    {
+        "id": "pa_016",
+        "word": "A moeda perdida",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Uma mulher varreu toda a casa para encontrá-la",
+        "impostorHint": "Alegria"
+    },
+    {
+        "id": "pa_017",
+        "word": "O rico e Lázaro",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "O mendigo pobre foi para o seio de Abraão",
+        "impostorHint": "Abismo"
+    },
+    {
+        "id": "pa_018",
+        "word": "O fariseu e o publicano",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "O publicano bateu no peito e foi justificado",
+        "impostorHint": "Humildade"
+    },
+    {
+        "id": "pa_019",
+        "word": "O juiz injusto",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "A viúva persistiu em seu pedido até ser ouvida",
+        "impostorHint": "Viúva"
+    },
+    {
+        "id": "pa_020",
+        "word": "O bom pastor",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Conhece suas ovelhas pelo nome e dá a vida",
+        "impostorHint": "Ovelhas"
+    },
+    {
+        "id": "pa_021",
+        "word": "A videira e os ramos",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Sem o tronco os ramos não podem dar fruto",
+        "impostorHint": "Fruto"
+    },
+    {
+        "id": "pa_022",
+        "word": "O mordomo astuto",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "Ganhou amigos reduzindo as dívidas de seu senhor",
+        "impostorHint": "Astúcia"
+    },
+    {
+        "id": "pa_023",
+        "word": "O rico insensato",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Planejou construir celeiros maiores mas morreu naquela noite",
+        "impostorHint": "Celeiro"
+    },
+    {
+        "id": "pa_024",
+        "word": "A figueira estéril",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "O jardineiro pediu mais um ano para a árvore",
+        "impostorHint": "Figueira"
+    },
+    {
+        "id": "pa_025",
+        "word": "O grande banquete",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Os pobres e aleijados ocuparam o lugar dos ricos",
+        "impostorHint": "Desculpas"
+    },
+    {
+        "id": "pa_026",
+        "word": "O amigo à meia-noite",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "A insistência fez o amigo se levantar e ajudar",
+        "impostorHint": "Persistência"
+    },
+    {
+        "id": "pa_027",
+        "word": "Os dois devedores",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Aquele a quem mais perdoaram mais amou",
+        "impostorHint": "Gratidão"
+    },
+    {
+        "id": "pa_028",
+        "word": "A figueira e o verão",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Quando brota sabem que o verão está perto",
+        "impostorHint": "Sinais"
+    },
+    {
+        "id": "pa_029",
+        "word": "O construtor sábio",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A tempestade não derrubou a casa do obediente",
+        "impostorHint": "Fundação"
+    },
+    {
+        "id": "pa_030",
+        "word": "Os dois filhos",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Um disse não à vinha mas foi, o outro ao contrário",
+        "impostorHint": "Obediência"
+    },
+    {
+        "id": "pa_031",
+        "word": "As minas",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Um nobre foi a um país distante e deixou dinheiro",
+        "impostorHint": "Retorno"
+    },
+    {
+        "id": "pa_032",
+        "word": "O grão de trigo",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Deve cair na terra e morrer para dar muito fruto",
+        "impostorHint": "Morte"
+    },
+    {
+        "id": "pa_033",
+        "word": "O mordomo fiel",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Quem é fiel no pouco terá autoridade sobre mais",
+        "impostorHint": "Fidelidade"
+    },
+    {
+        "id": "pa_034",
+        "word": "O olho são",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "Se estiver mau todo o corpo estará nas trevas",
+        "impostorHint": "Luz"
+    },
+    {
+        "id": "pa_035",
+        "word": "O sal da terra",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Se perder o sabor não serve para nada",
+        "impostorHint": "Sabor"
+    },
+    {
+        "id": "pa_036",
+        "word": "O joio entre o trigo",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Crescem juntos até a colheita final",
+        "impostorHint": "Inimigo"
+    },
+    {
+        "id": "pa_037",
+        "word": "O rei que vai à guerra",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "Calculou se poderia vencer antes de atacar",
+        "impostorHint": "Cálculo"
+    },
+    {
+        "id": "pa_038",
+        "word": "Os convidados que se recusam",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Um comprou um boi, outro campo, outro se casou",
+        "impostorHint": "Campo"
+    },
+    {
+        "id": "pa_039",
+        "word": "A mulher e o fermento",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Escondeu fermento em três medidas de farinha",
+        "impostorHint": "Massa"
+    },
+    {
+        "id": "pa_040",
+        "word": "A árvore e seus frutos",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Pelos frutos os conhecereis",
+        "impostorHint": "Frutos"
     }
 ]

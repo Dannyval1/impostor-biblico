@@ -58,6 +58,20 @@ export const CATEGORIES: CategoryConfig[] = [
         isPremium: true,
         description: 'Doctrinas y enseñanzas cristianas',
     },
+    {
+        id: 'milagros_biblicos',
+        label: 'Milagros bíblicos',
+        icon: '✨',
+        isPremium: true,
+        description: 'Prodigios y señales de Dios en la Biblia',
+    },
+    {
+        id: 'parabolas_jesus',
+        label: 'Parábolas de Jesús',
+        icon: '📖',
+        isPremium: true,
+        description: 'Las enseñanzas en forma de historia de Jesús',
+    },
 ];
 
 export const FREE_CATEGORIES: Category[] = CATEGORIES

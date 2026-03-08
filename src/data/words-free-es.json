@@ -117,7 +117,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Primer rey de Israel",
-        "impostorHint": "Personaje"
+        "impostorHint": "Corona"
     },
     {
         "id": "pb_016",
@@ -133,7 +133,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Esposa de David, madre de Salomón",
-        "impostorHint": "Personaje"
+        "impostorHint": "Baño"
     },
     {
         "id": "pb_018",
@@ -149,7 +149,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Profeta que ascendió al cielo en un torbellino",
-        "impostorHint": "Profeta"
+        "impostorHint": "Torbellino"
     },
     {
         "id": "pb_020",
@@ -165,7 +165,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Profeta que vio al Señor en el templo",
-        "impostorHint": "Profeta"
+        "impostorHint": "Carbón"
     },
     {
         "id": "pb_022",
@@ -173,7 +173,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Profeta llorón que anunció el exilio",
-        "impostorHint": "Profeta"
+        "impostorHint": "Lágrimas"
     },
     {
         "id": "pb_023",
@@ -189,7 +189,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Sobrevivió al foso de los leones",
-        "impostorHint": "Profeta"
+        "impostorHint": "Leones"
     },
     {
         "id": "pb_025",
@@ -197,7 +197,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Profeta tragado por un gran pez",
-        "impostorHint": "Profeta"
+        "impostorHint": "Pez"
     },
     {
         "id": "pb_026",
@@ -261,7 +261,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Profeta que confrontó a David",
-        "impostorHint": "Profeta"
+        "impostorHint": "Oveja"
     },
     {
         "id": "pb_034",
@@ -277,7 +277,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Hijo rebelde de David",
-        "impostorHint": "Hijo"
+        "impostorHint": "Cabello"
     },
     {
         "id": "pb_036",
@@ -301,7 +301,7 @@
         "category": "personajes_biblicos",
         "difficulty": "hard",
         "hint": "Rey justo, se le añadieron 15 años de vida",
-        "impostorHint": "Personaje"
+        "impostorHint": "Rey"
     },
     {
         "id": "pb_039",
@@ -349,7 +349,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Predicador que bautizó a Jesús",
-        "impostorHint": "Personaje"
+        "impostorHint": "Río"
     },
     {
         "id": "pb_045",
@@ -381,7 +381,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Apóstol hermano de Pedro",
-        "impostorHint": "Personaje"
+        "impostorHint": "Pescador"
     },
     {
         "id": "pb_049",
@@ -389,7 +389,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Apóstol de Betsaida",
-        "impostorHint": "Personaje"
+        "impostorHint": "Panes"
     },
     {
         "id": "pb_050",
@@ -397,7 +397,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Apóstol que dudó de la resurrección",
-        "impostorHint": "Personaje"
+        "impostorHint": "Duda"
     },
     {
         "id": "pb_051",
@@ -413,7 +413,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Apóstol que traicionó a Jesús",
-        "impostorHint": "Personaje"
+        "impostorHint": "Plata"
     },
     {
         "id": "pb_053",
@@ -429,7 +429,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Compañero misionero de Pablo",
-        "impostorHint": "Personaje"
+        "impostorHint": "Chipre"
     },
     {
         "id": "pb_055",
@@ -445,7 +445,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Compañero de Pablo, cantó en la cárcel",
-        "impostorHint": "Personaje"
+        "impostorHint": "Canto"
     },
     {
         "id": "pb_057",
@@ -469,7 +469,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Primer mártir cristiano",
-        "impostorHint": "Personaje"
+        "impostorHint": "Piedras"
     },
     {
         "id": "pb_060",
@@ -477,7 +477,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Diácono que evangelizó en Samaria",
-        "impostorHint": "Personaje"
+        "impostorHint": "Carro"
     },
     {
         "id": "pb_061",
@@ -509,7 +509,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Fariseo que visitó a Jesús de noche",
-        "impostorHint": "Personaje"
+        "impostorHint": "Noche"
     },
     {
         "id": "pb_065",
@@ -541,7 +541,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Sumo sacerdote en el juicio de Jesús",
-        "impostorHint": "Personaje"
+        "impostorHint": "Juicio"
     },
     {
         "id": "pb_069",
@@ -565,7 +565,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Primer gentil convertido",
-        "impostorHint": "Gentil"
+        "impostorHint": "Romano"
     },
     {
         "id": "pb_072",
@@ -581,7 +581,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Pareja misionera fabricantes de tiendas",
-        "impostorHint": "Personaje"
+        "impostorHint": "Tiendas"
     },
     {
         "id": "pb_074",
@@ -597,7 +597,7 @@
         "category": "personajes_biblicos",
         "difficulty": "hard",
         "hint": "Esclavo fugitivo convertido por Pablo",
-        "impostorHint": "Personaje"
+        "impostorHint": "Fugitivo"
     },
     {
         "id": "pb_076",
@@ -621,7 +621,7 @@
         "category": "personajes_biblicos",
         "difficulty": "hard",
         "hint": "Mensajero de la iglesia de Filipos",
-        "impostorHint": "Personaje"
+        "impostorHint": "Filipos"
     },
     {
         "id": "pb_079",
@@ -629,7 +629,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Mujer resucitada por Pedro, cosía túnicas",
-        "impostorHint": "Personaje"
+        "impostorHint": "Costura"
     },
     {
         "id": "pb_080",
@@ -645,7 +645,7 @@
         "category": "personajes_biblicos",
         "difficulty": "hard",
         "hint": "Maestro fariseo que defendió a los apóstoles",
-        "impostorHint": "Personaje"
+        "impostorHint": "Maestro"
     },
     {
         "id": "pb_082",
@@ -653,7 +653,7 @@
         "category": "personajes_biblicos",
         "difficulty": "hard",
         "hint": "Intentó comprar el poder del Espíritu Santo",
-        "impostorHint": "Personaje"
+        "impostorHint": "Dinero"
     },
     {
         "id": "pb_083",
@@ -661,7 +661,7 @@
         "category": "personajes_biblicos",
         "difficulty": "hard",
         "hint": "Mago cegado por Pablo en Chipre",
-        "impostorHint": "Personaje"
+        "impostorHint": "Ceguera"
     },
     {
         "id": "pb_084",
@@ -677,7 +677,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Jesús le habló junto al pozo de Jacob",
-        "impostorHint": "Personaje"
+        "impostorHint": "Pozo"
     },
     {
         "id": "pb_086",
@@ -693,7 +693,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Arcángel guerrero",
-        "impostorHint": "Personaje"
+        "impostorHint": "Batalla"
     },
     {
         "id": "pb_088",
@@ -701,7 +701,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Adversario, tentó a Jesús en el desierto",
-        "impostorHint": "Personaje"
+        "impostorHint": "Tentación"
     },
     {
         "id": "pb_089",
@@ -725,7 +725,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Tercer hijo de Adán y Eva",
-        "impostorHint": "Tercero"
+        "impostorHint": "Adán"
     },
     {
         "id": "pb_092",
@@ -749,7 +749,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Sobrino de Abraham, escapó de Sodoma",
-        "impostorHint": "Personaje"
+        "impostorHint": "Sodoma"
     },
     {
         "id": "pb_095",
@@ -757,7 +757,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Hijo de Abraham y Agar",
-        "impostorHint": "Personaje"
+        "impostorHint": "Desierto"
     },
     {
         "id": "pb_096",
@@ -765,7 +765,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Hermano gemelo de Jacob, vendió primogenitura",
-        "impostorHint": "Personaje"
+        "impostorHint": "Gemelo"
     },
     {
         "id": "pb_097",
@@ -773,7 +773,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Esposa amada de Jacob, madre de José",
-        "impostorHint": "Personaje"
+        "impostorHint": "Pastora"
     },
     {
         "id": "pb_098",
@@ -789,7 +789,7 @@
         "category": "personajes_biblicos",
         "difficulty": "medium",
         "hint": "Hijo menor de Jacob y Raquel",
-        "impostorHint": "Personaje"
+        "impostorHint": "Menor"
     },
     {
         "id": "pb_100",
@@ -797,7 +797,7 @@
         "category": "personajes_biblicos",
         "difficulty": "easy",
         "hint": "Gobernante de Egipto en tiempos de Moisés",
-        "impostorHint": "Personaje"
+        "impostorHint": "Egipto"
     },
     {
         "id": "lb_001",
@@ -869,7 +869,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Nacimiento de Samuel y reinado de Saúl",
-        "impostorHint": "Libro"
+        "impostorHint": "Samuel"
     },
     {
         "id": "lb_010",
@@ -877,7 +877,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Reinado del rey David",
-        "impostorHint": "Libro"
+        "impostorHint": "David"
     },
     {
         "id": "lb_011",
@@ -901,7 +901,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Genealogías y reinado de David",
-        "impostorHint": "Libro"
+        "impostorHint": "Historia"
     },
     {
         "id": "lb_014",
@@ -909,7 +909,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Desde Salomón hasta el exilio",
-        "impostorHint": "Libro"
+        "impostorHint": "Salomón"
     },
     {
         "id": "lb_015",
@@ -981,7 +981,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Profecías sobre el Mesías",
-        "impostorHint": "Profeta"
+        "impostorHint": "Mesías"
     },
     {
         "id": "lb_024",
@@ -989,7 +989,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Profeta llorón",
-        "impostorHint": "Profeta"
+        "impostorHint": "Llanto"
     },
     {
         "id": "lb_025",
@@ -1013,7 +1013,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Profeta en Babilonia, foso de leones",
-        "impostorHint": "Profeta"
+        "impostorHint": "Leones"
     },
     {
         "id": "lb_028",
@@ -1021,7 +1021,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Profeta del amor fiel de Dios",
-        "impostorHint": "Profeta"
+        "impostorHint": "Esposa"
     },
     {
         "id": "lb_029",
@@ -1029,7 +1029,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Profecía de plaga de langostas",
-        "impostorHint": "Profeta"
+        "impostorHint": "Langostas"
     },
     {
         "id": "lb_030",
@@ -1037,7 +1037,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Profeta pastor de justicia social",
-        "impostorHint": "Profeta"
+        "impostorHint": "Justicia"
     },
     {
         "id": "lb_031",
@@ -1045,7 +1045,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Libro más corto del Antiguo Testamento",
-        "impostorHint": "Profeta"
+        "impostorHint": "Edom"
     },
     {
         "id": "lb_032",
@@ -1053,7 +1053,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Profeta tragado por gran pez",
-        "impostorHint": "Profeta"
+        "impostorHint": "Pez"
     },
     {
         "id": "lb_033",
@@ -1061,7 +1061,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Profecía del lugar de nacimiento del Mesías",
-        "impostorHint": "Profeta"
+        "impostorHint": "Belén"
     },
     {
         "id": "lb_034",
@@ -1069,7 +1069,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Profecía contra Nínive",
-        "impostorHint": "Profeta"
+        "impostorHint": "Nínive"
     },
     {
         "id": "lb_035",
@@ -1077,7 +1077,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "El justo por su fe vivirá",
-        "impostorHint": "Profeta"
+        "impostorHint": "Fe"
     },
     {
         "id": "lb_036",
@@ -1085,7 +1085,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Profecía del día del Señor",
-        "impostorHint": "Profeta"
+        "impostorHint": "Día"
     },
     {
         "id": "lb_037",
@@ -1093,7 +1093,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Reconstrucción del templo post-exilio",
-        "impostorHint": "Profeta"
+        "impostorHint": "Reconstrucción"
     },
     {
         "id": "lb_038",
@@ -1101,7 +1101,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Visiones y profecías mesiánicas",
-        "impostorHint": "Profeta"
+        "impostorHint": "Visión"
     },
     {
         "id": "lb_039",
@@ -1109,7 +1109,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Último libro del Antiguo Testamento",
-        "impostorHint": "Profeta"
+        "impostorHint": "Final"
     },
     {
         "id": "lb_040",
@@ -1165,7 +1165,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Carta sobre problemas en la iglesia",
-        "impostorHint": "Libro"
+        "impostorHint": "Corinto"
     },
     {
         "id": "lb_047",
@@ -1173,7 +1173,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Pablo defiende su apostolado",
-        "impostorHint": "Libro"
+        "impostorHint": "Pablo"
     },
     {
         "id": "lb_048",
@@ -1213,7 +1213,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Segunda venida de Cristo",
-        "impostorHint": "Libro"
+        "impostorHint": "Venida"
     },
     {
         "id": "lb_053",
@@ -1221,7 +1221,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Más sobre la segunda venida",
-        "impostorHint": "Libro"
+        "impostorHint": "Venida"
     },
     {
         "id": "lb_054",
@@ -1229,7 +1229,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Carta pastoral a un joven líder",
-        "impostorHint": "Libro"
+        "impostorHint": "Timoteo"
     },
     {
         "id": "lb_055",
@@ -1237,7 +1237,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Última carta de Pablo",
-        "impostorHint": "Libro"
+        "impostorHint": "Pablo"
     },
     {
         "id": "lb_056",
@@ -1277,7 +1277,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Esperanza en medio del sufrimiento",
-        "impostorHint": "Libro"
+        "impostorHint": "Sufrimiento"
     },
     {
         "id": "lb_061",
@@ -1285,7 +1285,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Advertencia contra falsos maestros",
-        "impostorHint": "Libro"
+        "impostorHint": "Advertencia"
     },
     {
         "id": "lb_062",
@@ -1293,7 +1293,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Dios es amor",
-        "impostorHint": "Libro"
+        "impostorHint": "Amor"
     },
     {
         "id": "lb_063",
@@ -1301,7 +1301,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Carta breve sobre el amor y la verdad",
-        "impostorHint": "Libro"
+        "impostorHint": "Verdad"
     },
     {
         "id": "lb_064",
@@ -1309,7 +1309,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Carta a Gayo sobre hospitalidad",
-        "impostorHint": "Libro"
+        "impostorHint": "Hospitalidad"
     },
     {
         "id": "lb_065",
@@ -1333,7 +1333,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Primeros cinco libros de la Biblia",
-        "impostorHint": "Libro"
+        "impostorHint": "Cinco"
     },
     {
         "id": "lb_068",
@@ -1341,7 +1341,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Nombre hebreo del Pentateuco",
-        "impostorHint": "Libro"
+        "impostorHint": "Hebreo"
     },
     {
         "id": "lb_069",
@@ -1349,7 +1349,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Cuatro relatos de la vida de Jesús",
-        "impostorHint": "Libro"
+        "impostorHint": "Cuatro"
     },
     {
         "id": "lb_075",
@@ -1357,7 +1357,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Primera parte de la Biblia, 39 libros",
-        "impostorHint": "Libro"
+        "impostorHint": "Hebreo"
     },
     {
         "id": "lb_076",
@@ -1365,7 +1365,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Segunda parte de la Biblia, 27 libros",
-        "impostorHint": "Libro"
+        "impostorHint": "Griego"
     },
     {
         "id": "lb_080",
@@ -1373,7 +1373,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Mateo, Marcos y Lucas",
-        "impostorHint": "Libro"
+        "impostorHint": "Tres"
     },
     {
         "id": "lb_081",
@@ -1381,7 +1381,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Traducción griega del Antiguo Testamento",
-        "impostorHint": "Libro"
+        "impostorHint": "Griego"
     },
     {
         "id": "lb_082",
@@ -1389,7 +1389,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Palabra de Dios escrita",
-        "impostorHint": "Libro"
+        "impostorHint": "Sagrado"
     },
     {
         "id": "lb_083",
@@ -1397,7 +1397,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Textos sagrados inspirados",
-        "impostorHint": "Libro"
+        "impostorHint": "Sagrado"
     },
     {
         "id": "lb_084",
@@ -1405,7 +1405,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Revelación escrita del Creador",
-        "impostorHint": "Libro"
+        "impostorHint": "Revelación"
     },
     {
         "id": "lb_085",
@@ -1413,7 +1413,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Copias antiguas de textos bíblicos",
-        "impostorHint": "Libro"
+        "impostorHint": "Antiguo"
     },
     {
         "id": "lb_086",
@@ -1421,7 +1421,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Libros aceptados como Escritura",
-        "impostorHint": "Libro"
+        "impostorHint": "Aceptado"
     },
     {
         "id": "lb_087",
@@ -1429,7 +1429,7 @@
         "category": "libros_biblicos",
         "difficulty": "hard",
         "hint": "Libros deuterocanónicos",
-        "impostorHint": "Libro"
+        "impostorHint": "Dudoso"
     },
     {
         "id": "lb_089",
@@ -1437,7 +1437,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Material de escritura de piel animal",
-        "impostorHint": "Libro"
+        "impostorHint": "Piel"
     },
     {
         "id": "lb_090",
@@ -1445,7 +1445,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Planta usada para hacer papel antiguo",
-        "impostorHint": "Libro"
+        "impostorHint": "Planta"
     },
     {
         "id": "lb_091",
@@ -1453,7 +1453,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Forma antigua de libro enrollado",
-        "impostorHint": "Libro"
+        "impostorHint": "Enrollado"
     },
     {
         "id": "lb_092",
@@ -1461,7 +1461,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Versión en otro idioma",
-        "impostorHint": "Libro"
+        "impostorHint": "Idioma"
     },
     {
         "id": "lb_093",
@@ -1469,7 +1469,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Pequeña división numerada",
-        "impostorHint": "Libro"
+        "impostorHint": "Número"
     },
     {
         "id": "lb_094",
@@ -1477,7 +1477,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "División principal de un libro",
-        "impostorHint": "Libro"
+        "impostorHint": "División"
     },
     {
         "id": "lb_095",
@@ -1485,7 +1485,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Índice de palabras bíblicas",
-        "impostorHint": "Libro"
+        "impostorHint": "Índice"
     },
     {
         "id": "lb_097",
@@ -1493,7 +1493,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Historia con enseñanza espiritual",
-        "impostorHint": "Libro"
+        "impostorHint": "Enseñanza"
     },
     {
         "id": "lb_098",
@@ -1501,7 +1501,7 @@
         "category": "libros_biblicos",
         "difficulty": "easy",
         "hint": "Mensaje revelado por Dios",
-        "impostorHint": "Libro"
+        "impostorHint": "Futuro"
     },
     {
         "id": "lb_099",
@@ -1509,7 +1509,7 @@
         "category": "libros_biblicos",
         "difficulty": "medium",
         "hint": "Registro de descendientes",
-        "impostorHint": "Libro"
+        "impostorHint": "Familia"
     },
     {
         "id": "ob_001",
@@ -1525,7 +1525,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Caja sagrada con las tablas de la ley",
-        "impostorHint": "Objeto"
+        "impostorHint": "Sagrado"
     },
     {
         "id": "ob_003",
@@ -1533,7 +1533,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Barco gigante del diluvio",
-        "impostorHint": "Objeto"
+        "impostorHint": "Diluvio"
     },
     {
         "id": "ob_004",
@@ -1541,7 +1541,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Piedras con los Diez Mandamientos",
-        "impostorHint": "Objeto"
+        "impostorHint": "Piedra"
     },
     {
         "id": "ob_005",
@@ -1557,7 +1557,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Bastón que se convirtió en serpiente",
-        "impostorHint": "Objeto"
+        "impostorHint": "Serpiente"
     },
     {
         "id": "ob_007",
@@ -1565,7 +1565,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Arma que David usó contra Goliat",
-        "impostorHint": "Objeto"
+        "impostorHint": "Correa"
     },
     {
         "id": "ob_008",
@@ -1573,7 +1573,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Instrumento musical de David",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cuerdas"
     },
     {
         "id": "ob_009",
@@ -1581,7 +1581,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Instrumento que derribó Jericó",
-        "impostorHint": "Objeto"
+        "impostorHint": "Viento"
     },
     {
         "id": "ob_010",
@@ -1589,7 +1589,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Puesta a Jesús en la crucifixión",
-        "impostorHint": "Objeto"
+        "impostorHint": "Dolor"
     },
     {
         "id": "ob_011",
@@ -1605,7 +1605,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Arma que traspasó el costado de Jesús",
-        "impostorHint": "Objeto"
+        "impostorHint": "Hierro"
     },
     {
         "id": "ob_013",
@@ -1661,7 +1661,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Menorá de siete brazos",
-        "impostorHint": "Objeto"
+        "impostorHint": "Luz"
     },
     {
         "id": "ob_020",
@@ -1669,7 +1669,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Cortina que se rasgó al morir Jesús",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cortina"
     },
     {
         "id": "ob_021",
@@ -1693,7 +1693,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Túnica de colores regalada por Jacob",
-        "impostorHint": "Objeto"
+        "impostorHint": "Colores"
     },
     {
         "id": "ob_024",
@@ -1701,7 +1701,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Símbolo de autoridad del hijo pródigo",
-        "impostorHint": "Objeto"
+        "impostorHint": "Oro"
     },
     {
         "id": "ob_025",
@@ -1709,7 +1709,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Tela áspera de luto y arrepentimiento",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tela"
     },
     {
         "id": "ob_026",
@@ -1717,7 +1717,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Símbolo de duelo y humildad",
-        "impostorHint": "Objeto"
+        "impostorHint": "Polvo"
     },
     {
         "id": "ob_027",
@@ -1725,7 +1725,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "David eligió cinco para Goliat",
-        "impostorHint": "Objeto"
+        "impostorHint": "Roca"
     },
     {
         "id": "ob_028",
@@ -1741,7 +1741,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Bastón de autoridad real",
-        "impostorHint": "Objeto"
+        "impostorHint": "Autoridad"
     },
     {
         "id": "ob_030",
@@ -1749,7 +1749,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Arma de guerra y símbolo de la Palabra",
-        "impostorHint": "Objeto"
+        "impostorHint": "Hierro"
     },
     {
         "id": "ob_031",
@@ -1757,7 +1757,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Protección del guerrero, símbolo de fe",
-        "impostorHint": "Objeto"
+        "impostorHint": "Protección"
     },
     {
         "id": "ob_032",
@@ -1765,7 +1765,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Protección completa del soldado",
-        "impostorHint": "Objeto"
+        "impostorHint": "Metal"
     },
     {
         "id": "ob_033",
@@ -1773,7 +1773,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Protección de la cabeza, salvación",
-        "impostorHint": "Objeto"
+        "impostorHint": "Metal"
     },
     {
         "id": "ob_034",
@@ -1797,7 +1797,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Símbolo de esperanza firme",
-        "impostorHint": "Objeto"
+        "impostorHint": "Mar"
     },
     {
         "id": "ob_037",
@@ -1805,7 +1805,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Dirige el barco, como la lengua",
-        "impostorHint": "Objeto"
+        "impostorHint": "Barco"
     },
     {
         "id": "ob_038",
@@ -1813,7 +1813,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Recipiente de cuero para líquidos",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cuero"
     },
     {
         "id": "ob_039",
@@ -1821,7 +1821,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Vasija grande de agua en Caná",
-        "impostorHint": "Objeto"
+        "impostorHint": "Barro"
     },
     {
         "id": "ob_040",
@@ -1829,7 +1829,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Recipiente para llevar agua del pozo",
-        "impostorHint": "Objeto"
+        "impostorHint": "Agua"
     },
     {
         "id": "ob_041",
@@ -1837,7 +1837,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Fuente de agua, encuentro de Jacob y Jesús",
-        "impostorHint": "Objeto"
+        "impostorHint": "Agua"
     },
     {
         "id": "ob_042",
@@ -1845,7 +1845,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Manantial de agua viva",
-        "impostorHint": "Objeto"
+        "impostorHint": "Agua"
     },
     {
         "id": "ob_043",
@@ -1861,7 +1861,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Luz portátil de los soldados",
-        "impostorHint": "Objeto"
+        "impostorHint": "Luz"
     },
     {
         "id": "ob_045",
@@ -1869,7 +1869,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Palo encendido de Gedeón",
-        "impostorHint": "Objeto"
+        "impostorHint": "Fuego"
     },
     {
         "id": "ob_046",
@@ -1877,7 +1877,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Combustible de las vírgenes prudentes",
-        "impostorHint": "Objeto"
+        "impostorHint": "Aceite"
     },
     {
         "id": "ob_047",
@@ -1885,7 +1885,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Piedras para moler grano",
-        "impostorHint": "Objeto"
+        "impostorHint": "Grano"
     },
     {
         "id": "ob_048",
@@ -1893,7 +1893,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Donde cocinaban pan y ardieron los jóvenes",
-        "impostorHint": "Objeto"
+        "impostorHint": "Fuego"
     },
     {
         "id": "ob_049",
@@ -1901,7 +1901,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Carga sobre bueyes, símbolo de servidumbre",
-        "impostorHint": "Objeto"
+        "impostorHint": "Bueyes"
     },
     {
         "id": "ob_050",
@@ -1909,7 +1909,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Herramienta para labrar la tierra",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tierra"
     },
     {
         "id": "ob_051",
@@ -1917,7 +1917,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Herramienta para cosechar",
-        "impostorHint": "Objeto"
+        "impostorHint": "Campo"
     },
     {
         "id": "ob_052",
@@ -1925,7 +1925,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Herramienta para cavar",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tierra"
     },
     {
         "id": "ob_053",
@@ -1933,7 +1933,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Herramienta que flotó para Eliseo",
-        "impostorHint": "Objeto"
+        "impostorHint": "Hierro"
     },
     {
         "id": "ob_054",
@@ -1941,7 +1941,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Herramienta de carpintero",
-        "impostorHint": "Agua"
+        "impostorHint": "Madera"
     },
     {
         "id": "ob_055",
@@ -1949,7 +1949,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Herramienta para cortar madera",
-        "impostorHint": "Objeto"
+        "impostorHint": "Madera"
     },
     {
         "id": "ob_056",
@@ -1957,7 +1957,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Herramienta para tallar piedra",
-        "impostorHint": "Objeto"
+        "impostorHint": "Piedra"
     },
     {
         "id": "ob_057",
@@ -1965,7 +1965,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Instrumento para pesar, símbolo de justicia",
-        "impostorHint": "Objeto"
+        "impostorHint": "Peso"
     },
     {
         "id": "ob_058",
@@ -1973,7 +1973,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Moneda romana de plata",
-        "impostorHint": "Objeto"
+        "impostorHint": "Plata"
     },
     {
         "id": "ob_059",
@@ -1981,7 +1981,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Moneda y medida de peso hebrea",
-        "impostorHint": "Objeto"
+        "impostorHint": "Plata"
     },
     {
         "id": "ob_060",
@@ -1989,7 +1989,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Medida de peso grande, parábola",
-        "impostorHint": "Objeto"
+        "impostorHint": "Dinero"
     },
     {
         "id": "ob_061",
@@ -1997,7 +1997,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Marca de autenticidad y propiedad",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cera"
     },
     {
         "id": "ob_062",
@@ -2005,7 +2005,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Material para escribir de piel",
-        "impostorHint": "Objeto"
+        "impostorHint": "Piel"
     },
     {
         "id": "ob_063",
@@ -2013,7 +2013,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Líquido para escribir las Escrituras",
-        "impostorHint": "Objeto"
+        "impostorHint": "Negro"
     },
     {
         "id": "ob_064",
@@ -2021,7 +2021,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Instrumento para escribir",
-        "impostorHint": "Objeto"
+        "impostorHint": "Escritura"
     },
     {
         "id": "ob_065",
@@ -2029,7 +2029,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Libro enrollado de las Escrituras",
-        "impostorHint": "Objeto"
+        "impostorHint": "Enrollado"
     },
     {
         "id": "ob_066",
@@ -2037,7 +2037,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Tela que envolvió el cuerpo de Jesús",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tela"
     },
     {
         "id": "ob_067",
@@ -2045,7 +2045,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Tela del sudario de Jesús",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tela"
     },
     {
         "id": "ob_068",
@@ -2053,7 +2053,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Ungüento costoso de María",
-        "impostorHint": "Objeto"
+        "impostorHint": "Aroma"
     },
     {
         "id": "ob_069",
@@ -2061,7 +2061,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Regalo de los magos, para embalsamar",
-        "impostorHint": "Objeto"
+        "impostorHint": "Resina"
     },
     {
         "id": "ob_070",
@@ -2069,7 +2069,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Metal precioso, regalo de los magos",
-        "impostorHint": "Objeto"
+        "impostorHint": "Metal"
     },
     {
         "id": "ob_071",
@@ -2077,7 +2077,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Ídolo hecho por Israel en el desierto",
-        "impostorHint": "Objeto"
+        "impostorHint": "Idolatría"
     },
     {
         "id": "ob_072",
@@ -2085,7 +2085,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Imagen adorada como falso dios",
-        "impostorHint": "Objeto"
+        "impostorHint": "Falso"
     },
     {
         "id": "ob_073",
@@ -2093,7 +2093,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Casa portátil de nómadas como Abraham",
-        "impostorHint": "Objeto"
+        "impostorHint": "Nómada"
     },
     {
         "id": "ob_074",
@@ -2101,7 +2101,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Tienda santuario en el desierto",
-        "impostorHint": "Objeto"
+        "impostorHint": "Santuario"
     },
     {
         "id": "ob_075",
@@ -2125,7 +2125,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Primera piedra del edificio, Cristo",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cimiento"
     },
     {
         "id": "ob_078",
@@ -2133,7 +2133,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Pilar de soporte, Sansón las derribó",
-        "impostorHint": "Objeto"
+        "impostorHint": "Pilar"
     },
     {
         "id": "ob_079",
@@ -2141,7 +2141,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Entrada, Jesús es la del redil",
-        "impostorHint": "Objeto"
+        "impostorHint": "Entrada"
     },
     {
         "id": "ob_080",
@@ -2149,7 +2149,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Ventana con barras de la cárcel",
-        "impostorHint": "Objeto"
+        "impostorHint": "Hierro"
     },
     {
         "id": "ob_081",
@@ -2157,7 +2157,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Ataduras de Pedro en la cárcel",
-        "impostorHint": "Objeto"
+        "impostorHint": "Hierro"
     },
     {
         "id": "ob_082",
@@ -2165,7 +2165,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Argollas para pies de prisioneros",
-        "impostorHint": "Objeto"
+        "impostorHint": "Metal"
     },
     {
         "id": "ob_083",
@@ -2173,7 +2173,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Azote usado en la flagelación de Jesús",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cuero"
     },
     {
         "id": "ob_084",
@@ -2189,7 +2189,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Bastón curvo del pastor",
-        "impostorHint": "Objeto"
+        "impostorHint": "Madera"
     },
     {
         "id": "ob_086",
@@ -2197,7 +2197,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Instrumento de viento pastoral",
-        "impostorHint": "Objeto"
+        "impostorHint": "Viento"
     },
     {
         "id": "ob_087",
@@ -2205,7 +2205,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Instrumento de cuerdas de David",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cuerdas"
     },
     {
         "id": "ob_088",
@@ -2213,7 +2213,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Platillos musicales del templo",
-        "impostorHint": "Objeto"
+        "impostorHint": "Metal"
     },
     {
         "id": "ob_089",
@@ -2221,7 +2221,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Cascabel en el vestido del sumo sacerdote",
-        "impostorHint": "Objeto"
+        "impostorHint": "Bronce"
     },
     {
         "id": "ob_090",
@@ -2229,7 +2229,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Adorno en el vestido sacerdotal",
-        "impostorHint": "Objeto"
+        "impostorHint": "Adorno"
     },
     {
         "id": "ob_091",
@@ -2237,7 +2237,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Turbante del sumo sacerdote",
-        "impostorHint": "Objeto"
+        "impostorHint": "Sacerdote"
     },
     {
         "id": "ob_092",
@@ -2245,7 +2245,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Pieza con 12 piedras del sumo sacerdote",
-        "impostorHint": "Objeto"
+        "impostorHint": "Joyas"
     },
     {
         "id": "ob_093",
@@ -2253,7 +2253,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Vestidura sacerdotal con hombreras",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tela"
     },
     {
         "id": "ob_094",
@@ -2261,7 +2261,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Objetos para consultar la voluntad de Dios",
-        "impostorHint": "Objeto"
+        "impostorHint": "Piedras"
     },
     {
         "id": "ob_095",
@@ -2269,7 +2269,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Figura de ángel sobre el arca",
-        "impostorHint": "Objeto"
+        "impostorHint": "Ángel"
     },
     {
         "id": "ob_096",
@@ -2277,7 +2277,7 @@
         "category": "objetos_biblicos",
         "difficulty": "hard",
         "hint": "Tapa del arca del pacto",
-        "impostorHint": "Objeto"
+        "impostorHint": "Cubierta"
     },
     {
         "id": "ob_097",
@@ -2285,7 +2285,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Separación del lugar santísimo",
-        "impostorHint": "Objeto"
+        "impostorHint": "Tela"
     },
     {
         "id": "ob_098",
@@ -2293,7 +2293,7 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Mueble del tabernáculo con panes",
-        "impostorHint": "Objeto"
+        "impostorHint": "Madera"
     },
     {
         "id": "ob_099",
@@ -2301,7 +2301,7 @@
         "category": "objetos_biblicos",
         "difficulty": "easy",
         "hint": "Pan del cielo en el desierto",
-        "impostorHint": "Objeto"
+        "impostorHint": "Blanco"
     },
     {
         "id": "ob_100",
@@ -2309,6 +2309,6 @@
         "category": "objetos_biblicos",
         "difficulty": "medium",
         "hint": "Vara que floreció milagrosamente",
-        "impostorHint": "Objeto"
+        "impostorHint": "Flores"
     }
 ]

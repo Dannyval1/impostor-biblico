@@ -1438,5 +1438,645 @@
         "difficulty": "medium",
         "hint": "Made tunics for the poor, raised by Peter",
         "impostorHint": "Clothes"
+    },
+    {
+        "id": "mi_001",
+        "word": "Parting of the Red Sea",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Moses stretched his hand and the sea opened",
+        "impostorHint": "Exodus"
+    },
+    {
+        "id": "mi_002",
+        "word": "Water turned to wine",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus' first miracle at a wedding",
+        "impostorHint": "Wedding"
+    },
+    {
+        "id": "mi_003",
+        "word": "Resurrection of Lazarus",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus called him out after four days",
+        "impostorHint": "Tomb"
+    },
+    {
+        "id": "mi_004",
+        "word": "Feeding the five thousand",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "5 loaves and 2 fish fed 5000 people",
+        "impostorHint": "Basket"
+    },
+    {
+        "id": "mi_005",
+        "word": "Manna from heaven",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Food God provided in the desert",
+        "impostorHint": "Bread"
+    },
+    {
+        "id": "mi_006",
+        "word": "Walking on water",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus and Peter did this on the lake",
+        "impostorHint": "Faith"
+    },
+    {
+        "id": "mi_007",
+        "word": "Healing the man born blind",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesus made mud and restored his sight",
+        "impostorHint": "Mud"
+    },
+    {
+        "id": "mi_008",
+        "word": "Resurrection of Jesus",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "On the third day the tomb was empty",
+        "impostorHint": "Sunday"
+    },
+    {
+        "id": "mi_009",
+        "word": "The Transfiguration",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesus shone like the sun on the mountain",
+        "impostorHint": "Light"
+    },
+    {
+        "id": "mi_010",
+        "word": "Calming the storm",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus commanded the wind and sea to be still",
+        "impostorHint": "Wind"
+    },
+    {
+        "id": "mi_011",
+        "word": "Healing the leper",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesus touched him and he was cleansed",
+        "impostorHint": "Skin"
+    },
+    {
+        "id": "mi_012",
+        "word": "The Great Flood",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "God flooded the earth and saved Noah",
+        "impostorHint": "Rainbow"
+    },
+    {
+        "id": "mi_013",
+        "word": "The Ten Plagues",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "God sent them to free Israel from Egypt",
+        "impostorHint": "Pharaoh"
+    },
+    {
+        "id": "mi_014",
+        "word": "The pillar of fire",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Led Israel through the desert at night",
+        "impostorHint": "Night"
+    },
+    {
+        "id": "mi_015",
+        "word": "The burning bush",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "God spoke to Moses from it",
+        "impostorHint": "Fire"
+    },
+    {
+        "id": "mi_016",
+        "word": "Sun standing still",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Joshua asked for it during battle",
+        "impostorHint": "Joshua"
+    },
+    {
+        "id": "mi_017",
+        "word": "Pentecost",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "The Holy Spirit came as tongues of fire",
+        "impostorHint": "Wind"
+    },
+    {
+        "id": "mi_018",
+        "word": "Daniel in the lions den",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "The lions did not touch him",
+        "impostorHint": "Angel"
+    },
+    {
+        "id": "mi_019",
+        "word": "The fiery furnace",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Shadrach, Meshach and Abednego came out unharmed",
+        "impostorHint": "Fourth"
+    },
+    {
+        "id": "mi_020",
+        "word": "Jonah and the great fish",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "He spent three days inside the fish",
+        "impostorHint": "Whale"
+    },
+    {
+        "id": "mi_021",
+        "word": "The widows oil",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "The oil never ran out thanks to the prophet Elijah",
+        "impostorHint": "Jars"
+    },
+    {
+        "id": "mi_022",
+        "word": "Fire from heaven",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Consumed the soaked altar on Mount Carmel",
+        "impostorHint": "Baal"
+    },
+    {
+        "id": "mi_023",
+        "word": "Elijah taken to heaven",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "He went up in a chariot of fire",
+        "impostorHint": "Chariot"
+    },
+    {
+        "id": "mi_024",
+        "word": "Elisha raises the Shunammites son",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "The prophet raised a dead child to life",
+        "impostorHint": "Child"
+    },
+    {
+        "id": "mi_025",
+        "word": "The floating axe head",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Elisha made an iron axe float in water",
+        "impostorHint": "Stick"
+    },
+    {
+        "id": "mi_026",
+        "word": "Healing of Naaman",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Syrian general healed of leprosy in the Jordan",
+        "impostorHint": "Seven"
+    },
+    {
+        "id": "mi_027",
+        "word": "Paul and Silas freed",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "An earthquake opened the prison doors",
+        "impostorHint": "Songs"
+    },
+    {
+        "id": "mi_028",
+        "word": "Pauls conversion",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "A bright light knocked him down on the road",
+        "impostorHint": "Blindness"
+    },
+    {
+        "id": "mi_029",
+        "word": "Healing the paralytic",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "His friends lowered him through the roof",
+        "impostorHint": "Roof"
+    },
+    {
+        "id": "mi_030",
+        "word": "Healing the centurions servant",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesus healed from a distance by faith",
+        "impostorHint": "Authority"
+    },
+    {
+        "id": "mi_031",
+        "word": "Ascension of Jesus",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "He rose to heaven before his disciples",
+        "impostorHint": "Cloud"
+    },
+    {
+        "id": "mi_032",
+        "word": "Water from the rock",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Moses struck a rock and water gushed out",
+        "impostorHint": "Thirst"
+    },
+    {
+        "id": "mi_033",
+        "word": "Fall of the walls of Jericho",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "The Israelites marched and blew trumpets",
+        "impostorHint": "Trumpet"
+    },
+    {
+        "id": "mi_034",
+        "word": "Creation of the world",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "God made everything in six days",
+        "impostorHint": "Genesis"
+    },
+    {
+        "id": "mi_035",
+        "word": "Resurrection of Dorcas",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Peter prayed and the woman came back to life",
+        "impostorHint": "Peter"
+    },
+    {
+        "id": "mi_036",
+        "word": "The Star of Bethlehem",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Guided the wise men to the child Jesus",
+        "impostorHint": "Wise men"
+    },
+    {
+        "id": "mi_037",
+        "word": "Gideons fleece",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "It was wet while the ground was dry",
+        "impostorHint": "Sign"
+    },
+    {
+        "id": "mi_038",
+        "word": "The coin in the fishs mouth",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Peter caught a fish to pay the temple tax",
+        "impostorHint": "Coin"
+    },
+    {
+        "id": "mi_039",
+        "word": "Raising the widow of Nains son",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Jesus stopped the funeral procession",
+        "impostorHint": "Procession"
+    },
+    {
+        "id": "mi_040",
+        "word": "Moses leprous hand",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "God gave it as a sign of his power",
+        "impostorHint": "Sign"
+    },
+    {
+        "id": "pa_001",
+        "word": "The Prodigal Son",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A son wasted his inheritance and returned repentant",
+        "impostorHint": "Return"
+    },
+    {
+        "id": "pa_002",
+        "word": "The Good Samaritan",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A stranger helped the wounded man others ignored",
+        "impostorHint": "Neighbor"
+    },
+    {
+        "id": "pa_003",
+        "word": "The Sower",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "The seed fell on different types of soil",
+        "impostorHint": "Soil"
+    },
+    {
+        "id": "pa_004",
+        "word": "The Mustard Seed",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "The smallest grows into the largest tree",
+        "impostorHint": "Small"
+    },
+    {
+        "id": "pa_005",
+        "word": "The Pearl of Great Price",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "A merchant sold everything to buy it",
+        "impostorHint": "Sale"
+    },
+    {
+        "id": "pa_006",
+        "word": "The Hidden Treasure",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A man sold everything to buy the field",
+        "impostorHint": "Field"
+    },
+    {
+        "id": "pa_007",
+        "word": "The Ten Virgins",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Five had oil and five did not",
+        "impostorHint": "Oil"
+    },
+    {
+        "id": "pa_008",
+        "word": "The Talents",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Each servant received a different amount to multiply",
+        "impostorHint": "Multiply"
+    },
+    {
+        "id": "pa_009",
+        "word": "The Unforgiving Servant",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "He was forgiven but refused to forgive his debtor",
+        "impostorHint": "Debt"
+    },
+    {
+        "id": "pa_010",
+        "word": "The Workers in the Vineyard",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "All received the same wage regardless of hours worked",
+        "impostorHint": "Wage"
+    },
+    {
+        "id": "pa_011",
+        "word": "The Wicked Tenants",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "They killed the owner's son",
+        "impostorHint": "Vineyard"
+    },
+    {
+        "id": "pa_012",
+        "word": "The Wedding Banquet",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The invited guests refused and others were called",
+        "impostorHint": "Guests"
+    },
+    {
+        "id": "pa_013",
+        "word": "The Yeast",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "A little leavens the whole batch of dough",
+        "impostorHint": "Bread"
+    },
+    {
+        "id": "pa_014",
+        "word": "The Net",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The good and bad fish were separated",
+        "impostorHint": "Sea"
+    },
+    {
+        "id": "pa_015",
+        "word": "The Lost Sheep",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "The shepherd left 99 to search for one",
+        "impostorHint": "Shepherd"
+    },
+    {
+        "id": "pa_016",
+        "word": "The Lost Coin",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A woman swept her whole house to find it",
+        "impostorHint": "Joy"
+    },
+    {
+        "id": "pa_017",
+        "word": "The Rich Man and Lazarus",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "The poor beggar went to Abraham's side",
+        "impostorHint": "Chasm"
+    },
+    {
+        "id": "pa_018",
+        "word": "The Pharisee and the Tax Collector",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The tax collector beat his chest and was justified",
+        "impostorHint": "Humility"
+    },
+    {
+        "id": "pa_019",
+        "word": "The Unjust Judge",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The widow persisted in her petition until heard",
+        "impostorHint": "Widow"
+    },
+    {
+        "id": "pa_020",
+        "word": "The Good Shepherd",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Knows his sheep by name and lays down his life",
+        "impostorHint": "Sheep"
+    },
+    {
+        "id": "pa_021",
+        "word": "The Vine and the Branches",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Without the trunk the branches cannot bear fruit",
+        "impostorHint": "Fruit"
+    },
+    {
+        "id": "pa_022",
+        "word": "The Shrewd Manager",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "He won friends by reducing his master's debts",
+        "impostorHint": "Shrewd"
+    },
+    {
+        "id": "pa_023",
+        "word": "The Rich Fool",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "He planned bigger barns but died that night",
+        "impostorHint": "Barn"
+    },
+    {
+        "id": "pa_024",
+        "word": "The Barren Fig Tree",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The gardener asked for one more year",
+        "impostorHint": "Fig tree"
+    },
+    {
+        "id": "pa_025",
+        "word": "The Great Banquet",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The poor and crippled took the place of the rich",
+        "impostorHint": "Excuses"
+    },
+    {
+        "id": "pa_026",
+        "word": "The Friend at Midnight",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Persistence made the friend get up and help",
+        "impostorHint": "Persistence"
+    },
+    {
+        "id": "pa_027",
+        "word": "The Two Debtors",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "The one forgiven more loved more",
+        "impostorHint": "Gratitude"
+    },
+    {
+        "id": "pa_028",
+        "word": "The Fig Tree and Summer",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "When it buds they know summer is near",
+        "impostorHint": "Signs"
+    },
+    {
+        "id": "pa_029",
+        "word": "The Wise and Foolish Builders",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "The storm did not knock down the obedient man's house",
+        "impostorHint": "Foundation"
+    },
+    {
+        "id": "pa_030",
+        "word": "The Two Sons",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "One said no to the vineyard but went, the other did the opposite",
+        "impostorHint": "Obedience"
+    },
+    {
+        "id": "pa_031",
+        "word": "The Minas",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "A nobleman went to a far country and left money with each servant",
+        "impostorHint": "Return"
+    },
+    {
+        "id": "pa_032",
+        "word": "The Grain of Wheat",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "It must fall into the ground and die to bear much fruit",
+        "impostorHint": "Death"
+    },
+    {
+        "id": "pa_033",
+        "word": "The Faithful Steward",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Whoever is faithful in little will have authority over more",
+        "impostorHint": "Faithfulness"
+    },
+    {
+        "id": "pa_034",
+        "word": "The Healthy Eye",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "If it is bad the whole body is in darkness",
+        "impostorHint": "Light"
+    },
+    {
+        "id": "pa_035",
+        "word": "The Salt of the Earth",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "If it loses its flavor it is no longer useful",
+        "impostorHint": "Flavor"
+    },
+    {
+        "id": "pa_036",
+        "word": "The Weeds among the Wheat",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "They grow together until the final harvest",
+        "impostorHint": "Enemy"
+    },
+    {
+        "id": "pa_037",
+        "word": "The King Going to War",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "He calculated whether he could win before attacking",
+        "impostorHint": "Calculation"
+    },
+    {
+        "id": "pa_038",
+        "word": "The Reluctant Guests",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "One bought an ox, another a field, another got married",
+        "impostorHint": "Field"
+    },
+    {
+        "id": "pa_039",
+        "word": "The Woman and the Yeast",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "She hid yeast in three measures of flour",
+        "impostorHint": "Dough"
+    },
+    {
+        "id": "pa_040",
+        "word": "The Tree and Its Fruit",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "You shall know them by their fruits",
+        "impostorHint": "Fruits"
     }
 ]

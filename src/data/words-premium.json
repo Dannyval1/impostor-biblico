@@ -101,7 +101,7 @@
         "category": "oficios_biblicos",
         "difficulty": "easy",
         "hint": "Líder de Israel antes de los reyes",
-        "impostorHint": "Líder"
+        "impostorHint": "Vara"
     },
     {
         "id": "of_014",
@@ -157,7 +157,7 @@
         "category": "oficios_biblicos",
         "difficulty": "medium",
         "hint": "Líder de la congregación",
-        "impostorHint": "Líder"
+        "impostorHint": "Sabiduría"
     },
     {
         "id": "of_021",
@@ -165,7 +165,7 @@
         "category": "oficios_biblicos",
         "difficulty": "easy",
         "hint": "Líder espiritual de la congregación",
-        "impostorHint": "Oficio"
+        "impostorHint": "Rebaño"
     },
     {
         "id": "of_022",
@@ -229,7 +229,7 @@
         "category": "oficios_biblicos",
         "difficulty": "medium",
         "hint": "Oficio de Pablo, Priscila y Aquila",
-        "impostorHint": "Pablo"
+        "impostorHint": "Lona"
     },
     {
         "id": "of_030",
@@ -261,7 +261,7 @@
         "category": "oficios_biblicos",
         "difficulty": "medium",
         "hint": "José y Daniel lo hacían",
-        "impostorHint": "José"
+        "impostorHint": "Sueños"
     },
     {
         "id": "of_034",
@@ -269,7 +269,7 @@
         "category": "oficios_biblicos",
         "difficulty": "medium",
         "hint": "Consejero del rey, como Daniel",
-        "impostorHint": "Mago"
+        "impostorHint": "Consejo"
     },
     {
         "id": "of_035",
@@ -293,7 +293,7 @@
         "category": "oficios_biblicos",
         "difficulty": "hard",
         "hint": "Oficio de Lidia en Filipos",
-        "impostorHint": "Lidia"
+        "impostorHint": "Tela"
     },
     {
         "id": "of_038",
@@ -365,7 +365,7 @@
         "category": "oficios_biblicos",
         "difficulty": "medium",
         "hint": "Hacía telas y ropa",
-        "impostorHint": "Tela"
+        "impostorHint": "Telar"
     },
     {
         "id": "of_047",
@@ -445,7 +445,7 @@
         "category": "lugares_biblicos",
         "difficulty": "easy",
         "hint": "Ciudad malvada destruida con fuego",
-        "impostorHint": "Fuego"
+        "impostorHint": "Sal"
     },
     {
         "id": "lu_007",
@@ -461,7 +461,7 @@
         "category": "lugares_biblicos",
         "difficulty": "hard",
         "hint": "Lugar del pacto entre Abraham y Abimelec",
-        "impostorHint": "Pozo"
+        "impostorHint": "Juramento"
     },
     {
         "id": "lu_009",
@@ -573,7 +573,7 @@
         "category": "lugares_biblicos",
         "difficulty": "medium",
         "hint": "Región entre Galilea y Judea",
-        "impostorHint": "Pozo"
+        "impostorHint": "Mezcla"
     },
     {
         "id": "lu_023",
@@ -645,7 +645,7 @@
         "category": "lugares_biblicos",
         "difficulty": "medium",
         "hint": "Donde Elías confrontó a los profetas de Baal",
-        "impostorHint": "Fuego"
+        "impostorHint": "Baal"
     },
     {
         "id": "lu_032",
@@ -733,7 +733,7 @@
         "category": "lugares_biblicos",
         "difficulty": "easy",
         "hint": "Capital del imperio, Pablo fue prisionero allí",
-        "impostorHint": "Imperio"
+        "impostorHint": "Coliseo"
     },
     {
         "id": "lu_043",
@@ -773,7 +773,7 @@
         "category": "lugares_biblicos",
         "difficulty": "medium",
         "hint": "Imperio que conquistó el reino del norte",
-        "impostorHint": "Imperio"
+        "impostorHint": "Conquista"
     },
     {
         "id": "lu_048",
@@ -957,7 +957,7 @@
         "category": "conceptos_teologicos",
         "difficulty": "easy",
         "hint": "Regreso prometido de Cristo",
-        "impostorHint": "Promesa"
+        "impostorHint": "Nubes"
     },
     {
         "id": "ct_021",
@@ -981,15 +981,7 @@
         "category": "conceptos_teologicos",
         "difficulty": "easy",
         "hint": "Desobediencia a Dios",
-        "impostorHint": "Error"
-    },
-    {
-        "id": "ct_024",
-        "word": "Pecado",
-        "category": "conceptos_teologicos",
-        "difficulty": "medium",
-        "hint": "Lo cometido por Adán",
-        "impostorHint": "Error"
+        "impostorHint": "Fruto"
     },
     {
         "id": "ct_025",
@@ -1101,7 +1093,7 @@
         "category": "conceptos_teologicos",
         "difficulty": "hard",
         "hint": "Dios no cambia",
-        "impostorHint": "Cambio"
+        "impostorHint": "Roca"
     },
     {
         "id": "ct_039",
@@ -1117,7 +1109,7 @@
         "category": "conceptos_teologicos",
         "difficulty": "medium",
         "hint": "Acuerdo solemne entre Dios y el hombre",
-        "impostorHint": "Promesa"
+        "impostorHint": "Arco iris"
     },
     {
         "id": "ct_041",
@@ -1213,7 +1205,7 @@
         "category": "mujeres_biblicas",
         "difficulty": "easy",
         "hint": "Esposa de Abraham, rió ante la promesa",
-        "impostorHint": "Madre"
+        "impostorHint": "Risa"
     },
     {
         "id": "mb_003",
@@ -1221,222 +1213,862 @@
         "category": "mujeres_biblicas",
         "difficulty": "medium",
         "hint": "Esposa de Isaac, madre de Jacob y Esaú",
-        "impostorHint": "Esposa"
+        "impostorHint": "Camello"
     },
     {
-        "word": "Raquel",
-        "hint": "Esposa amada de Jacob, madre de José",
-        "impostorHint": "Amada",
-        "difficulty": "medium",
         "id": "mb_004",
-        "category": "mujeres_biblicas"
+        "word": "Raquel",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Esposa amada de Jacob, madre de José",
+        "impostorHint": "Amada"
     },
     {
-        "word": "Lea",
-        "hint": "Primera esposa de Jacob, ojos delicados",
-        "impostorHint": "Ojos",
-        "difficulty": "medium",
         "id": "mb_005",
-        "category": "mujeres_biblicas"
+        "word": "Lea",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Primera esposa de Jacob, ojos delicados",
+        "impostorHint": "Ojos"
     },
     {
-        "word": "María",
-        "hint": "Hermana de Moisés, tocó el pandero",
-        "impostorHint": "Música",
-        "difficulty": "medium",
         "id": "mb_006",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Débora",
-        "hint": "Profetisa y única mujer juez de Israel",
-        "impostorHint": "Juez",
-        "difficulty": "medium",
-        "id": "mb_007",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Rut",
-        "hint": "Moabita leal a Noemí, bisabuela de David",
-        "impostorHint": "Lealtad",
-        "difficulty": "easy",
-        "id": "mb_008",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Ana",
-        "hint": "Madre de Samuel, oró fervientemente",
-        "impostorHint": "Oración",
-        "difficulty": "medium",
-        "id": "mb_009",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Ester",
-        "hint": "Reina persa que salvó a su pueblo",
-        "impostorHint": "Reina",
-        "difficulty": "easy",
-        "id": "mb_010",
-        "category": "mujeres_biblicas"
-    },
-    {
         "word": "María",
-        "hint": "Madre de Jesús, virgen elegida",
-        "impostorHint": "Elegida",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Hermana de Moisés, tocó el pandero",
+        "impostorHint": "Pandero"
+    },
+    {
+        "id": "mb_007",
+        "word": "Débora",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Profetisa y única mujer juez de Israel",
+        "impostorHint": "Juez"
+    },
+    {
+        "id": "mb_008",
+        "word": "Rut",
+        "category": "mujeres_biblicas",
         "difficulty": "easy",
+        "hint": "Moabita leal a Noemí, bisabuela de David",
+        "impostorHint": "Lealtad"
+    },
+    {
+        "id": "mb_009",
+        "word": "Ana",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Madre de Samuel, oró fervientemente",
+        "impostorHint": "Oración"
+    },
+    {
+        "id": "mb_010",
+        "word": "Ester",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Reina persa que salvó a su pueblo",
+        "impostorHint": "Banquete"
+    },
+    {
         "id": "mb_011",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Isabel",
-        "hint": "Madre de Juan el Bautista, prima de María",
-        "impostorHint": "Milagro",
-        "difficulty": "medium",
-        "id": "mb_012",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "María Magdalena",
-        "hint": "Seguidora de Jesús, primera en verle resucitado",
-        "impostorHint": "Testigo",
+        "word": "María, madre de Jesús",
+        "category": "mujeres_biblicas",
         "difficulty": "easy",
+        "hint": "Virgen elegida por Dios",
+        "impostorHint": "Ángel"
+    },
+    {
+        "id": "mb_012",
+        "word": "Isabel",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Madre de Juan el Bautista, prima de María",
+        "impostorHint": "Milagro"
+    },
+    {
         "id": "mb_013",
-        "category": "mujeres_biblicas"
+        "word": "María Magdalena",
+        "category": "mujeres_biblicas",
+        "difficulty": "easy",
+        "hint": "Seguidora de Jesús, primera en verle resucitado",
+        "impostorHint": "Testigo"
     },
     {
-        "word": "Marta",
-        "hint": "Hermana de Lázaro, afanada con el servicio",
-        "impostorHint": "Servicio",
-        "difficulty": "medium",
         "id": "mb_014",
-        "category": "mujeres_biblicas"
+        "word": "Marta",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Hermana de Lázaro, afanada con el servicio",
+        "impostorHint": "Servicio"
     },
     {
-        "word": "Noemí",
-        "hint": "Suegra de Rut, cambió su nombre a Mara",
-        "impostorHint": "Amargura",
-        "difficulty": "medium",
         "id": "mb_015",
-        "category": "mujeres_biblicas"
+        "word": "Noemí",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Suegra de Rut, cambió su nombre a Mara",
+        "impostorHint": "Amargura"
     },
     {
-        "word": "Rahab",
-        "hint": "Escondió a los espías en Jericó",
-        "impostorHint": "Muros",
-        "difficulty": "medium",
         "id": "mb_016",
-        "category": "mujeres_biblicas"
+        "word": "Rahab",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Escondió a los espías en Jericó",
+        "impostorHint": "Cordón"
     },
     {
-        "word": "Dalila",
-        "hint": "Descubrió el secreto de la fuerza de Sansón",
-        "impostorHint": "Fuerza",
-        "difficulty": "medium",
         "id": "mb_017",
-        "category": "mujeres_biblicas"
+        "word": "Dalila",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Descubrió el secreto de la fuerza de Sansón",
+        "impostorHint": "Cabello"
     },
     {
-        "word": "Jezabel",
-        "hint": "Reina malvada, enemiga de Elías",
-        "impostorHint": "Reina",
-        "difficulty": "hard",
         "id": "mb_018",
-        "category": "mujeres_biblicas"
+        "word": "Jezabel",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Reina malvada, enemiga de Elías",
+        "impostorHint": "Perros"
     },
     {
-        "word": "Agar",
-        "hint": "Sierva de Sara, madre de Ismael",
-        "impostorHint": "Desierto",
-        "difficulty": "medium",
         "id": "mb_019",
-        "category": "mujeres_biblicas"
+        "word": "Agar",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Sierva de Sara, madre de Ismael",
+        "impostorHint": "Desierto"
     },
     {
-        "word": "Dina",
-        "hint": "Hija de Jacob",
-        "impostorHint": "Hija",
-        "difficulty": "hard",
         "id": "mb_020",
-        "category": "mujeres_biblicas"
+        "word": "Dina",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Hija de Jacob",
+        "impostorHint": "Hija"
     },
     {
-        "word": "Tamar",
-        "hint": "Nuera de Judá, luchó por justicia",
-        "impostorHint": "Justicia",
-        "difficulty": "hard",
         "id": "mb_021",
-        "category": "mujeres_biblicas"
+        "word": "Tamar",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Nuera de Judá, luchó por justicia",
+        "impostorHint": "Justicia"
     },
     {
-        "word": "Séfora",
-        "hint": "Esposa de Moisés",
-        "impostorHint": "Esposa",
-        "difficulty": "hard",
         "id": "mb_022",
-        "category": "mujeres_biblicas"
+        "word": "Séfora",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Esposa de Moisés",
+        "impostorHint": "Circuncisión"
     },
     {
-        "word": "Jocabed",
-        "hint": "Madre de Moisés, lo puso en una canasta",
-        "impostorHint": "Canasta",
-        "difficulty": "hard",
         "id": "mb_023",
-        "category": "mujeres_biblicas"
+        "word": "Jocabed",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Madre de Moisés, lo puso en una canasta",
+        "impostorHint": "Canasta"
     },
     {
-        "word": "Abigail",
-        "hint": "Esposa sabia de Nabal, luego de David",
-        "impostorHint": "Sabiduría",
-        "difficulty": "medium",
         "id": "mb_024",
-        "category": "mujeres_biblicas"
+        "word": "Abigail",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Esposa sabia de Nabal, luego de David",
+        "impostorHint": "Sabiduría"
     },
     {
-        "word": "Betsabé",
-        "hint": "Esposa de Urías, luego de David, madre de Salomón",
-        "impostorHint": "Rey",
-        "difficulty": "medium",
         "id": "mb_025",
-        "category": "mujeres_biblicas"
+        "word": "Betsabé",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Esposa de Urías, luego de David, madre de Salomón",
+        "impostorHint": "Baño"
     },
     {
-        "word": "Sunamita",
-        "hint": "Mujer hospitalaria que preparó cuarto a Eliseo",
-        "impostorHint": "Casa",
-        "difficulty": "hard",
         "id": "mb_026",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Priscila",
-        "hint": "Esposa de Aquila, maestra de Apolos",
-        "impostorHint": "Maestra",
-        "difficulty": "medium",
-        "id": "mb_027",
-        "category": "mujeres_biblicas"
-    },
-    {
-        "word": "Febe",
-        "hint": "Diaconisa de la iglesia en Cencrea",
-        "impostorHint": "Diaconisa",
+        "word": "Sunamita",
+        "category": "mujeres_biblicas",
         "difficulty": "hard",
+        "hint": "Mujer hospitalaria que preparó cuarto a Eliseo",
+        "impostorHint": "Cuarto"
+    },
+    {
+        "id": "mb_027",
+        "word": "Priscila",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Esposa de Aquila, maestra de Apolos",
+        "impostorHint": "Maestra"
+    },
+    {
         "id": "mb_028",
-        "category": "mujeres_biblicas"
+        "word": "Febe",
+        "category": "mujeres_biblicas",
+        "difficulty": "hard",
+        "hint": "Diaconisa de la iglesia en Cencrea",
+        "impostorHint": "Diaconisa"
     },
     {
-        "word": "Lidia",
-        "hint": "Vendedora de púrpura, primera convertida en Europa",
-        "impostorHint": "Púrpura",
-        "difficulty": "medium",
         "id": "mb_029",
-        "category": "mujeres_biblicas"
+        "word": "Lidia",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Vendedora de púrpura, primera convertida en Europa",
+        "impostorHint": "Púrpura"
     },
     {
-        "word": "Dorcas",
-        "hint": "Hacía túnicas para los pobres, resucitada por Pedro",
-        "impostorHint": "Ropa",
-        "difficulty": "medium",
         "id": "mb_030",
-        "category": "mujeres_biblicas"
+        "word": "Dorcas",
+        "category": "mujeres_biblicas",
+        "difficulty": "medium",
+        "hint": "Hacía túnicas para los pobres, resucitada por Pedro",
+        "impostorHint": "Ropa"
+    },
+    {
+        "id": "mi_001",
+        "word": "División del Mar Rojo",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Moisés extendió su mano y el mar se abrió",
+        "impostorHint": "Éxodo"
+    },
+    {
+        "id": "mi_002",
+        "word": "Agua convertida en vino",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Primer milagro de Jesús en una boda",
+        "impostorHint": "Bodas"
+    },
+    {
+        "id": "mi_003",
+        "word": "Resurrección de Lázaro",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesús lo llamó después de cuatro días",
+        "impostorHint": "Tumba"
+    },
+    {
+        "id": "mi_004",
+        "word": "Multiplicación de los panes",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "5 panes y 2 peces alimentaron a 5000",
+        "impostorHint": "Cesta"
+    },
+    {
+        "id": "mi_005",
+        "word": "Maná del cielo",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Alimento que Dios dio en el desierto",
+        "impostorHint": "Pan"
+    },
+    {
+        "id": "mi_006",
+        "word": "Caminar sobre el agua",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesús y Pedro lo hicieron en el lago",
+        "impostorHint": "Fe"
+    },
+    {
+        "id": "mi_007",
+        "word": "Curación del ciego de nacimiento",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesús hizo lodo y le dio la vista",
+        "impostorHint": "Lodo"
+    },
+    {
+        "id": "mi_008",
+        "word": "Resurrección de Jesús",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Al tercer día la tumba quedó vacía",
+        "impostorHint": "Domingo"
+    },
+    {
+        "id": "mi_009",
+        "word": "La transfiguración",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesús brilló como el sol en el monte",
+        "impostorHint": "Luz"
+    },
+    {
+        "id": "mi_010",
+        "word": "La tempestad calmada",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesús ordenó al viento y al mar que se calmaran",
+        "impostorHint": "Viento"
+    },
+    {
+        "id": "mi_011",
+        "word": "Curación del leproso",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Jesús lo tocó y quedó limpio",
+        "impostorHint": "Piel"
+    },
+    {
+        "id": "mi_012",
+        "word": "El diluvio universal",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Dios inundó la tierra y salvó a Noé",
+        "impostorHint": "Arco iris"
+    },
+    {
+        "id": "mi_013",
+        "word": "Las diez plagas de Egipto",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Dios las envió para liberar a Israel",
+        "impostorHint": "Faraón"
+    },
+    {
+        "id": "mi_014",
+        "word": "La columna de fuego",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Guiaba a Israel de noche en el desierto",
+        "impostorHint": "Noche"
+    },
+    {
+        "id": "mi_015",
+        "word": "La zarza ardiente",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Dios habló a Moisés desde ella",
+        "impostorHint": "Fuego"
+    },
+    {
+        "id": "mi_016",
+        "word": "El sol detenido",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Josué pidió que se detuviera durante la batalla",
+        "impostorHint": "Josué"
+    },
+    {
+        "id": "mi_017",
+        "word": "Pentecostés",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "El Espíritu Santo descendió como lenguas de fuego",
+        "impostorHint": "Viento"
+    },
+    {
+        "id": "mi_018",
+        "word": "Daniel en el foso de leones",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Los leones no lo tocaron",
+        "impostorHint": "Ángel"
+    },
+    {
+        "id": "mi_019",
+        "word": "El horno de fuego ardiente",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Sadrac, Mesac y Abed-nego salieron ilesos",
+        "impostorHint": "Cuarto"
+    },
+    {
+        "id": "mi_020",
+        "word": "Jonás y el gran pez",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Estuvo tres días en el vientre del pez",
+        "impostorHint": "Ballena"
+    },
+    {
+        "id": "mi_021",
+        "word": "El aceite de la viuda",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "El aceite no se acabó por el profeta Elías",
+        "impostorHint": "Vasijas"
+    },
+    {
+        "id": "mi_022",
+        "word": "Fuego del cielo de Elías",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Consumió el altar empapado de agua",
+        "impostorHint": "Baal"
+    },
+    {
+        "id": "mi_023",
+        "word": "Ascensión de Elías",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Subió al cielo en un carro de fuego",
+        "impostorHint": "Carro"
+    },
+    {
+        "id": "mi_024",
+        "word": "Resurrección del hijo de la sunamita",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "El profeta Eliseo la realizó",
+        "impostorHint": "Niño"
+    },
+    {
+        "id": "mi_025",
+        "word": "El hacha flotante",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Eliseo hizo flotar un hacha de hierro",
+        "impostorHint": "Palo"
+    },
+    {
+        "id": "mi_026",
+        "word": "Curación de Naamán",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "General sirio curado de lepra en el Jordán",
+        "impostorHint": "Siete"
+    },
+    {
+        "id": "mi_027",
+        "word": "Pablo y Silas liberados de prisión",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Un terremoto abrió las puertas de la cárcel",
+        "impostorHint": "Cantos"
+    },
+    {
+        "id": "mi_028",
+        "word": "Conversión de Pablo",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Una gran luz lo derribó camino a Damasco",
+        "impostorHint": "Ceguera"
+    },
+    {
+        "id": "mi_029",
+        "word": "Curación del paralítico de Betsaida",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Sus amigos lo bajaron por el techo",
+        "impostorHint": "Techo"
+    },
+    {
+        "id": "mi_030",
+        "word": "Curación del siervo del centurión",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Jesús sanó a distancia por la fe del oficial",
+        "impostorHint": "Autoridad"
+    },
+    {
+        "id": "mi_031",
+        "word": "Ascensión de Jesús",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Subió al cielo ante sus discípulos",
+        "impostorHint": "Nube"
+    },
+    {
+        "id": "mi_032",
+        "word": "El agua de la roca",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Moisés golpeó una roca y brotó agua",
+        "impostorHint": "Sed"
+    },
+    {
+        "id": "mi_033",
+        "word": "La caída de los muros de Jericó",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Los israelitas marcharon y tocaron trompetas",
+        "impostorHint": "Trompeta"
+    },
+    {
+        "id": "mi_034",
+        "word": "La creación del mundo",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Dios hizo todo en seis días",
+        "impostorHint": "Génesis"
+    },
+    {
+        "id": "mi_035",
+        "word": "La resurrección de Dorcas",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Pedro oró y la mujer volvió a la vida",
+        "impostorHint": "Pedro"
+    },
+    {
+        "id": "mi_036",
+        "word": "La estrella de Belén",
+        "category": "milagros_biblicos",
+        "difficulty": "easy",
+        "hint": "Guió a los magos al niño Jesús",
+        "impostorHint": "Magos"
+    },
+    {
+        "id": "mi_037",
+        "word": "El vellón de Gedeón",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Estaba húmedo mientras el suelo estaba seco",
+        "impostorHint": "Señal"
+    },
+    {
+        "id": "mi_038",
+        "word": "El pez con la moneda",
+        "category": "milagros_biblicos",
+        "difficulty": "medium",
+        "hint": "Pedro lo pescó para pagar el impuesto del templo",
+        "impostorHint": "Moneda"
+    },
+    {
+        "id": "mi_039",
+        "word": "Resurrección del hijo de la viuda de Naín",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Jesús detuvo el cortejo fúnebre",
+        "impostorHint": "Cortejo"
+    },
+    {
+        "id": "mi_040",
+        "word": "La mano lepra de Moisés",
+        "category": "milagros_biblicos",
+        "difficulty": "hard",
+        "hint": "Dios le mostró su poder siendo una señal",
+        "impostorHint": "Señal"
+    },
+    {
+        "id": "pa_001",
+        "word": "El hijo pródigo",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Un hijo derrochó su herencia y volvió arrepentido",
+        "impostorHint": "Regreso"
+    },
+    {
+        "id": "pa_002",
+        "word": "El buen samaritano",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Un extranjero ayudó al herido que otros ignoraron",
+        "impostorHint": "Prójimo"
+    },
+    {
+        "id": "pa_003",
+        "word": "El sembrador",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "La semilla cayó en diferentes tipos de tierra",
+        "impostorHint": "Tierra"
+    },
+    {
+        "id": "pa_004",
+        "word": "La semilla de mostaza",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "La más pequeña crece hasta ser el árbol más grande",
+        "impostorHint": "Pequeño"
+    },
+    {
+        "id": "pa_005",
+        "word": "La perla de gran precio",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Un mercader vendió todo para comprarla",
+        "impostorHint": "Venta"
+    },
+    {
+        "id": "pa_006",
+        "word": "El tesoro escondido",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Un hombre vendió todo para comprar el campo",
+        "impostorHint": "Campo"
+    },
+    {
+        "id": "pa_007",
+        "word": "Las diez vírgenes",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Cinco tenían aceite y cinco no",
+        "impostorHint": "Aceite"
+    },
+    {
+        "id": "pa_008",
+        "word": "Los talentos",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "A cada siervo le dieron diferente cantidad para multiplicar",
+        "impostorHint": "Multiplicar"
+    },
+    {
+        "id": "pa_009",
+        "word": "El siervo sin misericordia",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Lo perdonaron pero él no perdonó a su deudor",
+        "impostorHint": "Deuda"
+    },
+    {
+        "id": "pa_010",
+        "word": "Los obreros de la viña",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Todos recibieron el mismo salario sin importar la hora",
+        "impostorHint": "Salario"
+    },
+    {
+        "id": "pa_011",
+        "word": "Los labradores malvados",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Mataron al hijo del dueño de la viña",
+        "impostorHint": "Viña"
+    },
+    {
+        "id": "pa_012",
+        "word": "El banquete de bodas",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Los invitados rechazaron la invitación y llamaron a otros",
+        "impostorHint": "Invitados"
+    },
+    {
+        "id": "pa_013",
+        "word": "La levadura",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Un poco fermenta toda la masa",
+        "impostorHint": "Pan"
+    },
+    {
+        "id": "pa_014",
+        "word": "La red de peces",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Se separaron los buenos de los malos",
+        "impostorHint": "Mar"
+    },
+    {
+        "id": "pa_015",
+        "word": "La oveja perdida",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "El pastor dejó 99 para buscar una",
+        "impostorHint": "Pastor"
+    },
+    {
+        "id": "pa_016",
+        "word": "La moneda perdida",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Una mujer barrió toda su casa para encontrarla",
+        "impostorHint": "Alegría"
+    },
+    {
+        "id": "pa_017",
+        "word": "El rico y Lázaro",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "El pobre mendigo fue al seno de Abraham",
+        "impostorHint": "Abismo"
+    },
+    {
+        "id": "pa_018",
+        "word": "El fariseo y el publicano",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "El publicano golpeó su pecho y fue justificado",
+        "impostorHint": "Humildad"
+    },
+    {
+        "id": "pa_019",
+        "word": "El juez injusto",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "La viuda persistió en su petición hasta ser escuchada",
+        "impostorHint": "Viuda"
+    },
+    {
+        "id": "pa_020",
+        "word": "El buen pastor",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Conoce a sus ovejas por nombre y da su vida",
+        "impostorHint": "Ovejas"
+    },
+    {
+        "id": "pa_021",
+        "word": "La vid y los sarmientos",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Sin el tronco los ramos no pueden dar fruto",
+        "impostorHint": "Fruto"
+    },
+    {
+        "id": "pa_022",
+        "word": "El mayordomo astuto",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "Se ganó amigos al reducir las deudas de su amo",
+        "impostorHint": "Astucia"
+    },
+    {
+        "id": "pa_023",
+        "word": "El rico insensato",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Planeó construir graneros más grandes pero murió esa noche",
+        "impostorHint": "Granero"
+    },
+    {
+        "id": "pa_024",
+        "word": "La higuera sin fruto",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "El jardinero pidió un año más para la higuera estéril",
+        "impostorHint": "Higuera"
+    },
+    {
+        "id": "pa_025",
+        "word": "El gran banquete",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Los pobres y lisiados ocuparon el lugar de los ricos",
+        "impostorHint": "Excusas"
+    },
+    {
+        "id": "pa_026",
+        "word": "El amigo a medianoche",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "La insistencia logró que el amigo se levantara",
+        "impostorHint": "Persistencia"
+    },
+    {
+        "id": "pa_027",
+        "word": "Los dos deudores",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "El que más le perdonaron más amó",
+        "impostorHint": "Gratitud"
+    },
+    {
+        "id": "pa_028",
+        "word": "La higuera y el verano",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Cuando brota saben que el verano está cerca",
+        "impostorHint": "Señales"
+    },
+    {
+        "id": "pa_029",
+        "word": "El edificio sobre la roca",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "La tormenta no derribó la casa del obediente",
+        "impostorHint": "Cimientos"
+    },
+    {
+        "id": "pa_030",
+        "word": "Los dos hijos",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Uno dijo que no iría al viñedo y fue, el otro al revés",
+        "impostorHint": "Obediencia"
+    },
+    {
+        "id": "pa_031",
+        "word": "Las minas",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Un noble fue a un país lejano y dejó dinero a cada siervo",
+        "impostorHint": "Rentabilidad"
+    },
+    {
+        "id": "pa_032",
+        "word": "El grano de trigo",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Debe caer en tierra y morir para dar mucho fruto",
+        "impostorHint": "Muerte"
+    },
+    {
+        "id": "pa_033",
+        "word": "El mayordomo fiel",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "El que es fiel en lo poco tendrá autoridad sobre más",
+        "impostorHint": "Fidelidad"
+    },
+    {
+        "id": "pa_034",
+        "word": "El ojo sano",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "Si está malo todo el cuerpo está en tinieblas",
+        "impostorHint": "Luz"
+    },
+    {
+        "id": "pa_035",
+        "word": "La sal de la tierra",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Si pierde su sabor no sirve para nada",
+        "impostorHint": "Sabor"
+    },
+    {
+        "id": "pa_036",
+        "word": "La cizaña entre el trigo",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Crecen juntos hasta la cosecha final",
+        "impostorHint": "Enemigo"
+    },
+    {
+        "id": "pa_037",
+        "word": "El rey en la guerra",
+        "category": "parabolas_jesus",
+        "difficulty": "hard",
+        "hint": "Calculó si podía vencer antes de atacar",
+        "impostorHint": "Cálculo"
+    },
+    {
+        "id": "pa_038",
+        "word": "Los invitados que se excusan",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Uno compró un buey, otro campo, otro se casó",
+        "impostorHint": "Campo"
+    },
+    {
+        "id": "pa_039",
+        "word": "La mujer y la levadura",
+        "category": "parabolas_jesus",
+        "difficulty": "medium",
+        "hint": "Escondió levadura en tres medidas de harina",
+        "impostorHint": "Masa"
+    },
+    {
+        "id": "pa_040",
+        "word": "El árbol y sus frutos",
+        "category": "parabolas_jesus",
+        "difficulty": "easy",
+        "hint": "Por sus frutos los conoceréis",
+        "impostorHint": "Frutos"
     }
 ]

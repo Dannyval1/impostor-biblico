@@ -5,7 +5,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "King of the jungle with mane",
-        "impostorHint": "Animal"
+        "impostorHint": "Mane"
     },
     {
         "id": "gen_an_002",
@@ -13,7 +13,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Man's best friend",
-        "impostorHint": "Animal"
+        "impostorHint": "Company"
     },
     {
         "id": "gen_an_003",
@@ -21,7 +21,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Feline pet that meows",
-        "impostorHint": "Animal"
+        "impostorHint": "Meow"
     },
     {
         "id": "gen_an_004",
@@ -29,7 +29,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Giant mammal with trunk",
-        "impostorHint": "Animal"
+        "impostorHint": "Trunk"
     },
     {
         "id": "gen_an_005",
@@ -37,7 +37,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Orange feline with black stripes",
-        "impostorHint": "Animal"
+        "impostorHint": "Stripes"
     },
     {
         "id": "gen_an_006",
@@ -45,7 +45,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Animal that neighs and gallops",
-        "impostorHint": "Animal"
+        "impostorHint": "Gallop"
     },
     {
         "id": "gen_an_007",
@@ -53,7 +53,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Animal that gives milk",
-        "impostorHint": "Animal"
+        "impostorHint": "Milk"
     },
     {
         "id": "gen_an_008",
@@ -61,7 +61,7 @@
         "category": "animales",
         "difficulty": "easy",
         "hint": "Animal that hops and eats carrots",
-        "impostorHint": "Animal"
+        "impostorHint": "Carrot"
     },
     {
         "id": "gen_an_009",
@@ -69,7 +69,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Tallest animal in the world",
-        "impostorHint": "Animal"
+        "impostorHint": "Neck"
     },
     {
         "id": "gen_an_010",
@@ -77,7 +77,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Very heavy aquatic mammal",
-        "impostorHint": "Animal"
+        "impostorHint": "River"
     },
     {
         "id": "gen_an_011",
@@ -85,7 +85,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Gray animal with horn on nose",
-        "impostorHint": "Animal"
+        "impostorHint": "Horn"
     },
     {
         "id": "gen_an_012",
@@ -93,7 +93,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Marsupial that hops and has pouch",
-        "impostorHint": "Animal"
+        "impostorHint": "Pouch"
     },
     {
         "id": "gen_an_013",
@@ -101,7 +101,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Bird that doesn't fly but swims well",
-        "impostorHint": "Animal"
+        "impostorHint": "Ice"
     },
     {
         "id": "gen_an_014",
@@ -109,7 +109,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Very intelligent marine mammal",
-        "impostorHint": "Animal"
+        "impostorHint": "Jump"
     },
     {
         "id": "gen_an_015",
@@ -117,7 +117,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Large mammal that hibernates",
-        "impostorHint": "Animal"
+        "impostorHint": "Hibernation"
     },
     {
         "id": "gen_an_016",
@@ -125,7 +125,7 @@
         "category": "animales",
         "difficulty": "medium",
         "hint": "Legless reptile that slithers",
-        "impostorHint": "Animal"
+        "impostorHint": "Venom"
     },
     {
         "id": "gen_an_017",
@@ -133,7 +133,7 @@
         "category": "animales",
         "difficulty": "hard",
         "hint": "Strange mammal with duck bill",
-        "impostorHint": "Animal"
+        "impostorHint": "Bill"
     },
     {
         "id": "gen_an_018",
@@ -141,7 +141,7 @@
         "category": "animales",
         "difficulty": "hard",
         "hint": "Australian marsupial that eats eucalyptus",
-        "impostorHint": "Animal"
+        "impostorHint": "Eucalyptus"
     },
     {
         "id": "gen_an_019",
@@ -149,7 +149,7 @@
         "category": "animales",
         "difficulty": "hard",
         "hint": "Mammal with natural armor",
-        "impostorHint": "Animal"
+        "impostorHint": "Armor"
     },
     {
         "id": "gen_an_020",
@@ -157,7 +157,7 @@
         "category": "animales",
         "difficulty": "hard",
         "hint": "Madagascar primate with ringed tail",
-        "impostorHint": "Animal"
+        "impostorHint": "Tail"
     },
     {
         "id": "gen_fo_001",
@@ -165,7 +165,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Italian food with dough and cheese",
-        "impostorHint": "Food"
+        "impostorHint": "Cheese"
     },
     {
         "id": "gen_fo_002",
@@ -173,7 +173,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Meat between two buns",
-        "impostorHint": "Food"
+        "impostorHint": "Bun"
     },
     {
         "id": "gen_fo_003",
@@ -181,7 +181,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Italian noodles with sauce",
-        "impostorHint": "Food"
+        "impostorHint": "Sauce"
     },
     {
         "id": "gen_fo_004",
@@ -189,7 +189,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "White grain staple from Asia",
-        "impostorHint": "Food"
+        "impostorHint": "Grain"
     },
     {
         "id": "gen_fo_005",
@@ -197,7 +197,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Popular poultry meat",
-        "impostorHint": "Food"
+        "impostorHint": "Bird"
     },
     {
         "id": "gen_fo_006",
@@ -205,7 +205,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Basic wheat food",
-        "impostorHint": "Food"
+        "impostorHint": "Oven"
     },
     {
         "id": "gen_fo_007",
@@ -213,7 +213,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Oval product from chickens",
-        "impostorHint": "Food"
+        "impostorHint": "Chicken"
     },
     {
         "id": "gen_fo_008",
@@ -221,7 +221,7 @@
         "category": "comida",
         "difficulty": "easy",
         "hint": "Common red or green fruit",
-        "impostorHint": "Food"
+        "impostorHint": "Tree"
     },
     {
         "id": "gen_fo_009",
@@ -229,7 +229,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Japanese food with raw fish",
-        "impostorHint": "Food"
+        "impostorHint": "Seaweed"
     },
     {
         "id": "gen_fo_010",
@@ -237,7 +237,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Mexican food with tortilla",
-        "impostorHint": "Food"
+        "impostorHint": "Tortilla"
     },
     {
         "id": "gen_fo_011",
@@ -245,7 +245,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Spanish dish with rice and seafood",
-        "impostorHint": "Food"
+        "impostorHint": "Seafood"
     },
     {
         "id": "gen_fo_012",
@@ -253,7 +253,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Layered Italian pasta with meat",
-        "impostorHint": "Food"
+        "impostorHint": "Layers"
     },
     {
         "id": "gen_fo_013",
@@ -261,7 +261,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Stuffed Mexican tortillas",
-        "impostorHint": "Food"
+        "impostorHint": "Chili"
     },
     {
         "id": "gen_fo_014",
@@ -269,7 +269,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "French crescent-shaped pastry",
-        "impostorHint": "Food"
+        "impostorHint": "Butter"
     },
     {
         "id": "gen_fo_015",
@@ -277,7 +277,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Stuffed and baked dough",
-        "impostorHint": "Food"
+        "impostorHint": "Filling"
     },
     {
         "id": "gen_fo_016",
@@ -285,15 +285,7 @@
         "category": "comida",
         "difficulty": "medium",
         "hint": "Spicy Indian food",
-        "impostorHint": "Food"
-    },
-    {
-        "id": "gen_fo_017",
-        "word": "Gazpacho",
-        "category": "comida",
-        "difficulty": "hard",
-        "hint": "Cold Spanish tomato soup",
-        "impostorHint": "Food"
+        "impostorHint": "Spices"
     },
     {
         "id": "gen_fo_018",
@@ -301,7 +293,7 @@
         "category": "comida",
         "difficulty": "hard",
         "hint": "French vegetable stew",
-        "impostorHint": "Food"
+        "impostorHint": "Vegetables"
     },
     {
         "id": "gen_fo_019",
@@ -309,7 +301,7 @@
         "category": "comida",
         "difficulty": "hard",
         "hint": "Raw fish marinated in lime",
-        "impostorHint": "Food"
+        "impostorHint": "Lime"
     },
     {
         "id": "gen_fo_020",
@@ -317,7 +309,7 @@
         "category": "comida",
         "difficulty": "hard",
         "hint": "Mexican sauce with chocolate",
-        "impostorHint": "Food"
+        "impostorHint": "Chocolate"
     },
     {
         "id": "gen_pr_001",
@@ -325,7 +317,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Professional who cures diseases",
-        "impostorHint": "Profession"
+        "impostorHint": "Coat"
     },
     {
         "id": "gen_pr_002",
@@ -333,7 +325,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Educates children in school",
-        "impostorHint": "Profession"
+        "impostorHint": "Blackboard"
     },
     {
         "id": "gen_pr_003",
@@ -341,7 +333,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Maintains order and safety",
-        "impostorHint": "Profession"
+        "impostorHint": "Uniform"
     },
     {
         "id": "gen_pr_004",
@@ -349,7 +341,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Puts out fires and rescues people",
-        "impostorHint": "Profession"
+        "impostorHint": "Hose"
     },
     {
         "id": "gen_pr_005",
@@ -357,7 +349,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Prepares food in restaurants",
-        "impostorHint": "Profession"
+        "impostorHint": "Apron"
     },
     {
         "id": "gen_pr_006",
@@ -365,7 +357,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Cares for patients in hospitals",
-        "impostorHint": "Profession"
+        "impostorHint": "Syringe"
     },
     {
         "id": "gen_pr_007",
@@ -373,7 +365,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Flies airplanes through the sky",
-        "impostorHint": "Profession"
+        "impostorHint": "Cockpit"
     },
     {
         "id": "gen_pr_008",
@@ -381,7 +373,7 @@
         "category": "profesiones",
         "difficulty": "easy",
         "hint": "Repairs cars and engines",
-        "impostorHint": "Profession"
+        "impostorHint": "Oil"
     },
     {
         "id": "gen_pr_009",
@@ -389,7 +381,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Designs and builds technical systems",
-        "impostorHint": "Profession"
+        "impostorHint": "Plans"
     },
     {
         "id": "gen_pr_010",
@@ -397,7 +389,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Creates software and applications",
-        "impostorHint": "Profession"
+        "impostorHint": "Code"
     },
     {
         "id": "gen_pr_011",
@@ -405,7 +397,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Reports news and events",
-        "impostorHint": "Profession"
+        "impostorHint": "Microphone"
     },
     {
         "id": "gen_pr_012",
@@ -413,7 +405,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Prepares and sells medicines",
-        "impostorHint": "Profession"
+        "impostorHint": "Pills"
     },
     {
         "id": "gen_pr_013",
@@ -421,7 +413,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Studies mind and behavior",
-        "impostorHint": "Profession"
+        "impostorHint": "Couch"
     },
     {
         "id": "gen_pr_014",
@@ -429,7 +421,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Installs and repairs electrical systems",
-        "impostorHint": "Profession"
+        "impostorHint": "Cables"
     },
     {
         "id": "gen_pr_015",
@@ -437,7 +429,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Researches natural phenomena",
-        "impostorHint": "Profession"
+        "impostorHint": "Laboratory"
     },
     {
         "id": "gen_pr_016",
@@ -445,7 +437,7 @@
         "category": "profesiones",
         "difficulty": "medium",
         "hint": "Plays instruments and composes",
-        "impostorHint": "Profession"
+        "impostorHint": "Score"
     },
     {
         "id": "gen_pr_017",
@@ -453,7 +445,7 @@
         "category": "profesiones",
         "difficulty": "hard",
         "hint": "Studies human cultures and societies",
-        "impostorHint": "Profession"
+        "impostorHint": "Tribe"
     },
     {
         "id": "gen_pr_018",
@@ -461,7 +453,7 @@
         "category": "profesiones",
         "difficulty": "hard",
         "hint": "Excavates and studies ancient civilizations",
-        "impostorHint": "Profession"
+        "impostorHint": "Fossil"
     },
     {
         "id": "gen_pr_019",
@@ -469,7 +461,7 @@
         "category": "profesiones",
         "difficulty": "hard",
         "hint": "Predicts climate and weather",
-        "impostorHint": "Profession"
+        "impostorHint": "Rain"
     },
     {
         "id": "gen_pr_020",
@@ -477,158 +469,638 @@
         "category": "profesiones",
         "difficulty": "hard",
         "hint": "Operates on brain and nervous system",
-        "impostorHint": "Profession"
+        "impostorHint": "Brain"
     },
     {
-        "id": "gen_to_001",
+        "id": "gen_he_001",
         "word": "Hammer",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Hits nails with metal head",
-        "impostorHint": "Tool"
+        "impostorHint": "Nail"
     },
     {
-        "id": "gen_to_002",
+        "id": "gen_he_002",
         "word": "Screwdriver",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Screws and unscrews screws",
-        "impostorHint": "Tool"
+        "impostorHint": "Screw"
     },
     {
-        "id": "gen_to_003",
+        "id": "gen_he_003",
         "word": "Wrench",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Adjusts nuts and bolts",
-        "impostorHint": "Tool"
+        "impostorHint": "Nut"
     },
     {
-        "id": "gen_to_004",
+        "id": "gen_he_004",
         "word": "Saw",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Cuts wood with teeth",
-        "impostorHint": "Tool"
+        "impostorHint": "Teeth"
     },
     {
-        "id": "gen_to_005",
+        "id": "gen_he_005",
         "word": "Knife",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Cuts with sharp blade",
-        "impostorHint": "Tool"
+        "impostorHint": "Edge"
     },
     {
-        "id": "gen_to_006",
+        "id": "gen_he_006",
         "word": "Scissors",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Cuts paper with two blades",
-        "impostorHint": "Tool"
+        "impostorHint": "Blades"
     },
     {
-        "id": "gen_to_007",
+        "id": "gen_he_007",
         "word": "Shovel",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Digs earth with long handle",
-        "impostorHint": "Tool"
+        "impostorHint": "Earth"
     },
     {
-        "id": "gen_to_008",
+        "id": "gen_he_008",
         "word": "Brush",
         "category": "herramientas",
         "difficulty": "easy",
         "hint": "Paints with bristles at tip",
-        "impostorHint": "Tool"
+        "impostorHint": "Bristles"
     },
     {
-        "id": "gen_to_009",
+        "id": "gen_he_009",
         "word": "Drill",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Makes holes by spinning fast",
-        "impostorHint": "Tool"
+        "impostorHint": "Hole"
     },
     {
-        "id": "gen_to_010",
+        "id": "gen_he_010",
         "word": "Welder",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Joins metals with extreme heat",
-        "impostorHint": "Tool"
+        "impostorHint": "Spark"
     },
     {
-        "id": "gen_to_011",
+        "id": "gen_he_011",
         "word": "Pliers",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Grips objects with jaws",
-        "impostorHint": "Tool"
+        "impostorHint": "Grip"
     },
     {
-        "id": "gen_to_013",
+        "id": "gen_he_013",
         "word": "File",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Wears down surfaces with roughness",
-        "impostorHint": "Tool"
+        "impostorHint": "Rough"
     },
     {
-        "id": "gen_to_014",
+        "id": "gen_he_014",
         "word": "Chisel",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Carves stone or wood with edge",
-        "impostorHint": "Tool"
+        "impostorHint": "Carve"
     },
     {
-        "id": "gen_to_015",
+        "id": "gen_he_015",
         "word": "Car jack",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Lifts cars to change tires",
-        "impostorHint": "Tool"
+        "impostorHint": "Tire"
     },
     {
-        "id": "gen_to_016",
+        "id": "gen_he_016",
         "word": "Compressor",
         "category": "herramientas",
         "difficulty": "medium",
         "hint": "Generates pressurized air",
-        "impostorHint": "Tool"
+        "impostorHint": "Pressure"
     },
     {
-        "id": "gen_to_017",
+        "id": "gen_he_017",
         "word": "Caliper",
         "category": "herramientas",
         "difficulty": "hard",
         "hint": "Measures with extreme precision",
-        "impostorHint": "Tool"
+        "impostorHint": "Millimeter"
     },
     {
-        "id": "gen_to_018",
+        "id": "gen_he_018",
         "word": "Multimeter",
         "category": "herramientas",
         "difficulty": "hard",
         "hint": "Measures voltage, current and resistance",
-        "impostorHint": "Tool"
+        "impostorHint": "Voltage"
     },
     {
-        "id": "gen_to_019",
+        "id": "gen_he_019",
         "word": "Milling machine",
         "category": "herramientas",
         "difficulty": "hard",
         "hint": "Machine that cuts metal precisely",
-        "impostorHint": "Tool"
+        "impostorHint": "Metal"
     },
     {
-        "id": "gen_to_020",
+        "id": "gen_he_020",
         "word": "Lathe",
         "category": "herramientas",
         "difficulty": "hard",
         "hint": "Machine that spins pieces to shape them",
-        "impostorHint": "Tool"
+        "impostorHint": "Spin"
+    },
+    {
+        "id": "gen_ma_001",
+        "word": "Apple",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Empresa de iPhone y Mac",
+        "impostorHint": "Tecnología"
+    },
+    {
+        "id": "gen_ma_002",
+        "word": "Nike",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Just do it",
+        "impostorHint": "Deporte"
+    },
+    {
+        "id": "gen_ma_003",
+        "word": "Coca-Cola",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "La bebida roja más famosa del mundo",
+        "impostorHint": "Refresco"
+    },
+    {
+        "id": "gen_ma_004",
+        "word": "Samsung",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Empresa coreana de teléfonos y televisores",
+        "impostorHint": "Pantalla"
+    },
+    {
+        "id": "gen_ma_005",
+        "word": "Amazon",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "El río más grande y la tienda online más grande",
+        "impostorHint": "Compras"
+    },
+    {
+        "id": "gen_ma_006",
+        "word": "Google",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "El buscador más usado del mundo",
+        "impostorHint": "Búsqueda"
+    },
+    {
+        "id": "gen_ma_007",
+        "word": "Tesla",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Carros eléctricos de Elon Musk",
+        "impostorHint": "Eléctrico"
+    },
+    {
+        "id": "gen_ma_008",
+        "word": "McDonald's",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Las arches doradas y las hamburguesas",
+        "impostorHint": "Papas"
+    },
+    {
+        "id": "gen_ma_009",
+        "word": "Adidas",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Las tres rayas",
+        "impostorHint": "Tres"
+    },
+    {
+        "id": "gen_ma_010",
+        "word": "Disney",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "El ratón y el reino mágico",
+        "impostorHint": "Magia"
+    },
+    {
+        "id": "gen_ma_011",
+        "word": "Netflix",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Plataforma de streaming rojo y negro",
+        "impostorHint": "Series"
+    },
+    {
+        "id": "gen_ma_012",
+        "word": "Microsoft",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Windows y Office",
+        "impostorHint": "Software"
+    },
+    {
+        "id": "gen_ma_013",
+        "word": "Mercedes-Benz",
+        "category": "marcas",
+        "difficulty": "medium",
+        "hint": "La estrella de tres puntas",
+        "impostorHint": "Lujo"
+    },
+    {
+        "id": "gen_ma_014",
+        "word": "BMW",
+        "category": "marcas",
+        "difficulty": "medium",
+        "hint": "El placer de conducir, de Baviera",
+        "impostorHint": "Bávaro"
+    },
+    {
+        "id": "gen_ma_015",
+        "word": "Toyota",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "La marca de carros más vendida del mundo",
+        "impostorHint": "Japonés"
+    },
+    {
+        "id": "gen_ma_016",
+        "word": "Pepsi",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "La rival de Coca-Cola",
+        "impostorHint": "Azul"
+    },
+    {
+        "id": "gen_ma_017",
+        "word": "LEGO",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Los bloques de construcción de plástico",
+        "impostorHint": "Bloques"
+    },
+    {
+        "id": "gen_ma_018",
+        "word": "Spotify",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Música en streaming verde",
+        "impostorHint": "Música"
+    },
+    {
+        "id": "gen_ma_019",
+        "word": "Zara",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Marca de ropa española de Inditex",
+        "impostorHint": "Moda"
+    },
+    {
+        "id": "gen_ma_020",
+        "word": "Starbucks",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "La sirena verde del café",
+        "impostorHint": "Café"
+    },
+    {
+        "id": "gen_ma_021",
+        "word": "Instagram",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Red social de fotos con cámara de colores",
+        "impostorHint": "Fotos"
+    },
+    {
+        "id": "gen_ma_022",
+        "word": "YouTube",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "La plataforma de videos más grande",
+        "impostorHint": "Play"
+    },
+    {
+        "id": "gen_ma_023",
+        "word": "Uber",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Aplicación de transporte",
+        "impostorHint": "Taxi"
+    },
+    {
+        "id": "gen_ma_024",
+        "word": "IKEA",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Muebles suecos para armar",
+        "impostorHint": "Muebles"
+    },
+    {
+        "id": "gen_ma_025",
+        "word": "Ferrari",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "El caballo rampante italiano",
+        "impostorHint": "Rojo"
+    },
+    {
+        "id": "gen_ma_026",
+        "word": "Sony",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "PlayStation y electrónica japonesa",
+        "impostorHint": "Japonés"
+    },
+    {
+        "id": "gen_ma_027",
+        "word": "Louis Vuitton",
+        "category": "marcas",
+        "difficulty": "medium",
+        "hint": "Bolsos y maletas de lujo franceses",
+        "impostorHint": "Monograma"
+    },
+    {
+        "id": "gen_ma_028",
+        "word": "Rolex",
+        "category": "marcas",
+        "difficulty": "medium",
+        "hint": "Relojes de lujo suizos",
+        "impostorHint": "Tiempo"
+    },
+    {
+        "id": "gen_ma_029",
+        "word": "KFC",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Pollo frito del coronel Sanders",
+        "impostorHint": "Pollo"
+    },
+    {
+        "id": "gen_ma_030",
+        "word": "WhatsApp",
+        "category": "marcas",
+        "difficulty": "easy",
+        "hint": "Mensajería verde de Meta",
+        "impostorHint": "Mensaje"
+    },
+    {
+        "id": "gen_fa_001",
+        "word": "Albert Einstein",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Científico alemán de la teoría de la relatividad",
+        "impostorHint": "Física"
+    },
+    {
+        "id": "gen_fa_002",
+        "word": "Michael Jackson",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "El rey del pop",
+        "impostorHint": "Moonwalk"
+    },
+    {
+        "id": "gen_fa_003",
+        "word": "Lionel Messi",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "El mejor futbolista argentino de la historia",
+        "impostorHint": "Argentina"
+    },
+    {
+        "id": "gen_fa_004",
+        "word": "Cristiano Ronaldo",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "CR7, el delantero portugués",
+        "impostorHint": "CR7"
+    },
+    {
+        "id": "gen_fa_005",
+        "word": "Elon Musk",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Fundador de Tesla y SpaceX",
+        "impostorHint": "Marte"
+    },
+    {
+        "id": "gen_fa_006",
+        "word": "Beyoncé",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "La reina del pop y R&B",
+        "impostorHint": "Destino"
+    },
+    {
+        "id": "gen_fa_007",
+        "word": "Taylor Swift",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Cantante de country y pop, fans swifties",
+        "impostorHint": "Eras"
+    },
+    {
+        "id": "gen_fa_008",
+        "word": "Bill Gates",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Fundador de Microsoft",
+        "impostorHint": "Windows"
+    },
+    {
+        "id": "gen_fa_009",
+        "word": "Barack Obama",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "44° presidente de los Estados Unidos",
+        "impostorHint": "44"
+    },
+    {
+        "id": "gen_fa_010",
+        "word": "Shakira",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Cantante colombiana de cadera engañosa",
+        "impostorHint": "Cadera"
+    },
+    {
+        "id": "gen_fa_011",
+        "word": "Steve Jobs",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Cofundador de Apple",
+        "impostorHint": "iMac"
+    },
+    {
+        "id": "gen_fa_012",
+        "word": "Oprah Winfrey",
+        "category": "famosos",
+        "difficulty": "medium",
+        "hint": "La reina de los talk shows estadounidenses",
+        "impostorHint": "Show"
+    },
+    {
+        "id": "gen_fa_013",
+        "word": "LeBron James",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "El rey del baloncesto de la NBA",
+        "impostorHint": "Canasta"
+    },
+    {
+        "id": "gen_fa_014",
+        "word": "Usain Bolt",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "El hombre más rápido del mundo",
+        "impostorHint": "Rayo"
+    },
+    {
+        "id": "gen_fa_015",
+        "word": "Madonna",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "La reina del pop de los 80",
+        "impostorHint": "Material"
+    },
+    {
+        "id": "gen_fa_016",
+        "word": "Pablo Picasso",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Pintor español del cubismo",
+        "impostorHint": "Arte"
+    },
+    {
+        "id": "gen_fa_017",
+        "word": "Marie Curie",
+        "category": "famosos",
+        "difficulty": "medium",
+        "hint": "Primera mujer en ganar el Nobel",
+        "impostorHint": "Química"
+    },
+    {
+        "id": "gen_fa_018",
+        "word": "Napoleon Bonaparte",
+        "category": "famosos",
+        "difficulty": "medium",
+        "hint": "Emperador francés de baja estatura",
+        "impostorHint": "Francia"
+    },
+    {
+        "id": "gen_fa_019",
+        "word": "Martin Luther King",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Lider de derechos civiles, tengo un sueño",
+        "impostorHint": "Sueño"
+    },
+    {
+        "id": "gen_fa_020",
+        "word": "Walt Disney",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Creador de Mickey Mouse y el reino mágico",
+        "impostorHint": "Sueños"
+    },
+    {
+        "id": "gen_fa_021",
+        "word": "Frida Kahlo",
+        "category": "famosos",
+        "difficulty": "medium",
+        "hint": "Pintora mexicana de autorretratos",
+        "impostorHint": "México"
+    },
+    {
+        "id": "gen_fa_022",
+        "word": "Ronaldinho",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "El mago brasileño del fútbol",
+        "impostorHint": "Brasil"
+    },
+    {
+        "id": "gen_fa_023",
+        "word": "Winston Churchill",
+        "category": "famosos",
+        "difficulty": "medium",
+        "hint": "Primer ministro británico en la Segunda Guerra",
+        "impostorHint": "Guerra"
+    },
+    {
+        "id": "gen_fa_024",
+        "word": "Cleopatra",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Reina del antiguo Egipto",
+        "impostorHint": "Nilo"
+    },
+    {
+        "id": "gen_fa_025",
+        "word": "Leonardo da Vinci",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Pintor de la Mona Lisa y el Hombre de Vitruvio",
+        "impostorHint": "Mona"
+    },
+    {
+        "id": "gen_fa_026",
+        "word": "Nelson Mandela",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Líder antiapartheid de Sudáfrica",
+        "impostorHint": "Libertad"
+    },
+    {
+        "id": "gen_fa_027",
+        "word": "Simón Bolívar",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "El libertador de América del Sur",
+        "impostorHint": "Libertador"
+    },
+    {
+        "id": "gen_fa_028",
+        "word": "Mark Zuckerberg",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Creador de Facebook y Meta",
+        "impostorHint": "Red"
+    },
+    {
+        "id": "gen_fa_029",
+        "word": "Marilyn Monroe",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Icono del cine de los 50, Some Like It Hot",
+        "impostorHint": "Hollywood"
+    },
+    {
+        "id": "gen_fa_030",
+        "word": "Rihanna",
+        "category": "famosos",
+        "difficulty": "easy",
+        "hint": "Cantante de Barbados y empresaria de Fenty",
+        "impostorHint": "Barbados"
     }
 ]

@@ -16,6 +16,7 @@ import {
     Switch,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
@@ -28,6 +29,11 @@ import { SettingsModal } from '../components/SettingsModal';
 import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
 import { CreateCategoryModal } from '../components/CreateCategoryModal';
+import { RewardedCategoryModal } from '../components/RewardedCategoryModal';
+import { ExpiredAdUnlockModal } from '../components/ExpiredAdUnlockModal';
+import { AdUnlockTimerBadge } from '../components/AdUnlockTimerBadge';
+import { usePurchase } from '../context/PurchaseContext';
+import { CATEGORIES } from '../data/categories';
 
 type SetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Setup'>;
@@ -41,6 +47,8 @@ const CATEGORY_IMAGES: Record<Category, any> = {
     'lugares_biblicos': require('../../assets/biblical_categories/cat_lugares_biblicos.png'),
     'conceptos_teologicos': require('../../assets/biblical_categories/cat_conceptos_teologicos.png'),
     'mujeres_biblicas': require('../../assets/biblical_categories/cat_mujeres_biblicas.png'),
+    'milagros_biblicos': require('../../assets/biblical_categories/cat_milagros_biblicos.png'),
+    'parabolas_jesus': require('../../assets/biblical_categories/cat_parabolas_jesus.png'),
 
     'animales': require('../../assets/general_categories/cat_gen_animales.png'),
     'deportes': require('../../assets/general_categories/cat_gen_deportes.png'),
@@ -49,6 +57,8 @@ const CATEGORY_IMAGES: Record<Category, any> = {
     'herramientas': require('../../assets/general_categories/cat_gen_herramientas.png'),
     'acciones': require('../../assets/general_categories/cat_gen_acciones.png'),
     'objetos': require('../../assets/general_categories/cat_gen_objetos.png'),
+    'marcas': require('../../assets/general_categories/cat_gen_marcas.png'),
+    'famosos': require('../../assets/general_categories/cat_gen_famosos.png'),
 };
 
 const CATEGORY_COLORS: Record<Category, string> = {
@@ -59,6 +69,8 @@ const CATEGORY_COLORS: Record<Category, string> = {
     'lugares_biblicos': '#4DD0E1',
     'conceptos_teologicos': '#9575CD',
     'mujeres_biblicas': '#F48FB1',
+    'milagros_biblicos': '#4FC3F7',
+    'parabolas_jesus': '#A5D6A7',
     // Generic Colors
     'animales': '#AED581',
     'deportes': '#E57373',
@@ -67,11 +79,14 @@ const CATEGORY_COLORS: Record<Category, string> = {
     'herramientas': '#64B5F6',
     'acciones': '#BA68C8',
     'objetos': '#90A4AE',
+    'marcas': '#FF8A65',
+    'famosos': '#FFD54F',
 };
 
 // Categories are initialized inside the component to use translations
 
 export default function SetupScreen({ navigation }: SetupScreenProps) {
+    const isFocused = useIsFocused();
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const {
@@ -87,7 +102,64 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         deleteCustomCategory,
         updatePlayerName,
         toggleImpostorHint,
+        forceRemoveCategory,
     } = useGame();
+    const {
+        isPremium,
+        rewardedUnlock,
+        isCategoryUnlockedByAd,
+        activateRewardedUnlock,
+        clearExpiredUnlock,
+    } = usePurchase();
+
+    // Rewarded modal state
+    const [rewardedModalVisible, setRewardedModalVisible] = useState(false);
+    const [rewardedModalCategory, setRewardedModalCategory] = useState<{ id: string; label: string } | null>(null);
+    const [expiredCategoryInfo, setExpiredCategoryInfo] = useState<{ id: string, name: string } | null>(null);
+
+    const prevRewardedUnlock = useRef(rewardedUnlock);
+
+    // Show expiry modal when a rewarded-unlocked category expires while setup is open
+    useEffect(() => {
+        if (prevRewardedUnlock.current && !rewardedUnlock && isFocused) {
+            const expired = prevRewardedUnlock.current;
+            if (Date.now() >= expired.expiryTimestamp) {
+                const expiredCat = CATEGORIES.find(c => c.id === expired.categoryId);
+                const label = expiredCat
+                    ? (t.setup.categories_list as any)[expired.categoryId] || expiredCat.label
+                    : expired.categoryId;
+
+                // Trigger New Expiration Modal
+                setExpiredCategoryInfo({
+                    id: expired.categoryId,
+                    name: label
+                });
+
+                // Auto-deselect the category if it was selected
+                if (state.settings.selectedCategories.includes(expired.categoryId as any)) {
+                    forceRemoveCategory(expired.categoryId as any);
+                }
+            }
+        }
+        prevRewardedUnlock.current = rewardedUnlock;
+    }, [rewardedUnlock, isFocused]);
+
+    /** Returns the label of the category currently unlocked via ad, or null */
+    const getExistingUnlockLabel = (): string | null => {
+        if (!rewardedUnlock) return null;
+        if (Date.now() >= rewardedUnlock.expiryTimestamp) return null;
+        const cat = CATEGORIES.find(c => c.id === rewardedUnlock.categoryId);
+        return cat
+            ? (t.setup.categories_list as any)[rewardedUnlock.categoryId] || cat.label
+            : rewardedUnlock.categoryId;
+    };
+
+    /** Called when user taps a locked themed category */
+    const handleLockedCategoryPress = (categoryId: string, categoryLabel: string) => {
+        playClick();
+        setRewardedModalCategory({ id: categoryId, label: categoryLabel });
+        setRewardedModalVisible(true);
+    };
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
@@ -107,6 +179,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         { id: 'lugares_biblicos', label: t.setup.categories_list.lugares_biblicos },
         { id: 'mujeres_biblicas', label: t.setup.categories_list.mujeres_biblicas },
         { id: 'conceptos_teologicos', label: t.setup.categories_list.conceptos_teologicos },
+        { id: 'milagros_biblicos', label: t.setup.categories_list.milagros_biblicos },
+        { id: 'parabolas_jesus', label: t.setup.categories_list.parabolas_jesus },
     ];
 
     const CATEGORIES_GENERAL: { id: GenericCategory; label: string }[] = [
@@ -117,6 +191,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         { id: 'comida', label: t.setup.categories_list.comida },
         { id: 'profesiones', label: t.setup.categories_list.profesiones },
         { id: 'herramientas', label: t.setup.categories_list.herramientas },
+        { id: 'marcas', label: t.setup.categories_list.marcas },
+        { id: 'famosos', label: t.setup.categories_list.famosos },
     ];
 
     // Calculate selected counts for badges
@@ -239,7 +315,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleDecreaseImpostors = () => {
         playClick();
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK', () => {
+            showGameModal(t.error, t.setup.min_players_alert, 'warning', t.ok, () => {
                 triggerBounce();
             });
             return;
@@ -254,7 +330,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleIncreaseImpostors = () => {
         playClick();
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK', () => {
+            showGameModal(t.error, t.setup.min_players_alert, 'warning', t.ok, () => {
                 triggerBounce();
             });
             return;
@@ -471,8 +547,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 <>
                                     {CATEGORIES_BIBLICAL.map((category) => {
                                         const isSelected = state.settings.selectedCategories.includes(category.id);
-                                        const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos', 'mujeres_biblicas'].includes(category.id);
-                                        const isLocked = isPremiumCategory && !state.isPremium;
+                                        const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos', 'mujeres_biblicas', 'milagros_biblicos', 'parabolas_jesus'].includes(category.id);
+                                        const isLocked = isPremiumCategory && !state.isPremium && !isCategoryUnlockedByAd(category.id);
 
                                         return (
                                             <TouchableOpacity
@@ -484,8 +560,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                 ]}
                                                 onPress={() => {
                                                     if (isLocked) {
-                                                        playClick();
-                                                        navigation.navigate('Paywall');
+                                                        const label = t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.id;
+                                                        handleLockedCategoryPress(category.id, label);
                                                         return;
                                                     }
                                                     playClick();
@@ -528,6 +604,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                         style={styles.lockedIcon}
                                                         resizeMode="contain"
                                                     />
+                                                )}
+
+                                                {/* Timer badge for ad-unlocked categories */}
+                                                {isPremiumCategory && !state.isPremium && isCategoryUnlockedByAd(category.id) && (
+                                                    <AdUnlockTimerBadge categoryId={category.id} />
                                                 )}
                                             </TouchableOpacity>
                                         );
@@ -633,9 +714,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 <>
                                     {CATEGORIES_GENERAL.map((category) => {
                                         const isSelected = state.settings.selectedCategories.includes(category.id);
-                                        // Actions, objects, sports are free. Others are premium.
                                         const isPremiumCategory = !['acciones', 'objetos', 'deportes'].includes(category.id);
-                                        const isLocked = isPremiumCategory && !state.isPremium;
+                                        const isLocked = isPremiumCategory && !state.isPremium && !isCategoryUnlockedByAd(category.id);
 
                                         return (
                                             <TouchableOpacity
@@ -647,8 +727,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                 ]}
                                                 onPress={() => {
                                                     if (isLocked) {
-                                                        playClick();
-                                                        navigation.navigate('Paywall');
+                                                        const label = t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.id;
+                                                        handleLockedCategoryPress(category.id, label);
                                                         return;
                                                     }
                                                     playClick();
@@ -692,6 +772,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                         style={styles.lockedIcon}
                                                         resizeMode="contain"
                                                     />
+                                                )}
+
+                                                {/* Timer badge for ad-unlocked categories */}
+                                                {isPremiumCategory && !state.isPremium && isCategoryUnlockedByAd(category.id) && (
+                                                    <AdUnlockTimerBadge categoryId={category.id} />
                                                 )}
                                             </TouchableOpacity>
                                         );
@@ -936,10 +1021,51 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 categoryType={activeTab}
             />
 
+            {rewardedModalCategory && (
+                <RewardedCategoryModal
+                    visible={rewardedModalVisible}
+                    categoryId={rewardedModalCategory.id}
+                    categoryLabel={rewardedModalCategory.label}
+                    existingUnlockCategoryLabel={
+                        rewardedUnlock && rewardedModalCategory && rewardedUnlock.categoryId !== rewardedModalCategory.id
+                            ? getExistingUnlockLabel()
+                            : null
+                    }
+                    onUnlockGranted={async () => {
+                        if (rewardedModalCategory) {
+                            await activateRewardedUnlock(rewardedModalCategory.id);
+                            // Auto-select the just-unlocked category
+                            if (!state.settings.selectedCategories.includes(rewardedModalCategory.id as any)) {
+                                toggleCategory(rewardedModalCategory.id as any);
+                            }
+                        }
+                        setRewardedModalVisible(false);
+                    }}
+                    onBuyPremium={() => {
+                        setRewardedModalVisible(false);
+                        navigation.navigate('Paywall');
+                    }}
+                    onClose={() => setRewardedModalVisible(false)}
+                />
+            )}
+
+            {expiredCategoryInfo && (
+                <ExpiredAdUnlockModal
+                    visible={!!expiredCategoryInfo}
+                    categoryName={expiredCategoryInfo.name}
+                    onClose={() => setExpiredCategoryInfo(null)}
+                    onBuyPremium={() => {
+                        setExpiredCategoryInfo(null);
+                        navigation.navigate('Paywall');
+                    }}
+                />
+            )}
+
             <HowToPlayModal
                 visible={showHowToPlay}
                 onClose={() => setShowHowToPlay(false)}
             />
+
 
             <Modal
                 visible={showEditNameModal}
@@ -1439,7 +1565,20 @@ const styles = StyleSheet.create({
         zIndex: 10,
         opacity: 0.9,
     },
+    adUnlockBadge: {
+        position: 'absolute',
+        top: 6,
+        left: 6,
+        backgroundColor: 'rgba(91,127,219,0.85)',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+    },
     // Word Preview
+
     wordPreviewHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',

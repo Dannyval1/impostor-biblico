@@ -5,7 +5,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Move quickly with your legs",
-        "impostorHint": "Action"
+        "impostorHint": "Speed"
     },
     {
         "id": "gen_ac_002",
@@ -13,7 +13,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Leap up from the ground",
-        "impostorHint": "Action"
+        "impostorHint": "Height"
     },
     {
         "id": "gen_ac_003",
@@ -21,7 +21,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Move step by step",
-        "impostorHint": "Action"
+        "impostorHint": "Step"
     },
     {
         "id": "gen_ac_004",
@@ -29,7 +29,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Move through water",
-        "impostorHint": "Action"
+        "impostorHint": "Water"
     },
     {
         "id": "gen_ac_005",
@@ -37,7 +37,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Move to the rhythm of music",
-        "impostorHint": "Action"
+        "impostorHint": "Rhythm"
     },
     {
         "id": "gen_ac_006",
@@ -45,7 +45,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Make music with your voice",
-        "impostorHint": "Action"
+        "impostorHint": "Voice"
     },
     {
         "id": "gen_ac_007",
@@ -53,7 +53,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Form letters and words",
-        "impostorHint": "Action"
+        "impostorHint": "Pencil"
     },
     {
         "id": "gen_ac_008",
@@ -61,7 +61,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Interpret written text",
-        "impostorHint": "Action"
+        "impostorHint": "Pages"
     },
     {
         "id": "gen_ac_009",
@@ -69,7 +69,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Prepare food",
-        "impostorHint": "Action"
+        "impostorHint": "Fire"
     },
     {
         "id": "gen_ac_010",
@@ -77,7 +77,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Rest with eyes closed",
-        "impostorHint": "Action"
+        "impostorHint": "Rest"
     },
     {
         "id": "gen_ac_011",
@@ -85,7 +85,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Learn from books",
-        "impostorHint": "Action"
+        "impostorHint": "Books"
     },
     {
         "id": "gen_ac_012",
@@ -93,7 +93,7 @@
         "category": "acciones",
         "difficulty": "easy",
         "hint": "Do job activities",
-        "impostorHint": "Action"
+        "impostorHint": "Effort"
     },
     {
         "id": "gen_ac_013",
@@ -101,7 +101,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Create images with pencil",
-        "impostorHint": "Action"
+        "impostorHint": "Lines"
     },
     {
         "id": "gen_ac_014",
@@ -109,7 +109,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Apply colors with brush",
-        "impostorHint": "Action"
+        "impostorHint": "Colors"
     },
     {
         "id": "gen_ac_015",
@@ -117,7 +117,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Go up using hands and feet",
-        "impostorHint": "Action"
+        "impostorHint": "Height"
     },
     {
         "id": "gen_ac_016",
@@ -125,7 +125,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Speak very softly",
-        "impostorHint": "Action"
+        "impostorHint": "Secret"
     },
     {
         "id": "gen_ac_017",
@@ -133,7 +133,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Strike palms together to celebrate",
-        "impostorHint": "Action"
+        "impostorHint": "Palms"
     },
     {
         "id": "gen_ac_018",
@@ -141,7 +141,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Make musical sound with lips",
-        "impostorHint": "Action"
+        "impostorHint": "Lips"
     },
     {
         "id": "gen_ac_019",
@@ -149,7 +149,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Express joy with sounds",
-        "impostorHint": "Action"
+        "impostorHint": "Joy"
     },
     {
         "id": "gen_ac_020",
@@ -157,7 +157,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Shed tears of emotion",
-        "impostorHint": "Action"
+        "impostorHint": "Tears"
     },
     {
         "id": "gen_ac_021",
@@ -165,7 +165,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Construct structures",
-        "impostorHint": "Action"
+        "impostorHint": "Blocks"
     },
     {
         "id": "gen_ac_022",
@@ -173,7 +173,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Fix something broken",
-        "impostorHint": "Action"
+        "impostorHint": "Tools"
     },
     {
         "id": "gen_ac_023",
@@ -181,7 +181,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Smooth clothes with heat",
-        "impostorHint": "Action"
+        "impostorHint": "Heat"
     },
     {
         "id": "gen_ac_024",
@@ -189,7 +189,7 @@
         "category": "acciones",
         "difficulty": "medium",
         "hint": "Reflect in silence",
-        "impostorHint": "Action"
+        "impostorHint": "Silence"
     },
     {
         "id": "gen_ac_025",
@@ -197,7 +197,7 @@
         "category": "acciones",
         "difficulty": "hard",
         "hint": "Scale mountains with gear",
-        "impostorHint": "Action"
+        "impostorHint": "Rope"
     },
     {
         "id": "gen_ac_026",
@@ -205,7 +205,7 @@
         "category": "acciones",
         "difficulty": "hard",
         "hint": "Swim underwater with tank",
-        "impostorHint": "Action"
+        "impostorHint": "Oxygen"
     },
     {
         "id": "gen_ac_027",
@@ -213,7 +213,7 @@
         "category": "acciones",
         "difficulty": "hard",
         "hint": "Glide on snow with boards",
-        "impostorHint": "Action"
+        "impostorHint": "Snow"
     },
     {
         "id": "gen_ac_028",
@@ -221,7 +221,7 @@
         "category": "acciones",
         "difficulty": "hard",
         "hint": "Ride ocean waves on board",
-        "impostorHint": "Action"
+        "impostorHint": "Waves"
     },
     {
         "id": "gen_ac_029",
@@ -229,7 +229,7 @@
         "category": "acciones",
         "difficulty": "hard",
         "hint": "Jump from plane with parachute",
-        "impostorHint": "Action"
+        "impostorHint": "Fall"
     },
     {
         "id": "gen_ac_030",
@@ -237,7 +237,7 @@
         "category": "acciones",
         "difficulty": "hard",
         "hint": "Toss and catch multiple objects",
-        "impostorHint": "Action"
+        "impostorHint": "Balls"
     },
     {
         "id": "gen_ob_001",
@@ -245,7 +245,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Machine for processing information",
-        "impostorHint": "Object"
+        "impostorHint": "Screen"
     },
     {
         "id": "gen_ob_002",
@@ -253,7 +253,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Device for communication",
-        "impostorHint": "Object"
+        "impostorHint": "Call"
     },
     {
         "id": "gen_ob_003",
@@ -261,7 +261,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Furniture with flat surface",
-        "impostorHint": "Object"
+        "impostorHint": "Wood"
     },
     {
         "id": "gen_ob_004",
@@ -269,7 +269,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Seat with backrest",
-        "impostorHint": "Object"
+        "impostorHint": "Backrest"
     },
     {
         "id": "gen_ob_005",
@@ -277,7 +277,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Furniture for sleeping",
-        "impostorHint": "Object"
+        "impostorHint": "Mattress"
     },
     {
         "id": "gen_ob_006",
@@ -285,7 +285,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Bound pages for reading",
-        "impostorHint": "Object"
+        "impostorHint": "Pages"
     },
     {
         "id": "gen_ob_007",
@@ -293,7 +293,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Tool for writing or drawing",
-        "impostorHint": "Object"
+        "impostorHint": "Graphite"
     },
     {
         "id": "gen_ob_008",
@@ -301,7 +301,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Sphere for playing sports",
-        "impostorHint": "Object"
+        "impostorHint": "Round"
     },
     {
         "id": "gen_ob_009",
@@ -309,7 +309,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Four-wheeled vehicle",
-        "impostorHint": "Object"
+        "impostorHint": "Engine"
     },
     {
         "id": "gen_ob_010",
@@ -317,7 +317,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Two-wheeled vehicle",
-        "impostorHint": "Object"
+        "impostorHint": "Pedals"
     },
     {
         "id": "gen_ob_011",
@@ -325,7 +325,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Device that shows time",
-        "impostorHint": "Object"
+        "impostorHint": "Hands"
     },
     {
         "id": "gen_ob_012",
@@ -333,7 +333,7 @@
         "category": "objetos",
         "difficulty": "easy",
         "hint": "Surface that reflects image",
-        "impostorHint": "Object"
+        "impostorHint": "Reflection"
     },
     {
         "id": "gen_ob_013",
@@ -341,7 +341,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "String musical instrument",
-        "impostorHint": "Object"
+        "impostorHint": "Strings"
     },
     {
         "id": "gen_ob_014",
@@ -349,7 +349,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Keyboard with black and white keys",
-        "impostorHint": "Object"
+        "impostorHint": "Keys"
     },
     {
         "id": "gen_ob_015",
@@ -357,7 +357,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Screen for watching programs",
-        "impostorHint": "Object"
+        "impostorHint": "Screen"
     },
     {
         "id": "gen_ob_016",
@@ -365,7 +365,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Appliance that keeps food cold",
-        "impostorHint": "Object"
+        "impostorHint": "Cold"
     },
     {
         "id": "gen_ob_017",
@@ -373,7 +373,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Machine for washing clothes",
-        "impostorHint": "Object"
+        "impostorHint": "Soap"
     },
     {
         "id": "gen_ob_018",
@@ -381,7 +381,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Appliance for heating food quickly",
-        "impostorHint": "Object"
+        "impostorHint": "Heat"
     },
     {
         "id": "gen_ob_019",
@@ -389,7 +389,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Machine for cleaning carpets",
-        "impostorHint": "Object"
+        "impostorHint": "Suction"
     },
     {
         "id": "gen_ob_020",
@@ -397,7 +397,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Portable light for darkness",
-        "impostorHint": "Object"
+        "impostorHint": "Battery"
     },
     {
         "id": "gen_ob_021",
@@ -405,7 +405,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Protection against rain",
-        "impostorHint": "Object"
+        "impostorHint": "Rain"
     },
     {
         "id": "gen_ob_022",
@@ -413,7 +413,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Bag carried on the back",
-        "impostorHint": "Object"
+        "impostorHint": "Straps"
     },
     {
         "id": "gen_ob_023",
@@ -421,7 +421,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Device for taking photographs",
-        "impostorHint": "Object"
+        "impostorHint": "Lens"
     },
     {
         "id": "gen_ob_024",
@@ -429,7 +429,7 @@
         "category": "objetos",
         "difficulty": "medium",
         "hint": "Instrument that points north",
-        "impostorHint": "Object"
+        "impostorHint": "North"
     },
     {
         "id": "gen_ob_025",
@@ -437,7 +437,7 @@
         "category": "objetos",
         "difficulty": "hard",
         "hint": "Instrument for seeing distant objects",
-        "impostorHint": "Object"
+        "impostorHint": "Stars"
     },
     {
         "id": "gen_ob_026",
@@ -445,7 +445,7 @@
         "category": "objetos",
         "difficulty": "hard",
         "hint": "Instrument for seeing tiny objects",
-        "impostorHint": "Object"
+        "impostorHint": "Laboratory"
     },
     {
         "id": "gen_ob_027",
@@ -453,7 +453,7 @@
         "category": "objetos",
         "difficulty": "hard",
         "hint": "Medical tool for listening to heart",
-        "impostorHint": "Object"
+        "impostorHint": "Heart"
     },
     {
         "id": "gen_ob_028",
@@ -461,7 +461,7 @@
         "category": "objetos",
         "difficulty": "hard",
         "hint": "Device that marks musical tempo",
-        "impostorHint": "Object"
+        "impostorHint": "Time"
     },
     {
         "id": "gen_ob_029",
@@ -469,7 +469,7 @@
         "category": "objetos",
         "difficulty": "hard",
         "hint": "Picture of a person",
-        "impostorHint": "Object"
+        "impostorHint": "Face"
     },
     {
         "id": "gen_ob_030",
@@ -477,7 +477,7 @@
         "category": "objetos",
         "difficulty": "hard",
         "hint": "Tube with mirrors creating colorful patterns",
-        "impostorHint": "Object"
+        "impostorHint": "Colors"
     },
     {
         "id": "gen_sp_001",
@@ -485,7 +485,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with ball and two goals",
-        "impostorHint": "Sport"
+        "impostorHint": "Goal"
     },
     {
         "id": "gen_sp_002",
@@ -493,7 +493,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with hoop and orange ball",
-        "impostorHint": "Sport"
+        "impostorHint": "Basket"
     },
     {
         "id": "gen_sp_003",
@@ -501,7 +501,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with racket and net",
-        "impostorHint": "Sport"
+        "impostorHint": "Racket"
     },
     {
         "id": "gen_sp_004",
@@ -509,7 +509,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport practiced in water",
-        "impostorHint": "Sport"
+        "impostorHint": "Pool"
     },
     {
         "id": "gen_sp_005",
@@ -517,7 +517,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport on two wheels",
-        "impostorHint": "Sport"
+        "impostorHint": "Pedals"
     },
     {
         "id": "gen_sp_006",
@@ -525,7 +525,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with bat and bases",
-        "impostorHint": "Sport"
+        "impostorHint": "Bat"
     },
     {
         "id": "gen_sp_007",
@@ -533,7 +533,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with high net and hand hits",
-        "impostorHint": "Sport"
+        "impostorHint": "Net"
     },
     {
         "id": "gen_sp_008",
@@ -541,7 +541,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport of running and jumping",
-        "impostorHint": "Sport"
+        "impostorHint": "Track"
     },
     {
         "id": "gen_sp_009",
@@ -549,7 +549,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport of flexibility and acrobatics",
-        "impostorHint": "Sport"
+        "impostorHint": "Mat"
     },
     {
         "id": "gen_sp_010",
@@ -557,7 +557,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Combat sport with fists",
-        "impostorHint": "Sport"
+        "impostorHint": "Gloves"
     },
     {
         "id": "gen_sp_011",
@@ -565,7 +565,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with clubs and holes",
-        "impostorHint": "Sport"
+        "impostorHint": "Hole"
     },
     {
         "id": "gen_sp_012",
@@ -573,7 +573,7 @@
         "category": "deportes",
         "difficulty": "easy",
         "hint": "Sport with sticks on ice",
-        "impostorHint": "Sport"
+        "impostorHint": "Ice"
     },
     {
         "id": "gen_sp_013",
@@ -581,15 +581,7 @@
         "category": "deportes",
         "difficulty": "medium",
         "hint": "Sport similar to American football",
-        "impostorHint": "Sport"
-    },
-    {
-        "id": "gen_sp_014",
-        "word": "Cricket",
-        "category": "deportes",
-        "difficulty": "medium",
-        "hint": "English sport with wickets",
-        "impostorHint": "Sport"
+        "impostorHint": "Scrum"
     },
     {
         "id": "gen_sp_016",
@@ -597,23 +589,7 @@
         "category": "deportes",
         "difficulty": "medium",
         "hint": "Ping pong with paddles",
-        "impostorHint": "Sport"
-    },
-    {
-        "id": "gen_sp_017",
-        "word": "Squash",
-        "category": "deportes",
-        "difficulty": "medium",
-        "hint": "Racket sport against wall",
-        "impostorHint": "Sport"
-    },
-    {
-        "id": "gen_sp_018",
-        "word": "Water polo",
-        "category": "deportes",
-        "difficulty": "medium",
-        "hint": "Aquatic sport with ball and goals",
-        "impostorHint": "Sport"
+        "impostorHint": "Table"
     },
     {
         "id": "gen_sp_020",
@@ -621,23 +597,7 @@
         "category": "deportes",
         "difficulty": "medium",
         "hint": "Martial art of sharp strikes",
-        "impostorHint": "Sport"
-    },
-    {
-        "id": "gen_sp_021",
-        "word": "Taekwondo",
-        "category": "deportes",
-        "difficulty": "medium",
-        "hint": "Korean martial art of kicks",
-        "impostorHint": "Sport"
-    },
-    {
-        "id": "gen_sp_022",
-        "word": "Snowboarding",
-        "category": "deportes",
-        "difficulty": "medium",
-        "hint": "Snow sport with board",
-        "impostorHint": "Sport"
+        "impostorHint": "Belt"
     },
     {
         "id": "gen_sp_023",
@@ -645,7 +605,7 @@
         "category": "deportes",
         "difficulty": "medium",
         "hint": "Sport on ocean waves",
-        "impostorHint": "Sport"
+        "impostorHint": "Board"
     },
     {
         "id": "gen_sp_024",
@@ -653,7 +613,7 @@
         "category": "deportes",
         "difficulty": "medium",
         "hint": "Urban sport with wheeled board",
-        "impostorHint": "Sport"
+        "impostorHint": "Wheels"
     },
     {
         "id": "gen_sp_025",
@@ -661,7 +621,7 @@
         "category": "deportes",
         "difficulty": "hard",
         "hint": "Combat sport with swords",
-        "impostorHint": "Sport"
+        "impostorHint": "Sword"
     },
     {
         "id": "gen_sp_026",
@@ -669,6 +629,6 @@
         "category": "deportes",
         "difficulty": "hard",
         "hint": "Sport on horseback with mallets",
-        "impostorHint": "Sport"
+        "impostorHint": "Horse"
     }
 ]
