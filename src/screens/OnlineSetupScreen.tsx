@@ -381,6 +381,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         alignItems: 'center',
         borderRadius: 10,
+        position: 'relative',
     },
     activeTab: {
         backgroundColor: '#FFF',
@@ -398,11 +399,13 @@ const styles = StyleSheet.create({
         color: '#5B7FDB',
     },
     tabBadge: {
+        position: 'absolute',
+        top: 2,
+        right: 6,
         backgroundColor: '#E53E3E',
         borderRadius: 10,
         paddingHorizontal: 6,
         paddingVertical: 2,
-        marginLeft: 6,
         minWidth: 20,
         alignItems: 'center',
     },
