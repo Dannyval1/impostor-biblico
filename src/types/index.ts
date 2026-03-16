@@ -126,7 +126,7 @@ export interface OnlinePlayer {
     score: number;
 }
 
-export type RoomStatus = 'waiting' | 'playing' | 'voting' | 'finished';
+export type RoomStatus = 'waiting' | 'playing' | 'voting' | 'results' | 'finished';
 
 export interface OnlineRoom {
     id: string; // 6-character code
@@ -140,11 +140,17 @@ export interface OnlineRoom {
         categories: Category[];
         customCategories: CustomCategory[];
         isPremiumRoom: boolean;
+        impostorHint: boolean;
+        isConfigured: boolean;
     };
     currentWord?: Word;
     currentImpostors?: string[]; // List of IDs
+    currentRoundStartTime?: number;
     createdAt: number;
     winner?: 'impostors' | 'civilians';
+    lastEliminatedId?: string | null;
+    voteCounts?: Record<string, number>;
+    isTie?: boolean;
 }
 
 export interface OnlineGameState {

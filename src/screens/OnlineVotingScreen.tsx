@@ -23,11 +23,13 @@ export default function OnlineVotingScreen() {
             // Game Over
             const winner = gameState.room.winner === 'impostors' ? t.voting.winner_impostors : t.voting.winner_civilians;
             Alert.alert(t.voting.game_over, winner, [
-                { text: t.online.errors.back_to_lobby, onPress: () => navigation.replace('OnlineLobby') }
+                { text: t.online.back_to_lobby, onPress: () => navigation.replace('OnlineLobby') }
             ]);
         } else if (gameState.room?.status === 'playing') {
             // Back to playing (Next Round)
-            navigation.replace('OnlineLobby');
+            navigation.replace('OnlineReveal');
+        } else if (gameState.room?.status === 'results') {
+            navigation.replace('OnlineResults');
         }
     }, [gameState.room?.status]);
 
@@ -69,7 +71,7 @@ export default function OnlineVotingScreen() {
                     <Text style={[styles.playerName, isEliminated && styles.playerNameEliminated]}>
                         {item.name} {isMe && t.online.you}
                     </Text>
-                    {isEliminated && <Text style={styles.eliminatedText}>{t.online.errors.eliminated_badge}</Text>}
+                    {isEliminated && <Text style={styles.eliminatedText}>{t.online.eliminated_badge}</Text>}
                 </View>
                 {isSelected && <Ionicons name="radio-button-on" size={24} color="#5B7FDB" />}
                 {!isSelected && canVote && <Ionicons name="radio-button-off" size={24} color="#CCC" />}
@@ -98,12 +100,12 @@ export default function OnlineVotingScreen() {
                         onPress={handleVote}
                         disabled={!selectedPlayerId}
                     >
-                        <Text style={styles.voteButtonText}>{t.online.errors.vote_button}</Text>
+                        <Text style={styles.voteButtonText}>{t.online.vote_button}</Text>
                     </TouchableOpacity>
                 ) : (
                     <View style={styles.waitingContainer}>
                         <Text style={styles.waitingText}>
-                            {currentPlayer?.isEliminated ? t.online.errors.you_are_eliminated : t.online.errors.vote_submitted}
+                            {currentPlayer?.isEliminated ? t.online.you_are_eliminated : t.online.vote_submitted}
                         </Text>
                         {!currentPlayer?.isEliminated && <ActivityIndicator color="#FFF" style={{ marginTop: 10 }} />}
                     </View>
@@ -112,7 +114,7 @@ export default function OnlineVotingScreen() {
                 {/* Host Controls for Manual Override if needed */}
                 {gameState.isHost && (
                     <View style={styles.hostControls}>
-                        <Text style={styles.hostLabel}>{t.online.errors.host_controls}</Text>
+                        <Text style={styles.hostLabel}>{t.online.host_controls}</Text>
                         <View style={styles.hostButtonsRow}>
                             <TouchableOpacity
                                 style={[styles.hostButton, { backgroundColor: '#E53E3E' }]}
@@ -122,7 +124,7 @@ export default function OnlineVotingScreen() {
                                     else Alert.alert(t.online.errors.select_player_alert);
                                 }}
                             >
-                                <Text style={styles.hostButtonText}>{t.online.errors.eliminate_selected}</Text>
+                                <Text style={styles.hostButtonText}>{t.online.eliminate_selected}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity

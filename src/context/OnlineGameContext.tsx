@@ -29,6 +29,7 @@ interface OnlineGameContextProps {
     playAgain: () => void;
     updateSettings: (settings: Partial<OnlineRoom['settings']>) => void;
     nextRound: () => void;
+    continueRound: () => void;
     eliminatePlayer: (playerId: string) => void;
 }
 
@@ -201,7 +202,17 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     const createRoom = async (playerName: string): Promise<string> => {
         if (!gameState.playerId) throw new Error("No player ID");
 
-        const roomCode = generateRoomCode();
+        let roomCode = generateRoomCode();
+        let exists = true;
+        while (exists) {
+            const snap = await get(ref(database, `rooms/${roomCode}`));
+            if (!snap.exists()) {
+                exists = false;
+            } else {
+                roomCode = generateRoomCode();
+            }
+        }
+
         const role: OnlinePlayerRole = 'civilian'; // Default
         const avatar = `avatar_${Math.floor(Math.random() * TOTAL_AVATARS) + 1}` as Avatar;
 
@@ -228,7 +239,9 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                 language: getLocales()[0]?.languageCode === 'es' ? 'es' : 'en',
                 categories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
                 customCategories: [],
-                isPremiumRoom: isPremiumUser // Inherit from Host
+                isPremiumRoom: isPremiumUser, // Inherit from Host
+                impostorHint: false,
+                isConfigured: false
             },
             createdAt: Date.now()
         };
@@ -315,6 +328,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         }
 
         setGameState(prev => ({ ...prev, roomCode: null, room: null, isHost: false }));
+        listenersRef.current = false;
     };
 
     const updateSettings = async (settings: Partial<OnlineRoom['settings']>) => {
@@ -358,6 +372,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['currentWord'] = word;
         updates['currentImpostors'] = impostorIds;
         updates['status'] = 'playing';
+        updates['currentRoundStartTime'] = Date.now();
 
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
     };
@@ -382,7 +397,41 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             const votes = players.map(p => p.vote).filter(v => v !== undefined && v !== null);
 
             if (votes.length === players.length && players.length > 0) {
-                // Optional: Auto-reveal or wait for host?
+                const voteCounts: Record<string, number> = {};
+                players.forEach(p => {
+                    const votedFor = p.vote;
+                    if (votedFor) {
+                        voteCounts[votedFor] = (voteCounts[votedFor] || 0) + 1;
+                    }
+                });
+
+                let maxVotes = 0;
+                let eliminatedId: string | null = null;
+                let tie = false;
+
+                for (const [id, count] of Object.entries(voteCounts)) {
+                    if (count > maxVotes) {
+                        maxVotes = count;
+                        eliminatedId = id;
+                        tie = false;
+                    } else if (count === maxVotes) {
+                        tie = true;
+                    }
+                }
+
+                const updates: Record<string, any> = {
+                    status: 'results',
+                    voteCounts: voteCounts,
+                    isTie: tie,
+                    lastEliminatedId: tie ? null : eliminatedId
+                };
+
+                // Apply elimination if not tie
+                if (!tie && eliminatedId) {
+                    updates[`players/${eliminatedId}/isEliminated`] = true;
+                }
+
+                update(ref(database, `rooms/${gameState.roomCode}`), updates);
             }
         }
     }, [gameState.room?.players, gameState.room?.status]);
@@ -409,9 +458,43 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     };
 
     const nextRound = async () => {
+        if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
+
+        const players = Object.values(gameState.room.players);
+        const impostorCount = gameState.room.settings.impostorCount;
+
+        // Assign roles
+        const shuffled = [...players].sort(() => Math.random() - 0.5);
+        const impostorIds = shuffled.slice(0, impostorCount).map(p => p.id);
+        const updates: Record<string, any> = {};
+
+        players.forEach(p => {
+            const role = impostorIds.includes(p.id) ? 'impostor' : 'civilian';
+            updates[`players/${p.id}/role`] = role;
+            updates[`players/${p.id}/isEliminated`] = false;
+            updates[`players/${p.id}/vote`] = null;
+        });
+
+        const word = getRandomWord(
+            gameState.room.settings.categories,
+            gameState.room.settings.language,
+            gameState.room.settings.customCategories,
+            'all',
+            gameState.room.settings.isPremiumRoom
+        );
+
+        updates['currentWord'] = word;
+        updates['currentImpostors'] = impostorIds;
+        updates['status'] = 'playing';
+        updates['currentRoundStartTime'] = Date.now();
+
+        await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+    };
+
+    const continueRound = async () => {
         if (!gameState.roomCode || !gameState.isHost) return;
 
-        // Reset players
+        // Reset votes, keep everything else
         const updates: Record<string, any> = {};
         const players = Object.values(gameState.room!.players);
         players.forEach(p => {
@@ -419,6 +502,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         });
 
         updates['status'] = 'playing';
+        updates['currentRoundStartTime'] = Date.now();
 
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
     };
@@ -440,6 +524,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             playAgain,
             updateSettings,
             nextRound,
+            continueRound,
             eliminatePlayer
         }}>
             {children}

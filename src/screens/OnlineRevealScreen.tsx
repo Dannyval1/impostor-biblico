@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useOnlineGame } from '../context/OnlineGameContext';
@@ -13,7 +13,8 @@ export default function OnlineRevealScreen() {
     const { t } = useTranslation();
 
     // Local state for countdown
-    const [secondsLeft, setSecondsLeft] = useState<number>(gameState.room?.settings.gameDuration || 300);
+    const gameDuration = gameState.room?.settings.gameDuration;
+    const [secondsLeft, setSecondsLeft] = useState<number | null>(gameDuration ?? null);
     const [isRevealed, setIsRevealed] = useState(false); // Initially hidden? Or show immediately? 
     // In Online mode, since everyone has their own screen, we can show immediately or tap to reveal.
     // Let's do: Tap to Reveal, then static display.
@@ -27,29 +28,33 @@ export default function OnlineRevealScreen() {
         if (gameState.room?.status === 'voting') {
             navigation.replace('OnlineVoting');
         } else if (gameState.room?.status === 'finished') {
-            // Handle game over from here if needed
+            const winner = gameState.room.winner === 'impostors' ? t.voting.winner_impostors : t.voting.winner_civilians;
+            Alert.alert(t.voting.game_over, winner, [
+                { text: t.online.back_to_lobby, onPress: () => navigation.replace('OnlineLobby') }
+            ]);
         }
     }, [gameState.room?.status]);
 
     useEffect(() => {
-        // Simple local timer sync-ish. 
-        // Ideally we sync start time from server but for now local countdown is okay-ish if started roughly same time.
-        // Better: `createdAt` or `startTime` in Room object.
-        // For MVP: Local timer.
-        const interval = setInterval(() => {
-            setSecondsLeft(prev => {
-                if (prev <= 1) {
-                    clearInterval(interval);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
+        if (gameDuration === null || !gameState.room?.currentRoundStartTime) {
+            setSecondsLeft(null);
+            return;
+        }
+
+        const updateTimer = () => {
+            const elapsed = Math.floor((Date.now() - gameState.room!.currentRoundStartTime!) / 1000);
+            const remaining = Math.max(0, (gameDuration || 0) - elapsed);
+            setSecondsLeft(remaining);
+        };
+
+        updateTimer();
+        const interval = setInterval(updateTimer, 1000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [gameDuration, gameState.room?.currentRoundStartTime]);
 
-    const formatTime = (seconds: number) => {
+    const formatTime = (seconds: number | null) => {
+        if (seconds === null) return "∞";
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
@@ -74,6 +79,14 @@ export default function OnlineRevealScreen() {
                             <Ionicons name="skull-outline" size={80} color="#E53E3E" />
                             <Text style={styles.impostorText}>{t.reveal.impostor_task_1}</Text>
                             <Text style={styles.impostorText}>{t.reveal.impostor_task_2}</Text>
+
+                            {/* Show impostor hint if enabled in settings */}
+                            {gameState.room?.settings.impostorHint && word?.hint && (
+                                <View style={styles.hintBox}>
+                                    <Text style={styles.hintLabel}>{t.reveal.hint}:</Text>
+                                    <Text style={styles.hintImpostorText}>{word.hint}</Text>
+                                </View>
+                            )}
                         </View>
                     ) : (
                         <View style={styles.civilianContent}>
@@ -89,14 +102,14 @@ export default function OnlineRevealScreen() {
                         style={styles.actionButton}
                         onPress={startVoting}
                     >
-                        <Text style={styles.actionButtonText}>{t.online.errors.start_voting}</Text>
+                        <Text style={styles.actionButtonText}>{t.online.start_voting}</Text>
                     </TouchableOpacity>
                 )}
 
                 <Text style={styles.hintText}>
                     {gameState.isHost
-                        ? t.online.errors.host_hint
-                        : t.online.errors.player_hint}
+                        ? t.online.host_hint
+                        : t.online.player_hint}
                 </Text>
             </View>
         </SafeAreaView>
@@ -161,6 +174,28 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#333',
         textAlign: 'center',
+    },
+    hintBox: {
+        marginTop: 20,
+        backgroundColor: '#FFE5E5',
+        padding: 15,
+        borderRadius: 12,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#FC8181',
+        width: '100%',
+    },
+    hintLabel: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#E53E3E',
+        marginBottom: 5,
+    },
+    hintImpostorText: {
+        fontSize: 16,
+        color: '#2D3748',
+        textAlign: 'center',
+        fontWeight: '500',
     },
     civilianContent: {
         alignItems: 'center',

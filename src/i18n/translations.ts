@@ -79,6 +79,8 @@ export const translations = {
             edit_name_placeholder: 'Nombre del jugador',
             save_button: 'Guardar',
             default_player: 'Jugador',
+            impostor_hint: 'Pista para el Impostor',
+            impostor_hint_desc: 'El impostor verá una pista que le ayudará a adivinar',
         },
         voting: {
             discussion_time: 'Tiempo de Discusión',
@@ -205,6 +207,7 @@ export const translations = {
             code_alert_title: 'Código',
             share_hint: 'Comparte este código con tus amigos',
             players_list: 'Jugadores',
+            configure_game: 'CONFIGURAR PARTIDA',
             start_game: 'COMENZAR PARTIDA',
             waiting_host: 'Esperando al anfitrión...',
             create_new_room: 'Crear Nueva Sala',
@@ -231,18 +234,18 @@ export const translations = {
                 room_closed: 'La sala ha sido cerrada',
                 room_closed_desc: 'El anfitrión ha cerrado la sala o la partida ha terminado.',
                 name_and_code_required: 'Ingresa tu nombre y el código de sala',
-                start_voting: 'INICIAR VOTACIÓN',
-                host_hint: 'Presiona el botón cuando termine la discusión.',
-                player_hint: 'Espera a que el anfitrión inicie la votación.',
-                back_to_lobby: 'Volver al Lobby',
-                eliminated_badge: 'ELIMINADO',
-                vote_button: 'VOTAR',
-                you_are_eliminated: 'Estás eliminado',
-                vote_submitted: 'Voto enviado. Esperando resultados...',
-                host_controls: 'Controles de Anfitrión:',
-                eliminate_selected: 'Eliminar Seleccionado',
                 select_player_alert: 'Selecciona un jugador para eliminar'
-            }
+            },
+            start_voting: 'INICIAR VOTACIÓN',
+            host_hint: 'Presiona el botón cuando termine la discusión.',
+            player_hint: 'Espera a que el anfitrión inicie la votación.',
+            back_to_lobby: 'Volver al Lobby',
+            eliminated_badge: 'ELIMINADO',
+            vote_button: 'VOTAR',
+            you_are_eliminated: 'Estás eliminado',
+            vote_submitted: 'Voto enviado. Esperando resultados...',
+            host_controls: 'Controles de Anfitrión:',
+            eliminate_selected: 'Eliminar Seleccionado'
         }
     },
     en: {
@@ -323,6 +326,8 @@ export const translations = {
             edit_name_placeholder: 'Player name',
             save_button: 'Save',
             default_player: 'Player',
+            impostor_hint: 'Impostor Hint',
+            impostor_hint_desc: 'The impostor will see a hint to help them guess',
         },
         voting: {
             discussion_time: 'Discussion Time',
@@ -449,6 +454,7 @@ export const translations = {
             code_alert_title: 'Code',
             share_hint: 'Share this code with your friends',
             players_list: 'Players',
+            configure_game: 'CONFIGURE GAME',
             start_game: 'START GAME',
             waiting_host: 'Waiting for host...',
             create_new_room: 'Create New Room',
@@ -475,18 +481,18 @@ export const translations = {
                 room_closed: 'Room Closed',
                 room_closed_desc: 'The host has closed the room or the game has ended.',
                 name_and_code_required: 'Enter your name and room code',
-                start_voting: 'START VOTING',
-                host_hint: 'Press the button when discussion ends.',
-                player_hint: 'Wait for the host to start voting.',
-                back_to_lobby: 'Back to Lobby',
-                eliminated_badge: 'ELIMINATED',
-                vote_button: 'VOTE',
-                you_are_eliminated: 'You are eliminated',
-                vote_submitted: 'Vote submitted. Waiting for results...',
-                host_controls: 'Host Controls:',
-                eliminate_selected: 'Eliminate Selected',
                 select_player_alert: 'Select a player to eliminate'
-            }
+            },
+            start_voting: 'START VOTING',
+            host_hint: 'Press the button when discussion ends.',
+            player_hint: 'Wait for the host to start voting.',
+            back_to_lobby: 'Back to Lobby',
+            eliminated_badge: 'ELIMINATED',
+            vote_button: 'VOTE',
+            you_are_eliminated: 'You are eliminated',
+            vote_submitted: 'Vote submitted. Waiting for results...',
+            host_controls: 'Host Controls:',
+            eliminate_selected: 'Eliminate Selected'
         }
     }
 };

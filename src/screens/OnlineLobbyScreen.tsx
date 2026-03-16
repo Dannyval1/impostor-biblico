@@ -173,12 +173,10 @@ export default function OnlineLobbyScreen() {
                 <View style={styles.footer}>
                     {gameState.isHost ? (
                         <TouchableOpacity
-                            style={[styles.actionButton, playersList.length < 3 && styles.disabledButton]}
-                            onPress={startGame}
-                            disabled={playersList.length < 3}
+                            style={styles.actionButton}
+                            onPress={() => navigation.navigate('OnlineSetup')}
                         >
-                            <Text style={styles.actionButtonText}>{t.online.start_game}</Text>
-                            {playersList.length < 3 && <Text style={styles.minPlayersText}>{t.online.min_players}</Text>}
+                            <Text style={styles.actionButtonText}>{t.online.configure_game}</Text>
                         </TouchableOpacity>
                     ) : (
                         <View style={styles.waitingMessage}>
