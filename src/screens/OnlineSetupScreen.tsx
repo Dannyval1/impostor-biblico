@@ -8,6 +8,7 @@ import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENER
 import { Category, CustomCategory } from '../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { isPremiumCategory } from '../data/categories';
 
 type OnlineSetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'OnlineSetup'>;
@@ -27,7 +28,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const { gameState, updateSettings, startGame } = useOnlineGame();
 
     const [impostorCount, setImpostorCount] = useState(1);
-    const [gameDuration, setGameDuration] = useState<number | null>(300);
+    const [gameDuration, setGameDuration] = useState<number | null>(null);
     const [selectedCategories, setSelectedCategories] = useState<Category[]>(['personajes_biblicos']);
     const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
     const [impostorHint, setImpostorHint] = useState(false);
@@ -37,7 +38,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     useEffect(() => {
         if (gameState.room) {
             setImpostorCount(gameState.room.settings.impostorCount || 1);
-            setGameDuration(gameState.room.settings.gameDuration === undefined ? 300 : gameState.room.settings.gameDuration);
+            setGameDuration(gameState.room.settings.gameDuration === undefined ? null : gameState.room.settings.gameDuration);
             setSelectedCategories(gameState.room.settings.categories || []);
             setCustomCategories(gameState.room.settings.customCategories || []);
             setImpostorHint(gameState.room.settings.impostorHint || false);
@@ -180,8 +181,8 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                             const isSelected = selectedCategories.includes(category.id);
 
                             // Handle Premium Logic
-                            const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
-                            const isLocked = isPremiumCategory && !gameState.room?.settings.isPremiumRoom;
+                            const isPremium = isPremiumCategory(category.id);
+                            const isLocked = isPremium && !gameState.room?.settings.isPremiumRoom;
 
                             return (
                                 <TouchableOpacity

@@ -235,7 +235,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             },
             settings: {
                 impostorCount: 1,
-                gameDuration: 300,
+                gameDuration: null,
                 language: getLocales()[0]?.languageCode === 'es' ? 'es' : 'en',
                 categories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
                 customCategories: [],
