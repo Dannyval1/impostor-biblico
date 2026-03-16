@@ -25,7 +25,7 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     const { gameState, updateSettings } = useOnlineGame();
 
     const [impostorCount, setImpostorCount] = useState(1);
-    const [gameDuration, setGameDuration] = useState<number | null>(300);
+    const [gameDuration, setGameDuration] = useState<number | null>(null);
     const [selectedCategories, setSelectedCategories] = useState<Category[]>(['personajes_biblicos']);
     const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
     const [impostorHint, setImpostorHint] = useState(false);
@@ -35,7 +35,7 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     useEffect(() => {
         if (visible && gameState.room) {
             setImpostorCount(gameState.room.settings.impostorCount || 1);
-            setGameDuration(gameState.room.settings.gameDuration === undefined ? 300 : gameState.room.settings.gameDuration);
+            setGameDuration(gameState.room.settings.gameDuration === undefined ? null : gameState.room.settings.gameDuration);
             setSelectedCategories(gameState.room.settings.categories || []);
             setCustomCategories(gameState.room.settings.customCategories || []);
             setImpostorHint(gameState.room.settings.impostorHint || false);
