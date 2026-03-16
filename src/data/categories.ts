@@ -87,5 +87,8 @@ export function getCategoryConfig(categoryId: Category): CategoryConfig | undefi
 }
 
 export function isPremiumCategory(categoryId: Category): boolean {
-    return PREMIUM_CATEGORIES.includes(categoryId);
+    if (PREMIUM_CATEGORIES.includes(categoryId)) return true;
+    
+    const premiumGenerics = ['animales', 'comida', 'profesiones', 'herramientas', 'marcas', 'famosos'];
+    return premiumGenerics.includes(categoryId as string);
 }
