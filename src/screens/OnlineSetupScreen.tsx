@@ -79,6 +79,14 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const playerCount = Object.keys(gameState.room.players).length;
     const maxImpostors = Math.floor(playerCount / 2);
 
+    const biblicalSelectedCount =
+        CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length +
+        customCategories.filter(c => selectedCategories.includes(c.id) && (c.type === 'biblical' || !c.type)).length;
+
+    const genericSelectedCount =
+        CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length +
+        customCategories.filter(c => selectedCategories.includes(c.id) && c.type === 'general').length;
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -167,12 +175,18 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                             onPress={() => setActiveTab('biblical')}
                         >
                             <Text style={[styles.tabText, activeTab === 'biblical' && styles.activeTabText]}>{t.setup.biblical_tab}</Text>
+                            <View style={styles.tabBadge}>
+                                <Text style={styles.tabBadgeText}>{biblicalSelectedCount}</Text>
+                            </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.tab, activeTab === 'general' && styles.activeTab]}
                             onPress={() => setActiveTab('general')}
                         >
                             <Text style={[styles.tabText, activeTab === 'general' && styles.activeTabText]}>{t.setup.general_tab}</Text>
+                            <View style={styles.tabBadge}>
+                                <Text style={styles.tabBadgeText}>{genericSelectedCount}</Text>
+                            </View>
                         </TouchableOpacity>
                     </View>
 
@@ -382,6 +396,20 @@ const styles = StyleSheet.create({
     },
     activeTabText: {
         color: '#5B7FDB',
+    },
+    tabBadge: {
+        backgroundColor: '#E53E3E',
+        borderRadius: 10,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        marginLeft: 6,
+        minWidth: 20,
+        alignItems: 'center',
+    },
+    tabBadgeText: {
+        color: '#FFF',
+        fontSize: 10,
+        fontWeight: 'bold',
     },
     categoriesGrid: {
         flexDirection: 'row',
