@@ -3,6 +3,7 @@ import { CustomCategory } from '../types';
 
 const CUSTOM_CATEGORIES_KEY = '@impostor_custom_categories';
 const GAMES_PLAYED_KEY = '@impostor_games_played';
+const REWARDED_UNLOCK_KEY = '@impostor_rewarded_unlock';
 
 export const saveCustomCategories = async (categories: CustomCategory[]): Promise<void> => {
     try {
@@ -38,5 +39,72 @@ export const loadGamesPlayed = async (): Promise<number> => {
     } catch (e) {
         console.error('Error loading games played:', e);
         return 0;
+    }
+};
+
+// ─── Active unlock (single category at a time) ─────────────────────────────
+
+/** The currently active ad-unlocked category */
+export interface RewardedUnlock {
+    categoryId: string;
+    expiryTimestamp: number;
+}
+
+export const saveRewardedUnlock = async (unlock: RewardedUnlock): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(REWARDED_UNLOCK_KEY, JSON.stringify(unlock));
+    } catch (e) {
+        console.error('Error saving rewarded unlock:', e);
+    }
+};
+
+export const loadRewardedUnlock = async (): Promise<RewardedUnlock | null> => {
+    try {
+        const value = await AsyncStorage.getItem(REWARDED_UNLOCK_KEY);
+        return value != null ? JSON.parse(value) : null;
+    } catch (e) {
+        console.error('Error loading rewarded unlock:', e);
+        return null;
+    }
+};
+
+export const clearRewardedUnlock = async (): Promise<void> => {
+    try {
+        await AsyncStorage.removeItem(REWARDED_UNLOCK_KEY);
+    } catch (e) {
+        console.error('Error clearing rewarded unlock:', e);
+    }
+};
+
+// ─── Per-category unlock history (cooldown model) ───────────────────────────
+
+/** History record for a single category */
+export interface CategoryUnlockRecord {
+    /** How many times unlocked via ad (max 2) */
+    count: number;
+    /** Epoch ms after which the next ad unlock is available (0 = immediately) */
+    cooldownUntil: number;
+}
+
+/** Map of categoryId → its unlock history */
+export type RewardedUnlockHistory = Record<string, CategoryUnlockRecord>;
+
+const REWARDED_HISTORY_KEY = '@impostor_rewarded_history';
+
+export const loadRewardedHistory = async (): Promise<RewardedUnlockHistory> => {
+    try {
+        const value = await AsyncStorage.getItem(REWARDED_HISTORY_KEY);
+        return value != null ? JSON.parse(value) : {};
+    } catch (e) {
+        console.error('Error loading rewarded history:', e);
+        return {};
+    }
+};
+
+export const saveRewardedHistory = async (history: RewardedUnlockHistory): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(REWARDED_HISTORY_KEY, JSON.stringify(history));
+    } catch (e) {
+        console.error('Error saving rewarded history:', e);
     }
 };

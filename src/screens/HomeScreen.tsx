@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -20,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SettingsModal } from '../components/SettingsModal';
 import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
+import { UpdateModal } from '../components/UpdateModal';
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -28,6 +30,7 @@ type HomeScreenProps = {
 const { height, width } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
+    const insets = useSafeAreaInsets();
     const { state, setHasLoaded, playClick, playIntro } = useGame();
     const { t } = useTranslation();
     const { isPremium, hasShownInitialPaywall, setHasShownInitialPaywall } = usePurchase();
@@ -87,9 +90,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 ? 'https://apps.apple.com/app/id6758225650'
                 : 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
 
+            const message = Platform.OS === 'ios'
+                ? t.home.share_message
+                : `${t.home.share_message} ${url}`;
+
             await Share.share({
-                message: t.home.share_message,
-                url: url,
+                message: message,
+                url: Platform.OS === 'ios' ? url : undefined,
             });
         } catch (error) {
             console.error('Share failed:', error);
@@ -139,7 +146,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
                 {/* Settings Button Only (Top Right) */}
                 {!isLoading && (
-                    <View style={styles.topButtonsContainer}>
+                    <View style={[styles.topButtonsContainer, { top: insets.top + 10 }]}>
                         <TouchableOpacity
                             style={styles.iconButton}
                             onPress={() => {
@@ -163,7 +170,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     </Svg>
                 </View>
 
-                <View style={styles.sheetContent}>
+                <View style={[styles.sheetContent, { paddingBottom: Math.max(insets.bottom, 20) }]}>
                     <Text style={styles.title}>{t.home.title}</Text>
                     <Text style={styles.subtitle}>{t.home.subtitle}</Text>
 
@@ -223,6 +230,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 visible={showHowToPlay}
                 onClose={() => setShowHowToPlay(false)}
             />
+
+            {/* Version update checker — shown 3s after load */}
+            {!isLoading && <UpdateModal delayMs={3000} />}
         </View>
     );
 }

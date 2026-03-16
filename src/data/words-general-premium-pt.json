@@ -1,627 +1,627 @@
 [
     {
         "id": "gen_an_001",
-        "word": "Lion",
+        "word": "Leão",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "King of the jungle with mane",
-        "impostorHint": "Mane"
+        "hint": "Rei da selva com juba",
+        "impostorHint": "Juba"
     },
     {
         "id": "gen_an_002",
-        "word": "Dog",
+        "word": "Cachorro",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Man's best friend",
-        "impostorHint": "Company"
+        "hint": "Melhor amigo do homem",
+        "impostorHint": "Companhia"
     },
     {
         "id": "gen_an_003",
-        "word": "Cat",
+        "word": "Gato",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Feline pet that meows",
-        "impostorHint": "Meow"
+        "hint": "Mascote felino que mia",
+        "impostorHint": "Miau"
     },
     {
         "id": "gen_an_004",
-        "word": "Elephant",
+        "word": "Elefante",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Giant mammal with trunk",
-        "impostorHint": "Trunk"
+        "hint": "Mamífero gigante com tromba",
+        "impostorHint": "Tromba"
     },
     {
         "id": "gen_an_005",
-        "word": "Tiger",
+        "word": "Tigre",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Orange feline with black stripes",
-        "impostorHint": "Stripes"
+        "hint": "Felino laranja com listras pretas",
+        "impostorHint": "Listras"
     },
     {
         "id": "gen_an_006",
-        "word": "Horse",
+        "word": "Cavalo",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Animal that neighs and gallops",
-        "impostorHint": "Gallop"
+        "hint": "Animal que relincha e galopa",
+        "impostorHint": "Galope"
     },
     {
         "id": "gen_an_007",
-        "word": "Cow",
+        "word": "Vaca",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Animal that gives milk",
-        "impostorHint": "Milk"
+        "hint": "Animal que dá leite",
+        "impostorHint": "Leite"
     },
     {
         "id": "gen_an_008",
-        "word": "Rabbit",
+        "word": "Coelho",
         "category": "animales",
         "difficulty": "easy",
-        "hint": "Animal that hops and eats carrots",
-        "impostorHint": "Carrot"
+        "hint": "Animal que salta e come cenouras",
+        "impostorHint": "Cenoura"
     },
     {
         "id": "gen_an_009",
-        "word": "Giraffe",
+        "word": "Girafa",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Tallest animal in the world",
-        "impostorHint": "Neck"
+        "hint": "Animal mais alto do mundo",
+        "impostorHint": "Pescoço"
     },
     {
         "id": "gen_an_010",
-        "word": "Hippopotamus",
+        "word": "Hipopótamo",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Very heavy aquatic mammal",
-        "impostorHint": "River"
+        "hint": "Mamífero aquático muito pesado",
+        "impostorHint": "Rio"
     },
     {
         "id": "gen_an_011",
-        "word": "Rhinoceros",
+        "word": "Rinoceronte",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Gray animal with horn on nose",
-        "impostorHint": "Horn"
+        "hint": "Animal cinza com chifre no nariz",
+        "impostorHint": "Chifre"
     },
     {
         "id": "gen_an_012",
-        "word": "Kangaroo",
+        "word": "Canguru",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Marsupial that hops and has pouch",
-        "impostorHint": "Pouch"
+        "hint": "Marsupial que salta e tem bolsa",
+        "impostorHint": "Bolsa"
     },
     {
         "id": "gen_an_013",
-        "word": "Penguin",
+        "word": "Pinguim",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Bird that doesn't fly but swims well",
-        "impostorHint": "Ice"
+        "hint": "Ave que não voa mas nada bem",
+        "impostorHint": "Gelo"
     },
     {
         "id": "gen_an_014",
-        "word": "Dolphin",
+        "word": "Golfinho",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Very intelligent marine mammal",
-        "impostorHint": "Jump"
+        "hint": "Mamífero marinho muito inteligente",
+        "impostorHint": "Salto"
     },
     {
         "id": "gen_an_015",
-        "word": "Bear",
+        "word": "Urso",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Large mammal that hibernates",
-        "impostorHint": "Hibernation"
+        "hint": "Mamífero grande que hiberna",
+        "impostorHint": "Hibernação"
     },
     {
         "id": "gen_an_016",
-        "word": "Snake",
+        "word": "Cobra",
         "category": "animales",
         "difficulty": "medium",
-        "hint": "Legless reptile that slithers",
-        "impostorHint": "Venom"
+        "hint": "Réptil sem patas que rasteja",
+        "impostorHint": "Veneno"
     },
     {
         "id": "gen_an_017",
-        "word": "Platypus",
+        "word": "Ornitorrinco",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Strange mammal with duck bill",
-        "impostorHint": "Bill"
+        "hint": "Mamífero estranho com bico de pato",
+        "impostorHint": "Bico"
     },
     {
         "id": "gen_an_018",
-        "word": "Koala",
+        "word": "Coala",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Australian marsupial that eats eucalyptus",
-        "impostorHint": "Eucalyptus"
+        "hint": "Marsupial australiano que come eucalipto",
+        "impostorHint": "Eucalipto"
     },
     {
         "id": "gen_an_019",
-        "word": "Armadillo",
+        "word": "Tatu",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Mammal with natural armor",
-        "impostorHint": "Armor"
+        "hint": "Mamífero com armadura natural",
+        "impostorHint": "Armadura"
     },
     {
         "id": "gen_an_020",
-        "word": "Lemur",
+        "word": "Lêmure",
         "category": "animales",
         "difficulty": "hard",
-        "hint": "Madagascar primate with ringed tail",
-        "impostorHint": "Tail"
+        "hint": "Primata de Madagascar com cauda anelada",
+        "impostorHint": "Cauda"
     },
     {
         "id": "gen_fo_001",
         "word": "Pizza",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Italian food with dough and cheese",
-        "impostorHint": "Cheese"
+        "hint": "Comida italiana com massa e queijo",
+        "impostorHint": "Queijo"
     },
     {
         "id": "gen_fo_002",
-        "word": "Hamburger",
+        "word": "Hambúrguer",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Meat between two buns",
-        "impostorHint": "Bun"
+        "hint": "Carne entre dois pães",
+        "impostorHint": "Pão"
     },
     {
         "id": "gen_fo_003",
-        "word": "Pasta",
+        "word": "Macarrão",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Italian noodles with sauce",
-        "impostorHint": "Sauce"
+        "hint": "Massas italianas com molho",
+        "impostorHint": "Molho"
     },
     {
         "id": "gen_fo_004",
-        "word": "Rice",
+        "word": "Arroz",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "White grain staple from Asia",
-        "impostorHint": "Grain"
+        "hint": "Grão branco básico da Ásia",
+        "impostorHint": "Grão"
     },
     {
         "id": "gen_fo_005",
-        "word": "Chicken",
+        "word": "Frango",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Popular poultry meat",
-        "impostorHint": "Bird"
+        "hint": "Carne de ave muito popular",
+        "impostorHint": "Ave"
     },
     {
         "id": "gen_fo_006",
-        "word": "Bread",
+        "word": "Pão",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Basic wheat food",
-        "impostorHint": "Oven"
+        "hint": "Alimento básico de trigo",
+        "impostorHint": "Forno"
     },
     {
         "id": "gen_fo_007",
-        "word": "Egg",
+        "word": "Ovo",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Oval product from chickens",
-        "impostorHint": "Chicken"
+        "hint": "Produto oval das galinhas",
+        "impostorHint": "Galinha"
     },
     {
         "id": "gen_fo_008",
-        "word": "Apple",
+        "word": "Maçã",
         "category": "comida",
         "difficulty": "easy",
-        "hint": "Common red or green fruit",
-        "impostorHint": "Tree"
+        "hint": "Fruta vermelha ou verde muito comum",
+        "impostorHint": "Árvore"
     },
     {
         "id": "gen_fo_009",
         "word": "Sushi",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Japanese food with raw fish",
-        "impostorHint": "Seaweed"
+        "hint": "Comida japonesa com peixe cru",
+        "impostorHint": "Alga"
     },
     {
         "id": "gen_fo_010",
         "word": "Tacos",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Mexican food with tortilla",
-        "impostorHint": "Tortilla"
+        "hint": "Comida mexicana com tortilha",
+        "impostorHint": "Tortilha"
     },
     {
         "id": "gen_fo_011",
         "word": "Paella",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Spanish dish with rice and seafood",
-        "impostorHint": "Seafood"
+        "hint": "Prato espanhol com arroz e frutos do mar",
+        "impostorHint": "Mariscos"
     },
     {
         "id": "gen_fo_012",
-        "word": "Lasagna",
+        "word": "Lasanha",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Layered Italian pasta with meat",
-        "impostorHint": "Layers"
+        "hint": "Massa italiana em camadas com carne",
+        "impostorHint": "Camadas"
     },
     {
         "id": "gen_fo_013",
         "word": "Enchiladas",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Stuffed Mexican tortillas",
-        "impostorHint": "Chili"
+        "hint": "Tortilhas mexicanas recheadas",
+        "impostorHint": "Pimenta"
     },
     {
         "id": "gen_fo_014",
         "word": "Croissant",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "French crescent-shaped pastry",
-        "impostorHint": "Butter"
+        "hint": "Pão francês em forma de meia-lua",
+        "impostorHint": "Manteiga"
     },
     {
         "id": "gen_fo_015",
         "word": "Empanadas",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Stuffed and baked dough",
-        "impostorHint": "Filling"
+        "hint": "Massa recheada e assada ou frita",
+        "impostorHint": "Recheio"
     },
     {
         "id": "gen_fo_016",
         "word": "Curry",
         "category": "comida",
         "difficulty": "medium",
-        "hint": "Spicy Indian food",
-        "impostorHint": "Spices"
+        "hint": "Comida picante da Índia",
+        "impostorHint": "Especiarias"
     },
     {
         "id": "gen_fo_018",
         "word": "Ratatouille",
         "category": "comida",
         "difficulty": "hard",
-        "hint": "French vegetable stew",
-        "impostorHint": "Vegetables"
+        "hint": "Guisado francês de vegetais",
+        "impostorHint": "Legumes"
     },
     {
         "id": "gen_fo_019",
         "word": "Ceviche",
         "category": "comida",
         "difficulty": "hard",
-        "hint": "Raw fish marinated in lime",
-        "impostorHint": "Lime"
+        "hint": "Peixe cru marinado no limão",
+        "impostorHint": "Limão"
     },
     {
         "id": "gen_fo_020",
         "word": "Mole",
         "category": "comida",
         "difficulty": "hard",
-        "hint": "Mexican sauce with chocolate",
+        "hint": "Molho mexicano com chocolate",
         "impostorHint": "Chocolate"
     },
     {
         "id": "gen_pr_001",
-        "word": "Doctor",
+        "word": "Médico",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Professional who cures diseases",
-        "impostorHint": "Coat"
+        "hint": "Profissional que cura doenças",
+        "impostorHint": "Jaleco"
     },
     {
         "id": "gen_pr_002",
-        "word": "Teacher",
+        "word": "Professor",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Educates children in school",
-        "impostorHint": "Blackboard"
+        "hint": "Ensina crianças na escola",
+        "impostorHint": "Lousa"
     },
     {
         "id": "gen_pr_003",
-        "word": "Police officer",
+        "word": "Policial",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Maintains order and safety",
-        "impostorHint": "Uniform"
+        "hint": "Mantém a ordem e a segurança",
+        "impostorHint": "Farda"
     },
     {
         "id": "gen_pr_004",
-        "word": "Firefighter",
+        "word": "Bombeiro",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Puts out fires and rescues people",
-        "impostorHint": "Hose"
+        "hint": "Apaga incêndios e resgata pessoas",
+        "impostorHint": "Mangueira"
     },
     {
         "id": "gen_pr_005",
-        "word": "Chef",
+        "word": "Cozinheiro",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Prepares food in restaurants",
-        "impostorHint": "Apron"
+        "hint": "Prepara comida em restaurantes",
+        "impostorHint": "Avental"
     },
     {
         "id": "gen_pr_006",
-        "word": "Nurse",
+        "word": "Enfermeiro",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Cares for patients in hospitals",
-        "impostorHint": "Syringe"
+        "hint": "Cuida de pacientes em hospitais",
+        "impostorHint": "Seringa"
     },
     {
         "id": "gen_pr_007",
-        "word": "Pilot",
+        "word": "Piloto",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Flies airplanes through the sky",
-        "impostorHint": "Cockpit"
+        "hint": "Conduz aviões pelo céu",
+        "impostorHint": "Cabine"
     },
     {
         "id": "gen_pr_008",
-        "word": "Mechanic",
+        "word": "Mecânico",
         "category": "profesiones",
         "difficulty": "easy",
-        "hint": "Repairs cars and engines",
-        "impostorHint": "Oil"
+        "hint": "Repara carros e motores",
+        "impostorHint": "Óleo"
     },
     {
         "id": "gen_pr_009",
-        "word": "Engineer",
+        "word": "Engenheiro",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Designs and builds technical systems",
-        "impostorHint": "Plans"
+        "hint": "Projeta e constrói sistemas técnicos",
+        "impostorHint": "Plantas"
     },
     {
         "id": "gen_pr_010",
-        "word": "Programmer",
+        "word": "Programador",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Creates software and applications",
-        "impostorHint": "Code"
+        "hint": "Cria software e aplicativos",
+        "impostorHint": "Código"
     },
     {
         "id": "gen_pr_011",
-        "word": "Journalist",
+        "word": "Jornalista",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Reports news and events",
-        "impostorHint": "Microphone"
+        "hint": "Informa notícias e eventos",
+        "impostorHint": "Microfone"
     },
     {
         "id": "gen_pr_012",
-        "word": "Pharmacist",
+        "word": "Farmacêutico",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Prepares and sells medicines",
-        "impostorHint": "Pills"
+        "hint": "Prepara e vende remédios",
+        "impostorHint": "Comprimidos"
     },
     {
         "id": "gen_pr_013",
-        "word": "Psychologist",
+        "word": "Psicólogo",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Studies mind and behavior",
-        "impostorHint": "Couch"
+        "hint": "Estuda a mente e o comportamento",
+        "impostorHint": "Divã"
     },
     {
         "id": "gen_pr_014",
-        "word": "Electrician",
+        "word": "Eletricista",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Installs and repairs electrical systems",
-        "impostorHint": "Cables"
+        "hint": "Instala e repara sistemas elétricos",
+        "impostorHint": "Cabos"
     },
     {
         "id": "gen_pr_015",
-        "word": "Scientist",
+        "word": "Cientista",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Researches natural phenomena",
-        "impostorHint": "Laboratory"
+        "hint": "Pesquisa fenômenos naturais",
+        "impostorHint": "Laboratório"
     },
     {
         "id": "gen_pr_016",
-        "word": "Musician",
+        "word": "Músico",
         "category": "profesiones",
         "difficulty": "medium",
-        "hint": "Plays instruments and composes",
-        "impostorHint": "Score"
+        "hint": "Toca instrumentos e compõe",
+        "impostorHint": "Partitura"
     },
     {
         "id": "gen_pr_017",
-        "word": "Anthropologist",
+        "word": "Antropólogo",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Studies human cultures and societies",
-        "impostorHint": "Tribe"
+        "hint": "Estuda culturas e sociedades humanas",
+        "impostorHint": "Tribo"
     },
     {
         "id": "gen_pr_018",
-        "word": "Archaeologist",
+        "word": "Arqueólogo",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Excavates and studies ancient civilizations",
-        "impostorHint": "Fossil"
+        "hint": "Escava e estuda civilizações antigas",
+        "impostorHint": "Fóssil"
     },
     {
         "id": "gen_pr_019",
-        "word": "Meteorologist",
+        "word": "Meteorologista",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Predicts climate and weather",
-        "impostorHint": "Rain"
+        "hint": "Preve o clima e o tempo",
+        "impostorHint": "Chuva"
     },
     {
         "id": "gen_pr_020",
-        "word": "Neurosurgeon",
+        "word": "Neurocirurgião",
         "category": "profesiones",
         "difficulty": "hard",
-        "hint": "Operates on brain and nervous system",
-        "impostorHint": "Brain"
+        "hint": "Opera o cérebro e o sistema nervoso",
+        "impostorHint": "Cérebro"
     },
     {
         "id": "gen_he_001",
-        "word": "Hammer",
+        "word": "Martelo",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Hits nails with metal head",
-        "impostorHint": "Nail"
+        "hint": "Bate em pregos com cabeça de metal",
+        "impostorHint": "Prego"
     },
     {
         "id": "gen_he_002",
-        "word": "Screwdriver",
+        "word": "Chave de fenda",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Screws and unscrews screws",
-        "impostorHint": "Screw"
+        "hint": "Aperta e solta parafusos",
+        "impostorHint": "Parafuso"
     },
     {
         "id": "gen_he_003",
-        "word": "Wrench",
+        "word": "Chave Inglesa",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Adjusts nuts and bolts",
-        "impostorHint": "Nut"
+        "hint": "Ajusta porcas e parafusos",
+        "impostorHint": "Porca"
     },
     {
         "id": "gen_he_004",
-        "word": "Saw",
+        "word": "Serrote",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Cuts wood with teeth",
-        "impostorHint": "Teeth"
+        "hint": "Corta madeira com dentes",
+        "impostorHint": "Dentes"
     },
     {
         "id": "gen_he_005",
-        "word": "Knife",
+        "word": "Faca",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Cuts with sharp blade",
-        "impostorHint": "Edge"
+        "hint": "Corta com lâmina afiada",
+        "impostorHint": "Fio"
     },
     {
         "id": "gen_he_006",
-        "word": "Scissors",
+        "word": "Tesoura",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Cuts paper with two blades",
-        "impostorHint": "Blades"
+        "hint": "Corta papel com duas lâminas",
+        "impostorHint": "Lâminas"
     },
     {
         "id": "gen_he_007",
-        "word": "Shovel",
+        "word": "Pá",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Digs earth with long handle",
-        "impostorHint": "Earth"
+        "hint": "Cava terra com cabo longo",
+        "impostorHint": "Terra"
     },
     {
         "id": "gen_he_008",
-        "word": "Brush",
+        "word": "Pincel",
         "category": "herramientas",
         "difficulty": "easy",
-        "hint": "Paints with bristles at tip",
-        "impostorHint": "Bristles"
+        "hint": "Pinta com cerdas na ponta",
+        "impostorHint": "Cerdas"
     },
     {
         "id": "gen_he_009",
-        "word": "Drill",
+        "word": "Furadeira",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Makes holes by spinning fast",
-        "impostorHint": "Hole"
+        "hint": "Faz buracos girando rapidamente",
+        "impostorHint": "Buraco"
     },
     {
         "id": "gen_he_010",
-        "word": "Welder",
+        "word": "Soldador",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Joins metals with extreme heat",
-        "impostorHint": "Spark"
+        "hint": "Une metais com calor extremo",
+        "impostorHint": "Faísca"
     },
     {
         "id": "gen_he_011",
-        "word": "Pliers",
+        "word": "Alicate",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Grips objects with jaws",
+        "hint": "Segura objetos com mandíbulas",
         "impostorHint": "Grip"
     },
     {
         "id": "gen_he_013",
-        "word": "File",
+        "word": "Lima",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Wears down surfaces with roughness",
-        "impostorHint": "Rough"
+        "hint": "Desgasta superfícies com rugosidade",
+        "impostorHint": "Rugoso"
     },
     {
         "id": "gen_he_014",
-        "word": "Chisel",
+        "word": "Cinzel",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Carves stone or wood with edge",
-        "impostorHint": "Carve"
+        "hint": "Talha pedra ou madeira com fio",
+        "impostorHint": "Talhar"
     },
     {
         "id": "gen_he_015",
-        "word": "Car jack",
+        "word": "Macaco hidráulico",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Lifts cars to change tires",
-        "impostorHint": "Tire"
+        "hint": "Levanta carros para trocar pneus",
+        "impostorHint": "Pneu"
     },
     {
         "id": "gen_he_016",
         "word": "Compressor",
         "category": "herramientas",
         "difficulty": "medium",
-        "hint": "Generates pressurized air",
-        "impostorHint": "Pressure"
+        "hint": "Gera ar sob pressão",
+        "impostorHint": "Pressão"
     },
     {
         "id": "gen_he_017",
-        "word": "Caliper",
+        "word": "Paquímetro",
         "category": "herramientas",
         "difficulty": "hard",
-        "hint": "Measures with extreme precision",
-        "impostorHint": "Millimeter"
+        "hint": "Mede com extrema precisão",
+        "impostorHint": "Milímetro"
     },
     {
         "id": "gen_he_018",
-        "word": "Multimeter",
+        "word": "Multímetro",
         "category": "herramientas",
         "difficulty": "hard",
-        "hint": "Measures voltage, current and resistance",
-        "impostorHint": "Voltage"
+        "hint": "Mede voltagem, corrente e resistência",
+        "impostorHint": "Voltagem"
     },
     {
         "id": "gen_he_019",
-        "word": "Milling machine",
+        "word": "Fresadora",
         "category": "herramientas",
         "difficulty": "hard",
-        "hint": "Machine that cuts metal precisely",
+        "hint": "Máquina que corta metal com precisão",
         "impostorHint": "Metal"
     },
     {
         "id": "gen_he_020",
-        "word": "Lathe",
+        "word": "Torno",
         "category": "herramientas",
         "difficulty": "hard",
-        "hint": "Machine that spins pieces to shape them",
-        "impostorHint": "Spin"
+        "hint": "Máquina que gira peças para moldá-las",
+        "impostorHint": "Girar"
     },
     {
         "id": "gen_ma_001",

@@ -1,261 +1,308 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    Image,
-    ScrollView,
-    StatusBar,
     Alert,
-    ActivityIndicator
+    ImageBackground,
+    StatusBar,
+    Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { useTranslation } from '../hooks/useTranslation';
-import { ScaleButton } from '../components/ScaleButton';
-import { useGame } from '../context/GameContext';
 import { usePurchase } from '../context/PurchaseContext';
+import { useGame } from '../context/GameContext';
+import { useTranslation } from '../hooks/useTranslation';
+import { Ionicons } from '@expo/vector-icons';
+import { ScaleButton } from '../components/ScaleButton';
 
 type PaywallScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Paywall'>;
 };
 
 export default function PaywallScreen({ navigation }: PaywallScreenProps) {
+    const { isPremium, packages, purchasePackage, restorePurchases, isLoading } = usePurchase();
+    const { playClick } = useGame();
     const { t } = useTranslation();
-    const { playClick, playSuccess, playFailure } = useGame();
-    const { purchasePackage, restorePurchases, packages, isLoading: isPurchasesLoading } = usePurchase();
-    const [isBuying, setIsBuying] = useState(false);
+    const tr = t.paywall;
 
-    // Get the first available package (Lifetime or Subscription)
-    // Find the 'impostor_premium_lifetime' package explicitly
-    // This ensures we sell exactly what we configured in stores
-    const currentPackage = packages.find(
-        (pkg) => pkg.product.identifier === 'impostor_premium_lifetime'
-    ) || (packages.length > 0 ? packages[0] : null);
-    const priceString = currentPackage?.product.priceString;
+    const [purchasing, setPurchasing] = useState(false);
+    const [restoring, setRestoring] = useState(false);
 
-    const handleBuy = async () => {
+    // Close if user is already premium
+    useEffect(() => {
+        if (isPremium) navigation.goBack();
+    }, [isPremium]);
+
+    const mainPackage = packages.find(p => p.identifier === '$rc_lifetime') ?? packages[0];
+    const priceString = mainPackage?.product?.priceString ?? '...';
+
+    const handlePurchase = async () => {
+        if (!mainPackage) return;
         playClick();
-        if (!currentPackage) {
-            Alert.alert(t.paywall.error_title, 'No products available');
-            return;
-        }
-
-        setIsBuying(true);
+        setPurchasing(true);
         try {
-            await purchasePackage(currentPackage);
-            playSuccess();
-            Alert.alert(t.paywall.success_title, t.paywall.success_message, [
-                { text: 'OK', onPress: () => navigation.goBack() }
-            ]);
-        } catch (e: any) {
-            playFailure();
-            // Error is already handled/alerted in context, but we ensure we don't show success here
-            // If it was a user cancellation, we just silently stop.
+            await purchasePackage(mainPackage);
+        } catch {
+            // purchasePackage already shows alert for non-cancelled errors
         } finally {
-            setIsBuying(false);
+            setPurchasing(false);
         }
     };
 
     const handleRestore = async () => {
         playClick();
-        setIsBuying(true);
+        setRestoring(true);
         try {
             await restorePurchases();
-            // Check context for success logic or just alert
         } finally {
-            setIsBuying(false);
+            setRestoring(false);
         }
     };
 
-    const loading = isPurchasesLoading || isBuying;
-
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
-
-            {/* Background Image */}
-            <Image
-                source={require('../../assets/impostor_home_x.webp')}
-                style={styles.backgroundImage}
-                resizeMode="cover"
-            />
+        <ImageBackground
+            source={require('../../assets/impostor_home_x.webp')}
+            style={styles.bg}
+            resizeMode="cover"
+        >
+            <StatusBar barStyle="light-content" />
             <View style={styles.overlay} />
 
-            <SafeAreaView style={styles.safeArea}>
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        style={styles.closeButton}
-                        onPress={() => {
-                            playClick();
-                            navigation.goBack();
-                        }}
-                    >
-                        <Ionicons name="close-circle" size={36} color="#FFF" />
-                    </TouchableOpacity>
+            <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+                {/* Close */}
+                <TouchableOpacity
+                    style={styles.closeBtn}
+                    onPress={() => { playClick(); navigation.goBack(); }}
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                >
+                    <Ionicons name="close-circle" size={34} color="rgba(255,255,255,0.8)" />
+                </TouchableOpacity>
+
+                {/* ── Badge + Title ── */}
+                <View style={styles.headerBlock}>
+                    <View style={styles.diamondBadge}>
+                        <Ionicons name="diamond" size={26} color="#FFD700" />
+                    </View>
+                    <Text style={styles.title}>{tr.title}</Text>
+                    <Text style={styles.subtitle}>{tr.subtitle}</Text>
+
+                    {/* Social Proof */}
+                    <View style={styles.socialProofContainer}>
+                        <Text style={styles.socialProofText}>
+                            {tr.social_proof_prefix}
+                            <Text style={{ fontWeight: '700', color: '#FFF' }}>{tr.social_proof_count}</Text>
+                            {tr.social_proof_suffix}
+                        </Text>
+                    </View>
                 </View>
 
-                <ScrollView contentContainerStyle={styles.content}>
-                    <View style={styles.iconContainer}>
-                        <Ionicons name="diamond" size={25} color="#FFD700" />
-                    </View>
-
-                    <Text style={styles.title}>{t.paywall.title}</Text>
-                    <Text style={styles.subtitle}>{t.paywall.subtitle}</Text>
-
-                    <View style={styles.featuresContainer}>
-                        {t.paywall.sections.map((section: any, sectionIndex: number) => (
-                            <View key={sectionIndex} style={styles.sectionContainer}>
-                                <Text style={styles.sectionTitle}>{section.title}</Text>
-                                {section.items.map((item: string, itemIndex: number) => (
-                                    <View key={itemIndex} style={styles.featureRow}>
-                                        <View style={{ marginRight: 8 }}>
-                                            <Ionicons name="checkmark-circle" size={20} color="#48BB78" />
-                                        </View>
-                                        <Text style={styles.featureText}>{item}</Text>
-                                    </View>
-                                ))}
+                {/* ── Categories chips ── */}
+                <View style={styles.card}>
+                    <Text style={styles.sectionLabel}>{tr.categories_title}</Text>
+                    <View style={styles.chipsGrid}>
+                        {(tr.categories ?? []).map((cat: string, i: number) => (
+                            <View key={i} style={styles.chip}>
+                                <Text style={styles.chipText}>{cat}</Text>
                             </View>
                         ))}
                     </View>
+                </View>
 
-                    <View style={styles.spacer} />
+                {/* ── Extra benefits ── */}
+                <View style={styles.benefitsBlock}>
+                    <Text style={styles.sectionLabel}>{tr.benefits_title}</Text>
+                    {(tr.benefits ?? []).map((benefit: string, i: number) => (
+                        <View key={i} style={styles.benefitRow}>
+                            <Ionicons name="checkmark-circle" size={18} color="#68D391" />
+                            <Text style={styles.benefitText}>{benefit}</Text>
+                        </View>
+                    ))}
+                </View>
+
+                {/* ── CTA ── */}
+                <View style={styles.ctaBlock}>
+                    <Text style={styles.oneTime}>{tr.one_time}</Text>
 
                     <ScaleButton
-                        style={styles.buyButton}
-                        onPress={handleBuy}
-                        disabled={loading}
+                        style={[styles.buyBtn, (purchasing || isLoading) && styles.buyBtnDisabled]}
+                        onPress={handlePurchase}
+                        disabled={purchasing || isLoading || !mainPackage}
                     >
-                        {loading ? (
-                            <ActivityIndicator color="#000" />
-                        ) : (
-                            <Text style={styles.buyButtonText}>
-                                {t.paywall.buy_now.replace('%{price}', priceString || '...')}
-                            </Text>
-                        )}
+                        <Ionicons name="diamond" size={18} color="#1A202C" style={{ marginRight: 8 }} />
+                        <Text style={styles.buyBtnText}>
+                            {purchasing ? '...' : tr.buy_now.replace('%{price}', priceString)}
+                        </Text>
                     </ScaleButton>
 
-                    <TouchableOpacity
-                        style={styles.restoreButton}
-                        onPress={handleRestore}
-                        disabled={loading}
-                    >
-                        <Text style={styles.restoreButtonText}>{t.paywall.restore}</Text>
+                    <TouchableOpacity onPress={handleRestore} disabled={restoring} style={styles.restoreBtn}>
+                        <Text style={styles.restoreText}>
+                            {restoring ? '...' : tr.restore}
+                        </Text>
                     </TouchableOpacity>
-                </ScrollView>
+                </View>
             </SafeAreaView>
-        </View>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    bg: {
         flex: 1,
-        backgroundColor: '#1A202C',
-    },
-    backgroundImage: {
-        ...StyleSheet.absoluteFillObject,
-        width: '100%',
-        height: '100%',
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0,0,0,0.7)',
+        backgroundColor: 'rgba(10, 18, 50, 0.82)',
     },
     safeArea: {
         flex: 1,
+        paddingHorizontal: 22,
+        justifyContent: 'space-between',
     },
-    header: {
-        paddingHorizontal: 20,
-        alignItems: 'flex-end',
+    closeBtn: {
+        alignSelf: 'flex-end',
+        marginTop: 8,
     },
-    closeButton: {
-        padding: 5,
-    },
-    content: {
-        padding: 24,
+
+    // ── Header ──
+    headerBlock: {
         alignItems: 'center',
-        flexGrow: 1,
+        marginTop: -4,
     },
-    iconContainer: {
-        marginTop: -20,
-        marginBottom: 20,
-        backgroundColor: 'rgba(255,255,255,0.1)',
-        padding: 30,
-        borderRadius: 50,
+    diamondBadge: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'rgba(255,215,0,0.15)',
         borderWidth: 2,
-        borderColor: '#FFD700',
+        borderColor: 'rgba(255,215,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 12,
     },
     title: {
         fontSize: 20,
-        fontWeight: 'bold',
-        color: '#FFF',
+        fontWeight: '900',
+        color: '#FFD700',
         textAlign: 'center',
-        marginBottom: 0,
+        letterSpacing: 0.5,
+        marginBottom: 4,
     },
     subtitle: {
-        fontSize: 16,
-        color: '#CBD5E0',
+        fontSize: 14,
+        color: 'rgba(255,255,255,0.7)',
         textAlign: 'center',
-        marginBottom: 10,
     },
-    featuresContainer: {
-        width: '100%',
-        backgroundColor: 'rgba(255,255,255,0.05)',
-        borderRadius: 20,
-        padding: 24,
-    },
-    sectionContainer: {
-        marginBottom: 10,
-    },
-    sectionTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#FFD700',
-        marginBottom: 8,
-    },
-    featureRow: {
+    socialProofContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
-        marginLeft: 8,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 20,
+        marginTop: 16,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
     },
-    featureText: {
+    socialProofText: {
+        fontSize: 12,
+        color: 'rgba(255,255,255,0.85)',
+    },
+
+    // ── Card with chips ──
+    card: {
+        backgroundColor: 'rgba(255,255,255,0.08)',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.12)',
+        padding: 16,
+    },
+    sectionLabel: {
+        fontSize: 13,
+        fontWeight: '700',
+        color: 'rgba(255,255,255,0.55)',
+        textTransform: 'uppercase',
+        letterSpacing: 0.8,
+        marginBottom: 12,
+    },
+    chipsGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    chip: {
+        backgroundColor: 'rgba(255,215,0,0.12)',
+        borderWidth: 1,
+        borderColor: 'rgba(255,215,0,0.3)',
+        borderRadius: 20,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+    },
+    chipText: {
+        fontSize: 13,
+        color: '#FEFCE8',
+        fontWeight: '500',
+    },
+
+    // ── Benefits ──
+    benefitsBlock: {
+        gap: 10,
+    },
+    benefitRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    benefitText: {
         fontSize: 15,
-        color: '#FFF',
-        marginLeft: 8,
-        fontWeight: '400',
-    },
-    spacer: {
+        color: '#F0FFF4',
+        fontWeight: '500',
         flex: 1,
     },
-    buyButton: {
+
+    // ── CTA ──
+    ctaBlock: {
+        alignItems: 'center',
+        paddingBottom: Platform.OS === 'android' ? 8 : 0,
+    },
+    oneTime: {
+        fontSize: 12,
+        color: 'rgba(255,255,255,0.5)',
+        marginBottom: 10,
+        letterSpacing: 0.3,
+    },
+    buyBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#FFD700',
         width: '100%',
-        paddingVertical: 18,
-        borderRadius: 16,
-        alignItems: 'center',
-        marginBottom: 16,
+        paddingVertical: 17,
+        borderRadius: 18,
+        marginBottom: 14,
         shadowColor: '#FFD700',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 6,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.45,
+        shadowRadius: 14,
+        elevation: 8,
     },
-    buyButtonText: {
+    buyBtnDisabled: {
+        opacity: 0.65,
+    },
+    buyBtnText: {
+        fontSize: 17,
+        fontWeight: '900',
         color: '#1A202C',
-        fontSize: 20,
-        fontWeight: 'bold',
+        letterSpacing: 0.3,
     },
-    restoreButton: {
-        padding: 12,
+    restoreBtn: {
+        paddingVertical: 6,
     },
-    restoreButtonText: {
-        color: '#A0AEC0',
-        fontSize: 14,
+    restoreText: {
+        fontSize: 13,
+        color: 'rgba(255,255,255,0.45)',
         textDecorationLine: 'underline',
     },
 });

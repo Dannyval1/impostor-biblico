@@ -13,8 +13,10 @@ import {
     Modal,
     StatusBar,
     Animated,
+    Switch,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
@@ -28,6 +30,11 @@ import { SettingsModal } from '../components/SettingsModal';
 import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
 import { CreateCategoryModal } from '../components/CreateCategoryModal';
+import { RewardedCategoryModal } from '../components/RewardedCategoryModal';
+import { ExpiredAdUnlockModal } from '../components/ExpiredAdUnlockModal';
+import { AdUnlockTimerBadge } from '../components/AdUnlockTimerBadge';
+import { usePurchase } from '../context/PurchaseContext';
+import { CATEGORIES } from '../data/categories';
 
 type SetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Setup'>;
@@ -35,9 +42,8 @@ type SetupScreenProps = {
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-
-
 export default function SetupScreen({ navigation }: SetupScreenProps) {
+    const isFocused = useIsFocused();
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const {
@@ -52,7 +58,65 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         playClick,
         deleteCustomCategory,
         updatePlayerName,
+        toggleImpostorHint,
+        forceRemoveCategory,
     } = useGame();
+    const {
+        isPremium,
+        rewardedUnlock,
+        isCategoryUnlockedByAd,
+        activateRewardedUnlock,
+        clearExpiredUnlock,
+    } = usePurchase();
+
+    // Rewarded modal state
+    const [rewardedModalVisible, setRewardedModalVisible] = useState(false);
+    const [rewardedModalCategory, setRewardedModalCategory] = useState<{ id: string; label: string } | null>(null);
+    const [expiredCategoryInfo, setExpiredCategoryInfo] = useState<{ id: string, name: string } | null>(null);
+
+    const prevRewardedUnlock = useRef(rewardedUnlock);
+
+    // Show expiry modal when a rewarded-unlocked category expires while setup is open
+    useEffect(() => {
+        if (prevRewardedUnlock.current && !rewardedUnlock && isFocused) {
+            const expired = prevRewardedUnlock.current;
+            if (Date.now() >= expired.expiryTimestamp) {
+                const expiredCat = CATEGORIES.find(c => c.id === expired.categoryId);
+                const label = expiredCat
+                    ? (t.setup.categories_list as any)[expired.categoryId] || expiredCat.label
+                    : expired.categoryId;
+
+                // Trigger New Expiration Modal
+                setExpiredCategoryInfo({
+                    id: expired.categoryId,
+                    name: label
+                });
+
+                // Auto-deselect the category if it was selected
+                if (state.settings.selectedCategories.includes(expired.categoryId as any)) {
+                    forceRemoveCategory(expired.categoryId as any);
+                }
+            }
+        }
+        prevRewardedUnlock.current = rewardedUnlock;
+    }, [rewardedUnlock, isFocused]);
+
+    /** Returns the label of the category currently unlocked via ad, or null */
+    const getExistingUnlockLabel = (): string | null => {
+        if (!rewardedUnlock) return null;
+        if (Date.now() >= rewardedUnlock.expiryTimestamp) return null;
+        const cat = CATEGORIES.find(c => c.id === rewardedUnlock.categoryId);
+        return cat
+            ? (t.setup.categories_list as any)[rewardedUnlock.categoryId] || cat.label
+            : rewardedUnlock.categoryId;
+    };
+
+    /** Called when user taps a locked themed category */
+    const handleLockedCategoryPress = (categoryId: string, categoryLabel: string) => {
+        playClick();
+        setRewardedModalCategory({ id: categoryId, label: categoryLabel });
+        setRewardedModalVisible(true);
+    };
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
@@ -66,6 +130,30 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     // Tab State
     const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
+
+    const CATEGORIES_BIBLICAL: { id: Category; label: string }[] = [
+        { id: 'personajes_biblicos', label: t.setup.categories_list.personajes_biblicos },
+        { id: 'libros_biblicos', label: t.setup.categories_list.libros_biblicos },
+        { id: 'objetos_biblicos', label: t.setup.categories_list.objetos_biblicos },
+        { id: 'oficios_biblicos', label: t.setup.categories_list.oficios_biblicos },
+        { id: 'lugares_biblicos', label: t.setup.categories_list.lugares_biblicos },
+        { id: 'mujeres_biblicas', label: t.setup.categories_list.mujeres_biblicas },
+        { id: 'conceptos_teologicos', label: t.setup.categories_list.conceptos_teologicos },
+        { id: 'milagros_biblicos', label: t.setup.categories_list.milagros_biblicos },
+        { id: 'parabolas_jesus', label: t.setup.categories_list.parabolas_jesus },
+    ];
+
+    const CATEGORIES_GENERAL: { id: GenericCategory; label: string }[] = [
+        { id: 'acciones', label: t.setup.categories_list.acciones },
+        { id: 'objetos', label: t.setup.categories_list.objetos },
+        { id: 'deportes', label: t.setup.categories_list.deportes },
+        { id: 'animales', label: t.setup.categories_list.animales },
+        { id: 'comida', label: t.setup.categories_list.comida },
+        { id: 'profesiones', label: t.setup.categories_list.profesiones },
+        { id: 'herramientas', label: t.setup.categories_list.herramientas },
+        { id: 'marcas', label: t.setup.categories_list.marcas },
+        { id: 'famosos', label: t.setup.categories_list.famosos },
+    ];
 
     // Calculate selected counts for badges
     const biblicalSelectedCount =
@@ -162,7 +250,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     const handleAddPlayer = () => {
         if (!playerName.trim()) {
-            showGameModal('Error', t.setup.name_required_alert, 'warning', 'OK');
+            showGameModal(t.error, t.setup.name_required_alert, 'warning', t.ok);
             return;
         }
 
@@ -178,14 +266,14 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
 
     const handleStartGame = () => {
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'danger', 'OK', () => {
+            showGameModal(t.error, t.setup.min_players_alert, 'danger', t.ok, () => {
                 triggerBounce();
             });
             return;
         }
 
         if (state.settings.selectedCategories.length === 0) {
-            showGameModal('Error', t.setup.category_required_alert || 'Selecciona al menos una categoría', 'danger', 'OK');
+            showGameModal(t.error, t.setup.category_required_alert || 'Selecciona al menos una categoría', 'danger', t.ok);
             return;
         }
 
@@ -203,7 +291,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleDecreaseImpostors = () => {
         playClick();
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK', () => {
+            showGameModal(t.error, t.setup.min_players_alert, 'warning', t.ok, () => {
                 triggerBounce();
             });
             return;
@@ -218,7 +306,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
     const handleIncreaseImpostors = () => {
         playClick();
         if (state.settings.players.length < 3) {
-            showGameModal('Error', t.setup.min_players_alert, 'warning', 'OK', () => {
+            showGameModal(t.error, t.setup.min_players_alert, 'warning', t.ok, () => {
                 triggerBounce();
             });
             return;
@@ -349,41 +437,38 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                         </View>
 
                         {state.settings.players.length > 0 && (
-                            <View style={styles.playersGrid}>
-                                {state.settings.players.map((player: Player) => {
-                                    const avatarImage = getAvatarSource(player.avatar);
-
-                                    return (
-                                        <View key={player.id} style={[styles.playerCard, { backgroundColor: '#F0F4FF' }]}>
+                            <View style={styles.playersList}>
+                                {state.settings.players.map((player: Player, index: number) => (
+                                    <View key={player.id} style={styles.playerRow}>
+                                        <View style={styles.playerRowLeft}>
+                                            <Text style={styles.playerNumber}>{index + 1}.</Text>
                                             <TouchableOpacity
-                                                style={styles.removeButtonPosition}
+                                                style={styles.playerNameContainer}
                                                 onPress={() => {
                                                     playClick();
-                                                    removePlayer(player.id);
+                                                    setEditingPlayerId(player.id);
+                                                    setEditingPlayerName(player.name);
+                                                    setShowEditNameModal(true);
                                                 }}
                                             >
-                                                <Text style={styles.removeButton}>×</Text>
+                                                <Text style={styles.playerNameText} numberOfLines={1}>
+                                                    {player.name}
+                                                </Text>
+                                                <Ionicons name="pencil" size={14} color="#666" style={styles.editIcon} />
                                             </TouchableOpacity>
-
-                                            <Image source={avatarImage} style={styles.avatarImage} resizeMode="contain" />
-
-                                            <View style={styles.namePill}>
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        playClick();
-                                                        setEditingPlayerId(player.id);
-                                                        setEditingPlayerName(player.name);
-                                                        setShowEditNameModal(true);
-                                                    }}
-                                                >
-                                                    <Text style={styles.playerName} numberOfLines={1}>
-                                                        {player.name} <Ionicons name="pencil" size={10} color="#666" />
-                                                    </Text>
-                                                </TouchableOpacity>
-                                            </View>
                                         </View>
-                                    );
-                                })}
+
+                                        <TouchableOpacity
+                                            style={styles.removeButton}
+                                            onPress={() => {
+                                                playClick();
+                                                removePlayer(player.id);
+                                            }}
+                                        >
+                                            <Ionicons name="close-circle" size={24} color="#E53E3E" />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
                             </View>
                         )}
 
@@ -446,8 +531,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 <>
                                     {CATEGORIES_BIBLICAL.map((category) => {
                                         const isSelected = state.settings.selectedCategories.includes(category.id);
-                                        const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
-                                        const isLocked = isPremiumCategory && !state.isPremium;
+                                        const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos', 'mujeres_biblicas', 'milagros_biblicos', 'parabolas_jesus'].includes(category.id);
+                                        const isLocked = isPremiumCategory && !state.isPremium && !isCategoryUnlockedByAd(category.id);
 
                                         return (
                                             <TouchableOpacity
@@ -459,8 +544,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                 ]}
                                                 onPress={() => {
                                                     if (isLocked) {
-                                                        playClick();
-                                                        navigation.navigate('Paywall');
+                                                        const label = t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.id;
+                                                        handleLockedCategoryPress(category.id, label);
                                                         return;
                                                     }
                                                     playClick();
@@ -503,6 +588,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                         style={styles.lockedIcon}
                                                         resizeMode="contain"
                                                     />
+                                                )}
+
+                                                {/* Timer badge for ad-unlocked categories */}
+                                                {isPremiumCategory && !state.isPremium && isCategoryUnlockedByAd(category.id) && (
+                                                    <AdUnlockTimerBadge categoryId={category.id} />
                                                 )}
                                             </TouchableOpacity>
                                         );
@@ -608,9 +698,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 <>
                                     {CATEGORIES_GENERAL.map((category) => {
                                         const isSelected = state.settings.selectedCategories.includes(category.id);
-                                        // Actions, objects, sports are free. Others are premium.
                                         const isPremiumCategory = !['acciones', 'objetos', 'deportes'].includes(category.id);
-                                        const isLocked = isPremiumCategory && !state.isPremium;
+                                        const isLocked = isPremiumCategory && !state.isPremium && !isCategoryUnlockedByAd(category.id);
 
                                         return (
                                             <TouchableOpacity
@@ -622,8 +711,8 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                 ]}
                                                 onPress={() => {
                                                     if (isLocked) {
-                                                        playClick();
-                                                        navigation.navigate('Paywall');
+                                                        const label = t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.id;
+                                                        handleLockedCategoryPress(category.id, label);
                                                         return;
                                                     }
                                                     playClick();
@@ -667,6 +756,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                                         style={styles.lockedIcon}
                                                         resizeMode="contain"
                                                     />
+                                                )}
+
+                                                {/* Timer badge for ad-unlocked categories */}
+                                                {isPremiumCategory && !state.isPremium && isCategoryUnlockedByAd(category.id) && (
+                                                    <AdUnlockTimerBadge categoryId={category.id} />
                                                 )}
                                             </TouchableOpacity>
                                         );
@@ -772,51 +866,70 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                     </View>
 
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>{t.setup.duration}</Text>
-                        <TouchableOpacity
-                            style={styles.durationSelector}
-                            onPress={() => setShowDurationPicker(true)}
-                        >
-                            <Text style={styles.durationSelectorText}>{durationLabel}</Text>
-                            <Ionicons name="chevron-down" size={20} color="#666" />
-                        </TouchableOpacity>
+                        <View style={styles.settingRow}>
+                            <Text style={styles.settingTitle}>{t.setup.impostors}</Text>
+                            <View style={styles.impostorControlContainer}>
+                                <TouchableOpacity
+                                    style={[
+                                        styles.impostorControlButton,
+                                        state.settings.impostorCount <= 1 && styles.impostorControlButtonDisabled
+                                    ]}
+                                    onPress={handleDecreaseImpostors}
+                                >
+                                    <Text style={styles.impostorControlButtonText}>−</Text>
+                                </TouchableOpacity>
+
+                                <View style={styles.impostorCountDisplay}>
+                                    <Text style={styles.impostorCountText}>{state.settings.impostorCount}</Text>
+                                </View>
+
+                                <TouchableOpacity
+                                    style={[
+                                        styles.impostorControlButton,
+                                        state.settings.impostorCount >= maxImpostors && styles.impostorControlButtonDisabled
+                                    ]}
+                                    onPress={handleIncreaseImpostors}
+                                >
+                                    <Text style={styles.impostorControlButtonText}>+</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
 
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>{t.setup.impostors}</Text>
-                        <View style={styles.impostorControlContainer}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.impostorControlButton,
-                                    state.settings.impostorCount <= 1 && styles.impostorControlButtonDisabled
-                                ]}
-                                onPress={handleDecreaseImpostors}
-                            >
-                                <Text style={styles.impostorControlButtonText}>−</Text>
-                            </TouchableOpacity>
+                        <View style={styles.settingRow}>
+                            <Text style={styles.settingTitle}>{t.setup.impostor_hint}</Text>
+                            <Switch
+                                value={state.settings.impostorHintEnabled}
+                                onValueChange={(val) => {
+                                    playClick();
+                                    toggleImpostorHint(val);
+                                }}
+                                trackColor={{ false: '#767577', true: '#5B7FDB' }}
+                                thumbColor={state.settings.impostorHintEnabled ? '#FFF' : '#f4f3f4'}
+                                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }], alignSelf: 'center' }}
+                            />
+                        </View>
+                    </View>
 
-                            <View style={styles.impostorCountDisplay}>
-                                <Text style={styles.impostorCountText}>{state.settings.impostorCount}</Text>
-                            </View>
-
+                    <View style={styles.section}>
+                        <View style={styles.settingRow}>
+                            <Text style={styles.settingTitle}>{t.setup.duration}</Text>
                             <TouchableOpacity
-                                style={[
-                                    styles.impostorControlButton,
-                                    state.settings.impostorCount >= maxImpostors && styles.impostorControlButtonDisabled
-                                ]}
-                                onPress={handleIncreaseImpostors}
+                                style={styles.durationSelector}
+                                onPress={() => setShowDurationPicker(true)}
                             >
-                                <Text style={styles.impostorControlButtonText}>+</Text>
+                                <Text style={styles.durationSelectorText}>{durationLabel}</Text>
+                                <Ionicons name="chevron-down" size={20} color="#666" />
                             </TouchableOpacity>
                         </View>
-
                     </View>
 
                 </ScrollView>
             </KeyboardAvoidingView>
 
             {/* Bottom Sticky Button Container */}
-            <View style={[styles.bottomContainer, { paddingBottom: Math.max(20, insets.bottom + 10) }]}>
+            <View style={[styles.bottomContainer, { paddingBottom: Math.max(12, insets.bottom + 4) }]}>
                 <ScaleButton
                     style={[
                         styles.startButton,
@@ -892,10 +1005,51 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 categoryType={activeTab}
             />
 
+            {rewardedModalCategory && (
+                <RewardedCategoryModal
+                    visible={rewardedModalVisible}
+                    categoryId={rewardedModalCategory.id}
+                    categoryLabel={rewardedModalCategory.label}
+                    existingUnlockCategoryLabel={
+                        rewardedUnlock && rewardedModalCategory && rewardedUnlock.categoryId !== rewardedModalCategory.id
+                            ? getExistingUnlockLabel()
+                            : null
+                    }
+                    onUnlockGranted={async () => {
+                        if (rewardedModalCategory) {
+                            await activateRewardedUnlock(rewardedModalCategory.id);
+                            // Auto-select the just-unlocked category
+                            if (!state.settings.selectedCategories.includes(rewardedModalCategory.id as any)) {
+                                toggleCategory(rewardedModalCategory.id as any);
+                            }
+                        }
+                        setRewardedModalVisible(false);
+                    }}
+                    onBuyPremium={() => {
+                        setRewardedModalVisible(false);
+                        navigation.navigate('Paywall');
+                    }}
+                    onClose={() => setRewardedModalVisible(false)}
+                />
+            )}
+
+            {expiredCategoryInfo && (
+                <ExpiredAdUnlockModal
+                    visible={!!expiredCategoryInfo}
+                    categoryName={expiredCategoryInfo.name}
+                    onClose={() => setExpiredCategoryInfo(null)}
+                    onBuyPremium={() => {
+                        setExpiredCategoryInfo(null);
+                        navigation.navigate('Paywall');
+                    }}
+                />
+            )}
+
             <HowToPlayModal
                 visible={showHowToPlay}
                 onClose={() => setShowHowToPlay(false)}
             />
+
 
             <Modal
                 visible={showEditNameModal}
@@ -940,7 +1094,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                                 }}
                                 style={styles.modalButtonCancel}
                             >
-                                <Text style={styles.modalButtonCancelText}>{t.common.cancel}</Text>
+                                <Text style={styles.modalButtonCancelText}>{t.cancel}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => {
@@ -1011,13 +1165,33 @@ const styles = StyleSheet.create({
         padding: 4,
     },
     section: {
-        marginBottom: 24,
+        marginBottom: 16,
     },
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
         color: '#333',
         marginBottom: 12,
+    },
+    settingRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 12, // Use padding instead of fixed height for better alignment
+        backgroundColor: '#FFF',
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 2,
+        minHeight: 56, // Ensure minimum height
+    },
+    settingTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#333',
     },
     tabContainer: {
         flexDirection: 'row',
@@ -1089,7 +1263,7 @@ const styles = StyleSheet.create({
     },
     modeCardSelected: {
         borderColor: '#5B7FDB',
-        backgroundColor: '#fdf6cd',
+        backgroundColor: '#EBF0FF',
     },
     modeImageStickOut: {
         width: 80,
@@ -1134,70 +1308,51 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 0,
     },
-    playersGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-        gap: 12,
+    playersList: {
         marginBottom: 16,
     },
-    playerCard: {
-        width: '30.5%',
-        aspectRatio: 1,
-        borderRadius: 15,
-        padding: 8,
+    playerRow: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        marginBottom: 12,
-        position: 'relative',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    removeButtonPosition: {
-        position: 'absolute',
-        top: 4,
-        right: 4,
-        zIndex: 10,
-        backgroundColor: 'rgba(255,255,255,0.8)',
-        borderRadius: 10,
-        width: 20,
-        height: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    removeButton: {
-        fontSize: 14,
-        color: '#E53E3E',
-        fontWeight: 'bold',
-        marginTop: -1,
-    },
-    avatarImage: {
-        width: '80%',
-        height: '80%',
-        position: 'absolute',
-        top: 10,
-    },
-    namePill: {
+        justifyContent: 'space-between',
         backgroundColor: '#FFF',
-        paddingVertical: 5,
-        paddingHorizontal: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
         borderRadius: 12,
-        width: '100%',
-        alignItems: 'center',
+        marginBottom: 8,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.05,
         shadowRadius: 2,
         elevation: 2,
-        zIndex: 5,
     },
-    playerName: {
-        fontSize: 12,
+    playerRowLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
+    playerNumber: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#A0AEC0',
+        width: 30,
+    },
+    playerNameContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
+    playerNameText: {
+        fontSize: 16,
         fontWeight: '600',
         color: '#333',
+        marginRight: 8,
+    },
+    editIcon: {
+        opacity: 0.5,
+    },
+    removeButton: {
+        padding: 4,
     },
     addPlayerContainer: {
         flexDirection: 'row',
@@ -1380,7 +1535,20 @@ const styles = StyleSheet.create({
         zIndex: 10,
         opacity: 0.9,
     },
+    adUnlockBadge: {
+        position: 'absolute',
+        top: 6,
+        left: 6,
+        backgroundColor: 'rgba(91,127,219,0.85)',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+    },
     // Word Preview
+
     wordPreviewHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -1432,15 +1600,9 @@ const styles = StyleSheet.create({
     },
     // Duration
     durationSelector: {
-        backgroundColor: '#FFF',
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#E0E0E0',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 8,
     },
     durationSelectorText: {
         fontSize: 16,
@@ -1539,51 +1701,41 @@ const styles = StyleSheet.create({
     impostorControlContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        gap: 16,
-        marginBottom: 8,
+        justifyContent: 'flex-end',
+        gap: 8,
     },
     impostorControlButton: {
-        backgroundColor: '#E53E3E',
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        backgroundColor: '#5B7FDB',
+        width: 30, // Reduced from 36
+        height: 30, // Reduced from 36
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowRadius: 2,
+        elevation: 2,
     },
     impostorControlButtonDisabled: {
         backgroundColor: '#CCC',
         opacity: 0.5,
     },
     impostorControlButtonText: {
-        fontSize: 28,
+        fontSize: 18, // Reduced from 20
         fontWeight: 'bold',
         color: '#FFF',
+        marginTop: -2,
     },
     impostorCountDisplay: {
-        backgroundColor: '#FFF',
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        justifyContent: 'center',
+        minWidth: 30,
         alignItems: 'center',
-        borderWidth: 3,
-        borderColor: '#E53E3E',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-        elevation: 4,
+        justifyContent: 'center',
     },
     impostorCountText: {
-        fontSize: 36,
-        fontWeight: 'bold',
-        color: '#E53E3E',
+        fontSize: 24,
+        fontWeight: '600',
+        color: '#333',
     },
     impostorHint: {
         fontSize: 12,

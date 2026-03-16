@@ -20,21 +20,25 @@ import { Player } from '../types';
 import { getAvatarSource } from '../utils/avatarAssets';
 import { Confetti } from '../components/Confetti';
 import { GameModal } from '../components/GameModal';
+import { PostGamePaywallModal } from '../components/PostGamePaywallModal';
+import { usePurchase } from '../context/PurchaseContext';
 
 type VotingScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Voting'>;
 };
 
 export default function VotingScreen({ navigation }: VotingScreenProps) {
-    const { state, resetGame, eliminatePlayer, playClick, playSuccess, playFailure, setGamePhase } = useGame();
+    const { state, resetGame, startGame, eliminatePlayer, playClick, playSuccess, playFailure, setGamePhase, forceRemoveCategory } = useGame();
     const { t } = useTranslation();
+    const { isPremium, isCategoryUnlockedByAd } = usePurchase();
     const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
-    const [timeLeft, setTimeLeft] = useState(state.settings.gameDuration); // Usar duración configurada
+    const [timeLeft, setTimeLeft] = useState(state.settings.gameDuration);
     const [gameFinished, setGameFinished] = useState(false);
     const [resultMessage, setResultMessage] = useState('');
     const [winner, setWinner] = useState<'civilians' | 'impostor' | null>(null);
     const [eliminatedImpostors, setEliminatedImpostors] = useState<string[]>([]);
     const [showTimerExpiredAlert, setShowTimerExpiredAlert] = useState(false);
+    const [showPostGamePaywall, setShowPostGamePaywall] = useState(false);
 
     const activePlayers = state.settings.players.filter((p: Player) => !p.isEliminated);
 
@@ -65,7 +69,7 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         title: '',
         message: '',
         type: 'info',
-        buttonText: 'OK',
+        buttonText: t.ok,
         onClose: () => setModalVisible(false),
     });
 
@@ -166,17 +170,17 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 setWinner('civilians');
                 setResultMessage(t.voting.impostor_found);
                 playSuccess();
-                setResultMessage(t.voting.impostor_found);
-                playSuccess();
                 setGameFinished(true);
                 setGamePhase('results');
+                // Show post-game paywall after 1.5s for non-premium users
+                if (!isPremium) setTimeout(() => setShowPostGamePaywall(true), 1500);
             } else {
                 const remaining = state.settings.impostorCount - newEliminatedImpostors.length;
                 showGameModal(
                     t.voting.impostor_found,
                     `${t.voting.remaining_impostors}: ${remaining}`,
                     'success',
-                    'OK',
+                    t.ok,
                     () => {
                         playClick();
                         setSelectedPlayerId(null);
@@ -206,11 +210,24 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                         playFailure();
                         setGameFinished(true);
                         setGamePhase('results');
+                        // Show post-game paywall after 1.5s for non-premium users
+                        if (!isPremium) setTimeout(() => setShowPostGamePaywall(true), 1500);
                         return;
                     }
 
                     setSelectedPlayerId(null);
                     setTimeLeft(state.settings.gameDuration);
+                },
+                t.voting.reveal_impostor,
+                () => {
+                    playClick();
+                    if (selectedPlayerId) {
+                        eliminatePlayer(selectedPlayerId);
+                    }
+                    setWinner(null);
+                    setResultMessage(t.voting.game_over);
+                    setGameFinished(true);
+                    setGamePhase('results');
                 }
             );
         }
@@ -222,14 +239,14 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
             t.voting.game_over,
             '',
             'warning',
-            t.voting?.reveal_confirm || 'REVELAR',
+            t.voting?.reveal_confirm,
             () => {
                 setWinner(null);
                 setResultMessage(t.voting.game_over);
                 setGameFinished(true);
                 setGamePhase('results');
             },
-            t.common?.cancel || 'Cancelar',
+            t.cancel,
             () => {
                 playClick();
             }
@@ -246,15 +263,60 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
         });
     };
 
+    const handleQuickRestart = () => {
+        playClick();
+
+        // 1. Check if any selected premium category has expired its ad unlock
+        const FREE_CATEGORIES = ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos', 'acciones', 'objetos', 'deportes'];
+
+        let hasExpiredSelected = false;
+
+        state.settings.selectedCategories.forEach((catId: string) => {
+            // Safe ignore custom categories
+            const isCustom = state.customCategories?.some((c: any) => c.id === catId);
+            if (isCustom) return;
+
+            const isPremiumCat = !FREE_CATEGORIES.includes(catId);
+            // If premium, user is not premium, and the category timer ran out -> expired!
+            if (isPremiumCat && !isPremium && !isCategoryUnlockedByAd(catId)) {
+                hasExpiredSelected = true;
+                // Auto-deselect the category since it expired
+                forceRemoveCategory(catId as any);
+            }
+        });
+
+        if (hasExpiredSelected) {
+            showGameModal(
+                t.rewarded_unlock.expired_title,
+                t.rewarded_unlock.expired_message,
+                'warning',
+                t.rewarded_unlock.expired_choose_other,
+                () => {
+                    handlePlayAgain(); // Push user securely back to Setup
+                }
+            );
+            return;
+        }
+
+        // 2. Check if ad should be shown (same logic as SetupScreen)
+        if (!state.isPremium && state.gamesPlayed >= 3) {
+            navigation.replace('Ad');
+            return;
+        }
+
+        startGame();
+        navigation.replace('Reveal');
+    };
+
     const handleClose = () => {
         playClick();
         showGameModal(
             t.voting.game_over,
-            t.voting.exit_confirm || '¿Estás seguro de que quieres salir?',
+            t.voting.exit_confirm,
             'warning',
-            t.common?.exit || 'Exit',
+            t.exit,
             handlePlayAgain,
-            t.common?.cancel || 'Cancelar',
+            t.cancel,
             () => {
                 playClick();
             }
@@ -399,9 +461,16 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
 
                         <TouchableOpacity
                             style={styles.playAgainButton}
+                            onPress={handleQuickRestart}
+                        >
+                            <Text style={styles.playAgainText}>{t.play_again}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.backHomeButton}
                             onPress={handlePlayAgain}
                         >
-                            <Text style={styles.playAgainText}>{t.voting.back_home}</Text>
+                            <Text style={styles.backHomeText}>{t.voting.back_home}</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -418,6 +487,15 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 onClose={modalConfig.onClose}
                 secondaryButtonText={modalConfig.secondaryButtonText}
                 onSecondaryPress={modalConfig.onSecondaryPress}
+            />
+
+            <PostGamePaywallModal
+                visible={showPostGamePaywall}
+                onClose={() => setShowPostGamePaywall(false)}
+                onBuyPremium={() => {
+                    setShowPostGamePaywall(false);
+                    navigation.navigate('Paywall');
+                }}
             />
         </SafeAreaView>
     );
@@ -689,5 +767,21 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    backHomeButton: {
+        paddingVertical: 16,
+        paddingHorizontal: 40,
+        borderRadius: 16,
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 12,
+        borderWidth: 2,
+        borderColor: '#5B7FDB',
+        backgroundColor: '#FFF',
+    },
+    backHomeText: {
+        color: '#5B7FDB',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });

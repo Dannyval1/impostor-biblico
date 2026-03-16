@@ -45,11 +45,32 @@ export const CATEGORIES: CategoryConfig[] = [
         description: 'Ciudades, regiones y sitios bíblicos',
     },
     {
+        id: 'mujeres_biblicas',
+        label: 'Mujeres bíblicas',
+        icon: '👩',
+        isPremium: true,
+        description: 'Mujeres destacadas de la Biblia',
+    },
+    {
         id: 'conceptos_teologicos',
         label: 'Conceptos teológicos',
         icon: '💭',
         isPremium: true,
         description: 'Doctrinas y enseñanzas cristianas',
+    },
+    {
+        id: 'milagros_biblicos',
+        label: 'Milagros bíblicos',
+        icon: '✨',
+        isPremium: true,
+        description: 'Prodigios y señales de Dios en la Biblia',
+    },
+    {
+        id: 'parabolas_jesus',
+        label: 'Parábolas de Jesús',
+        icon: '📖',
+        isPremium: true,
+        description: 'Las enseñanzas en forma de historia de Jesús',
     },
 ];
 

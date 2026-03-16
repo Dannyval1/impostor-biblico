@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { useAudioPlayer } from 'expo-audio';
 import { getLocales } from 'expo-localization';
-import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar, CustomCategory } from '../types';
+import { GameState, GameAction, Player, Word, Category, PlayerRole, Avatar, CustomCategory, Language } from '../types';
 import { saveCustomCategories, loadCustomCategories, saveGamesPlayed, loadGamesPlayed } from '../utils/storage';
 import freeWordsDataEs from '../data/words-free-es.json';
 import freeWordsDataEn from '../data/words-free-en.json';
@@ -11,6 +11,10 @@ import generalWordsDataEs from '../data/words-general-es.json';
 import generalWordsDataEn from '../data/words-general-en.json';
 import generalPremiumWordsDataEs from '../data/words-general-premium-es.json';
 import generalPremiumWordsDataEn from '../data/words-general-premium-en.json';
+import freeWordsDataPt from '../data/words-free-pt.json';
+import premiumWordsDataPt from '../data/words-premium-pt.json';
+import generalWordsDataPt from '../data/words-general-pt.json';
+import generalPremiumWordsDataPt from '../data/words-general-premium-pt.json';
 import { TOTAL_AVATARS } from '../utils/avatarAssets';
 
 const clickSound = require('../../assets/sounds/click.mp3');
@@ -39,7 +43,8 @@ function getNextAvatar(currentPlayers: Player[]): Avatar {
     return available[randomIndex];
 }
 
-function getRandomWord(categories: Category[], language: 'es' | 'en', customCategories: CustomCategory[] = [], difficulty: 'easy' | 'medium' | 'hard' | 'all' = 'all'): Word {
+// Helper to get random word based on language and category
+const getRandomWord = (categories: Category[], language: Language, customCategories: CustomCategory[] = [], difficulty: 'easy' | 'medium' | 'hard' | 'all' = 'all'): Word => {
     const standardCategories: Category[] = [];
     const activeCustomCategoryIds: string[] = [];
 
@@ -51,10 +56,10 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
         }
     });
 
-    const freeWords = (language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
-    const premiumWords = (language === 'en' ? premiumWordsDataEn : premiumWordsDataEs) as Word[];
-    const generalWords = (language === 'en' ? generalWordsDataEn : generalWordsDataEs) as Word[];
-    const generalPremiumWords = (language === 'en' ? generalPremiumWordsDataEn : generalPremiumWordsDataEs) as Word[];
+    const freeWords = (language === 'en' ? freeWordsDataEn : language === 'pt' ? freeWordsDataPt : freeWordsDataEs) as Word[];
+    const premiumWords = (language === 'en' ? premiumWordsDataEn : language === 'pt' ? premiumWordsDataPt : premiumWordsDataEs) as Word[];
+    const generalWords = (language === 'en' ? generalWordsDataEn : language === 'pt' ? generalWordsDataPt : generalWordsDataEs) as Word[];
+    const generalPremiumWords = (language === 'en' ? generalPremiumWordsDataEn : language === 'pt' ? generalPremiumWordsDataPt : generalPremiumWordsDataEs) as Word[];
 
     const allWords = [...freeWords, ...premiumWords, ...generalWords, ...generalPremiumWords];
 
@@ -84,22 +89,29 @@ function getRandomWord(categories: Category[], language: 'es' | 'en', customCate
             const randomIndex = Math.floor(Math.random() * fallbackWords.length);
             return fallbackWords[randomIndex];
         }
-        return freeWords[0];
+        return freeWords[0]; // Fallback to a default word if nothing else is found
     }
 
     const randomIndex = Math.floor(Math.random() * availableWords.length);
     return availableWords[randomIndex];
-}
+};
 
-const deviceLanguage = getLocales()[0]?.languageCode === 'es' ? 'es' : 'en';
+const getDeviceLanguage = (): Language => {
+    const code = getLocales()[0]?.languageCode;
+    if (code === 'es') return 'es';
+    if (code === 'pt') return 'pt';
+    return 'en';
+};
+
+const deviceLanguage = getDeviceLanguage();
 
 const initialState: GameState = {
     settings: {
         mode: 'classic',
         players: [
-            { id: '1', name: deviceLanguage === 'es' ? 'Jugador 1' : 'Player 1', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
-            { id: '2', name: deviceLanguage === 'es' ? 'Jugador 2' : 'Player 2', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
-            { id: '3', name: deviceLanguage === 'es' ? 'Jugador 3' : 'Player 3', role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
+            { id: '1', name: deviceLanguage === 'es' ? 'Jugador 1' : (deviceLanguage === 'pt' ? 'Jogador 1' : 'Player 1'), role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_1' },
+            { id: '2', name: deviceLanguage === 'es' ? 'Jugador 2' : (deviceLanguage === 'pt' ? 'Jogador 2' : 'Player 2'), role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_2' },
+            { id: '3', name: deviceLanguage === 'es' ? 'Jugador 3' : (deviceLanguage === 'pt' ? 'Jogador 3' : 'Player 3'), role: 'civilian', score: 0, hasSeenWord: false, avatar: 'avatar_3' },
         ],
         selectedCategories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
         impostorCount: 1,
@@ -108,6 +120,7 @@ const initialState: GameState = {
         soundsEnabled: true,
         language: deviceLanguage,
         difficulty: 'all',
+        impostorHintEnabled: false,
     },
     currentWord: null,
     currentImpostor: null,
@@ -119,6 +132,7 @@ const initialState: GameState = {
     customCategories: [],
     gamesPlayed: 0,
     isPremium: false,
+    recentImpostors: [],
 };
 
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -145,14 +159,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             };
         }
 
-        case 'REMOVE_PLAYER':
+        case 'REMOVE_PLAYER': {
+            const remainingPlayers = state.settings.players.filter(p => p.id !== action.payload);
+            const remainingIds = new Set(remainingPlayers.map(p => p.id));
             return {
                 ...state,
                 settings: {
                     ...state.settings,
-                    players: state.settings.players.filter(p => p.id !== action.payload),
+                    players: remainingPlayers,
                 },
+                // Clean orphaned IDs from impostor history
+                recentImpostors: state.recentImpostors.filter(id => remainingIds.has(id)),
             };
+        }
 
         case 'UPDATE_PLAYER_NAME':
             return {
@@ -190,7 +209,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 };
             }
         }
-
         case 'SET_IMPOSTOR_COUNT':
             return {
                 ...state,
@@ -199,6 +217,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                     impostorCount: action.payload,
                 },
             };
+
+        case 'FORCE_REMOVE_CATEGORY': {
+            const category = action.payload;
+            const newCategories = state.settings.selectedCategories.filter(c => c !== category);
+            // If the user runs out of categories, gracefully fallback to one free category
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    selectedCategories: newCategories.length === 0 ? ['personajes_biblicos'] : newCategories,
+                },
+            };
+        }
 
         case 'SET_GAME_DURATION':
             return {
@@ -212,13 +243,47 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         case 'START_GAME': {
             const impostorCount = state.settings.impostorCount;
 
-            const shuffled = [...state.settings.players].sort(() => Math.random() - 0.5);
-            const impostorIds = shuffled.slice(0, impostorCount).map(p => p.id);
+            const playerCount = state.settings.players.length;
+            const MAX_HISTORY = Math.max(1, Math.min(playerCount - 2, 5));
+            const allPlayerIds = state.settings.players.map(p => p.id);
+
+            // Step 1: Filter players who were NOT impostor recently
+            let eligibleIds = allPlayerIds.filter(
+                id => !state.recentImpostors.includes(id)
+            );
+
+            // Step 2: If not enough eligible, pick the ones who were impostor longest ago
+            if (eligibleIds.length < impostorCount) {
+                eligibleIds = [...allPlayerIds].sort((a, b) => {
+                    const indexA = state.recentImpostors.indexOf(a);
+                    const indexB = state.recentImpostors.indexOf(b);
+                    // Players NOT in history (-1) go first, then oldest (lowest index) first
+                    const scoreA = indexA === -1 ? -1 : indexA;
+                    const scoreB = indexB === -1 ? -1 : indexB;
+                    return scoreA - scoreB;
+                });
+            }
+
+            // Step 3: Randomly select impostors from eligible pool (Fisher-Yates Shuffle)
+            const shuffledEligible = [...eligibleIds];
+            for (let i = shuffledEligible.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledEligible[i], shuffledEligible[j]] = [shuffledEligible[j], shuffledEligible[i]];
+            }
+            const impostorIds = shuffledEligible.slice(0, impostorCount);
+
+            // Step 4: Update history (keep only last MAX_HISTORY entries)
+            const updatedHistory = [...state.recentImpostors, ...impostorIds]
+                .slice(-MAX_HISTORY);
+            // --- END ANTI-REPETITION LOGIC ---
 
             const playersWithRoles = state.settings.players.map(player => ({
                 ...player,
                 role: (impostorIds.includes(player.id) ? 'impostor' : 'civilian') as PlayerRole,
                 hasSeenWord: false,
+                isEliminated: false,
+                clue: undefined,
+                votedFor: undefined,
             }));
 
             const word = getRandomWord(
@@ -239,6 +304,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 currentImpostors: impostorIds,
                 gamePhase: 'reveal',
                 gamesPlayed: state.gamesPlayed + 1,
+                recentImpostors: updatedHistory,
             };
         }
 
@@ -340,7 +406,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 hasLoaded: true,
                 customCategories: state.customCategories,
                 gamesPlayed: state.gamesPlayed,
-                isPremium: state.isPremium
+                isPremium: state.isPremium,
+                recentImpostors: state.recentImpostors,
             };
         }
 
@@ -362,6 +429,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
                 },
             };
 
+        case 'TOGGLE_IMPOSTOR_HINT':
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    impostorHintEnabled: action.payload,
+                },
+            };
+
         case 'SET_DIFFICULTY':
             return {
                 ...state,
@@ -377,13 +453,17 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             const updatedPlayers = state.settings.players.map(player => {
                 const jugadorMatch = player.name.match(/^Jugador (\d+)$/);
                 const playerMatch = player.name.match(/^Player (\d+)$/);
+                const jogadorMatch = player.name.match(/^Jogador (\d+)$/);
 
-                if (jugadorMatch && newLang === 'en') {
-                    // Convert Spanish to English
-                    return { ...player, name: `Player ${jugadorMatch[1]}` };
-                } else if (playerMatch && newLang === 'es') {
-                    // Convert English to Spanish
-                    return { ...player, name: `Jugador ${playerMatch[1]}` };
+                if (newLang === 'en') {
+                    if (jugadorMatch) return { ...player, name: `Player ${jugadorMatch[1]}` };
+                    if (jogadorMatch) return { ...player, name: `Player ${jogadorMatch[1]}` };
+                } else if (newLang === 'es') {
+                    if (playerMatch) return { ...player, name: `Jugador ${playerMatch[1]}` };
+                    if (jogadorMatch) return { ...player, name: `Jugador ${jogadorMatch[1]}` };
+                } else if (newLang === 'pt') {
+                    if (playerMatch) return { ...player, name: `Jogador ${playerMatch[1]}` };
+                    if (jugadorMatch) return { ...player, name: `Jogador ${jugadorMatch[1]}` };
                 }
 
                 return player;
@@ -478,6 +558,7 @@ const GameContext = createContext<{
     removePlayer: (id: string) => void;
     updatePlayerName: (id: string, name: string) => void;
     toggleCategory: (category: Category) => void;
+    forceRemoveCategory: (category: Category) => void;
     setImpostorCount: (count: number) => void;
     setGameDuration: (duration: number | null) => void;
     startGame: () => void;
@@ -490,8 +571,9 @@ const GameContext = createContext<{
     resetGame: () => void;
     toggleMusic: (enabled: boolean) => void;
     toggleSounds: (enabled: boolean) => void;
+    toggleImpostorHint: (enabled: boolean) => void;
     setDifficulty: (difficulty: 'easy' | 'medium' | 'hard' | 'all') => void;
-    setLanguage: (lang: 'es' | 'en') => void;
+    setLanguage: (lang: Language) => void;
     setHasLoaded: () => void;
     playClick: () => void;
     playSuccess: () => void;
@@ -658,6 +740,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         removePlayer: (id: string) => dispatch({ type: 'REMOVE_PLAYER', payload: id }),
         updatePlayerName: (id: string, name: string) => dispatch({ type: 'UPDATE_PLAYER_NAME', payload: { id, name } }),
         toggleCategory: (category: Category) => dispatch({ type: 'TOGGLE_CATEGORY', payload: category }),
+        forceRemoveCategory: (category: Category) => dispatch({ type: 'FORCE_REMOVE_CATEGORY', payload: category }),
         setImpostorCount: (count: number) => dispatch({ type: 'SET_IMPOSTOR_COUNT', payload: count }),
         setGameDuration: (duration: number | null) => dispatch({ type: 'SET_GAME_DURATION', payload: duration }),
         startGame: () => dispatch({ type: 'START_GAME' }),
@@ -672,8 +755,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
         resetGame: () => dispatch({ type: 'RESET_GAME' }),
         toggleMusic: (enabled: boolean) => dispatch({ type: 'TOGGLE_MUSIC', payload: enabled }),
         toggleSounds: (enabled: boolean) => dispatch({ type: 'TOGGLE_SOUNDS', payload: enabled }),
+        toggleImpostorHint: (enabled: boolean) => dispatch({ type: 'TOGGLE_IMPOSTOR_HINT', payload: enabled }),
         setDifficulty: (difficulty: 'easy' | 'medium' | 'hard' | 'all') => dispatch({ type: 'SET_DIFFICULTY', payload: difficulty }),
-        setLanguage: (lang: 'es' | 'en') => dispatch({ type: 'SET_LANGUAGE', payload: lang }),
+        setLanguage: (lang: import('../types').Language) => dispatch({ type: 'SET_LANGUAGE', payload: lang }),
         setHasLoaded: () => dispatch({ type: 'SET_HAS_LOADED' }),
         playClick,
         playSuccess,

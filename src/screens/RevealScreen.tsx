@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    ScrollView,
     StatusBar,
+    ImageBackground,
+    Animated,
+    PanResponder,
+    Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Player } from '../types';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const HALF_SCREEN = SCREEN_HEIGHT * 0.52;
+const PEEK_THRESHOLD = HALF_SCREEN * 0.35;
 
 type RevealScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Reveal'>;
@@ -20,20 +28,101 @@ type RevealScreenProps = {
 
 export default function RevealScreen({ navigation }: RevealScreenProps) {
     const { t } = useTranslation();
+    const insets = useSafeAreaInsets();
     const { state, markPlayerSeenWord, loadNewWord, playClick } = useGame();
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
-    const [isRevealed, setIsRevealed] = useState(false);
+    const [hasPeeked, setHasPeeked] = useState(false);
 
     const players = state.settings.players;
     const currentPlayer = players[currentPlayerIndex];
     const isImpostor = currentPlayer?.role === 'impostor';
 
-    const playersWhoSaw = players.filter((p: Player) => p.hasSeenWord).length;
+    // Bouncing arrow animation
+    const bounceAnim = useRef(new Animated.Value(0)).current;
+    // Buttons slide-up animation - Start offscreen (300)
+    const buttonsAnim = useRef(new Animated.Value(300)).current;
+    // Curtain position — stored as a plain number ref + Animated.Value
+    const curtainY = useRef(new Animated.Value(0)).current;
+    const curtainPos = useRef(0);
 
-    const handleReveal = () => {
-        playClick();
-        setIsRevealed(true);
-    };
+    useEffect(() => {
+        const bounce = Animated.loop(
+            Animated.sequence([
+                Animated.timing(bounceAnim, {
+                    toValue: -12,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(bounceAnim, {
+                    toValue: 0,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+            ])
+        );
+        bounce.start();
+        return () => bounce.stop();
+    }, [currentPlayerIndex]);
+
+    // Animate buttons in/out when peeked state changes
+    useEffect(() => {
+        if (hasPeeked) {
+            Animated.sequence([
+                Animated.delay(300),
+                Animated.spring(buttonsAnim, {
+                    toValue: 0,
+                    friction: 6,
+                    tension: 40,
+                    useNativeDriver: true,
+                })
+            ]).start();
+        } else {
+            Animated.timing(buttonsAnim, {
+                toValue: 300,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [hasPeeked]);
+
+    const panResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => false,
+            onMoveShouldSetPanResponder: (_, gs) => Math.abs(gs.dy) > 8,
+            onPanResponderMove: (_, gs) => {
+                // Only upward, hard clamped to HALF_SCREEN
+                const dy = gs.dy;
+                if (dy < 0) {
+                    const val = Math.max(dy, -HALF_SCREEN);
+                    curtainPos.current = val;
+                    // Reset buttons if they start dragging curtain down significantly?
+                    // No, let's keep it simple.
+                    curtainY.setValue(val);
+                } else {
+                    curtainPos.current = 0;
+                    curtainY.setValue(0);
+                }
+            },
+            onPanResponderRelease: (_, gs) => {
+                const shouldPeek = gs.dy < -PEEK_THRESHOLD;
+
+                curtainPos.current = 0;
+                // Use spring for a bouncy return, but clamp overshoot to avoid "jumping" the view down
+                Animated.spring(curtainY, {
+                    toValue: 0,
+                    friction: 7,
+                    tension: 40,
+                    overshootClamping: true, // Prevent bouncing past zero (positive Y)
+                    useNativeDriver: true,
+                }).start(() => {
+                    // Only show buttons AFTER curtain has bounced back down
+                    if (shouldPeek) {
+                        setHasPeeked(true);
+                    }
+                });
+            },
+        })
+    ).current;
 
     const handleNext = () => {
         playClick();
@@ -43,132 +132,166 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
             navigation.replace('Voting');
         } else {
             setCurrentPlayerIndex(currentPlayerIndex + 1);
-            setIsRevealed(false);
+            setHasPeeked(false);
+            curtainY.setValue(0);
+            curtainPos.current = 0;
+            // Force reset buttons anim immediately to hidden state to prevent flash
+            buttonsAnim.setValue(300);
         }
     };
 
     if (!currentPlayer) {
         return (
             <SafeAreaView style={styles.container}>
-                <Text>Error</Text>
+                <Text>{t.error}</Text>
             </SafeAreaView>
         );
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
-            <ScrollView contentContainerStyle={styles.content}>
-                <View style={styles.header}>
-                    <Text style={styles.progressText}>
-                        {playersWhoSaw}/{players.length} {t.reveal.players}
-                    </Text>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+
+            <View style={styles.layerContainer}>
+                {/* ─── BASE LAYER: Word info in bottom half ─── */}
+                <View style={styles.baseLayer}>
+                    <View style={styles.bottomHalf}>
+                        {isImpostor ? (
+                            <View style={styles.wordRevealArea}>
+                                <Text style={styles.impostorIcon}>🎭</Text>
+                                <Text style={styles.impostorLabel}>{t.reveal.shout_is}</Text>
+                                <Text style={styles.impostorTitle}>{t.reveal.shout_impostor}</Text>
+                                <Text style={styles.impostorSecret}>{t.reveal.impostor_secret}</Text>
+
+                                {state.settings.impostorHintEnabled && state.currentWord?.impostorHint && (
+                                    <Text style={styles.impostorHintText}>
+                                        <Text style={{ fontWeight: 'bold' }}>{t.reveal.hint}:</Text> {state.currentWord.impostorHint}
+                                    </Text>
+                                )}
+                            </View>
+                        ) : (
+                            <View style={styles.wordRevealArea}>
+                                <Text style={styles.wordLabel}>{t.reveal.your_word}</Text>
+                                <Text style={styles.word}>{state.currentWord?.word}</Text>
+
+                                <View style={styles.categoryPill}>
+                                    <Text style={styles.categoryText}>
+                                        📚 {t.setup.categories_list[(state.currentWord?.category || '') as keyof typeof t.setup.categories_list]}
+                                    </Text>
+                                </View>
+
+                                {state.currentWord?.hint && (
+                                    <Text style={styles.hintText}>
+                                        💡 {t.reveal.hint}: <Text style={styles.hintValue}>{state.currentWord.hint}</Text>
+                                    </Text>
+                                )}
+                            </View>
+                        )}
+                    </View>
                 </View>
 
-                <View style={styles.mainContent}>
-                    {!isRevealed ? (
-                        <>
-                            <Text style={styles.playerName}>{t.reveal.player}:</Text>
-                            <Text style={styles.playerNameBig}>{currentPlayer.name}</Text>
+                {/* ─── CURTAIN LAYER ─── */}
+                <Animated.View
+                    style={[styles.curtain, { transform: [{ translateY: curtainY }] }]}
+                    {...panResponder.panHandlers}
+                >
+                    <ImageBackground
+                        source={require('../../assets/impostor_home_x.webp')}
+                        style={styles.curtainImage}
+                        resizeMode="cover"
+                    >
+                        <View style={styles.blueOverlay} />
 
-                            <View style={styles.warningBox}>
-                                <Text style={styles.warningIcon}>⚠️</Text>
-                                <Text style={styles.warningText}>
-                                    {t.reveal.warning_title}{'\n'}{t.reveal.warning_subtitle}
+                        <View style={styles.curtainContent}>
+                            {/* Header: progress + close */}
+                            <View style={[styles.curtainHeader, { marginTop: insets.top + 8 }]}>
+                                <Text style={styles.progressText}>
+                                    {currentPlayerIndex + 1} / {players.length}
                                 </Text>
+                                <TouchableOpacity
+                                    style={styles.closeButton}
+                                    onPress={() => navigation.replace('Setup')}
+                                    activeOpacity={0.7}
+                                >
+                                    <Ionicons name="close" size={22} color="rgba(255,255,255,0.7)" />
+                                </TouchableOpacity>
                             </View>
 
-                            <Text style={styles.instructionText}>
-                                {t.reveal.tap_to_see}
-                            </Text>
+                            {/* Player name center - Absolute to prevent jumps */}
+                            <View style={styles.centerArea}>
+                                <Text style={styles.playerLabel}>{t.reveal.player}</Text>
+                                <Text style={styles.playerName}>{currentPlayer.name}</Text>
+                            </View>
 
-                            <TouchableOpacity
-                                style={styles.revealButton}
-                                onPress={handleReveal}
-                            >
-                                <Text style={styles.revealButtonIcon}>👁️</Text>
-                                <Text style={styles.revealButtonText}>{t.reveal.show_word}</Text>
-                            </TouchableOpacity>
-
-                            <Text style={styles.footerText}>
-                                {currentPlayerIndex + 1} de {players.length}
-                            </Text>
-                        </>
-                    ) : (
-                        <>
-                            {isImpostor ? (
-                                <View style={styles.impostorContainer}>
-                                    <Text style={styles.impostorIcon}>🎭</Text>
-                                    <Text style={styles.impostorTitle}>{t.reveal.shout_is}</Text>
-                                    <Text style={styles.impostorTitleBig}>{t.reveal.shout_impostor}</Text>
-
-                                    <View style={styles.impostorInfoBox}>
-                                        <Text style={styles.impostorInfoText}>
-                                            {t.reveal.impostor_secret}
-                                        </Text>
-                                        <Text style={styles.impostorInfoSubtext}>
-                                            {t.reveal.impostor_strategy}
-                                        </Text>
-
-
-                                    </View>
-                                </View>
-                            ) : (
-                                <View style={styles.wordContainer}>
-                                    <Text style={styles.wordLabel}>{t.reveal.your_word}</Text>
-
-                                    <View style={styles.wordBox}>
-                                        <Text style={styles.wordIcon}>🎯</Text>
-                                        <Text style={styles.word}>{state.currentWord?.word}</Text>
-                                    </View>
-
-                                    {state.currentWord?.hint && (
-                                        <View style={styles.hintBox}>
-                                            <Text style={styles.hintLabel}>{t.reveal.hint}:</Text>
-                                            <Text style={styles.hintText}>{state.currentWord.hint}</Text>
-                                        </View>
-                                    )}
-
-                                    <View style={styles.categoryBox}>
-                                        <Text style={styles.categoryText}>
-                                            📚 {t.setup.categories_list[(state.currentWord?.category || '') as keyof typeof t.setup.categories_list]}
-                                        </Text>
-                                    </View>
-
-                                    <View style={styles.reminderBox}>
-                                        <Text style={styles.reminderText}>
-                                            ⚠️ {t.reveal.memorize}
-                                        </Text>
-
-                                    </View>
-
-                                    {currentPlayerIndex === 0 && (
+                            {/* Footer Area - Absolute bottom */}
+                            <View style={[styles.footerArea, { paddingBottom: 12 + insets.bottom }]}>
+                                {/* BUTTONS: Appear above swipe text */}
+                                <Animated.View style={[
+                                    styles.buttonsArea,
+                                    {
+                                        transform: [{ translateY: buttonsAnim }],
+                                        opacity: buttonsAnim.interpolate({
+                                            inputRange: [0, 150],
+                                            outputRange: [1, 0],
+                                            extrapolate: 'clamp',
+                                        })
+                                    }
+                                ]}>
+                                    {currentPlayerIndex === 0 && !isImpostor && (
                                         <TouchableOpacity
                                             style={styles.changeWordButton}
                                             onPress={() => {
+                                                playClick();
                                                 loadNewWord();
+                                                setHasPeeked(false);
                                             }}
+                                            activeOpacity={0.8}
                                         >
-                                            <Text style={styles.changeWordButtonText}>🔄 {t.reveal.change_word}</Text>
+                                            <Text style={styles.changeWordButtonText}>{t.reveal.change_word}</Text>
                                         </TouchableOpacity>
                                     )}
-                                </View>
-                            )}
 
-                            <TouchableOpacity
-                                style={styles.nextButton}
-                                onPress={handleNext}
-                            >
-                                <Text style={styles.nextButtonText}>
-                                    {currentPlayerIndex === players.length - 1
-                                        ? t.reveal.start_game
-                                        : `${t.reveal.next_player} →`}
+                                    <TouchableOpacity
+                                        style={styles.nextButton}
+                                        onPress={handleNext}
+                                        activeOpacity={0.8}
+                                    >
+                                        <Text style={styles.nextButtonText}>
+                                            {currentPlayerIndex === players.length - 1
+                                                ? t.reveal.start_game
+                                                : `${t.reveal.next_player} →`}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </Animated.View>
+
+                                {/* Swipe prompt - Fade out when buttons appear */}
+                                <Animated.View style={[
+                                    styles.swipeArea,
+                                    {
+                                        opacity: buttonsAnim.interpolate({
+                                            inputRange: [0, 100],
+                                            outputRange: [0, 1],
+                                            extrapolate: 'clamp',
+                                        })
+                                    }
+                                ]}>
+                                    <Text style={styles.swipeText}>
+                                        {t.reveal.swipe_to_reveal}
+                                    </Text>
+                                    <Animated.Text style={[styles.swipeArrow, { transform: [{ translateY: bounceAnim }] }]}>
+                                        ▲
+                                    </Animated.Text>
+                                </Animated.View>
+
+                                {/* Warning */}
+                                <Text style={styles.warningFooter}>
+                                    ⚠️ {t.reveal.warning_title}
                                 </Text>
-                            </TouchableOpacity>
-                        </>
-                    )}
-                </View>
-            </ScrollView>
+                            </View>
+                        </View>
+                    </ImageBackground>
+                </Animated.View>
+            </View>
         </SafeAreaView>
     );
 }
@@ -176,247 +299,236 @@ export default function RevealScreen({ navigation }: RevealScreenProps) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#FFFFFF',
     },
-    content: {
-        flexGrow: 1,
-        padding: 20,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    roundText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#666',
-    },
-    progressText: {
-        fontSize: 14,
-        color: '#999',
-    },
-    mainContent: {
+
+    // ─── LAYERS ──────────────────────────────────────────
+    layerContainer: {
         flex: 1,
+        position: 'relative',
+    },
+    baseLayer: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'flex-end',
+    },
+    bottomHalf: {
+        height: SCREEN_HEIGHT / 2,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 32,
     },
-
-    // ANTES DE REVELAR
-    playerName: {
-        fontSize: 18,
-        color: '#666',
-        marginBottom: 8,
+    curtain: {
+        ...StyleSheet.absoluteFillObject,
+        zIndex: 10,
     },
-    playerNameBig: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 30,
-    },
-    warningBox: {
-        backgroundColor: '#FFF3CD',
-        borderWidth: 2,
-        borderColor: '#FFC107',
-        borderRadius: 12,
-        padding: 20,
-        marginBottom: 30,
-        alignItems: 'center',
+    curtainImage: {
+        flex: 1,
         width: '100%',
     },
-    warningIcon: {
+    blueOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(59, 89, 152, 0.85)',
+    },
+    curtainContent: {
+        flex: 1,
+        // Paddings removed to allow absolute positioning of children to edges
+    },
+    curtainHeader: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        zIndex: 10,
+        paddingHorizontal: 24,
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 10,
+        padding: 6,
+    },
+
+    // ─── CURTAIN: PLAYER & SWIPE ─────────────────────────
+    progressText: {
+        fontSize: 13,
+        color: 'rgba(255,255,255,0.6)',
+        textAlign: 'center',
+        letterSpacing: 1,
+    },
+    centerArea: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 0,
+    },
+    footerArea: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        paddingHorizontal: 24,
+        alignItems: 'center',
+        zIndex: 5,
+    },
+    playerLabel: {
+        fontSize: 15,
+        color: 'rgba(255,255,255,0.7)',
+        marginBottom: 4,
+        letterSpacing: 0.5,
+        textTransform: 'uppercase',
+    },
+    playerName: {
         fontSize: 40,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
+        letterSpacing: 1,
+    },
+    swipeArea: {
+        alignItems: 'center',
+        paddingBottom: 4,
+    },
+    swipeText: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: 'rgba(255,255,255,0.7)',
+        textAlign: 'center',
+        letterSpacing: 1.2,
+        lineHeight: 18,
         marginBottom: 10,
     },
-    warningText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#856404',
+    swipeArrow: {
+        fontSize: 26,
+        color: '#FFFFFF',
+    },
+    warningFooter: {
+        fontSize: 12,
+        color: 'rgba(255, 255, 255, 0.5)',
         textAlign: 'center',
-        lineHeight: 24,
+        marginTop: 8,
     },
-    instructionText: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 20,
+
+    // ─── BUTTONS (inside curtain, bottom) ────────────────
+    buttonsArea: {
+        position: 'absolute',
+        bottom: 80, // Position above the swipe text
+        left: 24,
+        right: 24,
+        alignItems: 'center',
+        zIndex: 10,
     },
-    revealButton: {
-        backgroundColor: '#5B7FDB',
-        paddingVertical: 20,
-        paddingHorizontal: 40,
+    nextButton: {
+        width: '100%',
+        backgroundColor: '#FFFFFF',
+        paddingVertical: 16,
         borderRadius: 16,
         alignItems: 'center',
-        marginBottom: 20,
-        minWidth: 250,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+        elevation: 8,
     },
-    revealButtonIcon: {
-        fontSize: 32,
-        marginBottom: 8,
-    },
-    revealButtonText: {
-        color: '#FFFFFF',
-        fontSize: 18,
+    nextButtonText: {
+        color: '#5B7FDB',
+        fontSize: 17,
         fontWeight: 'bold',
+        letterSpacing: 0.5,
     },
-    footerText: {
-        fontSize: 14,
-        color: '#999',
-    },
-
-    impostorContainer: {
+    changeWordButton: {
+        width: '100%',
+        backgroundColor: '#000000ff',
+        paddingVertical: 14,
+        borderRadius: 16,
         alignItems: 'center',
-        width: '100%',
+        marginBottom: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 4,
     },
-    impostorIcon: {
-        fontSize: 80,
-        marginBottom: 20,
-    },
-    impostorTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 8,
-    },
-    impostorTitleBig: {
-        fontSize: 48,
-        fontWeight: 'bold',
-        color: '#E53E3E',
-        marginBottom: 30,
-    },
-    impostorInfoBox: {
-        backgroundColor: '#FEE',
-        borderWidth: 2,
-        borderColor: '#E53E3E',
-        borderRadius: 12,
-        padding: 20,
-        marginBottom: 30,
-        width: '100%',
-    },
-    impostorInfoText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#E53E3E',
-        marginBottom: 12,
-        textAlign: 'center',
-    },
-    impostorInfoSubtext: {
-        fontSize: 14,
-        color: '#666',
-        textAlign: 'center',
-        lineHeight: 20,
-    },
-    teamInfoBox: {
-        backgroundColor: '#FFDEDE',
-        padding: 12,
-        borderRadius: 8,
-        marginTop: 12,
-    },
-    teamInfoText: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#C92A2A',
-        textAlign: 'center',
+    changeWordButtonText: {
+        color: '#FFFFFF',
+        fontSize: 15,
+        fontWeight: '700',
     },
 
-    wordContainer: {
+    // ─── BASE: WORD ──────────────────────────────────────
+    wordRevealArea: {
         alignItems: 'center',
         width: '100%',
     },
     wordLabel: {
-        fontSize: 18,
-        color: '#666',
-        marginBottom: 16,
-    },
-    wordBox: {
-        backgroundColor: '#FFFFFF',
-        borderWidth: 3,
-        borderColor: '#5B7FDB',
-        borderRadius: 16,
-        padding: 30,
-        marginBottom: 20,
-        alignItems: 'center',
-        width: '100%',
-    },
-    wordIcon: {
-        fontSize: 40,
-        marginBottom: 12,
+        fontSize: 14,
+        color: '#999',
+        marginBottom: 10,
+        letterSpacing: 0.5,
+        textTransform: 'uppercase',
     },
     word: {
         fontSize: 36,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#222',
         textAlign: 'center',
-    },
-    hintBox: {
-        backgroundColor: '#F0F4FF',
-        borderRadius: 12,
-        padding: 16,
+        letterSpacing: 0.5,
         marginBottom: 16,
-        width: '100%',
     },
-    hintLabel: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#5B7FDB',
-        marginBottom: 4,
-    },
-    hintText: {
-        fontSize: 16,
-        color: '#333',
-    },
-    categoryBox: {
-        backgroundColor: '#FFF',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
+    categoryPill: {
+        backgroundColor: '#EEEEEE',
+        paddingVertical: 6,
+        paddingHorizontal: 14,
         borderRadius: 20,
-        marginBottom: 20,
+        marginBottom: 12,
     },
     categoryText: {
-        fontSize: 14,
-        color: '#666',
+        fontSize: 13,
+        color: '#777',
     },
-    reminderBox: {
-        backgroundColor: '#FFF3CD',
-        borderRadius: 12,
-        padding: 12,
-        marginBottom: 30,
-    },
-    reminderText: {
+    hintText: {
         fontSize: 14,
+        color: '#999',
+        textAlign: 'center',
+    },
+    hintValue: {
+        color: '#555',
         fontWeight: '600',
-        color: '#856404',
-        textAlign: 'center',
-    },
-    reminderSubtext: {
-        fontSize: 12,
-        color: '#856404',
-        textAlign: 'center',
-        marginTop: 4,
     },
 
-    nextButton: {
-        backgroundColor: '#5B7FDB',
-        paddingVertical: 16,
-        paddingHorizontal: 40,
-        borderRadius: 12,
-        minWidth: 250,
-        alignItems: 'center',
+    // ─── BASE: IMPOSTOR ──────────────────────────────────
+    impostorIcon: {
+        fontSize: 56,
+        marginBottom: 8,
     },
-    nextButtonText: {
-        color: '#FFFFFF',
+    impostorLabel: {
         fontSize: 16,
         fontWeight: '600',
+        color: '#555',
+        marginBottom: 2,
     },
-    changeWordButton: {
-        marginTop: 10,
-        marginBottom: 20,
-        padding: 10,
-    },
-    changeWordButtonText: {
-        color: '#5B7FDB',
-        fontSize: 16,
+    impostorTitle: {
+        fontSize: 38,
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
+        color: '#E53E3E',
+        marginBottom: 14,
+        letterSpacing: 1,
+    },
+    impostorSecret: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#E53E3E',
+        textAlign: 'center',
+        marginBottom: 8,
+    },
+    impostorHintText: {
+        fontSize: 16,
+        color: '#777',
+        textAlign: 'center',
+        marginTop: 12,
+        fontStyle: 'italic',
+    },
+    impostorStrategy: {
+        fontSize: 13,
+        color: '#777',
+        textAlign: 'center',
+        lineHeight: 19,
     },
 });

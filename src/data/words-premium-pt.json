@@ -4,63 +4,63 @@
         "word": "Pescador",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Profesión de Pedro y otros apóstoles",
+        "hint": "Profissão de Pedro e outros apóstolos",
         "impostorHint": "Redes"
     },
     {
         "id": "of_002",
-        "word": "Carpintero",
+        "word": "Carpinteiro",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Oficio de José, padre terrenal de Jesús",
-        "impostorHint": "Madera"
+        "hint": "Profissão de José, pai terreno de Jesus",
+        "impostorHint": "Madeira"
     },
     {
         "id": "of_003",
         "word": "Pastor",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Cuidaba ovejas, profesión de David",
-        "impostorHint": "Ovejas"
+        "hint": "Cuidava de ovelhas, profissão de Davi",
+        "impostorHint": "Ovelhas"
     },
     {
         "id": "of_004",
-        "word": "Fariseo",
+        "word": "Fariseu",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Líder religioso judío, experto en la ley",
-        "impostorHint": "Ley"
+        "hint": "Líder religioso judeu, especialista na lei",
+        "impostorHint": "Lei"
     },
     {
         "id": "of_005",
         "word": "Publicano",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Cobrador de impuestos, como Mateo",
-        "impostorHint": "Impuestos"
+        "hint": "Cobrador de impostos, como Mateus",
+        "impostorHint": "Impostos"
     },
     {
         "id": "of_006",
-        "word": "Saduceo",
+        "word": "Saduceu",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Partido religioso que negaba la resurrección",
-        "impostorHint": "Resurrección"
+        "hint": "Partido religioso que negava a ressurreição",
+        "impostorHint": "Ressurreição"
     },
     {
         "id": "of_007",
         "word": "Escriba",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Copiaba y enseñaba las Escrituras",
-        "impostorHint": "Copia"
+        "hint": "Copiava e ensinava as Escrituras",
+        "impostorHint": "Cópia"
     },
     {
         "id": "of_008",
         "word": "Sacerdote",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Ministraba en el templo, ofrecía sacrificios",
+        "hint": "Ministrava no templo, oferecia sacrifícios",
         "impostorHint": "Templo"
     },
     {
@@ -68,71 +68,71 @@
         "word": "Levita",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Tribu encargada del servicio del templo",
-        "impostorHint": "Servicio"
+        "hint": "Tribo encarregada do serviço do templo",
+        "impostorHint": "Serviço"
     },
     {
         "id": "of_010",
-        "word": "Sumo sacerdote",
+        "word": "Sumo Sacerdote",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Máximo líder religioso judío",
-        "impostorHint": "Expiación"
+        "hint": "Líder religioso máximo dos judeus",
+        "impostorHint": "Expiação"
     },
     {
         "id": "of_011",
         "word": "Profeta",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Hablaba mensajes de Dios al pueblo",
-        "impostorHint": "Mensaje"
+        "hint": "Falava mensagens de Deus ao povo",
+        "impostorHint": "Mensagem"
     },
     {
         "id": "of_012",
-        "word": "Rey",
+        "word": "Rei",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Gobernante de Israel o Judá",
-        "impostorHint": "Corona"
+        "hint": "Governante de Israel ou Judá",
+        "impostorHint": "Coroa"
     },
     {
         "id": "of_013",
-        "word": "Juez",
+        "word": "Juiz",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Líder de Israel antes de los reyes",
-        "impostorHint": "Vara"
+        "hint": "Líder de Israel antes dos reis",
+        "impostorHint": "Líder"
     },
     {
         "id": "of_014",
         "word": "Soldado",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Militar del ejército",
+        "hint": "Militar do exército",
         "impostorHint": "Espada"
     },
     {
         "id": "of_015",
-        "word": "Centurión",
+        "word": "Centurião",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Oficial romano a cargo de 100 soldados",
-        "impostorHint": "Fe"
+        "hint": "Oficial romano encarregado de 100 soldados",
+        "impostorHint": "Fé"
     },
     {
         "id": "of_016",
         "word": "Médico",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Profesión de Lucas el evangelista",
+        "hint": "Profissão de Lucas, o evangelista",
         "impostorHint": "Cura"
     },
     {
         "id": "of_017",
-        "word": "Apóstol",
+        "word": "Apóstolo",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Enviado, los 12 discípulos de Jesús",
+        "hint": "Enviado, os 12 discípulos de Jesus",
         "impostorHint": "Enviado"
     },
     {
@@ -140,175 +140,175 @@
         "word": "Discípulo",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Seguidor y aprendiz de un maestro",
-        "impostorHint": "Alumno"
+        "hint": "Seguidor e aprendiz de um mestre",
+        "impostorHint": "Aluno"
     },
     {
         "id": "of_019",
         "word": "Diácono",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Servidor en la iglesia primitiva",
-        "impostorHint": "Servidor"
+        "hint": "Servo na igreja primitiva",
+        "impostorHint": "Servo"
     },
     {
         "id": "of_020",
-        "word": "Anciano",
+        "word": "Ancião",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Líder de la congregación",
-        "impostorHint": "Sabiduría"
+        "hint": "Líder da congregação",
+        "impostorHint": "Líder"
     },
     {
         "id": "of_021",
-        "word": "Pastor de iglesia",
+        "word": "Pastor de igreja",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Líder espiritual de la congregación",
-        "impostorHint": "Rebaño"
+        "hint": "Líder espiritual da congregação",
+        "impostorHint": "Ofício"
     },
     {
         "id": "of_022",
-        "word": "Maestro",
+        "word": "Mestre",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Enseñaba la palabra de Dios",
-        "impostorHint": "Enseñanza"
+        "hint": "Ensinava a palavra de Deus",
+        "impostorHint": "Ensino"
     },
     {
         "id": "of_023",
         "word": "Evangelista",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Predicaba el evangelio",
-        "impostorHint": "Noticias"
+        "hint": "Pregava o evangelho",
+        "impostorHint": "Notícias"
     },
     {
         "id": "of_024",
-        "word": "Viñador",
+        "word": "Vinhateiro",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Cuidaba viñedos y hacía vino",
+        "hint": "Cuidava de vinhas e fazia vinho",
         "impostorHint": "Uvas"
     },
     {
         "id": "of_025",
-        "word": "Labrador",
+        "word": "Agricultor",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Agricultor que trabajaba la tierra",
-        "impostorHint": "Tierra"
+        "hint": "Trabalhava a terra",
+        "impostorHint": "Terra"
     },
     {
         "id": "of_026",
-        "word": "Alfarero",
+        "word": "Oleiro",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Hacía vasijas de barro",
+        "hint": "Fazia vasos de barro",
         "impostorHint": "Barro"
     },
     {
         "id": "of_027",
-        "word": "Panadero",
+        "word": "Padeiro",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Hacía pan, mencionado en José",
-        "impostorHint": "Horno"
+        "hint": "Fazia pão, mencionado na história de José",
+        "impostorHint": "Forno"
     },
     {
         "id": "of_028",
         "word": "Curtidor",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Trabajaba cuero, como Simón en Joppe",
-        "impostorHint": "Pieles"
+        "hint": "Trabalhava com couro, como Simão em Jope",
+        "impostorHint": "Peles"
     },
     {
         "id": "of_029",
-        "word": "Fabricante de tiendas",
+        "word": "Fabricante de tendas",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Oficio de Pablo, Priscila y Aquila",
-        "impostorHint": "Lona"
+        "hint": "Profissão de Paulo, Priscila e Áquila",
+        "impostorHint": "Paulo"
     },
     {
         "id": "of_030",
-        "word": "Platero",
+        "word": "Ourives",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Hacía ídolos de plata, como Demetrio",
-        "impostorHint": "Plata"
+        "hint": "Fazia ídolos de prata, como Demétrio",
+        "impostorHint": "Prata"
     },
     {
         "id": "of_031",
-        "word": "Copero",
+        "word": "Copeiro",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Servía vino al rey, como Nehemías",
-        "impostorHint": "Vino"
+        "hint": "Servia vinho ao rei, como Neemias",
+        "impostorHint": "Vinho"
     },
     {
         "id": "of_032",
         "word": "Eunuco",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Oficial de la corte",
-        "impostorHint": "Carro"
+        "hint": "Oficial da corte",
+        "impostorHint": "Carruagem"
     },
     {
         "id": "of_033",
-        "word": "Intérprete de sueños",
+        "word": "Intérprete de sonhos",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "José y Daniel lo hacían",
-        "impostorHint": "Sueños"
+        "hint": "José e Daniel faziam isso",
+        "impostorHint": "José"
     },
     {
         "id": "of_034",
-        "word": "Sabio",
+        "word": "Sábio",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Consejero del rey, como Daniel",
-        "impostorHint": "Consejo"
+        "hint": "Conselheiro do rei, como Daniel",
+        "impostorHint": "Mago"
     },
     {
         "id": "of_035",
         "word": "Mago",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Practicante de artes ocultas",
+        "hint": "Praticante de artes ocultas",
         "impostorHint": "Oriente"
     },
     {
         "id": "of_036",
-        "word": "Mercader",
+        "word": "Mercador",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Comerciante de mercancías",
-        "impostorHint": "Perlas"
+        "hint": "Comerciante de mercadorias",
+        "impostorHint": "Pérolas"
     },
     {
         "id": "of_037",
-        "word": "Vendedor de púrpura",
+        "word": "Vendedora de púrpura",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Oficio de Lidia en Filipos",
-        "impostorHint": "Tela"
+        "hint": "Profissão de Lídia em Filipos",
+        "impostorHint": "Lídia"
     },
     {
         "id": "of_038",
-        "word": "Armero",
+        "word": "Armeiro",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Fabricaba armas y armaduras",
-        "impostorHint": "Escudero"
+        "hint": "Fabricava armas e armaduras",
+        "impostorHint": "Escudeiro"
     },
     {
         "id": "of_039",
-        "word": "Constructor",
+        "word": "Construtor",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Edificaba casas y edificios",
+        "hint": "Edificava casas e edifícios",
         "impostorHint": "Casa"
     },
     {
@@ -316,103 +316,103 @@
         "word": "Músico",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Tocaba instrumentos en el templo",
-        "impostorHint": "Arpa"
+        "hint": "Tocava instrumentos no templo",
+        "impostorHint": "Harpa"
     },
     {
         "id": "of_041",
-        "word": "Cantante",
+        "word": "Cantor",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Alababa a Dios con cánticos",
+        "hint": "Louvava a Deus com cânticos",
         "impostorHint": "Coro"
     },
     {
         "id": "of_042",
-        "word": "Portero",
+        "word": "Porteiro",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Guardián de las puertas del templo",
-        "impostorHint": "Puerta"
+        "hint": "Guardião das portas do templo",
+        "impostorHint": "Porta"
     },
     {
         "id": "of_043",
-        "word": "Guardia",
+        "word": "Guarda",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Protegía al rey o prisioneros",
+        "hint": "Protegia o rei ou prisioneiros",
         "impostorHint": "Sepulcro"
     },
     {
         "id": "of_044",
-        "word": "Herrero",
+        "word": "Ferreiro",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Trabajaba el hierro",
-        "impostorHint": "Hierro"
+        "hint": "Trabalhava com ferro",
+        "impostorHint": "Ferro"
     },
     {
         "id": "of_045",
-        "word": "Orfebre",
+        "word": "Ourives",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Trabajaba oro y joyas",
-        "impostorHint": "Oro"
+        "hint": "Trabalhava com ouro e joias",
+        "impostorHint": "Ouro"
     },
     {
         "id": "of_046",
-        "word": "Tejedor",
+        "word": "Tecelão",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Hacía telas y ropa",
-        "impostorHint": "Telar"
+        "hint": "Fazia tecidos e roupas",
+        "impostorHint": "Tecido"
     },
     {
         "id": "of_047",
-        "word": "Tintoreo",
+        "word": "Tintureiro",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Teñía telas de colores",
-        "impostorHint": "Color"
+        "hint": "Tingia tecidos de cores",
+        "impostorHint": "Cor"
     },
     {
         "id": "of_048",
-        "word": "Pregonero",
+        "word": "Arauto",
         "category": "oficios_biblicos",
         "difficulty": "hard",
-        "hint": "Anunciaba decretos del rey",
+        "hint": "Anunciava decretos do rei",
         "impostorHint": "Voz"
     },
     {
         "id": "of_049",
-        "word": "Tesorero",
+        "word": "Tesoureiro",
         "category": "oficios_biblicos",
         "difficulty": "medium",
-        "hint": "Administraba las finanzas",
-        "impostorHint": "Etiopía"
+        "hint": "Administrava as finanças",
+        "impostorHint": "Etiópia"
     },
     {
         "id": "of_050",
-        "word": "Gobernador",
+        "word": "Governador",
         "category": "oficios_biblicos",
         "difficulty": "easy",
-        "hint": "Autoridad romana como Pilato",
-        "impostorHint": "Provincia"
+        "hint": "Autoridade romana como Pilatos",
+        "impostorHint": "Província"
     },
     {
         "id": "lu_001",
-        "word": "Edén",
+        "word": "Éden",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Jardín donde vivían Adán y Eva",
+        "hint": "Jardim onde viviam Adão e Eva",
         "impostorHint": "Paraíso"
     },
     {
         "id": "lu_002",
-        "word": "Ararat",
+        "word": "Ararate",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Monte donde reposó el arca de Noé",
+        "hint": "Monte onde a arca de Noé repousou",
         "impostorHint": "Arca"
     },
     {
@@ -420,7 +420,7 @@
         "word": "Babel",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Ciudad de la torre, idiomas confundidos",
+        "hint": "Cidade da torre, línguas confundidas",
         "impostorHint": "Torre"
     },
     {
@@ -428,183 +428,183 @@
         "word": "Ur",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Ciudad de origen de Abraham",
-        "impostorHint": "Salida"
+        "hint": "Cidade de origem de Abraão",
+        "impostorHint": "Saída"
     },
     {
         "id": "lu_005",
-        "word": "Canaán",
+        "word": "Canaã",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Tierra prometida a Abraham",
-        "impostorHint": "Leche"
+        "hint": "Terra prometida a Abraão",
+        "impostorHint": "Leite"
     },
     {
         "id": "lu_006",
         "word": "Sodoma",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Ciudad malvada destruida con fuego",
-        "impostorHint": "Sal"
+        "hint": "Cidade perversa destruída com fogo",
+        "impostorHint": "Fogo"
     },
     {
         "id": "lu_007",
         "word": "Gomorra",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Ciudad destruida junto con Sodoma",
-        "impostorHint": "Juicio"
+        "hint": "Cidade destruída junto com Sodoma",
+        "impostorHint": "Juízo"
     },
     {
         "id": "lu_008",
-        "word": "Beerseba",
+        "word": "Berseba",
         "category": "lugares_biblicos",
         "difficulty": "hard",
-        "hint": "Lugar del pacto entre Abraham y Abimelec",
-        "impostorHint": "Juramento"
+        "hint": "Lugar da aliança entre Abraão e Abimeleque",
+        "impostorHint": "Poço"
     },
     {
         "id": "lu_009",
         "word": "Betel",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Casa de Dios, donde Jacob vio la escalera",
-        "impostorHint": "Escalera"
+        "hint": "Casa de Deus, onde Jacó viu a escada",
+        "impostorHint": "Escada"
     },
     {
         "id": "lu_010",
-        "word": "Egipto",
+        "word": "Egito",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "País donde José gobernó e Israel fue esclavo",
+        "hint": "País onde José governou e Israel foi escravo",
         "impostorHint": "Nilo"
     },
     {
         "id": "lu_011",
-        "word": "Gosén",
+        "word": "Gósen",
         "category": "lugares_biblicos",
         "difficulty": "hard",
-        "hint": "Región de Egipto donde vivió Israel",
-        "impostorHint": "Refugio"
+        "hint": "Região do Egito onde Israel viveu",
+        "impostorHint": "Refúgio"
     },
     {
         "id": "lu_012",
-        "word": "Mar Rojo",
+        "word": "Mar Vermelho",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Dios lo dividió para que Israel pasara",
-        "impostorHint": "Paso"
+        "hint": "Deus o dividiu para Israel passar",
+        "impostorHint": "Travessia"
     },
     {
         "id": "lu_013",
-        "word": "Monte Sinaí",
+        "word": "Monte Sinai",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Donde Moisés recibió las tablas de la ley",
-        "impostorHint": "Ley"
+        "hint": "Onde Moisés recebeu as tábuas da lei",
+        "impostorHint": "Lei"
     },
     {
         "id": "lu_014",
-        "word": "Desierto",
+        "word": "Deserto",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Israel vagó 40 años allí",
-        "impostorHint": "Prueba"
+        "hint": "Israel vagou 40 anos ali",
+        "impostorHint": "Teste"
     },
     {
         "id": "lu_015",
         "word": "Jericó",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Primera ciudad conquistada, murallas cayeron",
+        "hint": "Primeira cidade conquistada, muralhas caíram",
         "impostorHint": "Muros"
     },
     {
         "id": "lu_016",
-        "word": "Jerusalén",
+        "word": "Jerusalém",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Ciudad santa, capital de Israel",
+        "hint": "Cidade santa, capital de Israel",
         "impostorHint": "Paz"
     },
     {
         "id": "lu_017",
-        "word": "Belén",
+        "word": "Belém",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Ciudad natal de David y Jesús",
-        "impostorHint": "Pan"
+        "hint": "Cidade natal de Davi e Jesus",
+        "impostorHint": "Pão"
     },
     {
         "id": "lu_018",
-        "word": "Nazaret",
+        "word": "Nazaré",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Ciudad donde Jesús creció",
-        "impostorHint": "Rama"
+        "hint": "Cidade onde Jesus cresceu",
+        "impostorHint": "Ramo"
     },
     {
         "id": "lu_019",
-        "word": "Capernaum",
+        "word": "Cafarnaum",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Ciudad base del ministerio de Jesús",
-        "impostorHint": "Milagros"
+        "hint": "Cidade base do ministério de Jesus",
+        "impostorHint": "Milagres"
     },
     {
         "id": "lu_020",
-        "word": "Galilea",
+        "word": "Galileia",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Región del norte donde Jesús ministró",
+        "hint": "Região do norte onde Jesus ministrou",
         "impostorHint": "Lago"
     },
     {
         "id": "lu_021",
-        "word": "Judea",
+        "word": "Judeia",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Región del sur con Jerusalén",
-        "impostorHint": "Sur"
+        "hint": "Região do sul com Jerusalém",
+        "impostorHint": "Sul"
     },
     {
         "id": "lu_022",
         "word": "Samaria",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Región entre Galilea y Judea",
-        "impostorHint": "Mezcla"
+        "hint": "Região entre a Galileia e a Judeia",
+        "impostorHint": "Poço"
     },
     {
         "id": "lu_023",
-        "word": "Mar de Galilea",
+        "word": "Mar da Galileia",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Lago donde Jesús calmó la tempestad",
+        "hint": "Lago onde Jesus acalmou a tempestade",
         "impostorHint": "Pesca"
     },
     {
         "id": "lu_024",
-        "word": "Río Jordán",
+        "word": "Rio Jordão",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Donde Juan bautizaba",
-        "impostorHint": "Bautismo"
+        "hint": "Onde João batizava",
+        "impostorHint": "Batismo"
     },
     {
         "id": "lu_025",
-        "word": "Monte de los Olivos",
+        "word": "Monte das Oliveiras",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Donde Jesús ascendió al cielo",
-        "impostorHint": "Oración"
+        "hint": "Onde Jesus subiu ao céu",
+        "impostorHint": "Oração"
     },
     {
         "id": "lu_026",
-        "word": "Getsemaní",
+        "word": "Getsêmani",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Huerto donde Jesús oró antes de ser arrestado",
+        "hint": "Jardim onde Jesus orou antes de ser preso",
         "impostorHint": "Prensa"
     },
     {
@@ -612,15 +612,15 @@
         "word": "Gólgota",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Lugar de la calavera, donde crucificaron a Jesús",
-        "impostorHint": "Calavera"
+        "hint": "Lugar da caveira, onde Jesus foi crucificado",
+        "impostorHint": "Caveira"
     },
     {
         "id": "lu_028",
-        "word": "Betania",
+        "word": "Betânia",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Pueblo de Lázaro, Marta y María",
+        "hint": "Casa de Lázaro, Marta e Maria",
         "impostorHint": "Amigos"
     },
     {
@@ -628,47 +628,47 @@
         "word": "Betsaida",
         "category": "lugares_biblicos",
         "difficulty": "hard",
-        "hint": "Ciudad natal de Pedro, Andrés y Felipe",
-        "impostorHint": "Ciegos"
+        "hint": "Cidade natal de Pedro, André e Filipe",
+        "impostorHint": "Cegos"
     },
     {
         "id": "lu_030",
         "word": "Caná",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Donde Jesús convirtió agua en vino",
-        "impostorHint": "Bodas"
+        "hint": "Onde Jesus transformou água em vinho",
+        "impostorHint": "Casamento"
     },
     {
         "id": "lu_031",
         "word": "Monte Carmelo",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Donde Elías confrontó a los profetas de Baal",
-        "impostorHint": "Baal"
+        "hint": "Onde Elias confrontou os profetas de Baal",
+        "impostorHint": "Fogo"
     },
     {
         "id": "lu_032",
-        "word": "Monte Hermón",
+        "word": "Monte Hermom",
         "category": "lugares_biblicos",
         "difficulty": "hard",
-        "hint": "Posible lugar de la transfiguración",
-        "impostorHint": "Nieve"
+        "hint": "Possível local da transfiguração",
+        "impostorHint": "Neve"
     },
     {
         "id": "lu_033",
-        "word": "Monte Sión",
+        "word": "Monte Sião",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Colina en Jerusalén, ciudad de David",
+        "hint": "Colina em Jerusalém, cidade de Davi",
         "impostorHint": "Fortaleza"
     },
     {
         "id": "lu_034",
-        "word": "Templo de Jerusalén",
+        "word": "Templo de Jerusalém",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Casa de Dios construida por Salomón",
+        "hint": "Casa de Deus construída por Salomão",
         "impostorHint": "Casa"
     },
     {
@@ -676,47 +676,47 @@
         "word": "Tabernáculo",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Tienda de reunión en el desierto",
-        "impostorHint": "Tienda"
+        "hint": "Tenda de reunião no deserto",
+        "impostorHint": "Tenda"
     },
     {
         "id": "lu_036",
         "word": "Emaús",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Camino donde Jesús se apareció resucitado",
-        "impostorHint": "Camino"
+        "hint": "Estrada onde Jesus apareceu ressuscitado",
+        "impostorHint": "Caminho"
     },
     {
         "id": "lu_037",
         "word": "Damasco",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Donde Pablo fue convertido",
+        "hint": "Onde Paulo foi convertido",
         "impostorHint": "Luz"
     },
     {
         "id": "lu_038",
-        "word": "Antioquía",
+        "word": "Antioquia",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Donde se llamó cristianos por primera vez",
-        "impostorHint": "Cristianos"
+        "hint": "Onde foram chamados cristãos pela primeira vez",
+        "impostorHint": "Cristãos"
     },
     {
         "id": "lu_039",
         "word": "Corinto",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Ciudad griega donde Pablo escribió cartas",
-        "impostorHint": "Puerto"
+        "hint": "Cidade grega onde Paulo escreveu cartas",
+        "impostorHint": "Porto"
     },
     {
         "id": "lu_040",
         "word": "Éfeso",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Ciudad con templo de Diana",
+        "hint": "Cidade com templo de Diana",
         "impostorHint": "Diana"
     },
     {
@@ -724,300 +724,308 @@
         "word": "Filipos",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Donde Pablo y Silas fueron encarcelados",
-        "impostorHint": "Cárcel"
+        "hint": "Onde Paulo e Silas foram presos",
+        "impostorHint": "Prisão"
     },
     {
         "id": "lu_042",
         "word": "Roma",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Capital del imperio, Pablo fue prisionero allí",
-        "impostorHint": "Coliseo"
+        "hint": "Capital do império, Paulo foi prisioneiro lá",
+        "impostorHint": "Império"
     },
     {
         "id": "lu_043",
         "word": "Atenas",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Donde Pablo predicó en el Areópago",
-        "impostorHint": "Dios"
+        "hint": "Onde Paulo pregou no Areópago",
+        "impostorHint": "Deus"
     },
     {
         "id": "lu_044",
-        "word": "Tesalónica",
+        "word": "Tessalônica",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Iglesia receptora de cartas de Pablo",
+        "hint": "Igreja que recebeu cartas de Paulo",
         "impostorHint": "Problemas"
     },
     {
         "id": "lu_045",
-        "word": "Babilonia",
+        "word": "Babilônia",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Imperio que llevó a Judá al exilio",
-        "impostorHint": "Cautiverio"
+        "hint": "Império que levou Judá para o exílio",
+        "impostorHint": "Cativeiro"
     },
     {
         "id": "lu_046",
         "word": "Nínive",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Ciudad a donde Jonás fue enviado",
-        "impostorHint": "Pez"
+        "hint": "Cidade para onde Jonas foi enviado",
+        "impostorHint": "Peixe"
     },
     {
         "id": "lu_047",
-        "word": "Asiria",
+        "word": "Assíria",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Imperio que conquistó el reino del norte",
-        "impostorHint": "Conquista"
+        "hint": "Império que conquistou o reino do norte",
+        "impostorHint": "Império"
     },
     {
         "id": "lu_048",
-        "word": "Persia",
+        "word": "Pérsia",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Imperio de Ciro, Daniel y Ester",
-        "impostorHint": "Leyes"
+        "hint": "Império de Ciro, Daniel e Ester",
+        "impostorHint": "Leis"
     },
     {
         "id": "lu_049",
         "word": "Patmos",
         "category": "lugares_biblicos",
         "difficulty": "medium",
-        "hint": "Isla donde Juan escribió Apocalipsis",
-        "impostorHint": "Visión"
+        "hint": "Ilha onde João escreveu o Apocalipse",
+        "impostorHint": "Visão"
     },
     {
         "id": "lu_050",
-        "word": "Cielo",
+        "word": "Céu",
         "category": "lugares_biblicos",
         "difficulty": "easy",
-        "hint": "Morada de Dios y destino de los salvos",
+        "hint": "Morada de Deus e destino dos salvos",
         "impostorHint": "Meta"
     },
     {
         "id": "ct_001",
-        "word": "Gracia",
+        "word": "Graça",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Favor inmerecido de Dios",
-        "impostorHint": "Regalo"
+        "hint": "Favor imerecido de Deus",
+        "impostorHint": "Presente"
     },
     {
         "id": "ct_002",
-        "word": "Fe",
+        "word": "Fé",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Certeza de lo que se espera",
-        "impostorHint": "Certeza"
+        "hint": "Certeza das coisas que se esperam",
+        "impostorHint": "Confiança"
     },
     {
         "id": "ct_003",
-        "word": "Salvación",
+        "word": "Salvação",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Liberación del pecado por Cristo",
-        "impostorHint": "Rescate"
+        "hint": "Libertação do pecado por Cristo",
+        "impostorHint": "Resgate"
     },
     {
         "id": "ct_004",
-        "word": "Redención",
+        "word": "Redenção",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Compra de vuelta mediante un precio",
-        "impostorHint": "Precio"
+        "hint": "Compra de volta mediante um preço",
+        "impostorHint": "Preço"
     },
     {
         "id": "ct_005",
-        "word": "Justificación",
+        "word": "Justificação",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Declarado justo ante Dios por fe",
-        "impostorHint": "Declaración"
+        "hint": "Declarado justo diante de Deus pela fé",
+        "impostorHint": "Declaração"
     },
     {
         "id": "ct_006",
-        "word": "Santificación",
+        "word": "Santificação",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Proceso de ser hecho santo",
-        "impostorHint": "Proceso"
+        "hint": "Processo de ser feito santo",
+        "impostorHint": "Processo"
     },
     {
         "id": "ct_007",
-        "word": "Glorificación",
+        "word": "Glorificação",
         "category": "conceptos_teologicos",
         "difficulty": "hard",
-        "hint": "Transformación final en la eternidad",
+        "hint": "Transformação final na eternidade",
         "impostorHint": "Futuro"
     },
     {
         "id": "ct_008",
-        "word": "Expiación",
+        "word": "Expiação",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Pago por el pecado mediante sacrificio",
-        "impostorHint": "Cubrir"
+        "hint": "Pagamento pelo pecado mediante sacrifício",
+        "impostorHint": "Cobrir"
     },
     {
         "id": "ct_009",
-        "word": "Propiciación",
+        "word": "Propiciação",
         "category": "conceptos_teologicos",
         "difficulty": "hard",
-        "hint": "Satisfacción de la ira de Dios",
+        "hint": "Satisfação da ira de Deus",
         "impostorHint": "Ira"
     },
     {
         "id": "ct_010",
-        "word": "Reconciliación",
+        "word": "Reconciliação",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Restauración de la relación con Dios",
+        "hint": "Restauração do relacionamento com Deus",
         "impostorHint": "Amigos"
     },
     {
         "id": "ct_011",
-        "word": "Adopción",
+        "word": "Adoção",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Ser hecho hijo de Dios",
-        "impostorHint": "Hijos"
+        "hint": "Ser feito filho de Deus",
+        "impostorHint": "Filhos"
     },
     {
         "id": "ct_012",
-        "word": "Regeneración",
+        "word": "Regeneração",
         "category": "conceptos_teologicos",
         "difficulty": "hard",
-        "hint": "Nacer de nuevo espiritualmente",
-        "impostorHint": "Nuevo"
+        "hint": "Nascer de novo espiritualmente",
+        "impostorHint": "Novo"
     },
     {
         "id": "ct_013",
-        "word": "Conversión",
+        "word": "Conversão",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Volverse a Dios desde el pecado",
-        "impostorHint": "Cambio"
+        "hint": "Voltar-se para Deus deixando o pecado",
+        "impostorHint": "Mudança"
     },
     {
         "id": "ct_014",
-        "word": "Arrepentimiento",
+        "word": "Arrependimento",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Cambio de mente sobre el pecado",
-        "impostorHint": "Vuelta"
+        "hint": "Mudança de mente sobre o pecado",
+        "impostorHint": "Volta"
     },
     {
         "id": "ct_015",
-        "word": "Perdón",
+        "word": "Perdão",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Cancelación de la deuda del pecado",
-        "impostorHint": "Olvido"
+        "hint": "Cancelamento da dívida do pecado",
+        "impostorHint": "Esquecer"
     },
     {
         "id": "ct_016",
-        "word": "Trinidad",
+        "word": "Trindade",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Padre, Hijo y Espíritu Santo",
-        "impostorHint": "Tres"
+        "hint": "Pai, Filho e Espírito Santo",
+        "impostorHint": "Três"
     },
     {
         "id": "ct_017",
-        "word": "Encarnación",
+        "word": "Encarnação",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios se hizo hombre en Jesús",
+        "hint": "Deus se fez homem em Jesus",
         "impostorHint": "Carne"
     },
     {
         "id": "ct_018",
-        "word": "Resurrección",
+        "word": "Ressurreição",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Jesús volvió a la vida al tercer día",
+        "hint": "Jesus voltou à vida no terceiro dia",
         "impostorHint": "Vida"
     },
     {
         "id": "ct_019",
-        "word": "Ascensión",
+        "word": "Ascensão",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Jesús subió al cielo",
-        "impostorHint": "Nube"
+        "hint": "Jesus subiu ao céu",
+        "impostorHint": "Nuvem"
     },
     {
         "id": "ct_020",
-        "word": "Segunda venida",
+        "word": "Segunda Vinda",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Regreso prometido de Cristo",
-        "impostorHint": "Nubes"
+        "hint": "Retorno prometido de Cristo",
+        "impostorHint": "Promessa"
     },
     {
         "id": "ct_021",
-        "word": "Juicio final",
+        "word": "Juízo Final",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Dios juzgará a toda la humanidad",
+        "hint": "Deus julgará toda a humanidade",
         "impostorHint": "Trono"
     },
     {
         "id": "ct_022",
-        "word": "Eternidad",
+        "word": "Eternidade",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Vida sin fin con Dios",
-        "impostorHint": "Tiempo"
+        "hint": "Vida sem fim com Deus",
+        "impostorHint": "Tempo"
     },
     {
         "id": "ct_023",
         "word": "Pecado",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Desobediencia a Dios",
-        "impostorHint": "Fruto"
+        "hint": "Desobediência a Deus",
+        "impostorHint": "Erro"
+    },
+    {
+        "id": "ct_024",
+        "word": "Pecado Original",
+        "category": "conceptos_teologicos",
+        "difficulty": "medium",
+        "hint": "Herdado de Adão",
+        "impostorHint": "Adão"
     },
     {
         "id": "ct_025",
-        "word": "Tentación",
+        "word": "Tentação",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Incitación al pecado",
-        "impostorHint": "Prueba"
+        "hint": "Incitação ao pecado",
+        "impostorHint": "Teste"
     },
     {
         "id": "ct_026",
-        "word": "Santidad",
+        "word": "Santidade",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Pureza moral y separación del pecado",
-        "impostorHint": "Apartado"
+        "hint": "Pureza moral e separação do pecado",
+        "impostorHint": "Separado"
     },
     {
         "id": "ct_027",
-        "word": "Justicia",
+        "word": "Justiça",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Rectitud conforme a la ley de Dios",
-        "impostorHint": "Rectitud"
+        "hint": "Retidão conforme a lei de Deus",
+        "impostorHint": "Certo"
     },
     {
         "id": "ct_028",
-        "word": "Misericordia",
+        "word": "Misericórdia",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Compasión de Dios hacia el pecador",
-        "impostorHint": "Compasión"
+        "hint": "Compaixão de Deus para com o pecador",
+        "impostorHint": "Compaixão"
     },
     {
         "id": "ct_029",
-        "word": "Amor ágape",
+        "word": "Amor Ágape",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
         "hint": "Amor sacrificial e incondicional",
@@ -1025,178 +1033,178 @@
     },
     {
         "id": "ct_030",
-        "word": "Esperanza",
+        "word": "Esperança",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Confianza en las promesas de Dios",
-        "impostorHint": "Ancla"
+        "hint": "Confiança nas promessas de Deus",
+        "impostorHint": "Âncora"
     },
     {
         "id": "ct_031",
-        "word": "Revelación",
+        "word": "Revelação",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios se da a conocer al hombre",
-        "impostorHint": "Descubrir"
+        "hint": "Deus se dando a conhecer ao homem",
+        "impostorHint": "Descobrir"
     },
     {
         "id": "ct_032",
-        "word": "Inspiración",
+        "word": "Inspiração",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios guió la escritura de la Biblia",
-        "impostorHint": "Soplo"
+        "hint": "Deus guiou a escrita da Bíblia",
+        "impostorHint": "Sopro"
     },
     {
         "id": "ct_033",
-        "word": "Providencia",
+        "word": "Providência",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Cuidado y gobierno de Dios sobre todo",
+        "hint": "Cuidado e governo de Deus sobre tudo",
         "impostorHint": "Cuidado"
     },
     {
         "id": "ct_034",
-        "word": "Soberanía",
+        "word": "Soberania",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Supremo gobierno de Dios",
-        "impostorHint": "Control"
+        "hint": "Governo supremo de Deus",
+        "impostorHint": "Controle"
     },
     {
         "id": "ct_035",
-        "word": "Omnipotencia",
+        "word": "Onipotência",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios es todopoderoso",
+        "hint": "Deus é todo-poderoso",
         "impostorHint": "Poder"
     },
     {
         "id": "ct_036",
-        "word": "Omnisciencia",
+        "word": "Onisciência",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios lo sabe todo",
+        "hint": "Deus sabe tudo",
         "impostorHint": "Saber"
     },
     {
         "id": "ct_037",
-        "word": "Omnipresencia",
+        "word": "Onipresença",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios está en todas partes",
-        "impostorHint": "Estar"
+        "hint": "Deus está em toda parte",
+        "impostorHint": "Presente"
     },
     {
         "id": "ct_038",
-        "word": "Inmutabilidad",
+        "word": "Imutabilidade",
         "category": "conceptos_teologicos",
         "difficulty": "hard",
-        "hint": "Dios no cambia",
-        "impostorHint": "Roca"
+        "hint": "Deus não muda",
+        "impostorHint": "Mudança"
     },
     {
         "id": "ct_039",
-        "word": "Eternidad de Dios",
+        "word": "Eternidade de Deus",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Dios no tiene principio ni fin",
-        "impostorHint": "Siempre"
+        "hint": "Deus não tem princípio nem fim",
+        "impostorHint": "Sempre"
     },
     {
         "id": "ct_040",
-        "word": "Pacto",
+        "word": "Aliança",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Acuerdo solemne entre Dios y el hombre",
-        "impostorHint": "Arco iris"
+        "hint": "Acordo solene entre Deus e o homem",
+        "impostorHint": "Promessa"
     },
     {
         "id": "ct_041",
-        "word": "Nuevo pacto",
+        "word": "Nova Aliança",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Establecido por la sangre de Cristo",
-        "impostorHint": "Sangre"
+        "hint": "Estabelecida pelo sangue de Cristo",
+        "impostorHint": "Sangue"
     },
     {
         "id": "ct_042",
-        "word": "Iglesia",
+        "word": "Igreja",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Cuerpo de creyentes en Cristo",
-        "impostorHint": "Cuerpo"
+        "hint": "Corpo de crentes em Cristo",
+        "impostorHint": "Corpo"
     },
     {
         "id": "ct_043",
-        "word": "Comunión de los santos",
+        "word": "Comunhão dos Santos",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Unidad espiritual de los creyentes",
-        "impostorHint": "Unidad"
+        "hint": "Unidade espiritual dos crentes",
+        "impostorHint": "Unidade"
     },
     {
         "id": "ct_044",
-        "word": "Bautismo",
+        "word": "Batismo",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Sacramento de iniciación cristiana",
-        "impostorHint": "Agua"
+        "hint": "Sacramento de iniciação cristã",
+        "impostorHint": "Água"
     },
     {
         "id": "ct_045",
-        "word": "Santa Cena",
+        "word": "Santa Ceia",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Conmemoración de la muerte de Cristo",
-        "impostorHint": "Memoria"
+        "hint": "Memória da morte de Cristo",
+        "impostorHint": "Memória"
     },
     {
         "id": "ct_046",
         "word": "Discipulado",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Proceso de seguir y aprender de Jesús",
+        "hint": "Processo de seguir e aprender de Jesus",
         "impostorHint": "Seguir"
     },
     {
         "id": "ct_047",
-        "word": "Evangelización",
+        "word": "Evangelização",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Predicar el evangelio a otros",
-        "impostorHint": "Buenas"
+        "hint": "Pregando o evangelho a outros",
+        "impostorHint": "Boas Novas"
     },
     {
         "id": "ct_048",
-        "word": "Misiones",
+        "word": "Missões",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Envío a predicar el evangelio",
+        "hint": "Envio para pregar o evangelho",
         "impostorHint": "Ir"
     },
     {
         "id": "ct_049",
-        "word": "Reino de Dios",
+        "word": "Reino de Deus",
         "category": "conceptos_teologicos",
         "difficulty": "easy",
-        "hint": "Gobierno y soberanía de Dios",
-        "impostorHint": "Gobierno"
+        "hint": "Governo e soberania de Deus",
+        "impostorHint": "Governo"
     },
     {
         "id": "ct_050",
-        "word": "Unicidad",
+        "word": "Unicidade",
         "category": "conceptos_teologicos",
         "difficulty": "medium",
-        "hint": "Un solo Dios sin divisiones",
-        "impostorHint": "Uno"
+        "hint": "Um só Deus sem divisões",
+        "impostorHint": "Um"
     },
     {
         "id": "mb_001",
         "word": "Eva",
         "category": "mujeres_biblicas",
         "difficulty": "easy",
-        "hint": "Primera mujer, madre de todos los vivientes",
+        "hint": "Primeira mulher, mãe de todos os viventes",
         "impostorHint": "Vida"
     },
     {
@@ -1204,223 +1212,223 @@
         "word": "Sara",
         "category": "mujeres_biblicas",
         "difficulty": "easy",
-        "hint": "Esposa de Abraham, rió ante la promesa",
-        "impostorHint": "Risa"
+        "hint": "Esposa de Abraão, riu da promessa",
+        "impostorHint": "Mãe"
     },
     {
         "id": "mb_003",
         "word": "Rebeca",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Esposa de Isaac, madre de Jacob y Esaú",
-        "impostorHint": "Camello"
+        "hint": "Esposa de Isaque, mãe de Jacó e Esaú",
+        "impostorHint": "Esposa"
     },
     {
         "id": "mb_004",
         "word": "Raquel",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Esposa amada de Jacob, madre de José",
+        "hint": "Esposa amada de Jacó, mãe de José",
         "impostorHint": "Amada"
     },
     {
         "id": "mb_005",
-        "word": "Lea",
+        "word": "Lia",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Primera esposa de Jacob, ojos delicados",
-        "impostorHint": "Ojos"
+        "hint": "Primeira esposa de Jacó, olhos ternos",
+        "impostorHint": "Olhos"
     },
     {
         "id": "mb_006",
-        "word": "María",
+        "word": "Miriã",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Hermana de Moisés, tocó el pandero",
-        "impostorHint": "Pandero"
+        "hint": "Irmã de Moisés, tocou tamborim",
+        "impostorHint": "Música"
     },
     {
         "id": "mb_007",
         "word": "Débora",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Profetisa y única mujer juez de Israel",
-        "impostorHint": "Juez"
+        "hint": "Profetiza e única juíza de Israel",
+        "impostorHint": "Juiz"
     },
     {
         "id": "mb_008",
-        "word": "Rut",
+        "word": "Rute",
         "category": "mujeres_biblicas",
         "difficulty": "easy",
-        "hint": "Moabita leal a Noemí, bisabuela de David",
-        "impostorHint": "Lealtad"
+        "hint": "Moabita leal a Noemi, bisavó de Davi",
+        "impostorHint": "Lealdade"
     },
     {
         "id": "mb_009",
         "word": "Ana",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Madre de Samuel, oró fervientemente",
-        "impostorHint": "Oración"
+        "hint": "Mãe de Samuel, orou fervorosamente",
+        "impostorHint": "Oração"
     },
     {
         "id": "mb_010",
         "word": "Ester",
         "category": "mujeres_biblicas",
         "difficulty": "easy",
-        "hint": "Reina persa que salvó a su pueblo",
-        "impostorHint": "Banquete"
+        "hint": "Rainha persa que salvou seu povo",
+        "impostorHint": "Rainha"
     },
     {
         "id": "mb_011",
-        "word": "María, madre de Jesús",
+        "word": "Maria",
         "category": "mujeres_biblicas",
         "difficulty": "easy",
-        "hint": "Virgen elegida por Dios",
-        "impostorHint": "Ángel"
+        "hint": "Mãe de Jesus, virgem escolhida",
+        "impostorHint": "Escolhida"
     },
     {
         "id": "mb_012",
         "word": "Isabel",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Madre de Juan el Bautista, prima de María",
-        "impostorHint": "Milagro"
+        "hint": "Mãe de João Batista, prima de Maria",
+        "impostorHint": "Milagre"
     },
     {
         "id": "mb_013",
-        "word": "María Magdalena",
+        "word": "Maria Madalena",
         "category": "mujeres_biblicas",
         "difficulty": "easy",
-        "hint": "Seguidora de Jesús, primera en verle resucitado",
-        "impostorHint": "Testigo"
+        "hint": "Seguidora de Jesus, primeira a vê-lo ressuscitado",
+        "impostorHint": "Testemunha"
     },
     {
         "id": "mb_014",
         "word": "Marta",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Hermana de Lázaro, afanada con el servicio",
-        "impostorHint": "Servicio"
+        "hint": "Irmã de Lázaro, preocupada com o serviço",
+        "impostorHint": "Serviço"
     },
     {
         "id": "mb_015",
-        "word": "Noemí",
+        "word": "Noemi",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Suegra de Rut, cambió su nombre a Mara",
+        "hint": "Sogra de Rute, mudou o nome para Mara",
         "impostorHint": "Amargura"
     },
     {
         "id": "mb_016",
-        "word": "Rahab",
+        "word": "Raabe",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Escondió a los espías en Jericó",
-        "impostorHint": "Cordón"
+        "hint": "Escondeu os espiões em Jericó",
+        "impostorHint": "Muros"
     },
     {
         "id": "mb_017",
         "word": "Dalila",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Descubrió el secreto de la fuerza de Sansón",
-        "impostorHint": "Cabello"
+        "hint": "Descobriu o segredo da força de Sansão",
+        "impostorHint": "Força"
     },
     {
         "id": "mb_018",
         "word": "Jezabel",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
-        "hint": "Reina malvada, enemiga de Elías",
-        "impostorHint": "Perros"
+        "hint": "Rainha perversa, inimiga de Elias",
+        "impostorHint": "Rainha"
     },
     {
         "id": "mb_019",
         "word": "Agar",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Sierva de Sara, madre de Ismael",
-        "impostorHint": "Desierto"
+        "hint": "Serva de Sara, mãe de Ismael",
+        "impostorHint": "Deserto"
     },
     {
         "id": "mb_020",
-        "word": "Dina",
+        "word": "Diná",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
-        "hint": "Hija de Jacob",
-        "impostorHint": "Hija"
+        "hint": "Filha de Jacó",
+        "impostorHint": "Filha"
     },
     {
         "id": "mb_021",
         "word": "Tamar",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
-        "hint": "Nuera de Judá, luchó por justicia",
-        "impostorHint": "Justicia"
+        "hint": "Nora de Judá, lutou por justiça",
+        "impostorHint": "Justiça"
     },
     {
         "id": "mb_022",
-        "word": "Séfora",
+        "word": "Zípora",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
         "hint": "Esposa de Moisés",
-        "impostorHint": "Circuncisión"
+        "impostorHint": "Esposa"
     },
     {
         "id": "mb_023",
-        "word": "Jocabed",
+        "word": "Joquebede",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
-        "hint": "Madre de Moisés, lo puso en una canasta",
-        "impostorHint": "Canasta"
+        "hint": "Mãe de Moisés, colocou-o num cesto",
+        "impostorHint": "Cesto"
     },
     {
         "id": "mb_024",
         "word": "Abigail",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Esposa sabia de Nabal, luego de David",
-        "impostorHint": "Sabiduría"
+        "hint": "Esposa sábia de Nabal, depois de Davi",
+        "impostorHint": "Sabedoria"
     },
     {
         "id": "mb_025",
-        "word": "Betsabé",
+        "word": "Bate-Seba",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Esposa de Urías, luego de David, madre de Salomón",
-        "impostorHint": "Baño"
+        "hint": "Esposa deurias, depois de Davi, mãe de Salomão",
+        "impostorHint": "Rei"
     },
     {
         "id": "mb_026",
         "word": "Sunamita",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
-        "hint": "Mujer hospitalaria que preparó cuarto a Eliseo",
-        "impostorHint": "Cuarto"
+        "hint": "Mulher hospitaleira que preparou quarto para Eliseu",
+        "impostorHint": "Casa"
     },
     {
         "id": "mb_027",
         "word": "Priscila",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Esposa de Aquila, maestra de Apolos",
-        "impostorHint": "Maestra"
+        "hint": "Esposa de Áquila, mestra de Apolo",
+        "impostorHint": "Mestra"
     },
     {
         "id": "mb_028",
         "word": "Febe",
         "category": "mujeres_biblicas",
         "difficulty": "hard",
-        "hint": "Diaconisa de la iglesia en Cencrea",
+        "hint": "Diaconisa da igreja em Cencreia",
         "impostorHint": "Diaconisa"
     },
     {
         "id": "mb_029",
-        "word": "Lidia",
+        "word": "Lídia",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Vendedora de púrpura, primera convertida en Europa",
+        "hint": "Vendedora de púrpura, primeira convertida na Europa",
         "impostorHint": "Púrpura"
     },
     {
@@ -1428,647 +1436,647 @@
         "word": "Dorcas",
         "category": "mujeres_biblicas",
         "difficulty": "medium",
-        "hint": "Hacía túnicas para los pobres, resucitada por Pedro",
-        "impostorHint": "Ropa"
+        "hint": "Fazia túnicas para os pobres, ressuscitada por Pedro",
+        "impostorHint": "Roupas"
     },
     {
         "id": "mi_001",
-        "word": "División del Mar Rojo",
+        "word": "Divisão do Mar Vermelho",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Moisés extendió su mano y el mar se abrió",
-        "impostorHint": "Éxodo"
+        "hint": "Moisés estendeu a mão e o mar se abriu",
+        "impostorHint": "Êxodo"
     },
     {
         "id": "mi_002",
-        "word": "Agua convertida en vino",
+        "word": "Água transformada em vinho",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Primer milagro de Jesús en una boda",
-        "impostorHint": "Bodas"
+        "hint": "Primeiro milagre de Jesus em um casamento",
+        "impostorHint": "Casamento"
     },
     {
         "id": "mi_003",
-        "word": "Resurrección de Lázaro",
+        "word": "Ressurreição de Lázaro",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús lo llamó después de cuatro días",
+        "hint": "Jesus o chamou após quatro dias",
         "impostorHint": "Tumba"
     },
     {
         "id": "mi_004",
-        "word": "Multiplicación de los panes",
+        "word": "Multiplicação dos pães",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "5 panes y 2 peces alimentaron a 5000",
+        "hint": "5 pães e 2 peixes alimentaram 5000",
         "impostorHint": "Cesta"
     },
     {
         "id": "mi_005",
-        "word": "Maná del cielo",
+        "word": "Maná do céu",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Alimento que Dios dio en el desierto",
-        "impostorHint": "Pan"
+        "hint": "Alimento que Deus deu no deserto",
+        "impostorHint": "Pão"
     },
     {
         "id": "mi_006",
-        "word": "Caminar sobre el agua",
+        "word": "Caminhar sobre as águas",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús y Pedro lo hicieron en el lago",
-        "impostorHint": "Fe"
+        "hint": "Jesus e Pedro fizeram isso no lago",
+        "impostorHint": "Fé"
     },
     {
         "id": "mi_007",
-        "word": "Curación del ciego de nacimiento",
+        "word": "Cura do cego de nascença",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Jesús hizo lodo y le dio la vista",
-        "impostorHint": "Lodo"
+        "hint": "Jesus fez lama e devolveu a visão",
+        "impostorHint": "Lama"
     },
     {
         "id": "mi_008",
-        "word": "Resurrección de Jesús",
+        "word": "Ressurreição de Jesus",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Al tercer día la tumba quedó vacía",
+        "hint": "No terceiro dia a tumba estava vazia",
         "impostorHint": "Domingo"
     },
     {
         "id": "mi_009",
-        "word": "La transfiguración",
+        "word": "A transfiguração",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Jesús brilló como el sol en el monte",
+        "hint": "Jesus brilhou como o sol no monte",
         "impostorHint": "Luz"
     },
     {
         "id": "mi_010",
-        "word": "La tempestad calmada",
+        "word": "Acalmar a tempestade",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús ordenó al viento y al mar que se calmaran",
-        "impostorHint": "Viento"
+        "hint": "Jesus mandou o vento e o mar ficarem quietos",
+        "impostorHint": "Vento"
     },
     {
         "id": "mi_011",
-        "word": "Curación del leproso",
+        "word": "Cura do leproso",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús lo tocó y quedó limpio",
-        "impostorHint": "Piel"
+        "hint": "Jesus o tocou e ele foi purificado",
+        "impostorHint": "Pele"
     },
     {
         "id": "mi_012",
-        "word": "El diluvio universal",
+        "word": "O dilúvio universal",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios inundó la tierra y salvó a Noé",
-        "impostorHint": "Arco iris"
+        "hint": "Deus inundou a terra e salvou Noé",
+        "impostorHint": "Arco-íris"
     },
     {
         "id": "mi_013",
-        "word": "Las diez plagas de Egipto",
+        "word": "As dez pragas do Egito",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios las envió para liberar a Israel",
-        "impostorHint": "Faraón"
+        "hint": "Deus as enviou para libertar Israel",
+        "impostorHint": "Faraó"
     },
     {
         "id": "mi_014",
-        "word": "La columna de fuego",
+        "word": "A coluna de fogo",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Guiaba a Israel de noche en el desierto",
-        "impostorHint": "Noche"
+        "hint": "Guiava Israel pelo deserto à noite",
+        "impostorHint": "Noite"
     },
     {
         "id": "mi_015",
-        "word": "La zarza ardiente",
+        "word": "A sarça ardente",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios habló a Moisés desde ella",
-        "impostorHint": "Fuego"
+        "hint": "Deus falou com Moisés através dela",
+        "impostorHint": "Fogo"
     },
     {
         "id": "mi_016",
-        "word": "El sol detenido",
+        "word": "O sol parado",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Josué pidió que se detuviera durante la batalla",
+        "hint": "Josué pediu que parasse durante a batalha",
         "impostorHint": "Josué"
     },
     {
         "id": "mi_017",
-        "word": "Pentecostés",
+        "word": "Pentecostes",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "El Espíritu Santo descendió como lenguas de fuego",
-        "impostorHint": "Viento"
+        "hint": "O Espírito Santo desceu como línguas de fogo",
+        "impostorHint": "Vento"
     },
     {
         "id": "mi_018",
-        "word": "Daniel en el foso de leones",
+        "word": "Daniel na cova dos leões",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Los leones no lo tocaron",
-        "impostorHint": "Ángel"
+        "hint": "Os leões não o tocaram",
+        "impostorHint": "Anjo"
     },
     {
         "id": "mi_019",
-        "word": "El horno de fuego ardiente",
+        "word": "A fornalha ardente",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Sadrac, Mesac y Abed-nego salieron ilesos",
-        "impostorHint": "Cuarto"
+        "hint": "Sadraque, Mesaque e Abede-Nego saíram ilesos",
+        "impostorHint": "Quarto"
     },
     {
         "id": "mi_020",
-        "word": "Jonás y el gran pez",
+        "word": "Jonas e o grande peixe",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Estuvo tres días en el vientre del pez",
-        "impostorHint": "Ballena"
+        "hint": "Ficou três dias dentro do peixe",
+        "impostorHint": "Baleia"
     },
     {
         "id": "mi_021",
-        "word": "El aceite de la viuda",
+        "word": "O azeite da viúva",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "El aceite no se acabó por el profeta Elías",
-        "impostorHint": "Vasijas"
+        "hint": "O azeite não acabou graças ao profeta Elias",
+        "impostorHint": "Vasilhas"
     },
     {
         "id": "mi_022",
-        "word": "Fuego del cielo de Elías",
+        "word": "Fogo do céu de Elias",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Consumió el altar empapado de agua",
+        "hint": "Consumiu o altar encharcado de água",
         "impostorHint": "Baal"
     },
     {
         "id": "mi_023",
-        "word": "Ascensión de Elías",
+        "word": "Elias levado ao céu",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Subió al cielo en un carro de fuego",
-        "impostorHint": "Carro"
+        "hint": "Subiu ao céu em uma carruagem de fogo",
+        "impostorHint": "Carruagem"
     },
     {
         "id": "mi_024",
-        "word": "Resurrección del hijo de la sunamita",
+        "word": "Ressurreição do filho da sunamita",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "El profeta Eliseo la realizó",
-        "impostorHint": "Niño"
+        "hint": "O profeta Eliseu a realizou",
+        "impostorHint": "Criança"
     },
     {
         "id": "mi_025",
-        "word": "El hacha flotante",
+        "word": "O machado flutuante",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Eliseo hizo flotar un hacha de hierro",
-        "impostorHint": "Palo"
+        "hint": "Eliseu fez um machado de ferro flutuar",
+        "impostorHint": "Pau"
     },
     {
         "id": "mi_026",
-        "word": "Curación de Naamán",
+        "word": "Cura de Naamã",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "General sirio curado de lepra en el Jordán",
-        "impostorHint": "Siete"
+        "hint": "General sírio curado de lepra no Jordão",
+        "impostorHint": "Sete"
     },
     {
         "id": "mi_027",
-        "word": "Pablo y Silas liberados de prisión",
+        "word": "Paulo e Silas libertados da prisão",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Un terremoto abrió las puertas de la cárcel",
-        "impostorHint": "Cantos"
+        "hint": "Um terremoto abriu as portas da prisão",
+        "impostorHint": "Cânticos"
     },
     {
         "id": "mi_028",
-        "word": "Conversión de Pablo",
+        "word": "Conversão de Paulo",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Una gran luz lo derribó camino a Damasco",
-        "impostorHint": "Ceguera"
+        "hint": "Uma grande luz o derrubou no caminho",
+        "impostorHint": "Cegueira"
     },
     {
         "id": "mi_029",
-        "word": "Curación del paralítico de Betsaida",
+        "word": "Cura do paralítico",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Sus amigos lo bajaron por el techo",
-        "impostorHint": "Techo"
+        "hint": "Seus amigos o desceram pelo telhado",
+        "impostorHint": "Telhado"
     },
     {
         "id": "mi_030",
-        "word": "Curación del siervo del centurión",
+        "word": "Cura do servo do centurião",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Jesús sanó a distancia por la fe del oficial",
-        "impostorHint": "Autoridad"
+        "hint": "Jesus curou à distância pela fé do oficial",
+        "impostorHint": "Autoridade"
     },
     {
         "id": "mi_031",
-        "word": "Ascensión de Jesús",
+        "word": "Ascensão de Jesus",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Subió al cielo ante sus discípulos",
-        "impostorHint": "Nube"
+        "hint": "Subiu ao céu diante de seus discípulos",
+        "impostorHint": "Nuvem"
     },
     {
         "id": "mi_032",
-        "word": "El agua de la roca",
+        "word": "Água da rocha",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Moisés golpeó una roca y brotó agua",
-        "impostorHint": "Sed"
+        "hint": "Moisés bateu na rocha e jorrou água",
+        "impostorHint": "Sede"
     },
     {
         "id": "mi_033",
-        "word": "La caída de los muros de Jericó",
+        "word": "Queda dos muros de Jericó",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Los israelitas marcharon y tocaron trompetas",
-        "impostorHint": "Trompeta"
+        "hint": "Os israelitas marcharam e tocaram trombetas",
+        "impostorHint": "Trombeta"
     },
     {
         "id": "mi_034",
-        "word": "La creación del mundo",
+        "word": "A criação do mundo",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios hizo todo en seis días",
-        "impostorHint": "Génesis"
+        "hint": "Deus fez tudo em seis dias",
+        "impostorHint": "Gênesis"
     },
     {
         "id": "mi_035",
-        "word": "La resurrección de Dorcas",
+        "word": "Ressurreição de Dorcas",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Pedro oró y la mujer volvió a la vida",
+        "hint": "Pedro orou e a mulher voltou à vida",
         "impostorHint": "Pedro"
     },
     {
         "id": "mi_036",
-        "word": "La estrella de Belén",
+        "word": "A estrela de Belém",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Guió a los magos al niño Jesús",
+        "hint": "Guiou os magos ao menino Jesus",
         "impostorHint": "Magos"
     },
     {
         "id": "mi_037",
-        "word": "El vellón de Gedeón",
+        "word": "O velo de Gideão",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Estaba húmedo mientras el suelo estaba seco",
-        "impostorHint": "Señal"
+        "hint": "Estava molhado enquanto o chão estava seco",
+        "impostorHint": "Sinal"
     },
     {
         "id": "mi_038",
-        "word": "El pez con la moneda",
+        "word": "A moeda na boca do peixe",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Pedro lo pescó para pagar el impuesto del templo",
-        "impostorHint": "Moneda"
+        "hint": "Pedro pescou para pagar o imposto do templo",
+        "impostorHint": "Moeda"
     },
     {
         "id": "mi_039",
-        "word": "Resurrección del hijo de la viuda de Naín",
+        "word": "Ressurreição do filho da viúva de Naim",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Jesús detuvo el cortejo fúnebre",
+        "hint": "Jesus parou o cortejo fúnebre",
         "impostorHint": "Cortejo"
     },
     {
         "id": "mi_040",
-        "word": "La mano lepra de Moisés",
+        "word": "A mão leprosa de Moisés",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Dios le mostró su poder siendo una señal",
-        "impostorHint": "Señal"
+        "hint": "Deus a deu como sinal do seu poder",
+        "impostorHint": "Sinal"
     },
     {
         "id": "pa_001",
-        "word": "El hijo pródigo",
+        "word": "O filho pródigo",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "Un hijo derrochó su herencia y volvió arrepentido",
-        "impostorHint": "Regreso"
+        "hint": "Um filho desperdiçou sua herança e voltou arrependido",
+        "impostorHint": "Regresso"
     },
     {
         "id": "pa_002",
-        "word": "El buen samaritano",
+        "word": "O bom samaritano",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "Un extranjero ayudó al herido que otros ignoraron",
-        "impostorHint": "Prójimo"
+        "hint": "Um estrangeiro ajudou o ferido que outros ignoraram",
+        "impostorHint": "Próximo"
     },
     {
         "id": "pa_003",
-        "word": "El sembrador",
+        "word": "O semeador",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "La semilla cayó en diferentes tipos de tierra",
-        "impostorHint": "Tierra"
+        "hint": "A semente caiu em diferentes tipos de solo",
+        "impostorHint": "Solo"
     },
     {
         "id": "pa_004",
-        "word": "La semilla de mostaza",
+        "word": "A semente de mostarda",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "La más pequeña crece hasta ser el árbol más grande",
-        "impostorHint": "Pequeño"
+        "hint": "A menor cresce até ser a maior árvore",
+        "impostorHint": "Pequeno"
     },
     {
         "id": "pa_005",
-        "word": "La perla de gran precio",
+        "word": "A pérola de grande valor",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Un mercader vendió todo para comprarla",
-        "impostorHint": "Venta"
+        "hint": "Um mercador vendeu tudo para comprá-la",
+        "impostorHint": "Venda"
     },
     {
         "id": "pa_006",
-        "word": "El tesoro escondido",
+        "word": "O tesouro escondido",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "Un hombre vendió todo para comprar el campo",
+        "hint": "Um homem vendeu tudo para comprar o campo",
         "impostorHint": "Campo"
     },
     {
         "id": "pa_007",
-        "word": "Las diez vírgenes",
+        "word": "As dez virgens",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Cinco tenían aceite y cinco no",
-        "impostorHint": "Aceite"
+        "hint": "Cinco tinham azeite e cinco não",
+        "impostorHint": "Azeite"
     },
     {
         "id": "pa_008",
-        "word": "Los talentos",
+        "word": "Os talentos",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "A cada siervo le dieron diferente cantidad para multiplicar",
+        "hint": "Cada servo recebeu uma quantia diferente para multiplicar",
         "impostorHint": "Multiplicar"
     },
     {
         "id": "pa_009",
-        "word": "El siervo sin misericordia",
+        "word": "O servo sem misericórdia",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Lo perdonaron pero él no perdonó a su deudor",
-        "impostorHint": "Deuda"
+        "hint": "Foi perdoado mas não perdoou seu devedor",
+        "impostorHint": "Dívida"
     },
     {
         "id": "pa_010",
-        "word": "Los obreros de la viña",
+        "word": "Os trabalhadores da vinha",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Todos recibieron el mismo salario sin importar la hora",
-        "impostorHint": "Salario"
+        "hint": "Todos receberam o mesmo salário independente da hora",
+        "impostorHint": "Salário"
     },
     {
         "id": "pa_011",
-        "word": "Los labradores malvados",
+        "word": "Os lavradores maus",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Mataron al hijo del dueño de la viña",
-        "impostorHint": "Viña"
+        "hint": "Mataram o filho do dono da vinha",
+        "impostorHint": "Vinha"
     },
     {
         "id": "pa_012",
-        "word": "El banquete de bodas",
+        "word": "O banquete de casamento",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Los invitados rechazaron la invitación y llamaron a otros",
-        "impostorHint": "Invitados"
+        "hint": "Os convidados recusaram e outros foram chamados",
+        "impostorHint": "Convidados"
     },
     {
         "id": "pa_013",
-        "word": "La levadura",
+        "word": "O fermento",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Un poco fermenta toda la masa",
-        "impostorHint": "Pan"
+        "hint": "Um pouco fermenta toda a massa",
+        "impostorHint": "Pão"
     },
     {
         "id": "pa_014",
-        "word": "La red de peces",
+        "word": "A rede de peixes",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Se separaron los buenos de los malos",
+        "hint": "Os bons e os maus foram separados",
         "impostorHint": "Mar"
     },
     {
         "id": "pa_015",
-        "word": "La oveja perdida",
+        "word": "A ovelha perdida",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "El pastor dejó 99 para buscar una",
+        "hint": "O pastor deixou 99 para procurar uma",
         "impostorHint": "Pastor"
     },
     {
         "id": "pa_016",
-        "word": "La moneda perdida",
+        "word": "A moeda perdida",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "Una mujer barrió toda su casa para encontrarla",
-        "impostorHint": "Alegría"
+        "hint": "Uma mulher varreu toda a casa para encontrá-la",
+        "impostorHint": "Alegria"
     },
     {
         "id": "pa_017",
-        "word": "El rico y Lázaro",
+        "word": "O rico e Lázaro",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "El pobre mendigo fue al seno de Abraham",
+        "hint": "O mendigo pobre foi para o seio de Abraão",
         "impostorHint": "Abismo"
     },
     {
         "id": "pa_018",
-        "word": "El fariseo y el publicano",
+        "word": "O fariseu e o publicano",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "El publicano golpeó su pecho y fue justificado",
-        "impostorHint": "Humildad"
+        "hint": "O publicano bateu no peito e foi justificado",
+        "impostorHint": "Humildade"
     },
     {
         "id": "pa_019",
-        "word": "El juez injusto",
+        "word": "O juiz injusto",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "La viuda persistió en su petición hasta ser escuchada",
-        "impostorHint": "Viuda"
+        "hint": "A viúva persistiu em seu pedido até ser ouvida",
+        "impostorHint": "Viúva"
     },
     {
         "id": "pa_020",
-        "word": "El buen pastor",
+        "word": "O bom pastor",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "Conoce a sus ovejas por nombre y da su vida",
-        "impostorHint": "Ovejas"
+        "hint": "Conhece suas ovelhas pelo nome e dá a vida",
+        "impostorHint": "Ovelhas"
     },
     {
         "id": "pa_021",
-        "word": "La vid y los sarmientos",
+        "word": "A videira e os ramos",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Sin el tronco los ramos no pueden dar fruto",
+        "hint": "Sem o tronco os ramos não podem dar fruto",
         "impostorHint": "Fruto"
     },
     {
         "id": "pa_022",
-        "word": "El mayordomo astuto",
+        "word": "O mordomo astuto",
         "category": "parabolas_jesus",
         "difficulty": "hard",
-        "hint": "Se ganó amigos al reducir las deudas de su amo",
-        "impostorHint": "Astucia"
+        "hint": "Ganhou amigos reduzindo as dívidas de seu senhor",
+        "impostorHint": "Astúcia"
     },
     {
         "id": "pa_023",
-        "word": "El rico insensato",
+        "word": "O rico insensato",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Planeó construir graneros más grandes pero murió esa noche",
-        "impostorHint": "Granero"
+        "hint": "Planejou construir celeiros maiores mas morreu naquela noite",
+        "impostorHint": "Celeiro"
     },
     {
         "id": "pa_024",
-        "word": "La higuera sin fruto",
+        "word": "A figueira estéril",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "El jardinero pidió un año más para la higuera estéril",
-        "impostorHint": "Higuera"
+        "hint": "O jardineiro pediu mais um ano para a árvore",
+        "impostorHint": "Figueira"
     },
     {
         "id": "pa_025",
-        "word": "El gran banquete",
+        "word": "O grande banquete",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Los pobres y lisiados ocuparon el lugar de los ricos",
-        "impostorHint": "Excusas"
+        "hint": "Os pobres e aleijados ocuparam o lugar dos ricos",
+        "impostorHint": "Desculpas"
     },
     {
         "id": "pa_026",
-        "word": "El amigo a medianoche",
+        "word": "O amigo à meia-noite",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "La insistencia logró que el amigo se levantara",
-        "impostorHint": "Persistencia"
+        "hint": "A insistência fez o amigo se levantar e ajudar",
+        "impostorHint": "Persistência"
     },
     {
         "id": "pa_027",
-        "word": "Los dos deudores",
+        "word": "Os dois devedores",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "El que más le perdonaron más amó",
-        "impostorHint": "Gratitud"
+        "hint": "Aquele a quem mais perdoaram mais amou",
+        "impostorHint": "Gratidão"
     },
     {
         "id": "pa_028",
-        "word": "La higuera y el verano",
+        "word": "A figueira e o verão",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Cuando brota saben que el verano está cerca",
-        "impostorHint": "Señales"
+        "hint": "Quando brota sabem que o verão está perto",
+        "impostorHint": "Sinais"
     },
     {
         "id": "pa_029",
-        "word": "El edificio sobre la roca",
+        "word": "O construtor sábio",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "La tormenta no derribó la casa del obediente",
-        "impostorHint": "Cimientos"
+        "hint": "A tempestade não derrubou a casa do obediente",
+        "impostorHint": "Fundação"
     },
     {
         "id": "pa_030",
-        "word": "Los dos hijos",
+        "word": "Os dois filhos",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Uno dijo que no iría al viñedo y fue, el otro al revés",
-        "impostorHint": "Obediencia"
+        "hint": "Um disse não à vinha mas foi, o outro ao contrário",
+        "impostorHint": "Obediência"
     },
     {
         "id": "pa_031",
-        "word": "Las minas",
+        "word": "As minas",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Un noble fue a un país lejano y dejó dinero a cada siervo",
-        "impostorHint": "Rentabilidad"
+        "hint": "Um nobre foi a um país distante e deixou dinheiro",
+        "impostorHint": "Retorno"
     },
     {
         "id": "pa_032",
-        "word": "El grano de trigo",
+        "word": "O grão de trigo",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Debe caer en tierra y morir para dar mucho fruto",
-        "impostorHint": "Muerte"
+        "hint": "Deve cair na terra e morrer para dar muito fruto",
+        "impostorHint": "Morte"
     },
     {
         "id": "pa_033",
-        "word": "El mayordomo fiel",
+        "word": "O mordomo fiel",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "El que es fiel en lo poco tendrá autoridad sobre más",
-        "impostorHint": "Fidelidad"
+        "hint": "Quem é fiel no pouco terá autoridade sobre mais",
+        "impostorHint": "Fidelidade"
     },
     {
         "id": "pa_034",
-        "word": "El ojo sano",
+        "word": "O olho são",
         "category": "parabolas_jesus",
         "difficulty": "hard",
-        "hint": "Si está malo todo el cuerpo está en tinieblas",
+        "hint": "Se estiver mau todo o corpo estará nas trevas",
         "impostorHint": "Luz"
     },
     {
         "id": "pa_035",
-        "word": "La sal de la tierra",
+        "word": "O sal da terra",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Si pierde su sabor no sirve para nada",
+        "hint": "Se perder o sabor não serve para nada",
         "impostorHint": "Sabor"
     },
     {
         "id": "pa_036",
-        "word": "La cizaña entre el trigo",
+        "word": "O joio entre o trigo",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Crecen juntos hasta la cosecha final",
-        "impostorHint": "Enemigo"
+        "hint": "Crescem juntos até a colheita final",
+        "impostorHint": "Inimigo"
     },
     {
         "id": "pa_037",
-        "word": "El rey en la guerra",
+        "word": "O rei que vai à guerra",
         "category": "parabolas_jesus",
         "difficulty": "hard",
-        "hint": "Calculó si podía vencer antes de atacar",
+        "hint": "Calculou se poderia vencer antes de atacar",
         "impostorHint": "Cálculo"
     },
     {
         "id": "pa_038",
-        "word": "Los invitados que se excusan",
+        "word": "Os convidados que se recusam",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Uno compró un buey, otro campo, otro se casó",
+        "hint": "Um comprou um boi, outro campo, outro se casou",
         "impostorHint": "Campo"
     },
     {
         "id": "pa_039",
-        "word": "La mujer y la levadura",
+        "word": "A mulher e o fermento",
         "category": "parabolas_jesus",
         "difficulty": "medium",
-        "hint": "Escondió levadura en tres medidas de harina",
-        "impostorHint": "Masa"
+        "hint": "Escondeu fermento em três medidas de farinha",
+        "impostorHint": "Massa"
     },
     {
         "id": "pa_040",
-        "word": "El árbol y sus frutos",
+        "word": "A árvore e seus frutos",
         "category": "parabolas_jesus",
         "difficulty": "easy",
-        "hint": "Por sus frutos los conoceréis",
+        "hint": "Pelos frutos os conhecereis",
         "impostorHint": "Frutos"
     }
 ]
