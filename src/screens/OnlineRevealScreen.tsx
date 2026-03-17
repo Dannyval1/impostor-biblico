@@ -9,7 +9,7 @@ import { useTranslation } from '../hooks/useTranslation';
 
 export default function OnlineRevealScreen() {
     const navigation = useNavigation<any>();
-    const { gameState, updateSettings, nextRound, startVoting } = useOnlineGame();
+    const { gameState, startCluePhase } = useOnlineGame();
     const { t } = useTranslation();
 
     // Local state for countdown
@@ -25,7 +25,9 @@ export default function OnlineRevealScreen() {
     const word = gameState.room?.currentWord;
 
     useEffect(() => {
-        if (gameState.room?.status === 'voting') {
+        if (gameState.room?.status === 'clues') {
+            navigation.replace('OnlineClue');
+        } else if (gameState.room?.status === 'voting') {
             navigation.replace('OnlineVoting');
         } else if (gameState.room?.status === 'finished') {
             const winner = gameState.room.winner === 'impostors' ? t.voting.winner_impostors : t.voting.winner_civilians;
@@ -100,16 +102,16 @@ export default function OnlineRevealScreen() {
                 {gameState.isHost && (
                     <TouchableOpacity
                         style={styles.actionButton}
-                        onPress={startVoting}
+                        onPress={startCluePhase}
                     >
-                        <Text style={styles.actionButtonText}>{t.online.start_voting}</Text>
+                        <Text style={styles.actionButtonText}>{t.online.start_discussion}</Text>
                     </TouchableOpacity>
                 )}
 
                 <Text style={styles.hintText}>
                     {gameState.isHost
-                        ? t.online.host_hint
-                        : t.online.player_hint}
+                        ? t.online.host_discussion_hint
+                        : t.online.player_discussion_hint}
                 </Text>
             </View>
         </SafeAreaView>

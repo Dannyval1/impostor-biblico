@@ -32,6 +32,8 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const [selectedCategories, setSelectedCategories] = useState<Category[]>(['personajes_biblicos']);
     const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
     const [impostorHint, setImpostorHint] = useState(false);
+    const [discussionMode, setDiscussionMode] = useState<'turns' | 'simultaneous'>('turns');
+    const [clueDuration, setClueDuration] = useState(30);
 
     const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
 
@@ -42,6 +44,8 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
             setSelectedCategories(gameState.room.settings.categories || []);
             setCustomCategories(gameState.room.settings.customCategories || []);
             setImpostorHint(gameState.room.settings.impostorHint || false);
+            setDiscussionMode(gameState.room.settings.discussionMode || 'turns');
+            setClueDuration(gameState.room.settings.clueDuration || 30);
         }
     }, [gameState.room]);
 
@@ -58,9 +62,11 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                 categories: selectedCategories,
                 customCategories,
                 impostorHint,
+                discussionMode,
+                clueDuration,
                 isConfigured: true
             });
-            startGame(); // Starts the game directly
+            startGame();
         } catch (error) {
             console.error('Failed to update settings and start', error);
         }
@@ -163,6 +169,41 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                             );
                         })}
                     </View>
+                </View>
+
+                {/* Discussion Mode */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{t.online.discussion_mode}</Text>
+                    <TouchableOpacity
+                        style={[styles.modeOptionCard, discussionMode === 'turns' && styles.modeOptionCardSelected]}
+                        onPress={() => { setDiscussionMode('turns'); setClueDuration(30); }}
+                        activeOpacity={0.8}
+                    >
+                        <View style={styles.modeOptionContent}>
+                            <Text style={[styles.modeOptionTitle, discussionMode === 'turns' && styles.modeOptionTitleSelected]}>
+                                {t.online.mode_turns}
+                            </Text>
+                            <Text style={styles.modeOptionDesc}>{t.online.mode_turns_desc}</Text>
+                        </View>
+                        {discussionMode === 'turns' && (
+                            <Ionicons name="checkmark-circle" size={22} color="#5B7FDB" />
+                        )}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.modeOptionCard, discussionMode === 'simultaneous' && styles.modeOptionCardSelected]}
+                        onPress={() => { setDiscussionMode('simultaneous'); setClueDuration(60); }}
+                        activeOpacity={0.8}
+                    >
+                        <View style={styles.modeOptionContent}>
+                            <Text style={[styles.modeOptionTitle, discussionMode === 'simultaneous' && styles.modeOptionTitleSelected]}>
+                                {t.online.mode_simultaneous}
+                            </Text>
+                            <Text style={styles.modeOptionDesc}>{t.online.mode_simultaneous_desc}</Text>
+                        </View>
+                        {discussionMode === 'simultaneous' && (
+                            <Ionicons name="checkmark-circle" size={22} color="#5B7FDB" />
+                        )}
+                    </TouchableOpacity>
                 </View>
 
                 {/* Categories */}
@@ -521,5 +562,35 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
-    }
+    },
+    modeOptionCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F7FAFF',
+        borderRadius: 14,
+        padding: 14,
+        marginBottom: 10,
+        borderWidth: 1.5,
+        borderColor: '#E2E8F0',
+    },
+    modeOptionCardSelected: {
+        borderColor: '#5B7FDB',
+        backgroundColor: '#EEF2FF',
+    },
+    modeOptionContent: {
+        flex: 1,
+    },
+    modeOptionTitle: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: '#2D3748',
+        marginBottom: 2,
+    },
+    modeOptionTitleSelected: {
+        color: '#5B7FDB',
+    },
+    modeOptionDesc: {
+        fontSize: 12,
+        color: '#718096',
+    },
 });

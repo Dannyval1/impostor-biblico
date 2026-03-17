@@ -31,6 +31,9 @@ interface OnlineGameContextProps {
     nextRound: () => void;
     continueRound: () => void;
     eliminatePlayer: (playerId: string) => void;
+    startCluePhase: () => void;
+    submitClue: (clue: string) => void;
+    advanceTurn: () => void;
 }
 
 const OnlineGameContext = createContext<OnlineGameContextProps | null>(null);
@@ -241,7 +244,9 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                 customCategories: [],
                 isPremiumRoom: isPremiumUser, // Inherit from Host
                 impostorHint: false,
-                isConfigured: false
+                isConfigured: false,
+                discussionMode: 'turns',
+                clueDuration: 30,
             },
             createdAt: Date.now()
         };
@@ -373,8 +378,54 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['currentImpostors'] = impostorIds;
         updates['status'] = 'playing';
         updates['currentRoundStartTime'] = Date.now();
+        // Clear previous clues and turn state
+        updates['turnOrder'] = null;
+        updates['currentTurnIndex'] = null;
+        updates['cluePhaseStartTime'] = null;
+        // Clear clues from all players
+        players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
 
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+    };
+
+    const startCluePhase = async () => {
+        if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
+        const players = Object.values(gameState.room.players).filter(p => !p.isEliminated);
+        const shuffledOrder = [...players].sort(() => Math.random() - 0.5).map(p => p.id);
+
+        const updates: Record<string, any> = {
+            status: 'clues',
+            turnOrder: shuffledOrder,
+            currentTurnIndex: 0,
+            cluePhaseStartTime: Date.now(),
+        };
+        // Clear previous clues
+        players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
+
+        await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+    };
+
+    const submitClue = async (clue: string) => {
+        if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        await update(ref(database, `rooms/${gameState.roomCode}/players/${gameState.playerId}`), { clue });
+    };
+
+    const advanceTurn = async () => {
+        if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
+        const room = gameState.room;
+        const turnOrder = room.turnOrder || [];
+        const currentIndex = room.currentTurnIndex ?? 0;
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex >= turnOrder.length) {
+            // All turns done → go to voting
+            await update(ref(database, `rooms/${gameState.roomCode}`), { status: 'voting' });
+        } else {
+            await update(ref(database, `rooms/${gameState.roomCode}`), {
+                currentTurnIndex: nextIndex,
+                cluePhaseStartTime: Date.now(),
+            });
+        }
     };
 
     const startVoting = async () => {
@@ -389,6 +440,21 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             vote: votedForId
         });
     };
+
+    // Auto-advance to voting when all clues submitted in simultaneous mode (Host only)
+    useEffect(() => {
+        if (
+            gameState.isHost &&
+            gameState.room?.status === 'clues' &&
+            gameState.room.settings.discussionMode === 'simultaneous'
+        ) {
+            const players = Object.values(gameState.room.players).filter(p => !p.isEliminated);
+            const allSubmitted = players.length > 0 && players.every(p => p.clue !== null && p.clue !== undefined);
+            if (allSubmitted) {
+                update(ref(database, `rooms/${gameState.roomCode}`), { status: 'voting' });
+            }
+        }
+    }, [gameState.room?.players, gameState.room?.status]);
 
     // Check for votes completion (Host only)
     useEffect(() => {
@@ -487,6 +553,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['currentImpostors'] = impostorIds;
         updates['status'] = 'playing';
         updates['currentRoundStartTime'] = Date.now();
+        updates['turnOrder'] = null;
+        updates['currentTurnIndex'] = null;
+        updates['cluePhaseStartTime'] = null;
+        players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
 
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
     };
@@ -525,7 +595,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             updateSettings,
             nextRound,
             continueRound,
-            eliminatePlayer
+            eliminatePlayer,
+            startCluePhase,
+            submitClue,
+            advanceTurn,
         }}>
             {children}
         </OnlineGameContext.Provider>

@@ -14,6 +14,7 @@ import OnlineRevealScreen from '../screens/OnlineRevealScreen';
 import OnlineVotingScreen from '../screens/OnlineVotingScreen';
 import OnlineResultsScreen from '../screens/OnlineResultsScreen';
 import OnlineSetupScreen from '../screens/OnlineSetupScreen';
+import OnlineClueScreen from '../screens/OnlineClueScreen';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -27,6 +28,7 @@ export type RootStackParamList = {
     OnlineVoting: undefined;
     OnlineResults: undefined;
     OnlineSetup: undefined;
+    OnlineClue: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -51,6 +53,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="OnlineVoting" component={OnlineVotingScreen} />
                 <Stack.Screen name="OnlineResults" component={OnlineResultsScreen} />
                 <Stack.Screen name="OnlineSetup" component={OnlineSetupScreen} />
+                <Stack.Screen name="OnlineClue" component={OnlineClueScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

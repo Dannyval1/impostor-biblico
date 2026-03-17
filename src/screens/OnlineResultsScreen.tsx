@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import {
+    View, Text, StyleSheet, TouchableOpacity, ScrollView,
+    Image, Animated, Easing,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { useTranslation } from '../hooks/useTranslation';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function OnlineResultsScreen() {
     const navigation = useNavigation<any>();
@@ -12,208 +16,334 @@ export default function OnlineResultsScreen() {
     const { t } = useTranslation();
 
     const room = gameState.room;
+    const myId = gameState.playerId!;
+    const me = room?.players[myId];
+
+    // Animations
+    const scaleAnim = useRef(new Animated.Value(0)).current;
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
+        Animated.parallel([
+            Animated.spring(scaleAnim, {
+                toValue: 1, tension: 50, friction: 7, useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 1, duration: 600, useNativeDriver: true,
+            }),
+        ]).start();
+    }, []);
+
+    // Navigate on status change
+    useEffect(() => {
         if (!room) return;
-        if (room.status === 'finished') {
-            const winner = room.winner === 'impostors' ? t.voting.winner_impostors : t.voting.winner_civilians;
-            Alert.alert(t.voting.game_over, winner, [
-                { text: t.online.back_to_lobby, onPress: () => navigation.replace('OnlineLobby') }
-            ]);
-        } else if (room.status === 'playing') {
-            navigation.replace('OnlineReveal');
-        } else if (room.status === 'voting') {
-            navigation.replace('OnlineVoting');
-        } else if (room.status === 'waiting') {
-            navigation.replace('OnlineLobby');
-        }
+        if (room.status === 'playing') navigation.replace('OnlineReveal');
+        else if (room.status === 'clues') navigation.replace('OnlineClue');
+        else if (room.status === 'voting') navigation.replace('OnlineVoting');
+        else if (room.status === 'waiting') navigation.replace('OnlineLobby');
+        else if (room.status === 'finished') navigation.replace('OnlineLobby');
     }, [room?.status]);
 
     if (!room || room.status !== 'results') return null;
 
     const players = Object.values(room.players);
     const voteCounts = room.voteCounts || {};
-
-    // Sort players by vote count
-    const sortedPlayers = [...players].sort((a, b) => {
-        const votesA = voteCounts[a.id] || 0;
-        const votesB = voteCounts[b.id] || 0;
-        return votesB - votesA;
-    });
-
     const isTie = room.isTie;
     const eliminatedId = room.lastEliminatedId;
     const eliminatedPlayer = players.find(p => p.id === eliminatedId);
+    const isEliminated = eliminatedPlayer?.id === myId;
+    const impostorIds = room.currentImpostors || [];
+    const amIImpostor = impostorIds.includes(myId);
+    const eliminatedIsImpostor = impostorIds.includes(eliminatedId || '');
 
-    const renderPlayerItem = ({ item }: { item: any }) => {
-        const votesReceived = voteCounts[item.id] || 0;
-        const isEliminatedThisRound = item.id === eliminatedId;
-        const isMe = item.id === gameState.playerId;
+    // Win/loss from my perspective
+    const civiliansWon = !isTie && eliminatedIsImpostor;
+    const impostorsWon = !isTie && !eliminatedIsImpostor;
 
-        return (
-            <View style={[styles.playerCard, isEliminatedThisRound && styles.playerCardEliminated]}>
-                <View style={styles.avatarContainer}>
-                    <Image source={AVATAR_ASSETS[item.avatar]} style={styles.avatarImage} />
-                </View>
-                <View style={styles.playerInfo}>
-                    <Text style={styles.playerName}>
-                        {item.name} {isMe && t.online.you}
-                    </Text>
-                    {isEliminatedThisRound && (
-                        <Text style={styles.eliminatedText}>{t.online.eliminated_badge}</Text>
-                    )}
-                </View>
-                <View style={styles.voteBubble}>
-                    <Text style={styles.voteText}>{votesReceived} {votesReceived === 1 ? 'voto' : 'votos'}</Text>
-                </View>
-            </View>
-        );
+    const iWon = amIImpostor ? impostorsWon : civiliansWon;
+
+    // Colors and messaging
+    const bgColor = iWon ? '#0F2027' : '#1A0000';
+    const accentColor = iWon ? '#48BB78' : '#E53E3E';
+    const titleEmoji = iWon ? '🎉' : '💀';
+    const tieAmbiguity = isTie;
+
+    // Sorted players by votes
+    const sortedPlayers = [...players].sort((a, b) =>
+        (voteCounts[b.id] || 0) - (voteCounts[a.id] || 0)
+    );
+
+    const impostors = players.filter(p => impostorIds.includes(p.id));
+
+    const getTitle = () => {
+        if (isTie) return t.online.tie_result;
+        if (amIImpostor) return iWon ? t.online.impostor_escaped : t.online.you_were_caught;
+        return iWon ? t.online.civilians_win_title : t.online.impostors_win_title;
+    };
+
+    const getSubtitle = () => {
+        if (isTie) return 'Nadie fue eliminado esta ronda';
+        if (civiliansWon) return t.online.good_job_civils;
+        if (impostorsWon) return t.online.impostor_won;
+        return '';
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Resultados</Text>
-                <Text style={styles.subTitle}>
-                    {isTie
-                        ? '¡Hubo un empate!'
-                        : eliminatedPlayer
-                            ? `${eliminatedPlayer.name} fue eliminado.`
-                            : 'Votación finalizada.'}
-                </Text>
-            </View>
+        <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
+            <ScrollView contentContainerStyle={styles.scroll}>
 
-            <FlatList
-                data={sortedPlayers}
-                keyExtractor={item => item.id}
-                renderItem={renderPlayerItem}
-                contentContainerStyle={styles.listContent}
-            />
+                {/* Main result card */}
+                <Animated.View style={[
+                    styles.resultCard,
+                    { borderColor: accentColor, transform: [{ scale: scaleAnim }] }
+                ]}>
+                    <Text style={styles.resultEmoji}>
+                        {isTie ? '🤝' : titleEmoji}
+                    </Text>
+                    <Text style={[styles.resultTitle, { color: accentColor }]}>
+                        {getTitle()}
+                    </Text>
+                    <Text style={styles.resultSubtitle}>{getSubtitle()}</Text>
+                </Animated.View>
 
-            <View style={styles.footer}>
-                {!gameState.isHost ? (
-                    <Text style={styles.waitingText}>{t.online.waiting_host}</Text>
-                ) : (
-                    <View style={styles.hostControls}>
-                        <TouchableOpacity
-                            style={[styles.hostButton, { backgroundColor: '#E53E3E' }]}
-                            onPress={nextRound}
-                        >
-                            <Text style={styles.hostButtonText}>{t.voting.next_round}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.hostButton, { backgroundColor: '#48BB78' }]}
-                            onPress={continueRound}
-                        >
-                            <Text style={styles.hostButtonText}>Continuar</Text>
-                        </TouchableOpacity>
+                <Animated.View style={{ opacity: fadeAnim }}>
+                    {/* Who was eliminated */}
+                    {!isTie && eliminatedPlayer && (
+                        <View style={styles.section}>
+                            <Text style={styles.sectionLabel}>
+                                {eliminatedIsImpostor
+                                    ? t.online.civilian_caught_impostor
+                                    : t.online.civilian_eliminated_msg}
+                            </Text>
+                            <View style={[
+                                styles.eliminatedCard,
+                                { borderColor: eliminatedIsImpostor ? '#48BB78' : '#E53E3E' }
+                            ]}>
+                                <Image
+                                    source={AVATAR_ASSETS[eliminatedPlayer.avatar]}
+                                    style={styles.eliminatedAvatar}
+                                />
+                                <View style={styles.eliminatedInfo}>
+                                    <Text style={styles.eliminatedName}>{eliminatedPlayer.name}</Text>
+                                    <Text style={[
+                                        styles.eliminatedRole,
+                                        { color: eliminatedIsImpostor ? '#FC8181' : '#68D391' }
+                                    ]}>
+                                        {eliminatedIsImpostor ? '🔴 IMPOSTOR' : '🟢 CIVIL'}
+                                    </Text>
+                                </View>
+                                <Ionicons
+                                    name={eliminatedIsImpostor ? 'checkmark-circle' : 'close-circle'}
+                                    size={28}
+                                    color={eliminatedIsImpostor ? '#48BB78' : '#E53E3E'}
+                                />
+                            </View>
+                        </View>
+                    )}
+
+                    {/* Reveal impostors */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionLabel}>{t.online.the_impostor_was}</Text>
+                        {impostors.map(imp => (
+                            <View key={imp.id} style={styles.impostorRevealCard}>
+                                <Image source={AVATAR_ASSETS[imp.avatar]} style={styles.impostorAvatar} />
+                                <Text style={styles.impostorName}>
+                                    {imp.name} {imp.id === myId ? `(${t.online.you})` : ''}
+                                </Text>
+                                <Ionicons name="skull" size={20} color="#FC8181" />
+                            </View>
+                        ))}
                     </View>
-                )}
-            </View>
+
+                    {/* The secret word */}
+                    {room.currentWord && (
+                        <View style={styles.section}>
+                            <Text style={styles.sectionLabel}>{t.online.the_word_was}</Text>
+                            <View style={styles.wordCard}>
+                                <Text style={styles.secretWord}>{room.currentWord.word}</Text>
+                                <Text style={styles.wordCategory}>{room.currentWord.category}</Text>
+                            </View>
+                        </View>
+                    )}
+
+                    {/* All clues written */}
+                    {players.some(p => p.clue) && (
+                        <View style={styles.section}>
+                            <Text style={styles.sectionLabel}>{t.online.clues_so_far}</Text>
+                            {sortedPlayers.filter(p => p.clue).map(p => {
+                                const isImp = impostorIds.includes(p.id);
+                                return (
+                                    <View key={p.id} style={[
+                                        styles.clueRevealCard,
+                                        isImp && styles.clueRevealCardImpostor
+                                    ]}>
+                                        <Image source={AVATAR_ASSETS[p.avatar]} style={styles.clueRevealAvatar} />
+                                        <View style={styles.clueRevealContent}>
+                                            <View style={styles.clueRevealNameRow}>
+                                                <Text style={styles.clueRevealName}>{p.name}</Text>
+                                                {isImp && (
+                                                    <View style={styles.impostorBadge}>
+                                                        <Text style={styles.impostorBadgeText}>IMPOSTOR</Text>
+                                                    </View>
+                                                )}
+                                            </View>
+                                            <Text style={styles.clueRevealText}>"{p.clue}"</Text>
+                                        </View>
+                                        <Text style={styles.clueVoteCount}>
+                                            {voteCounts[p.id] || 0} 🗳
+                                        </Text>
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    )}
+
+                    {/* Footer host controls */}
+                    <View style={styles.footer}>
+                        {!gameState.isHost ? (
+                            <Text style={styles.waitingText}>{t.online.waiting_host}</Text>
+                        ) : (
+                            <>
+                                <TouchableOpacity
+                                    style={[styles.actionBtn, { backgroundColor: '#48BB78' }]}
+                                    onPress={nextRound}
+                                >
+                                    <Ionicons name="refresh" size={20} color="#FFF" style={{ marginRight: 8 }} />
+                                    <Text style={styles.actionBtnText}>{t.online.play_again}</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.actionBtn, { backgroundColor: '#718096', marginTop: 10 }]}
+                                    onPress={() => navigation.replace('OnlineLobby')}
+                                >
+                                    <Text style={styles.actionBtnText}>{t.online.back_lobby}</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+                    </View>
+                </Animated.View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#2C1A0E',
-    },
-    header: {
+    container: { flex: 1 },
+    scroll: { padding: 20, paddingBottom: 40 },
+    resultCard: {
+        borderRadius: 24,
+        borderWidth: 2,
+        padding: 28,
         alignItems: 'center',
-        paddingVertical: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(255,255,255,0.1)',
+        marginBottom: 24,
+        backgroundColor: 'rgba(255,255,255,0.06)',
     },
-    headerTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#FFF',
+    resultEmoji: { fontSize: 64, marginBottom: 12 },
+    resultTitle: {
+        fontSize: 28,
+        fontWeight: '900',
+        textAlign: 'center',
+        letterSpacing: 1,
+        marginBottom: 8,
     },
-    subTitle: {
-        fontSize: 16,
-        color: '#F9E675',
-        marginTop: 5,
-        fontWeight: 'bold',
+    resultSubtitle: {
+        color: '#A0AEC0',
+        fontSize: 15,
+        textAlign: 'center',
+        lineHeight: 22,
     },
-    listContent: {
-        padding: 20,
-    },
-    playerCard: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#FFF',
-        borderRadius: 15,
-        padding: 12,
+    section: { marginBottom: 20 },
+    sectionLabel: {
+        color: '#718096',
+        fontSize: 11,
+        fontWeight: '700',
+        letterSpacing: 1.5,
+        textTransform: 'uppercase',
         marginBottom: 10,
     },
-    playerCardEliminated: {
-        backgroundColor: '#FFD2D2',
-        borderWidth: 2,
-        borderColor: '#E53E3E',
-    },
-    avatarContainer: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#F0F4FF',
-        marginRight: 15,
-        overflow: 'hidden',
-    },
-    avatarImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'contain',
-    },
-    playerInfo: {
-        flex: 1,
-    },
-    playerName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    eliminatedText: {
-        fontSize: 12,
-        color: '#E53E3E',
-        fontWeight: 'bold',
-    },
-    voteBubble: {
-        backgroundColor: '#5B7FDB',
-        borderRadius: 15,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-    },
-    voteText: {
-        color: '#FFF',
-        fontWeight: 'bold',
-    },
-    footer: {
-        padding: 20,
-        backgroundColor: '#1A1008',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-    },
-    waitingText: {
-        color: '#FFF',
-        fontSize: 16,
-        textAlign: 'center',
-        fontStyle: 'italic',
-    },
-    hostControls: {
+    eliminatedCard: {
         flexDirection: 'row',
-        gap: 10,
-        justifyContent: 'space-between',
-    },
-    hostButton: {
-        flex: 1,
-        paddingVertical: 15,
-        borderRadius: 12,
         alignItems: 'center',
+        backgroundColor: 'rgba(255,255,255,0.07)',
+        borderRadius: 16,
+        padding: 14,
+        borderWidth: 2,
     },
-    hostButtonText: {
-        color: '#FFF',
-        fontWeight: 'bold',
-        fontSize: 16,
+    eliminatedAvatar: {
+        width: 52, height: 52, borderRadius: 26, backgroundColor: '#2D3748', marginRight: 14,
     },
+    eliminatedInfo: { flex: 1 },
+    eliminatedName: { color: '#FFF', fontSize: 18, fontWeight: '800' },
+    eliminatedRole: { fontSize: 13, fontWeight: '700', marginTop: 2 },
+    impostorRevealCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(229,62,62,0.15)',
+        borderRadius: 14,
+        padding: 12,
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(229,62,62,0.3)',
+    },
+    impostorAvatar: {
+        width: 44, height: 44, borderRadius: 22, backgroundColor: '#2D3748', marginRight: 12,
+    },
+    impostorName: { flex: 1, color: '#FC8181', fontSize: 16, fontWeight: '700' },
+    wordCard: {
+        backgroundColor: 'rgba(255,255,255,0.07)',
+        borderRadius: 16,
+        padding: 20,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.12)',
+    },
+    secretWord: { color: '#FFF', fontSize: 32, fontWeight: '900', marginBottom: 6 },
+    wordCategory: {
+        color: '#718096',
+        fontSize: 13,
+        backgroundColor: 'rgba(255,255,255,0.08)',
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        borderRadius: 8,
+    },
+    clueRevealCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255,255,255,0.06)',
+        borderRadius: 12,
+        padding: 12,
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+    },
+    clueRevealCardImpostor: {
+        backgroundColor: 'rgba(229,62,62,0.12)',
+        borderColor: 'rgba(229,62,62,0.3)',
+    },
+    clueRevealAvatar: {
+        width: 38, height: 38, borderRadius: 19, backgroundColor: '#2D3748', marginRight: 12,
+    },
+    clueRevealContent: { flex: 1 },
+    clueRevealNameRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 3 },
+    clueRevealName: { color: '#A0AEC0', fontSize: 12, fontWeight: '600', marginRight: 6 },
+    impostorBadge: {
+        backgroundColor: '#E53E3E',
+        borderRadius: 4,
+        paddingHorizontal: 5,
+        paddingVertical: 1,
+    },
+    impostorBadgeText: { color: '#FFF', fontSize: 8, fontWeight: '800' },
+    clueRevealText: { color: '#FFF', fontSize: 15, fontWeight: '700' },
+    clueVoteCount: { color: '#718096', fontSize: 13 },
+    footer: { marginTop: 10 },
+    waitingText: {
+        color: '#718096', fontSize: 15, textAlign: 'center', fontStyle: 'italic',
+    },
+    actionBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 14,
+        paddingVertical: 16,
+    },
+    actionBtnText: { color: '#FFF', fontSize: 17, fontWeight: '900' },
 });

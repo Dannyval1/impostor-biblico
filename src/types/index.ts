@@ -135,9 +135,12 @@ export interface OnlinePlayer {
     vote?: string | null; // ID of player voted for
     isEliminated: boolean;
     score: number;
+    clue?: string | null; // Clue written during discussion phase
 }
 
-export type RoomStatus = 'waiting' | 'playing' | 'voting' | 'results' | 'finished';
+export type DiscussionMode = 'turns' | 'simultaneous';
+
+export type RoomStatus = 'waiting' | 'playing' | 'clues' | 'voting' | 'results' | 'finished';
 
 export interface OnlineRoom {
     id: string; // 6-character code
@@ -153,6 +156,8 @@ export interface OnlineRoom {
         isPremiumRoom: boolean;
         impostorHint: boolean;
         isConfigured: boolean;
+        discussionMode: DiscussionMode;  // 'turns' | 'simultaneous'
+        clueDuration: number;            // seconds: 30 for turns, 60 for simultaneous
     };
     currentWord?: Word;
     currentImpostors?: string[]; // List of IDs
@@ -162,6 +167,10 @@ export interface OnlineRoom {
     lastEliminatedId?: string | null;
     voteCounts?: Record<string, number>;
     isTie?: boolean;
+    // Discussion phase
+    turnOrder?: string[];        // Ordered list of playerIds for turns mode
+    currentTurnIndex?: number;  // Index into turnOrder
+    cluePhaseStartTime?: number; // When clue phase started (for timer)
 }
 
 export interface OnlineGameState {
