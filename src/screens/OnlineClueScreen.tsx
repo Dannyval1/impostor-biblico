@@ -11,10 +11,11 @@ import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { OnlinePlayer } from '../types';
+import { EmojiReactionBar } from '../components/EmojiReactionBar';
 
 export default function OnlineClueScreen() {
     const navigation = useNavigation<any>();
-    const { gameState, submitClue, advanceTurn, startVoting } = useOnlineGame();
+    const { gameState, submitClue, advanceTurn, startVoting, openRoundDecisionAfterSimultaneousReveal } = useOnlineGame();
     const { t } = useTranslation();
 
     const [clueText, setClueText] = useState('');
@@ -22,6 +23,7 @@ export default function OnlineClueScreen() {
 
     const room = gameState.room!;
     const mode = room.settings.discussionMode;
+    const isSimultaneousReveal = room.status === 'simultaneous_reveal' && mode === 'simultaneous';
     const turnOrder = room.turnOrder || [];
     const currentTurnIndex = room.currentTurnIndex ?? 0;
     const currentTurnPlayerId = turnOrder[currentTurnIndex];
@@ -34,11 +36,20 @@ export default function OnlineClueScreen() {
     const flashAnim = useRef(new Animated.Value(1)).current;
 
     const players = Object.values(room.players).filter(p => !p.isEliminated);
+    const cluesFingerprint = players.map(p => `${p.id}:${p.clue ?? ''}`).sort().join('|');
     const me = room.players[myId];
     const currentTurnPlayer = room.players[currentTurnPlayerId];
 
     // Clues collected so far (turns mode shows them as they come)
     const submittedClues = players.filter(p => p.clue !== null && p.clue !== undefined);
+
+    // Reset submission state when my clue is cleared (new clue round)
+    useEffect(() => {
+        if (me && me.clue == null && hasSubmitted) {
+            setHasSubmitted(false);
+            setClueText('');
+        }
+    }, [me?.clue]);
 
     // Navigate when status changes
     useEffect(() => {
@@ -81,9 +92,14 @@ export default function OnlineClueScreen() {
             if (remaining === 0 && isHost) {
                 if (mode === 'turns') {
                     advanceTurn();
-                } else {
-                    // Force go to voting even if not all submitted
-                    startVoting();
+                } else if (mode === 'simultaneous' && room.status === 'clues') {
+                    const activePlayers = Object.values(room.players).filter(
+                        p => !p.isEliminated && p.isConnected !== false
+                    );
+                    const allIn = activePlayers.length > 0 && activePlayers.every(p => p.clue != null);
+                    if (!allIn) {
+                        startVoting();
+                    }
                 }
             }
         };
@@ -91,20 +107,22 @@ export default function OnlineClueScreen() {
         update();
         const interval = setInterval(update, 1000);
         return () => clearInterval(interval);
-    }, [room.cluePhaseStartTime]);
+    }, [room.cluePhaseStartTime, room.status, mode, isHost, cluesFingerprint]);
+
+    // In turns mode, host auto-advances when the current turn player submits
+    useEffect(() => {
+        if (mode !== 'turns' || !isHost || !currentTurnPlayer) return;
+        if (currentTurnPlayer.clue != null) {
+            const timeout = setTimeout(() => advanceTurn(), 1500);
+            return () => clearTimeout(timeout);
+        }
+    }, [currentTurnPlayer?.clue, currentTurnIndex]);
 
     const handleSubmitClue = async () => {
         const trimmed = clueText.trim();
         if (!trimmed) return;
         await submitClue(trimmed);
         setHasSubmitted(true);
-
-        // In turns mode, host advances to next turn
-        if (mode === 'turns' && isHost) {
-            // Small delay so everyone sees the clue appear
-            setTimeout(() => advanceTurn(), 1500);
-        }
-        // In simultaneous mode, context auto-advances when all submitted
     };
 
     const formatTime = (s: number) => {
@@ -123,9 +141,11 @@ export default function OnlineClueScreen() {
             >
                 {/* Header */}
                 <View style={styles.header}>
-                    <Text style={styles.phaseLabel}>{t.online.clue_phase_title}</Text>
+                    <Text style={styles.phaseLabel}>
+                        {isSimultaneousReveal ? t.online.simultaneous_reveal_phase : t.online.clue_phase_title}
+                    </Text>
                     <Animated.Text style={[styles.timer, { color: timerColor, opacity: flashAnim }]}>
-                        {formatTime(secondsLeft)}
+                        {isSimultaneousReveal ? '—' : formatTime(secondsLeft)}
                     </Animated.Text>
                     <Text style={styles.modeLabel}>
                         {mode === 'turns' ? t.online.mode_turns : t.online.mode_simultaneous}
@@ -145,11 +165,11 @@ export default function OnlineClueScreen() {
                                             source={AVATAR_ASSETS[currentTurnPlayer.avatar]}
                                             style={styles.spotlightAvatar}
                                         />
+                                        <Text style={styles.spotlightName}>
+                                            {isMyTurn ? me?.name : currentTurnPlayer.name}
+                                        </Text>
                                         <Text style={styles.spotlightLabel}>
                                             {isMyTurn ? t.online.your_turn : t.online.watching_player}
-                                        </Text>
-                                        <Text style={styles.spotlightName}>
-                                            {isMyTurn ? t.online.your_turn : currentTurnPlayer.name}
                                         </Text>
                                         <Text style={styles.turnProgress}>
                                             {currentTurnIndex + 1} / {turnOrder.length}
@@ -214,8 +234,47 @@ export default function OnlineClueScreen() {
                         </>
                     )}
 
-                    {/* SIMULTANEOUS MODE */}
-                    {mode === 'simultaneous' && (
+                    {/* SIMULTANEOUS — revelación: todas las pistas antes del modal de decisión */}
+                    {mode === 'simultaneous' && isSimultaneousReveal && (
+                        <>
+                            <View style={styles.revealIntroCard}>
+                                <Ionicons name="eye-outline" size={40} color="#F6E05E" />
+                                <Text style={styles.revealIntroTitle}>{t.online.simultaneous_reveal_title}</Text>
+                                <Text style={styles.revealIntroSubtitle}>{t.online.simultaneous_reveal_subtitle}</Text>
+                            </View>
+                            {submittedClues.length > 0 && (
+                                <View style={styles.cluesSection}>
+                                    <Text style={styles.cluesSectionTitle}>{t.online.clues_so_far}</Text>
+                                    {submittedClues.map(p => (
+                                        <View key={p.id} style={styles.clueCard}>
+                                            <Image source={AVATAR_ASSETS[p.avatar]} style={styles.clueAvatar} />
+                                            <View style={styles.clueCardContent}>
+                                                <Text style={styles.clueName}>{p.name}</Text>
+                                                <Text style={styles.clueText}>"{p.clue}"</Text>
+                                            </View>
+                                        </View>
+                                    ))}
+                                </View>
+                            )}
+                            {isHost ? (
+                                <TouchableOpacity
+                                    style={styles.continueDecisionBtn}
+                                    onPress={() => { void openRoundDecisionAfterSimultaneousReveal(); }}
+                                    activeOpacity={0.85}
+                                >
+                                    <Text style={styles.continueDecisionBtnText}>{t.online.continue_to_group_decision}</Text>
+                                    <Ionicons name="arrow-forward-circle" size={22} color="#1A1A2E" />
+                                </TouchableOpacity>
+                            ) : (
+                                <View style={styles.waitingHostRevealBox}>
+                                    <Text style={styles.waitingHostRevealText}>{t.online.waiting_host_reveal_decision}</Text>
+                                </View>
+                            )}
+                        </>
+                    )}
+
+                    {/* SIMULTANEOUS MODE — escribir pistas */}
+                    {mode === 'simultaneous' && !isSimultaneousReveal && (
                         <>
                             {/* My word reminder */}
                             {me && (
@@ -288,6 +347,8 @@ export default function OnlineClueScreen() {
                         </>
                     )}
                 </ScrollView>
+
+                <EmojiReactionBar />
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
@@ -551,5 +612,59 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 13,
         marginBottom: 20,
+    },
+    revealIntroCard: {
+        backgroundColor: 'rgba(246,224,94,0.12)',
+        borderRadius: 20,
+        padding: 22,
+        alignItems: 'center',
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: 'rgba(246,224,94,0.35)',
+    },
+    revealIntroTitle: {
+        color: '#F6E05E',
+        fontSize: 20,
+        fontWeight: '900',
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    revealIntroSubtitle: {
+        color: '#A0AEC0',
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 8,
+        lineHeight: 20,
+    },
+    continueDecisionBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
+        backgroundColor: '#F6E05E',
+        borderRadius: 14,
+        paddingVertical: 16,
+        paddingHorizontal: 18,
+        marginTop: 8,
+    },
+    continueDecisionBtnText: {
+        color: '#1A1A2E',
+        fontSize: 15,
+        fontWeight: '900',
+        letterSpacing: 0.3,
+    },
+    waitingHostRevealBox: {
+        backgroundColor: 'rgba(255,255,255,0.06)',
+        borderRadius: 14,
+        padding: 18,
+        marginTop: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+    },
+    waitingHostRevealText: {
+        color: '#A0AEC0',
+        fontSize: 15,
+        textAlign: 'center',
+        lineHeight: 22,
     },
 });

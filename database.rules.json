@@ -1,0 +1,155 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomCode": {
+        ".read": "data.child('players').child(auth != null ? auth.uid : '').exists() || !data.exists()",
+        ".write": "!data.exists()",
+
+        "hostId": {
+          ".write": "data.parent().child('hostId').val() === auth.uid || !data.exists()",
+          ".validate": "newData.isString()"
+        },
+
+        "originalHostId": {
+          ".write": "!data.exists()",
+          ".validate": "newData.isString()"
+        },
+
+        "status": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "newData.isString() && newData.val().matches(/^(waiting|playing|clues|simultaneous_reveal|deciding|voting|results|elimination_choice|finished)$/)"
+        },
+
+        "settings": {
+          "isPremiumRoom": {
+            ".write": "!data.exists()",
+            ".validate": "newData.isBoolean()"
+          },
+          "maxPlayers": {
+            ".write": "!data.exists()",
+            ".validate": "newData.isNumber() && newData.val() >= 3 && newData.val() <= 20"
+          },
+          "$other": {
+            ".write": "data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": true
+          }
+        },
+
+        "premiumCategoriesSnapshot": {
+          ".write": "!data.exists()",
+          ".validate": true
+        },
+
+        "players": {
+          "$playerId": {
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+
+            "clue": {
+              ".write": "$playerId === auth.uid || data.parent().parent().parent().child('hostId').val() === auth.uid",
+              ".validate": "newData.isString() && newData.val().length <= 50"
+            },
+            "vote": {
+              ".write": "$playerId === auth.uid || data.parent().parent().parent().child('hostId').val() === auth.uid",
+              ".validate": "newData.isString()"
+            },
+            "role": {
+              ".read": "$playerId === auth.uid",
+              ".write": "data.parent().parent().parent().child('hostId').val() === auth.uid"
+            },
+            "isConnected": {
+              ".write": "$playerId === auth.uid || data.parent().parent().parent().child('hostId').val() === auth.uid"
+            },
+            "lastSeen": {
+              ".write": "$playerId === auth.uid"
+            },
+            "disconnectedAt": {
+              ".write": "$playerId === auth.uid"
+            }
+          }
+        },
+
+        "reactions": {
+          "$reactionId": {
+            ".write": true,
+            ".validate": "newData.hasChildren(['emoji', 'playerName', 'playerId', 'timestamp'])"
+          }
+        },
+
+        "currentWord": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "currentImpostors": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "currentRoundStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "cluePhaseStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "votingPhaseStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "turnOrder": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "currentTurnIndex": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "voteCounts": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "isTie": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "lastEliminatedId": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "winner": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "roundDecisionVotes": {
+          "$playerId": {
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": "newData.isString() && newData.val().matches(/^(go_vote|another_round)$/)"
+          },
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "roundDecisionStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "clueRound": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "newData.isNumber()"
+        },
+        "postResultVotes": {
+          "$playerId": {
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": "newData.isString() && newData.val().matches(/^(play_again|leave)$/)"
+          },
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "postResultStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "eliminationChoiceVotes": {
+          "$playerId": {
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": "newData.isString() && newData.val().matches(/^(continue_same|reveal_impostor)$/)"
+          },
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "eliminationChoiceStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "lastActivity": {
+          ".write": true
+        },
+        "createdAt": {
+          ".write": "!data.exists()"
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import {
     View, Text, StyleSheet, TouchableOpacity, ScrollView,
-    Image, Animated, Easing,
+    Image, Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -9,17 +9,17 @@ import { useOnlineGame } from '../context/OnlineGameContext';
 import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
+import { EmojiReactionBar } from '../components/EmojiReactionBar';
+import { getWordCategoryDisplayLabel } from '../utils/wordCategoryLabel';
 
 export default function OnlineResultsScreen() {
     const navigation = useNavigation<any>();
-    const { gameState, nextRound, continueRound } = useOnlineGame();
+    const { gameState, nextRound, resetToLobby, submitEliminationChoice } = useOnlineGame();
     const { t } = useTranslation();
 
     const room = gameState.room;
     const myId = gameState.playerId!;
-    const me = room?.players[myId];
 
-    // Animations
     const scaleAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -34,41 +34,43 @@ export default function OnlineResultsScreen() {
         ]).start();
     }, []);
 
-    // Navigate on status change
     useEffect(() => {
         if (!room) return;
         if (room.status === 'playing') navigation.replace('OnlineReveal');
-        else if (room.status === 'clues') navigation.replace('OnlineClue');
+        else if (room.status === 'clues' || room.status === 'simultaneous_reveal') navigation.replace('OnlineClue');
         else if (room.status === 'voting') navigation.replace('OnlineVoting');
         else if (room.status === 'waiting') navigation.replace('OnlineLobby');
         else if (room.status === 'finished') navigation.replace('OnlineLobby');
     }, [room?.status]);
 
-    if (!room || room.status !== 'results') return null;
+    if (!room || (room.status !== 'results' && room.status !== 'elimination_choice')) return null;
+
+    const isEliminationChoicePhase = room.status === 'elimination_choice';
 
     const players = Object.values(room.players);
     const voteCounts = room.voteCounts || {};
     const isTie = room.isTie;
     const eliminatedId = room.lastEliminatedId;
     const eliminatedPlayer = players.find(p => p.id === eliminatedId);
-    const isEliminated = eliminatedPlayer?.id === myId;
     const impostorIds = room.currentImpostors || [];
     const amIImpostor = impostorIds.includes(myId);
     const eliminatedIsImpostor = impostorIds.includes(eliminatedId || '');
 
-    // Win/loss from my perspective
     const civiliansWon = !isTie && eliminatedIsImpostor;
     const impostorsWon = !isTie && !eliminatedIsImpostor;
 
     const iWon = amIImpostor ? impostorsWon : civiliansWon;
 
-    // Colors and messaging
-    const bgColor = iWon ? '#0F2027' : '#1A0000';
-    const accentColor = iWon ? '#48BB78' : '#E53E3E';
-    const titleEmoji = iWon ? '🎉' : '💀';
-    const tieAmbiguity = isTie;
+    const choiceEligible = players.filter(p => !p.isEliminated && p.isConnected !== false);
+    const myEliminationChoice = room.eliminationChoiceVotes?.[myId];
+    const iCanVoteEliminationChoice =
+        isEliminationChoicePhase && choiceEligible.some(p => p.id === myId);
 
-    // Sorted players by votes
+    const bgColor = isEliminationChoicePhase ? '#2C1A0E' : (iWon ? '#0F2027' : '#1A0000');
+    const accentColor = isEliminationChoicePhase ? '#F6AD55' : (iWon ? '#48BB78' : '#E53E3E');
+    const titleEmoji = isEliminationChoicePhase ? '❓' : (iWon ? '🎉' : '💀');
+    const isTieResult = isTie;
+
     const sortedPlayers = [...players].sort((a, b) =>
         (voteCounts[b.id] || 0) - (voteCounts[a.id] || 0)
     );
@@ -76,13 +78,15 @@ export default function OnlineResultsScreen() {
     const impostors = players.filter(p => impostorIds.includes(p.id));
 
     const getTitle = () => {
-        if (isTie) return t.online.tie_result;
+        if (isEliminationChoicePhase) return t.online.wrong_civilian_choice_title;
+        if (isTieResult) return t.online.tie_result;
         if (amIImpostor) return iWon ? t.online.impostor_escaped : t.online.you_were_caught;
         return iWon ? t.online.civilians_win_title : t.online.impostors_win_title;
     };
 
     const getSubtitle = () => {
-        if (isTie) return 'Nadie fue eliminado esta ronda';
+        if (isEliminationChoicePhase) return t.online.wrong_civilian_choice_subtitle;
+        if (isTieResult) return 'Nadie fue eliminado esta ronda';
         if (civiliansWon) return t.online.good_job_civils;
         if (impostorsWon) return t.online.impostor_won;
         return '';
@@ -92,13 +96,12 @@ export default function OnlineResultsScreen() {
         <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
             <ScrollView contentContainerStyle={styles.scroll}>
 
-                {/* Main result card */}
                 <Animated.View style={[
                     styles.resultCard,
                     { borderColor: accentColor, transform: [{ scale: scaleAnim }] }
                 ]}>
                     <Text style={styles.resultEmoji}>
-                        {isTie ? '🤝' : titleEmoji}
+                        {isTieResult && !isEliminationChoicePhase ? '🤝' : titleEmoji}
                     </Text>
                     <Text style={[styles.resultTitle, { color: accentColor }]}>
                         {getTitle()}
@@ -107,8 +110,7 @@ export default function OnlineResultsScreen() {
                 </Animated.View>
 
                 <Animated.View style={{ opacity: fadeAnim }}>
-                    {/* Who was eliminated */}
-                    {!isTie && eliminatedPlayer && (
+                    {!isTieResult && eliminatedPlayer && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>
                                 {eliminatedIsImpostor
@@ -141,7 +143,7 @@ export default function OnlineResultsScreen() {
                         </View>
                     )}
 
-                    {/* Reveal impostors */}
+                    {!isEliminationChoicePhase && (
                     <View style={styles.section}>
                         <Text style={styles.sectionLabel}>{t.online.the_impostor_was}</Text>
                         {impostors.map(imp => (
@@ -154,20 +156,25 @@ export default function OnlineResultsScreen() {
                             </View>
                         ))}
                     </View>
+                    )}
 
-                    {/* The secret word */}
-                    {room.currentWord && (
+                    {!isEliminationChoicePhase && room.currentWord && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>{t.online.the_word_was}</Text>
                             <View style={styles.wordCard}>
                                 <Text style={styles.secretWord}>{room.currentWord.word}</Text>
-                                <Text style={styles.wordCategory}>{room.currentWord.category}</Text>
+                                <Text style={styles.wordCategory}>
+                                    {getWordCategoryDisplayLabel(
+                                        room.currentWord,
+                                        t.setup.categories_list as Record<string, string>,
+                                        room.settings.customCategories
+                                    )}
+                                </Text>
                             </View>
                         </View>
                     )}
 
-                    {/* All clues written */}
-                    {players.some(p => p.clue) && (
+                    {!isEliminationChoicePhase && players.some(p => p.clue) && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>{t.online.clues_so_far}</Text>
                             {sortedPlayers.filter(p => p.clue).map(p => {
@@ -198,26 +205,76 @@ export default function OnlineResultsScreen() {
                         </View>
                     )}
 
-                    {/* Footer host controls */}
+                    {!isEliminationChoicePhase && !room.settings.isPremiumRoom && (
+                        <TouchableOpacity
+                            style={styles.premiumCta}
+                            onPress={() => navigation.navigate('Paywall')}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.premiumCtaText}>
+                                ¿Te gustó jugar online? Con <Text style={{ fontWeight: '900' }}>Premium</Text> desbloqueas más categorías, salas más grandes y sin anuncios para todos.
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+
+                    <EmojiReactionBar />
+
                     <View style={styles.footer}>
-                        {!gameState.isHost ? (
-                            <Text style={styles.waitingText}>{t.online.waiting_host}</Text>
+                        {isEliminationChoicePhase ? (
+                            iCanVoteEliminationChoice && !myEliminationChoice ? (
+                                <View style={styles.eliminationChoiceRow}>
+                                    <TouchableOpacity
+                                        style={[styles.eliminationChoiceBtn, styles.eliminationChoiceBtnContinue]}
+                                        onPress={() => submitEliminationChoice('continue_same')}
+                                        activeOpacity={0.85}
+                                    >
+                                        <Ionicons name="play-forward" size={22} color="#1A202C" />
+                                        <Text style={styles.eliminationChoiceBtnTextDark}>{t.online.continue_same_word_btn}</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[styles.eliminationChoiceBtn, styles.eliminationChoiceBtnReveal]}
+                                        onPress={() => submitEliminationChoice('reveal_impostor')}
+                                        activeOpacity={0.85}
+                                    >
+                                        <Ionicons name="eye" size={22} color="#FFF" />
+                                        <Text style={styles.eliminationChoiceBtnText}>{t.online.reveal_impostor_btn}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ) : isEliminationChoicePhase && !choiceEligible.some(p => p.id === myId) ? (
+                                <View style={styles.waitingHostBox}>
+                                    <Text style={styles.waitingHostTitle}>{t.online.elimination_choice_eliminated_title}</Text>
+                                    <Text style={styles.waitingHostHint}>{t.online.elimination_choice_eliminated_hint}</Text>
+                                </View>
+                            ) : (
+                                <View style={styles.waitingHostBox}>
+                                    <Text style={styles.waitingHostTitle}>{t.online.elimination_choice_waiting}</Text>
+                                    <Text style={styles.waitingHostHint}>{t.online.elimination_choice_waiting_hint}</Text>
+                                </View>
+                            )
+                        ) : gameState.isHost ? (
+                            <View style={styles.hostActions}>
+                                <TouchableOpacity
+                                    style={[styles.hostChoiceBtn, styles.hostChoiceBtnPlay]}
+                                    onPress={() => { nextRound().catch(() => {}); }}
+                                    activeOpacity={0.85}
+                                >
+                                    <Ionicons name="refresh" size={20} color="#FFF" />
+                                    <Text style={styles.hostChoiceBtnText}>{t.online.play_again}</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.hostChoiceBtn, styles.hostChoiceBtnLobby]}
+                                    onPress={() => { resetToLobby().catch(() => {}); }}
+                                    activeOpacity={0.85}
+                                >
+                                    <Ionicons name="exit-outline" size={20} color="#FFF" />
+                                    <Text style={styles.hostChoiceBtnText}>{t.online.back_lobby}</Text>
+                                </TouchableOpacity>
+                            </View>
                         ) : (
-                            <>
-                                <TouchableOpacity
-                                    style={[styles.actionBtn, { backgroundColor: '#48BB78' }]}
-                                    onPress={nextRound}
-                                >
-                                    <Ionicons name="refresh" size={20} color="#FFF" style={{ marginRight: 8 }} />
-                                    <Text style={styles.actionBtnText}>{t.online.play_again}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.actionBtn, { backgroundColor: '#718096', marginTop: 10 }]}
-                                    onPress={() => navigation.replace('OnlineLobby')}
-                                >
-                                    <Text style={styles.actionBtnText}>{t.online.back_lobby}</Text>
-                                </TouchableOpacity>
-                            </>
+                            <View style={styles.waitingHostBox}>
+                                <Text style={styles.waitingHostTitle}>{t.online.waiting_host_results}</Text>
+                                <Text style={styles.waitingHostHint}>{t.online.waiting_host_results_hint}</Text>
+                            </View>
                         )}
                     </View>
                 </Animated.View>
@@ -269,7 +326,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     eliminatedAvatar: {
-        width: 52, height: 52, borderRadius: 26, backgroundColor: '#2D3748', marginRight: 14,
+        width: 52, height: 52, borderRadius: 10, backgroundColor: '#2D3748', marginRight: 14,
     },
     eliminatedInfo: { flex: 1 },
     eliminatedName: { color: '#FFF', fontSize: 18, fontWeight: '800' },
@@ -285,7 +342,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(229,62,62,0.3)',
     },
     impostorAvatar: {
-        width: 44, height: 44, borderRadius: 22, backgroundColor: '#2D3748', marginRight: 12,
+        width: 44, height: 44, borderRadius: 10, backgroundColor: '#2D3748', marginRight: 12,
     },
     impostorName: { flex: 1, color: '#FC8181', fontSize: 16, fontWeight: '700' },
     wordCard: {
@@ -320,7 +377,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(229,62,62,0.3)',
     },
     clueRevealAvatar: {
-        width: 38, height: 38, borderRadius: 19, backgroundColor: '#2D3748', marginRight: 12,
+        width: 38, height: 38, borderRadius: 10, backgroundColor: '#2D3748', marginRight: 12,
     },
     clueRevealContent: { flex: 1 },
     clueRevealNameRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 3 },
@@ -335,15 +392,96 @@ const styles = StyleSheet.create({
     clueRevealText: { color: '#FFF', fontSize: 15, fontWeight: '700' },
     clueVoteCount: { color: '#718096', fontSize: 13 },
     footer: { marginTop: 10 },
-    waitingText: {
-        color: '#718096', fontSize: 15, textAlign: 'center', fontStyle: 'italic',
+    hostActions: {
+        flexDirection: 'row',
+        gap: 10,
     },
-    actionBtn: {
+    hostChoiceBtn: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 14,
+        gap: 8,
         paddingVertical: 16,
+        borderRadius: 14,
+        borderWidth: 2,
     },
-    actionBtnText: { color: '#FFF', fontSize: 17, fontWeight: '900' },
+    hostChoiceBtnPlay: {
+        backgroundColor: 'rgba(72,187,120,0.25)',
+        borderColor: 'rgba(72,187,120,0.5)',
+    },
+    hostChoiceBtnLobby: {
+        backgroundColor: 'rgba(113,128,150,0.25)',
+        borderColor: 'rgba(113,128,150,0.45)',
+    },
+    hostChoiceBtnText: {
+        color: '#FFF',
+        fontSize: 13,
+        fontWeight: '800',
+    },
+    waitingHostBox: {
+        backgroundColor: 'rgba(255,255,255,0.06)',
+        borderRadius: 14,
+        padding: 18,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+    },
+    waitingHostTitle: {
+        color: '#E2E8F0',
+        fontSize: 16,
+        fontWeight: '700',
+        textAlign: 'center',
+        marginBottom: 8,
+    },
+    waitingHostHint: {
+        color: '#718096',
+        fontSize: 13,
+        textAlign: 'center',
+        lineHeight: 20,
+    },
+    premiumCta: {
+        backgroundColor: 'rgba(91,127,219,0.15)',
+        borderWidth: 1,
+        borderColor: 'rgba(91,127,219,0.3)',
+        borderRadius: 14,
+        padding: 14,
+        marginBottom: 16,
+    },
+    premiumCtaText: {
+        color: '#C3DAFE',
+        fontSize: 12,
+        textAlign: 'center',
+        lineHeight: 18,
+    },
+    eliminationChoiceRow: {
+        flexDirection: 'column',
+        gap: 12,
+    },
+    eliminationChoiceBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
+        paddingVertical: 16,
+        borderRadius: 14,
+        borderWidth: 2,
+    },
+    eliminationChoiceBtnContinue: {
+        backgroundColor: 'rgba(246,173,85,0.35)',
+        borderColor: 'rgba(246,173,85,0.7)',
+    },
+    eliminationChoiceBtnReveal: {
+        backgroundColor: 'rgba(229,62,62,0.35)',
+        borderColor: 'rgba(229,62,62,0.55)',
+    },
+    eliminationChoiceBtnText: {
+        color: '#FFF',
+        fontSize: 14,
+        fontWeight: '800',
+    },
+    eliminationChoiceBtnTextDark: {
+        color: '#1A202C',
+        fontSize: 14,
+        fontWeight: '800',
+    },
 });

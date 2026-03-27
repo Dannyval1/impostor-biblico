@@ -48,7 +48,7 @@ export function RewardedCategoryModal({
                     </Text>
 
                     <Text style={styles.webNote}>
-                        ⚠️ Los anuncios de video no están disponibles en web.
+                        Los anuncios de video no están disponibles en web.
                     </Text>
 
                     <TouchableOpacity style={styles.premiumBtn} onPress={onBuyPremium}>
@@ -62,3 +62,84 @@ export function RewardedCategoryModal({
         </Modal>
     );
 }
+
+const styles = StyleSheet.create({
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+    },
+    sheet: {
+        backgroundColor: '#FFF',
+        borderRadius: 24,
+        padding: 28,
+        width: '100%',
+        maxWidth: 400,
+        alignItems: 'center',
+    },
+    closeBtn: {
+        position: 'absolute',
+        top: 14,
+        right: 14,
+        padding: 4,
+    },
+    lockIconWrapper: {
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        backgroundColor: '#FFFBEB',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: '800',
+        color: '#1A202C',
+        textAlign: 'center',
+        marginBottom: 8,
+    },
+    categoryName: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#5B7FDB',
+        marginBottom: 8,
+    },
+    subtitle: {
+        fontSize: 14,
+        color: '#718096',
+        textAlign: 'center',
+        lineHeight: 20,
+        marginBottom: 16,
+    },
+    webNote: {
+        fontSize: 12,
+        color: '#A0AEC0',
+        textAlign: 'center',
+        marginBottom: 20,
+        fontStyle: 'italic',
+    },
+    premiumBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F9E675',
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 14,
+        width: '100%',
+        marginBottom: 10,
+    },
+    premiumBtnText: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#1A202C',
+    },
+    premiumDesc: {
+        fontSize: 11,
+        color: '#A0AEC0',
+        textAlign: 'center',
+    },
+});

@@ -56,6 +56,8 @@ export interface Word {
     id: string;
     word: string;
     category: Category;
+    /** Nombre legible para categorías personalizadas (Firebase / UI). */
+    categoryDisplayName?: string;
     difficulty: 'easy' | 'medium' | 'hard';
     hint?: string;
     impostorHint?: string;
@@ -126,27 +128,53 @@ export type GameAction =
 export type OnlinePlayerRole = 'civilian' | 'impostor';
 
 export interface OnlinePlayer {
-    id: string; // Firebase Auth UID or device ID
+    id: string;
     name: string;
     avatar: import('./index').Avatar;
     isHost: boolean;
     isReady: boolean;
     role?: OnlinePlayerRole;
-    vote?: string | null; // ID of player voted for
+    vote?: string | null;
     isEliminated: boolean;
     score: number;
-    clue?: string | null; // Clue written during discussion phase
+    clue?: string | null;
+    lastSeen?: number;
+    isConnected?: boolean;
+    disconnectedAt?: number;
 }
 
 export type DiscussionMode = 'turns' | 'simultaneous';
 
-export type RoomStatus = 'waiting' | 'playing' | 'clues' | 'voting' | 'results' | 'finished';
+export type RoomStatus =
+    | 'waiting'
+    | 'playing'
+    | 'clues'
+    | 'simultaneous_reveal'
+    | 'deciding'
+    | 'voting'
+    | 'results'
+    | 'elimination_choice'
+    | 'finished';
+
+/** Tras eliminar a un civil (4+ jugadores): seguir con la misma palabra o revelar impostor. */
+export type EliminationChoiceVote = 'continue_same' | 'reveal_impostor';
+
+export type RoundDecisionVote = 'go_vote' | 'another_round';
+export type PostResultVote = 'play_again' | 'leave';
+
+export interface OnlineReaction {
+    emoji: string;
+    playerName: string;
+    playerId: string;
+    timestamp: number;
+}
 
 export interface OnlineRoom {
-    id: string; // 6-character code
+    id: string;
     hostId: string;
+    originalHostId: string;
     status: RoomStatus;
-    players: Record<string, OnlinePlayer>; // Map of playerId -> Player
+    players: Record<string, OnlinePlayer>;
     settings: {
         impostorCount: number;
         gameDuration: number | null;
@@ -156,26 +184,38 @@ export interface OnlineRoom {
         isPremiumRoom: boolean;
         impostorHint: boolean;
         isConfigured: boolean;
-        discussionMode: DiscussionMode;  // 'turns' | 'simultaneous'
-        clueDuration: number;            // seconds: 30 for turns, 60 for simultaneous
+        discussionMode: DiscussionMode;
+        clueDuration: number;
+        maxPlayers: number;
     };
+    premiumCategoriesSnapshot?: Category[];
     currentWord?: Word;
-    currentImpostors?: string[]; // List of IDs
+    currentImpostors?: string[];
     currentRoundStartTime?: number;
     createdAt: number;
+    lastActivity?: number;
     winner?: 'impostors' | 'civilians';
     lastEliminatedId?: string | null;
     voteCounts?: Record<string, number>;
     isTie?: boolean;
-    // Discussion phase
-    turnOrder?: string[];        // Ordered list of playerIds for turns mode
-    currentTurnIndex?: number;  // Index into turnOrder
-    cluePhaseStartTime?: number; // When clue phase started (for timer)
+    turnOrder?: string[];
+    currentTurnIndex?: number;
+    cluePhaseStartTime?: number;
+    /** Inicio de la fase de votación (ms); el anfitrión cierra a los 30s aunque falten votos. */
+    votingPhaseStartTime?: number;
+    reactions?: Record<string, OnlineReaction>;
+    roundDecisionVotes?: Record<string, RoundDecisionVote>;
+    roundDecisionStartTime?: number;
+    clueRound?: number;
+    postResultVotes?: Record<string, PostResultVote>;
+    postResultStartTime?: number;
+    eliminationChoiceVotes?: Record<string, EliminationChoiceVote>;
+    eliminationChoiceStartTime?: number;
 }
 
 export interface OnlineGameState {
     roomCode: string | null;
-    playerId: string | null; // Current user's ID
+    playerId: string | null;
     isHost: boolean;
     room: OnlineRoom | null;
     error: string | null;

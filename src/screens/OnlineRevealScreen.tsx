@@ -1,11 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert, Animated, Easing } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { Ionicons } from '@expo/vector-icons';
 import { OnlinePlayerRole } from '../types';
 import { useTranslation } from '../hooks/useTranslation';
+import { getWordCategoryDisplayLabel } from '../utils/wordCategoryLabel';
+
+const AUTO_START_DELAY_S = 8;
+
+function AutoStartBar({ isHost, onStart, label }: { isHost: boolean; onStart: () => void; label: string }) {
+    const [countdown, setCountdown] = useState(AUTO_START_DELAY_S);
+    const progressAnim = useRef(new Animated.Value(1)).current;
+    const startedRef = useRef(false);
+    const onStartRef = useRef(onStart);
+    onStartRef.current = onStart;
+
+    useEffect(() => {
+        Animated.timing(progressAnim, {
+            toValue: 0,
+            duration: AUTO_START_DELAY_S * 1000,
+            easing: Easing.linear,
+            useNativeDriver: false,
+        }).start();
+
+        const interval = setInterval(() => {
+            setCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(interval);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // No llamar onStart dentro del setState de countdown: actualiza el Provider
+    // durante el render de este hijo y React lo rechaza. Diferir a después del commit.
+    useEffect(() => {
+        if (countdown > 0 || !isHost || startedRef.current) return;
+        startedRef.current = true;
+        const t = setTimeout(() => {
+            onStartRef.current();
+        }, 0);
+        return () => clearTimeout(t);
+    }, [countdown, isHost]);
+
+    const progressWidth = progressAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0%', '100%'],
+    });
+
+    return (
+        <View style={styles.autoStartContainer}>
+            <View style={styles.autoStartBarBg}>
+                <Animated.View style={[styles.autoStartBarFill, { width: progressWidth }]} />
+            </View>
+            <Text style={styles.autoStartText}>
+                {label} {countdown}s
+            </Text>
+        </View>
+    );
+}
 
 export default function OnlineRevealScreen() {
     const navigation = useNavigation<any>();
@@ -25,7 +83,7 @@ export default function OnlineRevealScreen() {
     const word = gameState.room?.currentWord;
 
     useEffect(() => {
-        if (gameState.room?.status === 'clues') {
+        if (gameState.room?.status === 'clues' || gameState.room?.status === 'simultaneous_reveal') {
             navigation.replace('OnlineClue');
         } else if (gameState.room?.status === 'voting') {
             navigation.replace('OnlineVoting');
@@ -83,10 +141,10 @@ export default function OnlineRevealScreen() {
                             <Text style={styles.impostorText}>{t.reveal.impostor_task_2}</Text>
 
                             {/* Show impostor hint if enabled in settings */}
-                            {gameState.room?.settings.impostorHint && word?.hint && (
+                            {gameState.room?.settings.impostorHint && word?.impostorHint && (
                                 <View style={styles.hintBox}>
                                     <Text style={styles.hintLabel}>{t.reveal.hint}:</Text>
-                                    <Text style={styles.hintImpostorText}>{word.hint}</Text>
+                                    <Text style={styles.hintImpostorText}>{word.impostorHint}</Text>
                                 </View>
                             )}
                         </View>
@@ -94,25 +152,22 @@ export default function OnlineRevealScreen() {
                         <View style={styles.civilianContent}>
                             <Text style={styles.wordLabel}>{t.reveal.your_word}</Text>
                             <Text style={styles.secretWord}>{word?.word}</Text>
-                            <Text style={styles.categoryLabel}>{word?.category}</Text>
+                            <Text style={styles.categoryLabel}>
+                                {getWordCategoryDisplayLabel(
+                                    word,
+                                    t.setup.categories_list as Record<string, string>,
+                                    gameState.room?.settings.customCategories
+                                )}
+                            </Text>
                         </View>
                     )}
                 </View>
 
-                {gameState.isHost && (
-                    <TouchableOpacity
-                        style={styles.actionButton}
-                        onPress={startCluePhase}
-                    >
-                        <Text style={styles.actionButtonText}>{t.online.start_discussion}</Text>
-                    </TouchableOpacity>
-                )}
-
-                <Text style={styles.hintText}>
-                    {gameState.isHost
-                        ? t.online.host_discussion_hint
-                        : t.online.player_discussion_hint}
-                </Text>
+                <AutoStartBar
+                    isHost={gameState.isHost}
+                    onStart={startCluePhase}
+                    label={t.online.start_discussion}
+                />
             </View>
         </SafeAreaView>
     );
@@ -237,10 +292,28 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    hintText: {
-        color: 'rgba(255,255,255,0.6)',
-        textAlign: 'center',
+    autoStartContainer: {
+        width: '100%',
+        alignItems: 'center',
+        gap: 10,
+        marginBottom: 15,
+    },
+    autoStartBarBg: {
+        width: '100%',
+        height: 6,
+        backgroundColor: 'rgba(255,255,255,0.15)',
+        borderRadius: 3,
+        overflow: 'hidden',
+    },
+    autoStartBarFill: {
+        height: '100%',
+        backgroundColor: '#F6E05E',
+        borderRadius: 3,
+    },
+    autoStartText: {
+        color: 'rgba(255,255,255,0.7)',
         fontSize: 14,
+        fontWeight: '600',
     },
     text: {
         color: '#FFF',

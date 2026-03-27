@@ -10,18 +10,31 @@ const config = getDefaultConfig(__dirname);
 // but we make it explicit here to be safe.
 config.resolver.platforms = ['ios', 'android', 'native', 'web'];
 
-// For web: alias react-native-google-mobile-ads to our no-op stub
-const webStubPath = path.resolve(__dirname, 'react-native-google-mobile-ads.web.js');
+const adsWebStub = path.resolve(__dirname, 'react-native-google-mobile-ads.web.js');
+const expoModulesCoreWebShim = path.resolve(__dirname, 'expo-modules-core.web.js');
 
 const originalResolveRequest = config.resolver.resolveRequest;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-    if (
-        platform === 'web' &&
-        (moduleName === 'react-native-google-mobile-ads' ||
-         moduleName.startsWith('react-native-google-mobile-ads/'))
-    ) {
-        return { filePath: webStubPath, type: 'sourceFile' };
+    if (platform === 'web') {
+        if (
+            moduleName === 'react-native-google-mobile-ads' ||
+            moduleName.startsWith('react-native-google-mobile-ads/')
+        ) {
+            return { filePath: adsWebStub, type: 'sourceFile' };
+        }
+
+        // expo-constants imports { uuidv4 } from 'expo-modules-core' but the
+        // installed version doesn't export it.  Redirect to our shim which
+        // re-exports everything and adds the missing function.
+        // Skip the redirect when the shim itself imports 'expo-modules-core'
+        // so it resolves to the real package (avoids circular resolution).
+        if (
+            moduleName === 'expo-modules-core' &&
+            context.originModulePath !== expoModulesCoreWebShim
+        ) {
+            return { filePath: expoModulesCoreWebShim, type: 'sourceFile' };
+        }
     }
 
     if (originalResolveRequest) {

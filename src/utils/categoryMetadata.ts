@@ -67,3 +67,9 @@ export const CATEGORIES_GENERAL: { id: GenericCategory; label: string }[] = [
     { id: 'marcas', label: 'Marcas famosas' },
     { id: 'famosos', label: 'Famosos' },
 ];
+
+/** IDs de categorías estándar del juego online (no personalizadas). */
+export const ONLINE_STANDARD_CATEGORY_IDS = new Set<string>([
+    ...CATEGORIES_BIBLICAL.map(c => c.id as string),
+    ...CATEGORIES_GENERAL.map(c => c.id as string),
+]);

@@ -54,11 +54,8 @@ interface PurchaseContextType {
 
 const PurchaseContext = createContext<PurchaseContextType | null>(null);
 
-// ⚠️ TESTING ONLY — set to false before publishing!
-const DEV_FORCE_PREMIUM = false;
-
 export function PurchaseProvider({ children }: { children: ReactNode }) {
-    const [isPremium, setIsPremium] = useState(DEV_FORCE_PREMIUM);
+    const [isPremium, setIsPremium] = useState(false);
     const [packages, setPackages] = useState<PurchasesPackage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [hasShownInitialPaywall, setHasShownInitialPaywall] = useState(false);

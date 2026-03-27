@@ -7,16 +7,35 @@ import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { OnlinePlayer } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
+import { EmojiReactionBar } from '../components/EmojiReactionBar';
+
+const VOTING_UI_TIMEOUT_MS = 30_000;
 
 export default function OnlineVotingScreen() {
     const navigation = useNavigation<any>();
-    const { gameState, submitVote, eliminatePlayer, nextRound, playAgain } = useOnlineGame();
+    const { gameState, submitVote } = useOnlineGame();
     const { t } = useTranslation();
     const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
     const [hasVoted, setHasVoted] = useState(false);
+    const [voteSecondsLeft, setVoteSecondsLeft] = useState(30);
 
     const players = gameState.room ? Object.values(gameState.room.players) : [];
     const currentPlayer = gameState.room?.players[gameState.playerId || ''];
+    const votePhaseStart = gameState.room?.votingPhaseStartTime;
+
+    useEffect(() => {
+        if (!votePhaseStart) {
+            setVoteSecondsLeft(30);
+            return;
+        }
+        const tick = () => {
+            const elapsed = Date.now() - votePhaseStart;
+            setVoteSecondsLeft(Math.max(0, Math.ceil((VOTING_UI_TIMEOUT_MS - elapsed) / 1000)));
+        };
+        tick();
+        const id = setInterval(tick, 1000);
+        return () => clearInterval(id);
+    }, [votePhaseStart]);
 
     useEffect(() => {
         if (gameState.room?.status === 'finished') {
@@ -28,7 +47,7 @@ export default function OnlineVotingScreen() {
         } else if (gameState.room?.status === 'playing') {
             // Back to playing (Next Round)
             navigation.replace('OnlineReveal');
-        } else if (gameState.room?.status === 'results') {
+        } else if (gameState.room?.status === 'results' || gameState.room?.status === 'elimination_choice') {
             navigation.replace('OnlineResults');
         }
     }, [gameState.room?.status]);
@@ -84,6 +103,11 @@ export default function OnlineVotingScreen() {
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>{t.voting.vote_title}</Text>
                 <Text style={styles.subTitle}>{t.voting.vote_subtitle}</Text>
+                {gameState.room?.status === 'voting' && votePhaseStart != null && (
+                    <Text style={styles.voteTimerHint}>
+                        {t.online.voting_time_left.replace('{s}', String(voteSecondsLeft))}
+                    </Text>
+                )}
             </View>
 
             <FlatList
@@ -92,6 +116,8 @@ export default function OnlineVotingScreen() {
                 renderItem={renderPlayerItem}
                 contentContainerStyle={styles.listContent}
             />
+
+            <EmojiReactionBar />
 
             <View style={styles.footer}>
                 {!hasVoted && !currentPlayer?.isEliminated ? (
@@ -111,31 +137,6 @@ export default function OnlineVotingScreen() {
                     </View>
                 )}
 
-                {/* Host Controls for Manual Override if needed */}
-                {gameState.isHost && (
-                    <View style={styles.hostControls}>
-                        <Text style={styles.hostLabel}>{t.online.host_controls}</Text>
-                        <View style={styles.hostButtonsRow}>
-                            <TouchableOpacity
-                                style={[styles.hostButton, { backgroundColor: '#E53E3E' }]}
-                                onPress={() => {
-                                    // Manual elimination of selected
-                                    if (selectedPlayerId) eliminatePlayer(selectedPlayerId);
-                                    else Alert.alert(t.online.errors.select_player_alert);
-                                }}
-                            >
-                                <Text style={styles.hostButtonText}>{t.online.eliminate_selected}</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.hostButton, { backgroundColor: '#48BB78' }]}
-                                onPress={nextRound}
-                            >
-                                <Text style={styles.hostButtonText}>{t.voting.next_round}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )}
             </View>
         </SafeAreaView>
     );
@@ -162,6 +163,14 @@ const styles = StyleSheet.create({
         color: 'rgba(255,255,255,0.7)',
         marginTop: 5,
     },
+    voteTimerHint: {
+        fontSize: 13,
+        color: '#F6E05E',
+        marginTop: 10,
+        textAlign: 'center',
+        paddingHorizontal: 16,
+        fontWeight: '600',
+    },
     listContent: {
         padding: 20,
     },
@@ -185,26 +194,27 @@ const styles = StyleSheet.create({
     avatarContainer: {
         width: 50,
         height: 50,
-        borderRadius: 25,
-        backgroundColor: '#F0F4FF',
         marginRight: 15,
-        overflow: 'hidden',
     },
     avatarImage: {
-        width: '100%',
-        height: '100%',
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: '#F0F4FF',
         resizeMode: 'contain',
     },
     votedBadge: {
         position: 'absolute',
-        bottom: 0,
-        right: 0,
+        bottom: -2,
+        right: -2,
         backgroundColor: '#48BB78',
-        width: 16,
-        height: 16,
-        borderRadius: 8,
+        width: 20,
+        height: 20,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        borderWidth: 2,
+        borderColor: '#FFF',
     },
     playerInfo: {
         flex: 1,
@@ -258,33 +268,5 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         textAlign: 'center',
-    },
-    hostControls: {
-        marginTop: 20,
-        paddingTop: 20,
-        borderTopWidth: 1,
-        borderTopColor: 'rgba(255,255,255,0.2)',
-    },
-    hostLabel: {
-        color: '#F9E675',
-        fontSize: 14,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    hostButtonsRow: {
-        flexDirection: 'row',
-        gap: 10,
-        justifyContent: 'space-between',
-    },
-    hostButton: {
-        flex: 1,
-        paddingVertical: 12,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    hostButtonText: {
-        color: '#FFF',
-        fontWeight: 'bold',
-        fontSize: 12,
     },
 });

@@ -16,6 +16,7 @@ import premiumWordsDataPt from '../data/words-premium-pt.json';
 import generalWordsDataPt from '../data/words-general-pt.json';
 import generalPremiumWordsDataPt from '../data/words-general-premium-pt.json';
 import { TOTAL_AVATARS } from '../utils/avatarAssets';
+import { ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
 
 const clickSound = require('../../assets/sounds/click.mp3');
 const successSound = require('../../assets/sounds/victory.mp3');
@@ -49,9 +50,11 @@ const getRandomWord = (categories: Category[], language: Language, customCategor
     const activeCustomCategoryIds: string[] = [];
 
     categories.forEach(cat => {
-        if (typeof cat === 'string' && customCategories.some(c => c.id === cat)) {
-            activeCustomCategoryIds.push(cat);
-        } else {
+        const id = cat as string;
+        const customDef = customCategories.find(c => c.id === id);
+        if (customDef) {
+            activeCustomCategoryIds.push(id);
+        } else if (ONLINE_STANDARD_CATEGORY_IDS.has(id)) {
             standardCategories.push(cat);
         }
     });
@@ -73,9 +76,10 @@ const getRandomWord = (categories: Category[], language: Language, customCategor
         const customCat = customCategories.find(c => c.id === id);
         if (customCat && customCat.words.length > 0) {
             const customWords: Word[] = customCat.words.map(w => ({
-                id: `${id}_${Math.random().toString(36).substr(2, 9)}`, // Temporary ID
+                id: `${id}_${Math.random().toString(36).substr(2, 9)}`,
                 word: w,
-                category: id as Category, // Cast string to Category
+                category: id as Category,
+                categoryDisplayName: customCat.name,
                 difficulty: 'medium',
                 hint: ''
             }));
@@ -89,7 +93,7 @@ const getRandomWord = (categories: Category[], language: Language, customCategor
             const randomIndex = Math.floor(Math.random() * fallbackWords.length);
             return fallbackWords[randomIndex];
         }
-        return freeWords[0]; // Fallback to a default word if nothing else is found
+        return freeWords[0];
     }
 
     const randomIndex = Math.floor(Math.random() * availableWords.length);

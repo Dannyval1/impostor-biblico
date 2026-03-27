@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Image, Alert, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
 import { useOnlineGame } from '../context/OnlineGameContext';
-import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL } from '../utils/categoryMetadata';
+import { useGame } from '../context/GameContext';
+import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL, ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
 import { Category, CustomCategory } from '../types';
+
+function isCustomCategoryIdModal(id: Category): boolean {
+    return !ONLINE_STANDARD_CATEGORY_IDS.has(id as string);
+}
 
 interface OnlineSettingsModalProps {
     visible: boolean;
@@ -23,6 +28,7 @@ const DURATIONS = [
 export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalProps) {
     const { t } = useTranslation();
     const { gameState, updateSettings } = useOnlineGame();
+    const { state: globalState } = useGame();
 
     const [impostorCount, setImpostorCount] = useState(1);
     const [gameDuration, setGameDuration] = useState<number | null>(null);
@@ -30,16 +36,29 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
     const [impostorHint, setImpostorHint] = useState(false);
 
-    const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
+    const [activeTab, setActiveTab] = useState<'biblical' | 'general' | 'custom'>('biblical');
 
+    const mergedCustomDefs = useMemo(() => {
+        const map = new Map<string, CustomCategory>();
+        for (const c of gameState.room?.settings.customCategories || []) {
+            map.set(c.id, c);
+        }
+        for (const c of globalState.customCategories || []) {
+            if (!map.has(c.id)) map.set(c.id, c);
+        }
+        return Array.from(map.values());
+    }, [gameState.room?.settings.customCategories, globalState.customCategories]);
+
+    const prevVisibleRef = useRef(false);
     useEffect(() => {
-        if (visible && gameState.room) {
+        if (visible && !prevVisibleRef.current && gameState.room) {
             setImpostorCount(gameState.room.settings.impostorCount || 1);
             setGameDuration(gameState.room.settings.gameDuration === undefined ? null : gameState.room.settings.gameDuration);
             setSelectedCategories(gameState.room.settings.categories || []);
             setCustomCategories(gameState.room.settings.customCategories || []);
             setImpostorHint(gameState.room.settings.impostorHint || false);
         }
+        prevVisibleRef.current = visible;
     }, [visible, gameState.room]);
 
     const handleSave = async () => {
@@ -49,11 +68,12 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
         }
 
         try {
+            const customDefsToSave = mergedCustomDefs.filter(c => selectedCategories.includes(c.id as Category));
             await updateSettings({
                 impostorCount,
                 gameDuration,
                 categories: selectedCategories,
-                customCategories,
+                customCategories: customDefsToSave,
                 impostorHint
             });
             onClose();
@@ -65,8 +85,19 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     const toggleCategory = (categoryId: Category) => {
         if (selectedCategories.includes(categoryId)) {
             setSelectedCategories(selectedCategories.filter(id => id !== categoryId));
+            if (isCustomCategoryIdModal(categoryId)) {
+                setCustomCategories(prev => prev.filter(c => c.id !== categoryId));
+            }
         } else {
             setSelectedCategories([...selectedCategories, categoryId]);
+            if (isCustomCategoryIdModal(categoryId)) {
+                const def = mergedCustomDefs.find(c => c.id === categoryId);
+                if (def) {
+                    setCustomCategories(prev =>
+                        prev.some(c => c.id === categoryId) ? prev : [...prev, def]
+                    );
+                }
+            }
         }
     };
 
@@ -171,15 +202,65 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
                                 >
                                     <Text style={[styles.tabText, activeTab === 'general' && styles.activeTabText]}>{t.setup.general_tab}</Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.tab, activeTab === 'custom' && styles.activeTab]}
+                                    onPress={() => setActiveTab('custom')}
+                                >
+                                    <Text style={[styles.tabText, activeTab === 'custom' && styles.activeTabText]}>{t.setup.custom_tab}</Text>
+                                </TouchableOpacity>
                             </View>
 
+                            {activeTab === 'custom' && (
+                                mergedCustomDefs.length === 0 ? (
+                                    <Text style={styles.emptyCustomHint}>{t.online.custom_categories_empty}</Text>
+                                ) : (
+                                    <View style={styles.categoriesGrid}>
+                                        {mergedCustomDefs.map(category => {
+                                            const isSelected = selectedCategories.includes(category.id as Category);
+                                            return (
+                                                <TouchableOpacity
+                                                    key={category.id}
+                                                    style={[
+                                                        styles.categoryCard,
+                                                        { backgroundColor: '#4A5568' },
+                                                        isSelected && styles.categoryCardSelected,
+                                                    ]}
+                                                    onPress={() => toggleCategory(category.id as Category)}
+                                                    activeOpacity={0.8}
+                                                >
+                                                    <View style={styles.customCategoryIconWrap}>
+                                                        <Ionicons name="albums-outline" size={36} color="#E2E8F0" />
+                                                    </View>
+                                                    {!isSelected && <View style={styles.inactiveOverlay} />}
+                                                    <View style={styles.categoryNamePill}>
+                                                        <Text style={styles.categoryNameText} numberOfLines={2}>
+                                                            {category.name}
+                                                        </Text>
+                                                    </View>
+                                                    {isSelected && (
+                                                        <View style={styles.categoryCheckBadge}>
+                                                            <Ionicons name="checkmark" size={12} color="#FFF" />
+                                                        </View>
+                                                    )}
+                                                </TouchableOpacity>
+                                            );
+                                        })}
+                                    </View>
+                                )
+                            )}
+
+                            {(activeTab === 'biblical' || activeTab === 'general') && (
                             <View style={styles.categoriesGrid}>
                                 {(activeTab === 'biblical' ? CATEGORIES_BIBLICAL : CATEGORIES_GENERAL).map(category => {
                                     const isSelected = selectedCategories.includes(category.id);
 
-                                    // Handle Premium Logic
-                                    const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
-                                    const isLocked = isPremiumCategory && !gameState.room?.settings.isPremiumRoom;
+                                    const isPremiumCat = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
+                                    const room = gameState.room;
+                                    const isOriginalHost = room?.originalHostId === gameState.playerId;
+                                    const isPremiumRoom = room?.settings.isPremiumRoom;
+                                    const snapshot = room?.premiumCategoriesSnapshot || [];
+                                    const lockedForMigrated = isPremiumCat && isPremiumRoom && !isOriginalHost && !snapshot.includes(category.id as any) && !isSelected;
+                                    const isLocked = (isPremiumCat && !isPremiumRoom) || lockedForMigrated;
 
                                     return (
                                         <TouchableOpacity
@@ -215,6 +296,7 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
                                     );
                                 })}
                             </View>
+                            )}
                         </View>
                         <View style={{ height: 20 }} />
                     </ScrollView>
@@ -388,6 +470,20 @@ const styles = StyleSheet.create({
     },
     activeTabText: {
         color: '#5B7FDB',
+    },
+    emptyCustomHint: {
+        color: '#718096',
+        fontSize: 14,
+        lineHeight: 20,
+        marginTop: 8,
+        marginBottom: 12,
+        textAlign: 'center',
+    },
+    customCategoryIconWrap: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
     },
     categoriesGrid: {
         flexDirection: 'row',

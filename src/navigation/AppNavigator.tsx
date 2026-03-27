@@ -5,8 +5,6 @@ import HomeScreen from '../screens/HomeScreen';
 import SetupScreen from '../screens/SetupScreen';
 import RevealScreen from '../screens/RevealScreen';
 import VotingScreen from '../screens/VotingScreen';
-
-
 import PaywallScreen from '../screens/PaywallScreen';
 import AdScreen from '../screens/AdScreen';
 import OnlineLobbyScreen from '../screens/OnlineLobbyScreen';
@@ -15,6 +13,10 @@ import OnlineVotingScreen from '../screens/OnlineVotingScreen';
 import OnlineResultsScreen from '../screens/OnlineResultsScreen';
 import OnlineSetupScreen from '../screens/OnlineSetupScreen';
 import OnlineClueScreen from '../screens/OnlineClueScreen';
+import { RoomClosedModal } from '../components/RoomClosedModal';
+import { InsufficientPlayersModal } from '../components/InsufficientPlayersModal';
+import { RoundDecisionModal } from '../components/RoundDecisionModal';
+import { HostMigrationNotice } from '../components/HostMigrationNotice';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -55,6 +57,10 @@ export default function AppNavigator() {
                 <Stack.Screen name="OnlineSetup" component={OnlineSetupScreen} />
                 <Stack.Screen name="OnlineClue" component={OnlineClueScreen} />
             </Stack.Navigator>
+            <RoomClosedModal />
+            <InsufficientPlayersModal />
+            <RoundDecisionModal />
+            <HostMigrationNotice />
         </NavigationContainer>
     );
 }

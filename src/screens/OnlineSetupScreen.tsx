@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
 import { useOnlineGame } from '../context/OnlineGameContext';
-import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL } from '../utils/categoryMetadata';
+import { useGame } from '../context/GameContext';
+import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL, ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
 import { Category, CustomCategory } from '../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { isPremiumCategory } from '../data/categories';
+
+function isCustomCategoryId(id: Category): boolean {
+    return !ONLINE_STANDARD_CATEGORY_IDS.has(id as string);
+}
 
 type OnlineSetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'OnlineSetup'>;
@@ -26,6 +31,7 @@ const DURATIONS = [
 export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps) {
     const { t } = useTranslation();
     const { gameState, updateSettings, startGame } = useOnlineGame();
+    const { state: globalState } = useGame();
 
     const [impostorCount, setImpostorCount] = useState(1);
     const [gameDuration, setGameDuration] = useState<number | null>(null);
@@ -35,10 +41,23 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const [discussionMode, setDiscussionMode] = useState<'turns' | 'simultaneous'>('turns');
     const [clueDuration, setClueDuration] = useState(30);
 
-    const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
+    const [activeTab, setActiveTab] = useState<'biblical' | 'general' | 'custom'>('biblical');
 
+    const mergedCustomDefs = useMemo(() => {
+        const map = new Map<string, CustomCategory>();
+        for (const c of gameState.room?.settings.customCategories || []) {
+            map.set(c.id, c);
+        }
+        for (const c of globalState.customCategories || []) {
+            if (!map.has(c.id)) map.set(c.id, c);
+        }
+        return Array.from(map.values());
+    }, [gameState.room?.settings.customCategories, globalState.customCategories]);
+
+    const initializedRef = useRef(false);
     useEffect(() => {
-        if (gameState.room) {
+        if (gameState.room && !initializedRef.current) {
+            initializedRef.current = true;
             setImpostorCount(gameState.room.settings.impostorCount || 1);
             setGameDuration(gameState.room.settings.gameDuration === undefined ? null : gameState.room.settings.gameDuration);
             setSelectedCategories(gameState.room.settings.categories || []);
@@ -54,19 +73,32 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
             Alert.alert(t.common.error, t.setup.category_required_alert);
             return;
         }
+        const hasPlayableCategory = selectedCategories.some(cat => {
+            const id = cat as string;
+            const def = mergedCustomDefs.find(c => c.id === id);
+            if (def) return def.words.length > 0;
+            return ONLINE_STANDARD_CATEGORY_IDS.has(id);
+        });
+        if (!hasPlayableCategory) {
+            Alert.alert(t.common.error, t.setup.category_required_alert);
+            return;
+        }
 
         try {
-            await updateSettings({
+            const customDefsToSave = mergedCustomDefs.filter(c => selectedCategories.includes(c.id as Category));
+            const settingsPayload = {
                 impostorCount,
                 gameDuration,
                 categories: selectedCategories,
-                customCategories,
+                customCategories: customDefsToSave,
                 impostorHint,
                 discussionMode,
                 clueDuration,
-                isConfigured: true
-            });
-            startGame();
+                isConfigured: true,
+            };
+            await updateSettings(settingsPayload);
+            // Misma instantánea que acaba de ir a Firebase: el listener puede aún no haber actualizado gameState.
+            await startGame(settingsPayload);
         } catch (error) {
             console.error('Failed to update settings and start', error);
         }
@@ -75,8 +107,19 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const toggleCategory = (categoryId: Category) => {
         if (selectedCategories.includes(categoryId)) {
             setSelectedCategories(selectedCategories.filter(id => id !== categoryId));
+            if (isCustomCategoryId(categoryId)) {
+                setCustomCategories(prev => prev.filter(c => c.id !== categoryId));
+            }
         } else {
             setSelectedCategories([...selectedCategories, categoryId]);
+            if (isCustomCategoryId(categoryId)) {
+                const def = mergedCustomDefs.find(c => c.id === categoryId);
+                if (def) {
+                    setCustomCategories(prev =>
+                        prev.some(c => c.id === categoryId) ? prev : [...prev, def]
+                    );
+                }
+            }
         }
     };
 
@@ -85,13 +128,10 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const playerCount = Object.keys(gameState.room.players).length;
     const maxImpostors = Math.floor(playerCount / 2);
 
-    const biblicalSelectedCount =
-        CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length +
-        customCategories.filter(c => selectedCategories.includes(c.id) && (c.type === 'biblical' || !c.type)).length;
-
-    const genericSelectedCount =
-        CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length +
-        customCategories.filter(c => selectedCategories.includes(c.id) && c.type === 'general').length;
+    // Badges por pestaña: solo cuentan categorías de esa pestaña (custom ≠ “fantasma” en Bíblicas).
+    const biblicalSelectedCount = CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length;
+    const genericSelectedCount = CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length;
+    const customSelectedCount = mergedCustomDefs.filter(c => selectedCategories.includes(c.id)).length;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -229,15 +269,70 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                                 <Text style={styles.tabBadgeText}>{genericSelectedCount}</Text>
                             </View>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.tab, activeTab === 'custom' && styles.activeTab]}
+                            onPress={() => setActiveTab('custom')}
+                        >
+                            <Text style={[styles.tabText, activeTab === 'custom' && styles.activeTabText]}>{t.setup.custom_tab}</Text>
+                            <View style={styles.tabBadge}>
+                                <Text style={styles.tabBadgeText}>{customSelectedCount}</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
+                    {activeTab === 'custom' && (
+                        mergedCustomDefs.length === 0 ? (
+                            <Text style={styles.emptyCustomHint}>{t.online.custom_categories_empty}</Text>
+                        ) : (
+                            <View style={styles.categoriesGrid}>
+                                {mergedCustomDefs.map(category => {
+                                    const isSelected = selectedCategories.includes(category.id as Category);
+                                    return (
+                                        <TouchableOpacity
+                                            key={category.id}
+                                            style={[
+                                                styles.categoryCard,
+                                                { backgroundColor: '#4A5568' },
+                                                isSelected && styles.categoryCardSelected,
+                                            ]}
+                                            onPress={() => toggleCategory(category.id as Category)}
+                                            activeOpacity={0.8}
+                                        >
+                                            <View style={styles.customCategoryIconWrap}>
+                                                <Ionicons name="albums-outline" size={36} color="#E2E8F0" />
+                                            </View>
+                                            {!isSelected && <View style={styles.inactiveOverlay} />}
+                                            <View style={styles.categoryNamePill}>
+                                                <Text style={styles.categoryNameText} numberOfLines={2}>
+                                                    {category.name}
+                                                </Text>
+                                            </View>
+                                            {isSelected && (
+                                                <View style={styles.categoryCheckBadge}>
+                                                    <Ionicons name="checkmark" size={12} color="#FFF" />
+                                                </View>
+                                            )}
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </View>
+                        )
+                    )}
+
+                    {(activeTab === 'biblical' || activeTab === 'general') && (
                     <View style={styles.categoriesGrid}>
                         {(activeTab === 'biblical' ? CATEGORIES_BIBLICAL : CATEGORIES_GENERAL).map(category => {
                             const isSelected = selectedCategories.includes(category.id);
 
-                            // Handle Premium Logic
                             const isPremium = isPremiumCategory(category.id);
-                            const isLocked = isPremium && !gameState.room?.settings.isPremiumRoom;
+                            const room = gameState.room;
+                            const isOriginalHost = room?.originalHostId === gameState.playerId;
+                            const isPremiumRoom = room?.settings.isPremiumRoom;
+
+                            // Migrated free host: can't add new premium categories not in snapshot
+                            const snapshot = room?.premiumCategoriesSnapshot || [];
+                            const lockedForMigratedHost = isPremium && isPremiumRoom && !isOriginalHost && !snapshot.includes(category.id) && !isSelected;
+                            const isLocked = (isPremium && !isPremiumRoom) || lockedForMigratedHost;
 
                             return (
                                 <TouchableOpacity
@@ -249,7 +344,9 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                                     ]}
                                     onPress={() => {
                                         if (isLocked) {
-                                            Alert.alert("Premium", t.setup.premium_category_alert);
+                                            Alert.alert("Premium", lockedForMigratedHost
+                                                ? "Esta categoría no estaba disponible al crear la sala."
+                                                : t.setup.premium_category_alert);
                                             return;
                                         }
                                         toggleCategory(category.id);
@@ -273,14 +370,40 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                             );
                         })}
                     </View>
+                    )}
                 </View>
                 <View style={{ height: 40 }} />
             </ScrollView>
 
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.saveButton} onPress={handleSaveAndStart}>
-                    <Text style={styles.saveButtonText}>{t.online.start_game}</Text>
-                </TouchableOpacity>
+                {(() => {
+                    const connectedPlayers = gameState.room
+                        ? Object.values(gameState.room.players).filter(p => p.isConnected !== false)
+                        : [];
+                    const hasCategories = selectedCategories.length > 0;
+                    const canStart = connectedPlayers.length >= 3 && hasCategories;
+                    return (
+                        <>
+                            <TouchableOpacity
+                                style={[styles.saveButton, !canStart && styles.saveButtonDisabled]}
+                                onPress={handleSaveAndStart}
+                                disabled={!canStart}
+                            >
+                                <Text style={styles.saveButtonText}>{t.online.start_game}</Text>
+                            </TouchableOpacity>
+                            {!hasCategories && (
+                                <Text style={styles.minPlayersWarning}>
+                                    {t.setup.category_required_alert}
+                                </Text>
+                            )}
+                            {hasCategories && connectedPlayers.length < 3 && (
+                                <Text style={styles.minPlayersWarning}>
+                                    {`Se necesitan al menos 3 jugadores (${connectedPlayers.length}/3)`}
+                                </Text>
+                            )}
+                        </>
+                    );
+                })()}
             </View>
         </SafeAreaView>
     );
@@ -455,6 +578,21 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontWeight: 'bold',
     },
+    emptyCustomHint: {
+        color: '#718096',
+        fontSize: 14,
+        lineHeight: 20,
+        marginTop: 8,
+        marginBottom: 16,
+        textAlign: 'center',
+        paddingHorizontal: 12,
+    },
+    customCategoryIconWrap: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    },
     categoriesGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -558,10 +696,22 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 4,
     },
+    saveButtonDisabled: {
+        backgroundColor: '#888',
+        opacity: 0.5,
+        shadowOpacity: 0,
+        elevation: 0,
+    },
     saveButtonText: {
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    minPlayersWarning: {
+        color: '#E53E3E',
+        fontSize: 12,
+        textAlign: 'center',
+        marginTop: 8,
     },
     modeOptionCard: {
         flexDirection: 'row',

@@ -194,14 +194,11 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         playClick();
         setSelectedMode('online');
         Animated.sequence([
-            Animated.timing(onlineModeAnim, { toValue: 0.95, duration: 100, useNativeDriver: true }),
-            Animated.spring(onlineModeAnim, { toValue: 1, friction: 3, tension: 40, useNativeDriver: true }),
+            Animated.timing(onlineModeAnim, { toValue: 0.95, duration: 80, useNativeDriver: true }),
+            Animated.spring(onlineModeAnim, { toValue: 1, friction: 5, tension: 80, useNativeDriver: true }),
         ]).start(() => {
-            setTimeout(() => {
-                navigation.navigate('OnlineLobby');
-                // Revert selection smoothly back to classic so when user returns it looks normal, or they can keep it.
-                setTimeout(() => setSelectedMode('classic'), 500);
-            }, 200);
+            navigation.navigate('OnlineLobby');
+            setTimeout(() => setSelectedMode('classic'), 300);
         });
     };
 
