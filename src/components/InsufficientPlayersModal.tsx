@@ -6,7 +6,7 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTranslation } from '../hooks/useTranslation';
 
 export function InsufficientPlayersModal() {
-    const { insufficientPlayers, clearInsufficientPlayers, leaveRoom } = useOnlineGame();
+    const { insufficientPlayers, clearInsufficientPlayers, leaveRoom, roomClosed } = useOnlineGame();
     const navigation = useNavigation<any>();
     const { t } = useTranslation();
 
@@ -19,7 +19,7 @@ export function InsufficientPlayersModal() {
     };
 
     return (
-        <Modal visible={insufficientPlayers} transparent animationType="fade" onRequestClose={handleDismiss}>
+        <Modal visible={insufficientPlayers && !roomClosed} transparent animationType="fade" onRequestClose={handleDismiss}>
             <View style={styles.overlay}>
                 <View style={styles.card}>
                     <View style={styles.iconWrapper}>

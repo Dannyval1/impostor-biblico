@@ -315,7 +315,7 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
         setImpostorCount(state.settings.impostorCount + 1);
     };
 
-    const maxImpostors = Math.max(1, state.settings.players.length - 1);
+    const maxImpostors = Math.max(1, Math.min(2, Math.floor(state.settings.players.length / 2)));
     const DURATION_OPTIONS = [
         { value: null, label: t.setup.unlimited },
         { value: 60, label: `1 ${t.setup.minute}` },

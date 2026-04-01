@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Animated, Share } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -59,12 +59,13 @@ export default function OnlineLobbyScreen() {
         setModalVisible(true);
     };
 
-    // Navigation logic based on game state
+    // Navigation logic based on game state (sin roomCode = sesión terminada; no navegar con snapshot conservado)
     useEffect(() => {
+        if (!gameState.roomCode) return;
         if (gameState.room?.status === 'playing') {
             navigation.replace('OnlineReveal');
         }
-    }, [gameState.room?.status]);
+    }, [gameState.roomCode, gameState.room?.status]);
 
     const handleCreateRoom = async () => {
         if (!playerName.trim()) {
@@ -81,6 +82,9 @@ export default function OnlineLobbyScreen() {
             } finally {
                 setIsLoading(false);
             }
+        }).catch(err => {
+            console.error(err);
+            setIsLoading(false);
         });
     };
 
@@ -120,9 +124,9 @@ export default function OnlineLobbyScreen() {
                 }
             } catch (error: any) {
                 if (error.message === 'Game already started') {
-                    showGameModal(t.common.error, t.online.errors.game_started, 'danger', 'OK');
+                    showGameModal(t.common.error, t.online.errors.game_started_desc || t.online.errors.game_started, 'danger', 'OK');
                 } else if (error.message === 'Room full') {
-                    showGameModal(t.common.error, 'Sala llena. El anfitrión puede ampliar el cupo con Premium.', 'warning', 'OK');
+                    showGameModal(t.common.error, t.online.errors.room_full || 'Sala llena.', 'warning', 'OK');
                 } else {
                     showGameModal(t.common.error, t.online.errors.room_join_error, 'danger', 'OK');
                 }
@@ -130,6 +134,9 @@ export default function OnlineLobbyScreen() {
             } finally {
                 setIsLoading(false);
             }
+        }).catch(err => {
+            console.error(err);
+            setIsLoading(false);
         });
     };
 
@@ -140,9 +147,15 @@ export default function OnlineLobbyScreen() {
         }
     };
 
-    const copyToClipboard = () => {
-        // Implement copy if clipboard package available, else just show it
-        showGameModal(t.online.code_alert_title, gameState.roomCode || '', 'info', 'OK');
+    const shareCode = async () => {
+        const code = gameState.roomCode || '';
+        try {
+            await Share.share({
+                message: code,
+            });
+        } catch {
+            // fallback
+        }
     };
 
     const renderPlayerItem = ({ item }: { item: OnlinePlayer }) => {
@@ -158,7 +171,7 @@ export default function OnlineLobbyScreen() {
                 <View style={styles.playerInfo}>
                     <Text style={styles.playerName}>{item.name} {item.id === gameState.playerId && t.online.you}</Text>
                     {item.isHost && <Text style={styles.hostBadge}>{t.online.host_badge}</Text>}
-                    {isDisconnected && <Text style={styles.disconnectedText}>Reconectando...</Text>}
+                    {isDisconnected && <Text style={styles.disconnectedText}>{t.online.reconnecting}</Text>}
                 </View>
                 {!isDisconnected && <Ionicons name="checkmark-circle" size={24} color="#48BB78" />}
                 {isDisconnected && <Ionicons name="wifi-outline" size={22} color="#E53E3E" />}
@@ -193,9 +206,9 @@ export default function OnlineLobbyScreen() {
 
                 <View style={styles.roomCodeContainer}>
                     <Text style={styles.roomCodeLabel}>{t.online.room_code}</Text>
-                    <TouchableOpacity onPress={copyToClipboard} style={styles.codeBox}>
-                        <Text style={styles.roomCodeText}>{gameState.roomCode}</Text>
-                        <Ionicons name="copy-outline" size={20} color="#5B7FDB" />
+                    <TouchableOpacity onPress={shareCode} style={styles.codeBox}>
+                        <Text selectable style={styles.roomCodeText}>{gameState.roomCode}</Text>
+                        <Ionicons name="share-outline" size={20} color="#5B7FDB" />
                     </TouchableOpacity>
                     <Text style={styles.shareHint}>{t.online.share_hint}</Text>
                 </View>

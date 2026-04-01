@@ -1,19 +1,44 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTranslation } from '../hooks/useTranslation';
+import type { OnlineRoomCloseReason } from '../types';
 
 export function RoomClosedModal() {
-    const { roomClosed, clearRoomClosed } = useOnlineGame();
+    const { roomClosed, roomCloseReason, clearRoomClosed } = useOnlineGame();
     const navigation = useNavigation<any>();
     const { t } = useTranslation();
+
+    const effectiveReason: OnlineRoomCloseReason = roomCloseReason ?? 'room_removed';
+
+    const { title, subtitle } = useMemo(() => {
+        const e = t.online.errors;
+        switch (effectiveReason) {
+            case 'host_left':
+                return {
+                    title: e.room_closed_host_left_title,
+                    subtitle: e.room_closed_host_left_desc,
+                };
+            case 'connection_lost':
+                return {
+                    title: e.room_closed_connection_title,
+                    subtitle: e.room_closed_connection_desc,
+                };
+            case 'room_removed':
+            default:
+                return {
+                    title: e.room_closed_removed_title,
+                    subtitle: e.room_closed_removed_desc,
+                };
+        }
+    }, [effectiveReason, t]);
 
     const handleDismiss = () => {
         clearRoomClosed();
         navigation.dispatch(
-            CommonActions.reset({ index: 0, routes: [{ name: 'Home' }] })
+            CommonActions.reset({ index: 0, routes: [{ name: 'Setup' }] })
         );
     };
 
@@ -24,8 +49,8 @@ export function RoomClosedModal() {
                     <View style={styles.iconWrapper}>
                         <Ionicons name="log-out-outline" size={36} color="#E53E3E" />
                     </View>
-                    <Text style={styles.title}>{t.online.errors.room_closed}</Text>
-                    <Text style={styles.subtitle}>{t.online.errors.room_closed_desc}</Text>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.subtitle}>{subtitle}</Text>
                     <TouchableOpacity style={styles.button} onPress={handleDismiss} activeOpacity={0.85}>
                         <Text style={styles.buttonText}>{t.ok || 'OK'}</Text>
                     </TouchableOpacity>

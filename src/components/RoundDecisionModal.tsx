@@ -14,12 +14,14 @@ export function RoundDecisionModal() {
     const prevStatusRef = useRef<string | null>(null);
 
     const room = gameState.room;
-    const isVisible = room?.status === 'deciding';
+    const me = gameState.playerId && room?.players ? room.players[gameState.playerId] : undefined;
+    const isEliminated = me?.isEliminated === true;
+    const isVisible = room?.status === 'deciding' && !isEliminated;
     const clueRound = room?.clueRound || 1;
 
     useEffect(() => {
         if (room?.status !== prevStatusRef.current) {
-            if (room?.status === 'deciding') {
+            if (room?.status === 'deciding' && !isEliminated) {
                 setMyVote(null);
                 setCountdown(DECISION_TIMEOUT_S);
                 progressAnim.setValue(1);
@@ -32,7 +34,7 @@ export function RoundDecisionModal() {
             }
             prevStatusRef.current = room?.status || null;
         }
-    }, [room?.status]);
+    }, [room?.status, isEliminated]);
 
     useEffect(() => {
         if (!isVisible) return;
@@ -69,7 +71,7 @@ export function RoundDecisionModal() {
         : `${clueRound} ${t.online.round_decision.subtitle_multi}`;
 
     return (
-        <Modal visible transparent animationType="fade">
+        <Modal visible={isVisible} transparent animationType="fade">
             <View style={styles.overlay}>
                 <View style={styles.card}>
                     <Text style={styles.title}>{t.online.round_decision.title}</Text>

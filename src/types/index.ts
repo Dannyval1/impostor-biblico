@@ -1,5 +1,8 @@
 export type GameMode = 'classic' | 'online';
 
+/** Por qué se cerró la sala online (modal informativo para no anfitriones). */
+export type OnlineRoomCloseReason = 'host_left' | 'connection_lost' | 'room_removed';
+
 export type GamePhase = 'setup' | 'reveal' | 'discussion' | 'voting' | 'results';
 
 export type PlayerRole = 'civilian' | 'impostor';
@@ -171,14 +174,18 @@ export interface OnlineReaction {
 
 export interface OnlineRoom {
     id: string;
+    /** Conteo de jugadores; usado por reglas RTDB (no existe numChildren() en rules). */
+    playerCount?: number;
     hostId: string;
+    hostHeartbeat?: string | number;
     originalHostId: string;
+    originalHostName: string;
     status: RoomStatus;
     players: Record<string, OnlinePlayer>;
     settings: {
         impostorCount: number;
         gameDuration: number | null;
-        language: 'es' | 'en';
+        language: 'es' | 'en' | 'pt';
         categories: Category[];
         customCategories: CustomCategory[];
         isPremiumRoom: boolean;
@@ -195,6 +202,7 @@ export interface OnlineRoom {
     createdAt: number;
     lastActivity?: number;
     winner?: 'impostors' | 'civilians';
+    finishReason?: string;
     lastEliminatedId?: string | null;
     voteCounts?: Record<string, number>;
     isTie?: boolean;

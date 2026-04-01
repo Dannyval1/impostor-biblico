@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     View, Text, StyleSheet, TouchableOpacity, ScrollView,
-    Image, Animated,
+    Image, Animated, ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
 import { EmojiReactionBar } from '../components/EmojiReactionBar';
 import { getWordCategoryDisplayLabel } from '../utils/wordCategoryLabel';
+import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
 
 export default function OnlineResultsScreen() {
     const navigation = useNavigation<any>();
@@ -34,20 +35,60 @@ export default function OnlineResultsScreen() {
         ]).start();
     }, []);
 
+    // ── Elimination choice countdown ──────────────────────────────────
+    const [choiceSecondsLeft, setChoiceSecondsLeft] = useState(45);
+    useEffect(() => {
+        if (!room || room.status !== 'elimination_choice') return;
+        const startTime = room.eliminationChoiceStartTime || Date.now();
+        const tick = () => {
+            const elapsed = Date.now() - startTime;
+            setChoiceSecondsLeft(Math.max(0, Math.ceil((45000 - elapsed) / 1000)));
+        };
+        tick();
+        const id = setInterval(tick, 1000);
+        return () => clearInterval(id);
+    }, [room?.status, room?.eliminationChoiceStartTime]);
+
     useEffect(() => {
         if (!room) return;
+        if (!gameState.roomCode) return;
         if (room.status === 'playing') navigation.replace('OnlineReveal');
-        else if (room.status === 'clues' || room.status === 'simultaneous_reveal') navigation.replace('OnlineClue');
+        else if (room.status === 'clues' || room.status === 'simultaneous_reveal' || room.status === 'deciding') navigation.replace('OnlineClue');
         else if (room.status === 'voting') navigation.replace('OnlineVoting');
         else if (room.status === 'waiting') navigation.replace('OnlineLobby');
-        else if (room.status === 'finished') navigation.replace('OnlineLobby');
-    }, [room?.status]);
+    }, [gameState.roomCode, room?.status]);
 
-    if (!room || (room.status !== 'results' && room.status !== 'elimination_choice')) return null;
+    if (!room) {
+        return <OnlineRoomPlaceholder />;
+    }
+    if (room.status !== 'results' && room.status !== 'elimination_choice' && room.status !== 'finished') {
+        return <OnlineRoomPlaceholder />;
+    }
 
+    const isFinished = room.status === 'finished';
     const isEliminationChoicePhase = room.status === 'elimination_choice';
 
     const players = Object.values(room.players);
+    const me = room.players[myId];
+
+    if (isEliminationChoicePhase && me?.isEliminated) {
+        return (
+            <SafeAreaView style={[styles.container, { backgroundColor: '#1A0000' }]}>
+                <View style={[styles.waitingHostBox, { flex: 1, justifyContent: 'center' }]}>
+                    {me?.avatar && (
+                        <Image
+                            source={AVATAR_ASSETS[me.avatar]}
+                            style={styles.eliminatedAvatar}
+                        />
+                    )}
+                    <Text style={[styles.waitingHostTitle, { fontSize: 28 }]}>{t.online.you_are_eliminated}</Text>
+                    <Text style={[styles.waitingHostHint, { marginTop: 12 }]}>{t.online.elimination_choice_eliminated_hint}</Text>
+                    <ActivityIndicator color="rgba(255,255,255,0.5)" size="large" style={{ marginTop: 30 }} />
+                </View>
+                <EmojiReactionBar />
+            </SafeAreaView>
+        );
+    }
     const voteCounts = room.voteCounts || {};
     const isTie = room.isTie;
     const eliminatedId = room.lastEliminatedId;
@@ -56,19 +97,47 @@ export default function OnlineResultsScreen() {
     const amIImpostor = impostorIds.includes(myId);
     const eliminatedIsImpostor = impostorIds.includes(eliminatedId || '');
 
-    const civiliansWon = !isTie && eliminatedIsImpostor;
-    const impostorsWon = !isTie && !eliminatedIsImpostor;
+    const finishReason = room.finishReason;
+    const isImpostorFled = finishReason === 'impostor_disconnected';
+    const isNotEnoughPlayers = finishReason === 'not_enough_players';
 
-    const iWon = amIImpostor ? impostorsWon : civiliansWon;
+    // Count remaining active impostors (excluding this newly eliminated one unless fled)
+    const remainingImpostors = impostorIds.filter(
+        id => id !== eliminatedId && !players.find(p => p.id === id)?.isEliminated
+    );
+
+    let civiliansWon = false;
+    let impostorsWon = false;
+
+    if (isImpostorFled) {
+        civiliansWon = true;
+    } else if (isNotEnoughPlayers) {
+        civiliansWon = false;
+        impostorsWon = false;
+    } else {
+        civiliansWon = !isTie && eliminatedIsImpostor && remainingImpostors.length === 0;
+        impostorsWon = !isTie && !eliminatedIsImpostor;
+    }
+
+    const iWon = isNotEnoughPlayers ? false : (amIImpostor ? impostorsWon : civiliansWon);
 
     const choiceEligible = players.filter(p => !p.isEliminated && p.isConnected !== false);
     const myEliminationChoice = room.eliminationChoiceVotes?.[myId];
     const iCanVoteEliminationChoice =
         isEliminationChoicePhase && choiceEligible.some(p => p.id === myId);
 
-    const bgColor = isEliminationChoicePhase ? '#2C1A0E' : (iWon ? '#0F2027' : '#1A0000');
-    const accentColor = isEliminationChoicePhase ? '#F6AD55' : (iWon ? '#48BB78' : '#E53E3E');
-    const titleEmoji = isEliminationChoicePhase ? '❓' : (iWon ? '🎉' : '💀');
+    // When an impostor is found but game continues, use positive styling
+    const isImpostorFoundContinue = isEliminationChoicePhase && eliminatedIsImpostor;
+
+    const bgColor = isEliminationChoicePhase
+        ? (isImpostorFoundContinue ? '#0F2027' : '#2C1A0E')
+        : (isNotEnoughPlayers ? '#2D3748' : (iWon ? '#0F2027' : '#1A0000'));
+    const accentColor = isEliminationChoicePhase
+        ? (isImpostorFoundContinue ? '#48BB78' : '#F6AD55')
+        : (isNotEnoughPlayers ? '#A0AEC0' : (iWon ? '#48BB78' : '#E53E3E'));
+    const titleEmoji = isEliminationChoicePhase
+        ? (isImpostorFoundContinue ? '🎯' : '❓')
+        : (isNotEnoughPlayers ? '📉' : (isImpostorFled ? '💨' : (iWon ? '🎉' : '💀')));
     const isTieResult = isTie;
 
     const sortedPlayers = [...players].sort((a, b) =>
@@ -78,15 +147,29 @@ export default function OnlineResultsScreen() {
     const impostors = players.filter(p => impostorIds.includes(p.id));
 
     const getTitle = () => {
-        if (isEliminationChoicePhase) return t.online.wrong_civilian_choice_title;
+        if (isNotEnoughPlayers) return t.online.results_game_cancelled_title;
+        if (isImpostorFled) return t.online.results_impostor_fled_title;
+        if (isEliminationChoicePhase) {
+            if (isImpostorFoundContinue) {
+                return t.online.civilian_caught_impostor;
+            }
+            return t.online.wrong_civilian_choice_title;
+        }
         if (isTieResult) return t.online.tie_result;
         if (amIImpostor) return iWon ? t.online.impostor_escaped : t.online.you_were_caught;
         return iWon ? t.online.civilians_win_title : t.online.impostors_win_title;
     };
 
     const getSubtitle = () => {
-        if (isEliminationChoicePhase) return t.online.wrong_civilian_choice_subtitle;
-        if (isTieResult) return 'Nadie fue eliminado esta ronda';
+        if (isNotEnoughPlayers) return t.online.results_game_cancelled_subtitle;
+        if (isImpostorFled) return t.online.results_impostor_fled_subtitle;
+        if (isEliminationChoicePhase) {
+            if (isImpostorFoundContinue) {
+                return t.online.impostor_found_remaining.replace('%{count}', String(remainingImpostors.length));
+            }
+            return t.online.wrong_civilian_choice_subtitle;
+        }
+        if (isTieResult) return t.online.tie_result;
         if (civiliansWon) return t.online.good_job_civils;
         if (impostorsWon) return t.online.impostor_won;
         return '';
@@ -131,7 +214,7 @@ export default function OnlineResultsScreen() {
                                         styles.eliminatedRole,
                                         { color: eliminatedIsImpostor ? '#FC8181' : '#68D391' }
                                     ]}>
-                                        {eliminatedIsImpostor ? '🔴 IMPOSTOR' : '🟢 CIVIL'}
+                                        {eliminatedIsImpostor ? t.online.results_role_impostor : t.online.results_role_civilian}
                                     </Text>
                                 </View>
                                 <Ionicons
@@ -190,7 +273,7 @@ export default function OnlineResultsScreen() {
                                                 <Text style={styles.clueRevealName}>{p.name}</Text>
                                                 {isImp && (
                                                     <View style={styles.impostorBadge}>
-                                                        <Text style={styles.impostorBadgeText}>IMPOSTOR</Text>
+                                                        <Text style={styles.impostorBadgeText}>{t.online.results_clue_impostor_badge}</Text>
                                                     </View>
                                                 )}
                                             </View>
@@ -212,7 +295,9 @@ export default function OnlineResultsScreen() {
                             activeOpacity={0.8}
                         >
                             <Text style={styles.premiumCtaText}>
-                                ¿Te gustó jugar online? Con <Text style={{ fontWeight: '900' }}>Premium</Text> desbloqueas más categorías, salas más grandes y sin anuncios para todos.
+                                {t.online.results_online_premium_cta_before}
+                                <Text style={{ fontWeight: '900' }}>Premium</Text>
+                                {t.online.results_online_premium_cta_after}
                             </Text>
                         </TouchableOpacity>
                     )}
@@ -220,6 +305,14 @@ export default function OnlineResultsScreen() {
                     <EmojiReactionBar />
 
                     <View style={styles.footer}>
+                        {isEliminationChoicePhase && (
+                            <View style={styles.choiceTimerRow}>
+                                <Ionicons name="time-outline" size={16} color="#F6AD55" />
+                                <Text style={styles.choiceTimerText}>
+                                    {choiceSecondsLeft}s
+                                </Text>
+                            </View>
+                        )}
                         {isEliminationChoicePhase ? (
                             iCanVoteEliminationChoice && !myEliminationChoice ? (
                                 <View style={styles.eliminationChoiceRow}>
@@ -253,14 +346,16 @@ export default function OnlineResultsScreen() {
                             )
                         ) : gameState.isHost ? (
                             <View style={styles.hostActions}>
-                                <TouchableOpacity
-                                    style={[styles.hostChoiceBtn, styles.hostChoiceBtnPlay]}
-                                    onPress={() => { nextRound().catch(() => {}); }}
-                                    activeOpacity={0.85}
-                                >
-                                    <Ionicons name="refresh" size={20} color="#FFF" />
-                                    <Text style={styles.hostChoiceBtnText}>{t.online.play_again}</Text>
-                                </TouchableOpacity>
+                                {players.filter(p => p.isConnected !== false).length >= 3 && (
+                                    <TouchableOpacity
+                                        style={[styles.hostChoiceBtn, styles.hostChoiceBtnPlay]}
+                                        onPress={() => { nextRound().catch(() => {}); }}
+                                        activeOpacity={0.85}
+                                    >
+                                        <Ionicons name="refresh" size={20} color="#FFF" />
+                                        <Text style={styles.hostChoiceBtnText}>{t.online.play_again}</Text>
+                                    </TouchableOpacity>
+                                )}
                                 <TouchableOpacity
                                     style={[styles.hostChoiceBtn, styles.hostChoiceBtnLobby]}
                                     onPress={() => { resetToLobby().catch(() => {}); }}
@@ -483,5 +578,18 @@ const styles = StyleSheet.create({
         color: '#1A202C',
         fontSize: 14,
         fontWeight: '800',
+    },
+    choiceTimerRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+        marginBottom: 12,
+    },
+    choiceTimerText: {
+        color: '#F6AD55',
+        fontSize: 18,
+        fontWeight: '900',
+        fontVariant: ['tabular-nums'],
     },
 });

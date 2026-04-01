@@ -8,6 +8,7 @@ import { OnlinePlayer } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
 import { EmojiReactionBar } from '../components/EmojiReactionBar';
+import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
 
 const VOTING_UI_TIMEOUT_MS = 30_000;
 
@@ -15,13 +16,16 @@ export default function OnlineVotingScreen() {
     const navigation = useNavigation<any>();
     const { gameState, submitVote } = useOnlineGame();
     const { t } = useTranslation();
+
     const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
     const [hasVoted, setHasVoted] = useState(false);
     const [voteSecondsLeft, setVoteSecondsLeft] = useState(30);
 
-    const players = gameState.room ? Object.values(gameState.room.players) : [];
-    const currentPlayer = gameState.room?.players[gameState.playerId || ''];
-    const votePhaseStart = gameState.room?.votingPhaseStartTime;
+    const room = gameState.room;
+    const players = room ? Object.values(room.players) : [];
+    const currentPlayer = room?.players[gameState.playerId || ''];
+    const votePhaseStart = room?.votingPhaseStartTime;
+    const isEliminated = currentPlayer?.isEliminated;
 
     useEffect(() => {
         if (!votePhaseStart) {
@@ -38,19 +42,17 @@ export default function OnlineVotingScreen() {
     }, [votePhaseStart]);
 
     useEffect(() => {
-        if (gameState.room?.status === 'finished') {
-            // Game Over
-            const winner = gameState.room.winner === 'impostors' ? t.voting.winner_impostors : t.voting.winner_civilians;
-            Alert.alert(t.voting.game_over, winner, [
-                { text: t.online.back_to_lobby, onPress: () => navigation.replace('OnlineLobby') }
-            ]);
-        } else if (gameState.room?.status === 'playing') {
-            // Back to playing (Next Round)
-            navigation.replace('OnlineReveal');
-        } else if (gameState.room?.status === 'results' || gameState.room?.status === 'elimination_choice') {
+        if (!gameState.roomCode) return;
+        if (gameState.room?.status === 'finished' || gameState.room?.status === 'results' || gameState.room?.status === 'elimination_choice') {
             navigation.replace('OnlineResults');
+        } else if (gameState.room?.status === 'playing') {
+            navigation.replace('OnlineReveal');
         }
-    }, [gameState.room?.status]);
+    }, [gameState.roomCode, gameState.room?.status]);
+
+    if (!room) {
+        return <OnlineRoomPlaceholder />;
+    }
 
     const handleVote = async () => {
         if (selectedPlayerId) {
@@ -62,41 +64,68 @@ export default function OnlineVotingScreen() {
     const renderPlayerItem = ({ item }: { item: OnlinePlayer }) => {
         const isSelected = selectedPlayerId === item.id;
         const isMe = item.id === gameState.playerId;
-        const isEliminated = item.isEliminated;
+        const isPlayerEliminated = item.isEliminated;
 
         // Can't vote for myself or eliminated players
-        const canVote = !hasVoted && !isMe && !isEliminated && !currentPlayer?.isEliminated;
+        const canVote = !hasVoted && !isMe && !isPlayerEliminated && !isEliminated;
 
         return (
             <TouchableOpacity
                 style={[
                     styles.playerCard,
                     isSelected && styles.playerCardSelected,
-                    isEliminated && styles.playerCardEliminated
+                    isPlayerEliminated && styles.playerCardEliminated
                 ]}
                 onPress={() => canVote && setSelectedPlayerId(item.id)}
                 disabled={!canVote}
                 activeOpacity={canVote ? 0.7 : 1}
             >
                 <View style={styles.avatarContainer}>
-                    <Image source={AVATAR_ASSETS[item.avatar]} style={[styles.avatarImage, isEliminated && { opacity: 0.5 }]} />
-                    {item.vote && !isEliminated && (
+                    <Image source={AVATAR_ASSETS[item.avatar]} style={[styles.avatarImage, isPlayerEliminated && { opacity: 0.5 }]} />
+                    {item.vote && !isPlayerEliminated && (
                         <View style={styles.votedBadge}>
                             <Ionicons name="checkmark" size={12} color="#FFF" />
                         </View>
                     )}
                 </View>
                 <View style={styles.playerInfo}>
-                    <Text style={[styles.playerName, isEliminated && styles.playerNameEliminated]}>
+                    <Text style={[styles.playerName, isPlayerEliminated && styles.playerNameEliminated]}>
                         {item.name} {isMe && t.online.you}
                     </Text>
-                    {isEliminated && <Text style={styles.eliminatedText}>{t.online.eliminated_badge}</Text>}
+                    {isPlayerEliminated && <Text style={styles.eliminatedText}>{t.online.eliminated_badge}</Text>}
                 </View>
                 {isSelected && <Ionicons name="radio-button-on" size={24} color="#5B7FDB" />}
                 {!isSelected && canVote && <Ionicons name="radio-button-off" size={24} color="#CCC" />}
             </TouchableOpacity>
         );
     };
+
+    // ── Eliminated player overlay ──────────────────────────────────
+    if (isEliminated) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.eliminatedOverlay}>
+                    <View style={styles.eliminatedAvatarContainer}>
+                        {currentPlayer?.avatar && (
+                            <Image
+                                source={AVATAR_ASSETS[currentPlayer.avatar]}
+                                style={styles.eliminatedAvatar}
+                            />
+                        )}
+                        <View style={styles.eliminatedAvatarBadge}>
+                            <Ionicons name="close-circle" size={32} color="#E53E3E" />
+                        </View>
+                    </View>
+                    <Text style={styles.eliminatedTitle}>{t.online.you_are_eliminated}</Text>
+                    <Text style={styles.eliminatedSubtitle}>
+                        {t.online.vote_submitted?.replace('Voto enviado. ', '').replace('Vote submitted. ', '') || 'Esperando resultado...'}
+                    </Text>
+                    <ActivityIndicator color="rgba(255,255,255,0.5)" size="large" style={{ marginTop: 24 }} />
+                </View>
+                <EmojiReactionBar />
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -120,7 +149,7 @@ export default function OnlineVotingScreen() {
             <EmojiReactionBar />
 
             <View style={styles.footer}>
-                {!hasVoted && !currentPlayer?.isEliminated ? (
+                {!hasVoted ? (
                     <TouchableOpacity
                         style={[styles.voteButton, !selectedPlayerId && styles.disabledButton]}
                         onPress={handleVote}
@@ -131,9 +160,9 @@ export default function OnlineVotingScreen() {
                 ) : (
                     <View style={styles.waitingContainer}>
                         <Text style={styles.waitingText}>
-                            {currentPlayer?.isEliminated ? t.online.you_are_eliminated : t.online.vote_submitted}
+                            {t.online.vote_submitted}
                         </Text>
-                        {!currentPlayer?.isEliminated && <ActivityIndicator color="#FFF" style={{ marginTop: 10 }} />}
+                        <ActivityIndicator color="#FFF" style={{ marginTop: 10 }} />
                     </View>
                 )}
 
@@ -268,5 +297,47 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         textAlign: 'center',
+    },
+    // ── Eliminated overlay styles ──────────────────────────────
+    eliminatedOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+    },
+    eliminatedAvatarContainer: {
+        width: 120,
+        height: 120,
+        marginBottom: 24,
+    },
+    eliminatedAvatar: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        opacity: 0.35,
+        backgroundColor: '#555',
+        resizeMode: 'contain',
+    },
+    eliminatedAvatarBadge: {
+        position: 'absolute',
+        bottom: -4,
+        right: -4,
+        backgroundColor: '#2C1A0E',
+        borderRadius: 20,
+        padding: 2,
+    },
+    eliminatedTitle: {
+        fontSize: 26,
+        fontWeight: '900',
+        color: '#E53E3E',
+        textAlign: 'center',
+        letterSpacing: 1,
+    },
+    eliminatedSubtitle: {
+        fontSize: 16,
+        color: 'rgba(255,255,255,0.5)',
+        textAlign: 'center',
+        marginTop: 10,
+        lineHeight: 22,
     },
 });

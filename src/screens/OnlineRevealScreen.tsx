@@ -83,17 +83,15 @@ export default function OnlineRevealScreen() {
     const word = gameState.room?.currentWord;
 
     useEffect(() => {
+        if (!gameState.roomCode) return;
         if (gameState.room?.status === 'clues' || gameState.room?.status === 'simultaneous_reveal') {
             navigation.replace('OnlineClue');
         } else if (gameState.room?.status === 'voting') {
             navigation.replace('OnlineVoting');
-        } else if (gameState.room?.status === 'finished') {
-            const winner = gameState.room.winner === 'impostors' ? t.voting.winner_impostors : t.voting.winner_civilians;
-            Alert.alert(t.voting.game_over, winner, [
-                { text: t.online.back_to_lobby, onPress: () => navigation.replace('OnlineLobby') }
-            ]);
+        } else if (gameState.room?.status === 'finished' || gameState.room?.status === 'results' || gameState.room?.status === 'elimination_choice') {
+            navigation.replace('OnlineResults');
         }
-    }, [gameState.room?.status]);
+    }, [gameState.roomCode, gameState.room?.status]);
 
     useEffect(() => {
         if (gameDuration === null || !gameState.room?.currentRoundStartTime) {

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Image, Alert, Switch } from 'react-native';
+import { GameModal } from './GameModal';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { useGame } from '../context/GameContext';
 import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL, ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
 import { Category, CustomCategory } from '../types';
+import { isPremiumCategory } from '../data/categories';
+import { usePurchase } from '../context/PurchaseContext';
 
 function isCustomCategoryIdModal(id: Category): boolean {
     return !ONLINE_STANDARD_CATEGORY_IDS.has(id as string);
@@ -29,6 +32,9 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     const { t } = useTranslation();
     const { gameState, updateSettings } = useOnlineGame();
     const { state: globalState } = useGame();
+    const { isCategoryUnlockedByAd } = usePurchase();
+
+    const [premiumModal, setPremiumModal] = useState<'migrated' | 'paywall' | null>(null);
 
     const [impostorCount, setImpostorCount] = useState(1);
     const [gameDuration, setGameDuration] = useState<number | null>(null);
@@ -36,7 +42,7 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
     const [impostorHint, setImpostorHint] = useState(false);
 
-    const [activeTab, setActiveTab] = useState<'biblical' | 'general' | 'custom'>('biblical');
+    const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
 
     const mergedCustomDefs = useMemo(() => {
         const map = new Map<string, CustomCategory>();
@@ -106,12 +112,24 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
     const playerCount = Object.keys(gameState.room.players).length;
     const maxImpostors = Math.floor(playerCount / 2);
 
+    const biblicalSelectedCount =
+        CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length +
+        mergedCustomDefs.filter(
+            c => selectedCategories.includes(c.id as Category) && (c.type === 'biblical' || !c.type)
+        ).length;
+    const genericSelectedCount =
+        CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length +
+        mergedCustomDefs.filter(
+            c => selectedCategories.includes(c.id as Category) && c.type === 'general'
+        ).length;
+
     return (
+        <>
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContent}>
                     <View style={styles.header}>
-                        <Text style={styles.headerTitle}>Ajustes de Sala</Text>
+                        <Text style={styles.headerTitle}>{t.online.room_settings_title}</Text>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                             <Ionicons name="close" size={24} color="#333" />
                         </TouchableOpacity>
@@ -143,7 +161,7 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
                                 </TouchableOpacity>
                             </View>
                             <Text style={styles.impostorHint}>
-                                Máximo {maxImpostors} impostores (mitad de jugadores)
+                                {t.online.room_settings_impostor_cap_hint.replace('{max}', String(maxImpostors))}
                             </Text>
                         </View>
 
@@ -195,72 +213,36 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
                                     onPress={() => setActiveTab('biblical')}
                                 >
                                     <Text style={[styles.tabText, activeTab === 'biblical' && styles.activeTabText]}>{t.setup.biblical_tab}</Text>
+                                    <View style={styles.tabBadge}>
+                                        <Text style={styles.tabBadgeText}>{biblicalSelectedCount}</Text>
+                                    </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={[styles.tab, activeTab === 'general' && styles.activeTab]}
                                     onPress={() => setActiveTab('general')}
                                 >
                                     <Text style={[styles.tabText, activeTab === 'general' && styles.activeTabText]}>{t.setup.general_tab}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.tab, activeTab === 'custom' && styles.activeTab]}
-                                    onPress={() => setActiveTab('custom')}
-                                >
-                                    <Text style={[styles.tabText, activeTab === 'custom' && styles.activeTabText]}>{t.setup.custom_tab}</Text>
+                                    <View style={styles.tabBadge}>
+                                        <Text style={styles.tabBadgeText}>{genericSelectedCount}</Text>
+                                    </View>
                                 </TouchableOpacity>
                             </View>
 
-                            {activeTab === 'custom' && (
-                                mergedCustomDefs.length === 0 ? (
-                                    <Text style={styles.emptyCustomHint}>{t.online.custom_categories_empty}</Text>
-                                ) : (
-                                    <View style={styles.categoriesGrid}>
-                                        {mergedCustomDefs.map(category => {
-                                            const isSelected = selectedCategories.includes(category.id as Category);
-                                            return (
-                                                <TouchableOpacity
-                                                    key={category.id}
-                                                    style={[
-                                                        styles.categoryCard,
-                                                        { backgroundColor: '#4A5568' },
-                                                        isSelected && styles.categoryCardSelected,
-                                                    ]}
-                                                    onPress={() => toggleCategory(category.id as Category)}
-                                                    activeOpacity={0.8}
-                                                >
-                                                    <View style={styles.customCategoryIconWrap}>
-                                                        <Ionicons name="albums-outline" size={36} color="#E2E8F0" />
-                                                    </View>
-                                                    {!isSelected && <View style={styles.inactiveOverlay} />}
-                                                    <View style={styles.categoryNamePill}>
-                                                        <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                            {category.name}
-                                                        </Text>
-                                                    </View>
-                                                    {isSelected && (
-                                                        <View style={styles.categoryCheckBadge}>
-                                                            <Ionicons name="checkmark" size={12} color="#FFF" />
-                                                        </View>
-                                                    )}
-                                                </TouchableOpacity>
-                                            );
-                                        })}
-                                    </View>
-                                )
-                            )}
-
-                            {(activeTab === 'biblical' || activeTab === 'general') && (
                             <View style={styles.categoriesGrid}>
                                 {(activeTab === 'biblical' ? CATEGORIES_BIBLICAL : CATEGORIES_GENERAL).map(category => {
                                     const isSelected = selectedCategories.includes(category.id);
 
-                                    const isPremiumCat = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos'].includes(category.id);
+                                    const isPremiumCat = isPremiumCategory(category.id);
                                     const room = gameState.room;
                                     const isOriginalHost = room?.originalHostId === gameState.playerId;
                                     const isPremiumRoom = room?.settings.isPremiumRoom;
                                     const snapshot = room?.premiumCategoriesSnapshot || [];
                                     const lockedForMigrated = isPremiumCat && isPremiumRoom && !isOriginalHost && !snapshot.includes(category.id as any) && !isSelected;
-                                    const isLocked = (isPremiumCat && !isPremiumRoom) || lockedForMigrated;
+                                    const canUsePremiumHere =
+                                        isPremiumRoom ||
+                                        globalState.isPremium ||
+                                        (isPremiumCat && isCategoryUnlockedByAd(category.id));
+                                    const isLocked = (isPremiumCat && !canUsePremiumHere) || lockedForMigrated;
 
                                     return (
                                         <TouchableOpacity
@@ -272,7 +254,7 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
                                             ]}
                                             onPress={() => {
                                                 if (isLocked) {
-                                                    Alert.alert("Premium", t.setup.premium_category_alert);
+                                                    setPremiumModal(lockedForMigrated ? 'migrated' : 'paywall');
                                                     return;
                                                 }
                                                 toggleCategory(category.id);
@@ -295,20 +277,70 @@ export function OnlineSettingsModal({ visible, onClose }: OnlineSettingsModalPro
                                         </TouchableOpacity>
                                     );
                                 })}
+
+                                {mergedCustomDefs
+                                    .filter(c =>
+                                        activeTab === 'biblical'
+                                            ? c.type === 'biblical' || !c.type
+                                            : c.type === 'general'
+                                    )
+                                    .map(category => {
+                                        const isSelected = selectedCategories.includes(category.id as Category);
+                                        return (
+                                            <TouchableOpacity
+                                                key={category.id}
+                                                style={[
+                                                    styles.categoryCard,
+                                                    { backgroundColor: '#A0AEC0' },
+                                                    isSelected && styles.categoryCardSelected,
+                                                ]}
+                                                onPress={() => toggleCategory(category.id as Category)}
+                                                activeOpacity={0.8}
+                                            >
+                                                <View style={styles.customIconContainer}>
+                                                    <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
+                                                </View>
+                                                {!isSelected && <View style={styles.inactiveOverlay} />}
+                                                <View style={styles.categoryNamePill}>
+                                                    <Text style={styles.categoryNameText} numberOfLines={2}>
+                                                        {category.name} ({category.words.length})
+                                                    </Text>
+                                                </View>
+                                                {isSelected && (
+                                                    <View style={styles.categoryCheckBadge}>
+                                                        <Ionicons name="checkmark" size={12} color="#FFF" />
+                                                    </View>
+                                                )}
+                                            </TouchableOpacity>
+                                        );
+                                    })}
                             </View>
-                            )}
                         </View>
                         <View style={{ height: 20 }} />
                     </ScrollView>
 
                     <View style={styles.footer}>
                         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                            <Text style={styles.saveButtonText}>Guardar</Text>
+                            <Text style={styles.saveButtonText}>{t.setup.save_button}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
         </Modal>
+
+        <GameModal
+            visible={premiumModal !== null}
+            type="info"
+            title={t.online.premium_category_modal_title}
+            message={
+                premiumModal === 'migrated'
+                    ? t.online.premium_migrated_category_note
+                    : t.setup.premium_category_alert
+            }
+            buttonText={t.common.ok}
+            onClose={() => setPremiumModal(null)}
+        />
+        </>
     );
 }
 
@@ -455,6 +487,23 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         alignItems: 'center',
         borderRadius: 10,
+        position: 'relative',
+    },
+    tabBadge: {
+        position: 'absolute',
+        top: 2,
+        right: 6,
+        backgroundColor: '#E53E3E',
+        borderRadius: 10,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        minWidth: 20,
+        alignItems: 'center',
+    },
+    tabBadgeText: {
+        color: '#FFF',
+        fontSize: 10,
+        fontWeight: 'bold',
     },
     activeTab: {
         backgroundColor: '#FFF',
@@ -471,19 +520,19 @@ const styles = StyleSheet.create({
     activeTabText: {
         color: '#5B7FDB',
     },
-    emptyCustomHint: {
-        color: '#718096',
-        fontSize: 14,
-        lineHeight: 20,
-        marginTop: 8,
-        marginBottom: 12,
-        textAlign: 'center',
-    },
-    customCategoryIconWrap: {
-        flex: 1,
+    customIconContainer: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'rgba(255,255,255,0.3)',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
+        marginBottom: 12,
+    },
+    customIconText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FFF',
     },
     categoriesGrid: {
         flexDirection: 'row',

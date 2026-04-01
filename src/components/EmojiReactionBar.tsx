@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'reac
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { OnlineReaction } from '../types';
 
-const EMOJIS = ['😂', '🤔', '😱', '🔥', '👏', '🙏'];
+const EMOJIS = ['😂', '🥲', '🤔', '🫣', '😱', '😎', '👏'];
 
 interface FloatingReaction {
     id: string;

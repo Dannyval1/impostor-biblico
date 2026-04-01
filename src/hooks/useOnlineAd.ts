@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePurchase } from '../context/PurchaseContext';
 
 const ONLINE_AD_KEY = 'lastOnlineAdSeen';
-const AD_COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 hours
+const AD_COOLDOWN_MS = 1 * 60 * 60 * 1000; // 1 hour
 
 export function useOnlineAd() {
     const { isPremium } = usePurchase();

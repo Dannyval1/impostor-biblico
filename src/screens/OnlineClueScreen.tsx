@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
     View, Text, StyleSheet, TextInput, TouchableOpacity,
-    KeyboardAvoidingView, Platform, ScrollView, Animated,
+    KeyboardAvoidingView, Platform, ScrollView, Animated, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,7 @@ import { Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { OnlinePlayer } from '../types';
 import { EmojiReactionBar } from '../components/EmojiReactionBar';
+import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
 
 export default function OnlineClueScreen() {
     const navigation = useNavigation<any>();
@@ -20,8 +21,15 @@ export default function OnlineClueScreen() {
 
     const [clueText, setClueText] = useState('');
     const [hasSubmitted, setHasSubmitted] = useState(false);
+    // Debe declararse antes de cualquier return: si no, al perderse `room` React rompe el orden de hooks.
+    const [secondsLeft, setSecondsLeft] = useState(30);
+    const flashAnim = useRef(new Animated.Value(1)).current;
 
-    const room = gameState.room!;
+    if (!gameState.room) {
+        return <OnlineRoomPlaceholder />;
+    }
+
+    const room = gameState.room;
     const mode = room.settings.discussionMode;
     const isSimultaneousReveal = room.status === 'simultaneous_reveal' && mode === 'simultaneous';
     const turnOrder = room.turnOrder || [];
@@ -32,8 +40,6 @@ export default function OnlineClueScreen() {
     const isHost = gameState.isHost;
 
     const clueDuration = room.settings.clueDuration || (mode === 'turns' ? 30 : 60);
-    const [secondsLeft, setSecondsLeft] = useState(clueDuration);
-    const flashAnim = useRef(new Animated.Value(1)).current;
 
     const players = Object.values(room.players).filter(p => !p.isEliminated);
     const cluesFingerprint = players.map(p => `${p.id}:${p.clue ?? ''}`).sort().join('|');
@@ -51,14 +57,15 @@ export default function OnlineClueScreen() {
         }
     }, [me?.clue]);
 
-    // Navigate when status changes
+    // Navigate when status changes (sin roomCode = sesión cerrada; no navegar con snapshot conservado)
     useEffect(() => {
+        if (!gameState.roomCode) return;
         if (room.status === 'voting') {
             navigation.replace('OnlineVoting');
-        } else if (room.status === 'results') {
+        } else if (room.status === 'results' || room.status === 'finished' || room.status === 'elimination_choice') {
             navigation.replace('OnlineResults');
         }
-    }, [room.status]);
+    }, [gameState.roomCode, room.status]);
 
     // Reset my submission state when turn changes (turns mode)
     useEffect(() => {
@@ -132,6 +139,28 @@ export default function OnlineClueScreen() {
     };
 
     const timerColor = secondsLeft <= 10 ? '#E53E3E' : secondsLeft <= 20 ? '#F6AD55' : '#48BB78';
+
+    // ── Eliminated player overlay ──────────────────────────────────
+    if (me?.isEliminated) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.eliminatedOverlay}>
+                    {me?.avatar && (
+                        <Image
+                            source={AVATAR_ASSETS[me.avatar]}
+                            style={styles.eliminatedAvatar}
+                        />
+                    )}
+                    <Text style={styles.eliminatedTitle}>{t.online.you_are_eliminated}</Text>
+                    <Text style={styles.eliminatedSubtitle}>
+                        {t.online.elimination_choice_eliminated_hint}
+                    </Text>
+                    <ActivityIndicator color="rgba(255,255,255,0.5)" size="large" style={{ marginTop: 24 }} />
+                </View>
+                <EmojiReactionBar />
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -666,5 +695,34 @@ const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
         lineHeight: 22,
+    },
+    // Eliminated overlay
+    eliminatedOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+    },
+    eliminatedAvatar: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        opacity: 0.35,
+        backgroundColor: '#555',
+        marginBottom: 20,
+    },
+    eliminatedTitle: {
+        fontSize: 24,
+        fontWeight: '900',
+        color: '#E53E3E',
+        textAlign: 'center',
+        letterSpacing: 1,
+    },
+    eliminatedSubtitle: {
+        fontSize: 14,
+        color: 'rgba(255,255,255,0.5)',
+        textAlign: 'center',
+        marginTop: 10,
+        lineHeight: 20,
     },
 });

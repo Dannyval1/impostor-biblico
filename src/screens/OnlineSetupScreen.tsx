@@ -5,11 +5,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { useGame } from '../context/GameContext';
+import { usePurchase } from '../context/PurchaseContext';
 import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL, ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
 import { Category, CustomCategory } from '../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { isPremiumCategory } from '../data/categories';
+import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
+import { GameModal } from '../components/GameModal';
 
 function isCustomCategoryId(id: Category): boolean {
     return !ONLINE_STANDARD_CATEGORY_IDS.has(id as string);
@@ -32,6 +35,9 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const { t } = useTranslation();
     const { gameState, updateSettings, startGame } = useOnlineGame();
     const { state: globalState } = useGame();
+    const { isCategoryUnlockedByAd } = usePurchase();
+
+    const [premiumModal, setPremiumModal] = useState<'migrated' | 'paywall' | null>(null);
 
     const [impostorCount, setImpostorCount] = useState(1);
     const [gameDuration, setGameDuration] = useState<number | null>(null);
@@ -41,7 +47,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const [discussionMode, setDiscussionMode] = useState<'turns' | 'simultaneous'>('turns');
     const [clueDuration, setClueDuration] = useState(30);
 
-    const [activeTab, setActiveTab] = useState<'biblical' | 'general' | 'custom'>('biblical');
+    const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
 
     const mergedCustomDefs = useMemo(() => {
         const map = new Map<string, CustomCategory>();
@@ -123,15 +129,23 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
         }
     };
 
-    if (!gameState.room) return null;
+    if (!gameState.room) {
+        return <OnlineRoomPlaceholder />;
+    }
 
     const playerCount = Object.keys(gameState.room.players).length;
-    const maxImpostors = Math.floor(playerCount / 2);
+    const maxImpostors = Math.max(1, Math.min(2, Math.floor(playerCount / 2)));
 
-    // Badges por pestaña: solo cuentan categorías de esa pestaña (custom ≠ “fantasma” en Bíblicas).
-    const biblicalSelectedCount = CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length;
-    const genericSelectedCount = CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length;
-    const customSelectedCount = mergedCustomDefs.filter(c => selectedCategories.includes(c.id)).length;
+    const biblicalSelectedCount =
+        CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length +
+        mergedCustomDefs.filter(
+            c => selectedCategories.includes(c.id as Category) && (c.type === 'biblical' || !c.type)
+        ).length;
+    const genericSelectedCount =
+        CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length +
+        mergedCustomDefs.filter(
+            c => selectedCategories.includes(c.id as Category) && c.type === 'general'
+        ).length;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -169,7 +183,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.impostorHint}>
-                        Máximo {maxImpostors} impostores (mitad de jugadores)
+                        {(t.setup as any).max_impostors || `Máximo ${maxImpostors} impostores`}
                     </Text>
                 </View>
 
@@ -189,27 +203,6 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                     </View>
                 </View>
 
-                {/* Duration */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t.setup.duration}</Text>
-                    <View style={styles.durationTabs}>
-                        {DURATIONS.map(dur => {
-                            const isSelected = gameDuration === dur.value;
-                            const label = dur.value === null ? t.setup.unlimited : dur.label.replace('setup.minutes', t.setup.minutes).replace('setup.minute', t.setup.minute);
-                            return (
-                                <TouchableOpacity
-                                    key={dur.value || 'unlimited'}
-                                    style={[styles.durationTab, isSelected && styles.durationTabSelected]}
-                                    onPress={() => setGameDuration(dur.value)}
-                                >
-                                    <Text style={[styles.durationTabText, isSelected && styles.durationTabTextSelected]}>
-                                        {label}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
-                        })}
-                    </View>
-                </View>
 
                 {/* Discussion Mode */}
                 <View style={styles.section}>
@@ -269,57 +262,8 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                                 <Text style={styles.tabBadgeText}>{genericSelectedCount}</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.tab, activeTab === 'custom' && styles.activeTab]}
-                            onPress={() => setActiveTab('custom')}
-                        >
-                            <Text style={[styles.tabText, activeTab === 'custom' && styles.activeTabText]}>{t.setup.custom_tab}</Text>
-                            <View style={styles.tabBadge}>
-                                <Text style={styles.tabBadgeText}>{customSelectedCount}</Text>
-                            </View>
-                        </TouchableOpacity>
                     </View>
 
-                    {activeTab === 'custom' && (
-                        mergedCustomDefs.length === 0 ? (
-                            <Text style={styles.emptyCustomHint}>{t.online.custom_categories_empty}</Text>
-                        ) : (
-                            <View style={styles.categoriesGrid}>
-                                {mergedCustomDefs.map(category => {
-                                    const isSelected = selectedCategories.includes(category.id as Category);
-                                    return (
-                                        <TouchableOpacity
-                                            key={category.id}
-                                            style={[
-                                                styles.categoryCard,
-                                                { backgroundColor: '#4A5568' },
-                                                isSelected && styles.categoryCardSelected,
-                                            ]}
-                                            onPress={() => toggleCategory(category.id as Category)}
-                                            activeOpacity={0.8}
-                                        >
-                                            <View style={styles.customCategoryIconWrap}>
-                                                <Ionicons name="albums-outline" size={36} color="#E2E8F0" />
-                                            </View>
-                                            {!isSelected && <View style={styles.inactiveOverlay} />}
-                                            <View style={styles.categoryNamePill}>
-                                                <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                    {category.name}
-                                                </Text>
-                                            </View>
-                                            {isSelected && (
-                                                <View style={styles.categoryCheckBadge}>
-                                                    <Ionicons name="checkmark" size={12} color="#FFF" />
-                                                </View>
-                                            )}
-                                        </TouchableOpacity>
-                                    );
-                                })}
-                            </View>
-                        )
-                    )}
-
-                    {(activeTab === 'biblical' || activeTab === 'general') && (
                     <View style={styles.categoriesGrid}>
                         {(activeTab === 'biblical' ? CATEGORIES_BIBLICAL : CATEGORIES_GENERAL).map(category => {
                             const isSelected = selectedCategories.includes(category.id);
@@ -332,7 +276,12 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                             // Migrated free host: can't add new premium categories not in snapshot
                             const snapshot = room?.premiumCategoriesSnapshot || [];
                             const lockedForMigratedHost = isPremium && isPremiumRoom && !isOriginalHost && !snapshot.includes(category.id) && !isSelected;
-                            const isLocked = (isPremium && !isPremiumRoom) || lockedForMigratedHost;
+                            // Misma regla que modo clásico: sala premium, compra, o categoría desbloqueada con anuncio
+                            const canUsePremiumHere =
+                                isPremiumRoom ||
+                                globalState.isPremium ||
+                                (isPremium && isCategoryUnlockedByAd(category.id));
+                            const isLocked = (isPremium && !canUsePremiumHere) || lockedForMigratedHost;
 
                             return (
                                 <TouchableOpacity
@@ -344,9 +293,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                                     ]}
                                     onPress={() => {
                                         if (isLocked) {
-                                            Alert.alert("Premium", lockedForMigratedHost
-                                                ? "Esta categoría no estaba disponible al crear la sala."
-                                                : t.setup.premium_category_alert);
+                                            setPremiumModal(lockedForMigratedHost ? 'migrated' : 'paywall');
                                             return;
                                         }
                                         toggleCategory(category.id);
@@ -369,8 +316,44 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                                 </TouchableOpacity>
                             );
                         })}
+
+                        {mergedCustomDefs
+                            .filter(c =>
+                                activeTab === 'biblical'
+                                    ? c.type === 'biblical' || !c.type
+                                    : c.type === 'general'
+                            )
+                            .map(category => {
+                                const isSelected = selectedCategories.includes(category.id as Category);
+                                return (
+                                    <TouchableOpacity
+                                        key={category.id}
+                                        style={[
+                                            styles.categoryCard,
+                                            { backgroundColor: '#A0AEC0' },
+                                            isSelected && styles.categoryCardSelected,
+                                        ]}
+                                        onPress={() => toggleCategory(category.id as Category)}
+                                        activeOpacity={0.8}
+                                    >
+                                        <View style={styles.customIconContainer}>
+                                            <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
+                                        </View>
+                                        {!isSelected && <View style={styles.inactiveOverlay} />}
+                                        <View style={styles.categoryNamePill}>
+                                            <Text style={styles.categoryNameText} numberOfLines={2}>
+                                                {category.name} ({category.words.length})
+                                            </Text>
+                                        </View>
+                                        {isSelected && (
+                                            <View style={styles.categoryCheckBadge}>
+                                                <Ionicons name="checkmark" size={12} color="#FFF" />
+                                            </View>
+                                        )}
+                                    </TouchableOpacity>
+                                );
+                            })}
                     </View>
-                    )}
                 </View>
                 <View style={{ height: 40 }} />
             </ScrollView>
@@ -398,13 +381,29 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                             )}
                             {hasCategories && connectedPlayers.length < 3 && (
                                 <Text style={styles.minPlayersWarning}>
-                                    {`Se necesitan al menos 3 jugadores (${connectedPlayers.length}/3)`}
+                                    {t.online.need_three_players_progress.replace(
+                                        '{current}',
+                                        String(connectedPlayers.length)
+                                    )}
                                 </Text>
                             )}
                         </>
                     );
                 })()}
             </View>
+
+            <GameModal
+                visible={premiumModal !== null}
+                type="info"
+                title={t.online.premium_category_modal_title}
+                message={
+                    premiumModal === 'migrated'
+                        ? t.online.premium_migrated_category_note
+                        : t.setup.premium_category_alert
+                }
+                buttonText={t.common.ok}
+                onClose={() => setPremiumModal(null)}
+            />
         </SafeAreaView>
     );
 }
@@ -578,20 +577,19 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontWeight: 'bold',
     },
-    emptyCustomHint: {
-        color: '#718096',
-        fontSize: 14,
-        lineHeight: 20,
-        marginTop: 8,
-        marginBottom: 16,
-        textAlign: 'center',
-        paddingHorizontal: 12,
-    },
-    customCategoryIconWrap: {
-        flex: 1,
+    customIconContainer: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'rgba(255,255,255,0.3)',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
+        marginBottom: 20,
+    },
+    customIconText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FFF',
     },
     categoriesGrid: {
         flexDirection: 'row',
