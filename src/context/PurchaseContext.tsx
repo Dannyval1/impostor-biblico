@@ -16,14 +16,20 @@ const API_KEYS = {
     google: 'goog_BXcFKYvqJnBsFkSfNodPqFwQgEz'
 };
 
+/**
+ * Pon en `true` solo mientras pruebas flujo premium sin comprar.
+ * Debe ser `false` en builds que vayan a tienda.
+ */
+const FORCE_PREMIUM_FOR_TESTING = false;
+
 // 3 hours unlock duration
 const UNLOCK_DURATION_MS = 3 * 60 * 60 * 1000;
-// 24 hours cooldown
-const COOLDOWN_DURATION_MS = 24 * 60 * 60 * 1000;
+// No more cooldowns needed since max unlocks is 1
+const COOLDOWN_DURATION_MS = 0;
 /** Maximum ad unlocks allowed per category before the user must purchase */
-const MAX_AD_UNLOCKS = 2;
+const MAX_AD_UNLOCKS = 1;
 /** Maximum number of DISTINCT premium categories a user can trial with ads */
-const MAX_AD_CATEGORIES = 2;
+const MAX_AD_CATEGORIES = 1;
 
 // ─── Cooldown status for a single category ──────────────────────────────────
 export type AdUnlockStatus =
@@ -54,11 +60,8 @@ interface PurchaseContextType {
 
 const PurchaseContext = createContext<PurchaseContextType | null>(null);
 
-// ⚠️ TESTING ONLY — set to false before publishing!
-const DEV_FORCE_PREMIUM = false;
-
 export function PurchaseProvider({ children }: { children: ReactNode }) {
-    const [isPremium, setIsPremium] = useState(DEV_FORCE_PREMIUM);
+    const [isPremium, setIsPremium] = useState(false);
     const [packages, setPackages] = useState<PurchasesPackage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [hasShownInitialPaywall, setHasShownInitialPaywall] = useState(false);
@@ -157,7 +160,9 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
     };
 
     const checkPremiumStatus = (customerInfo: CustomerInfo) => {
-        setIsPremium(!!customerInfo.entitlements.active['premium']);
+        setIsPremium(
+            FORCE_PREMIUM_FOR_TESTING || !!customerInfo.entitlements.active['premium']
+        );
     };
 
     const purchasePackage = async (pack: PurchasesPackage) => {

@@ -1,5 +1,8 @@
 export type GameMode = 'classic' | 'online';
 
+/** Por qué se cerró la sala online (modal informativo para no anfitriones). */
+export type OnlineRoomCloseReason = 'host_left' | 'connection_lost' | 'room_removed';
+
 export type GamePhase = 'setup' | 'reveal' | 'discussion' | 'voting' | 'results';
 
 export type PlayerRole = 'civilian' | 'impostor';
@@ -56,6 +59,8 @@ export interface Word {
     id: string;
     word: string;
     category: Category;
+    /** Nombre legible para categorías personalizadas (Firebase / UI). */
+    categoryDisplayName?: string;
     difficulty: 'easy' | 'medium' | 'hard';
     hint?: string;
     impostorHint?: string;
@@ -120,3 +125,106 @@ export type GameAction =
     | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string; name: string } }
     | { type: 'TOGGLE_IMPOSTOR_HINT'; payload: boolean }
     | { type: 'FORCE_REMOVE_CATEGORY'; payload: Category };
+
+// Online Mode Types
+
+export type OnlinePlayerRole = 'civilian' | 'impostor';
+
+export interface OnlinePlayer {
+    id: string;
+    name: string;
+    avatar: import('./index').Avatar;
+    isHost: boolean;
+    isReady: boolean;
+    role?: OnlinePlayerRole;
+    vote?: string | null;
+    isEliminated: boolean;
+    score: number;
+    clue?: string | null;
+    lastSeen?: number;
+    isConnected?: boolean;
+    disconnectedAt?: number;
+}
+
+export type DiscussionMode = 'turns' | 'simultaneous';
+
+export type RoomStatus =
+    | 'waiting'
+    | 'playing'
+    | 'clues'
+    | 'simultaneous_reveal'
+    | 'deciding'
+    | 'voting'
+    | 'results'
+    | 'elimination_choice'
+    | 'finished';
+
+/** Tras eliminar a un civil (4+ jugadores): seguir con la misma palabra o revelar impostor. */
+export type EliminationChoiceVote = 'continue_same' | 'reveal_impostor';
+
+export type RoundDecisionVote = 'go_vote' | 'another_round';
+export type PostResultVote = 'play_again' | 'leave';
+
+export interface OnlineReaction {
+    emoji: string;
+    playerName: string;
+    playerId: string;
+    timestamp: number;
+}
+
+export interface OnlineRoom {
+    id: string;
+    /** Conteo de jugadores; usado por reglas RTDB (no existe numChildren() en rules). */
+    playerCount?: number;
+    hostId: string;
+    hostHeartbeat?: string | number;
+    originalHostId: string;
+    originalHostName: string;
+    status: RoomStatus;
+    players: Record<string, OnlinePlayer>;
+    settings: {
+        impostorCount: number;
+        gameDuration: number | null;
+        language: 'es' | 'en' | 'pt';
+        categories: Category[];
+        customCategories: CustomCategory[];
+        isPremiumRoom: boolean;
+        impostorHint: boolean;
+        isConfigured: boolean;
+        discussionMode: DiscussionMode;
+        clueDuration: number;
+        maxPlayers: number;
+    };
+    premiumCategoriesSnapshot?: Category[];
+    currentWord?: Word;
+    currentImpostors?: string[];
+    currentRoundStartTime?: number;
+    createdAt: number;
+    lastActivity?: number;
+    winner?: 'impostors' | 'civilians';
+    finishReason?: string;
+    lastEliminatedId?: string | null;
+    voteCounts?: Record<string, number>;
+    isTie?: boolean;
+    turnOrder?: string[];
+    currentTurnIndex?: number;
+    cluePhaseStartTime?: number;
+    /** Inicio de la fase de votación (ms); el anfitrión cierra a los 30s aunque falten votos. */
+    votingPhaseStartTime?: number;
+    reactions?: Record<string, OnlineReaction>;
+    roundDecisionVotes?: Record<string, RoundDecisionVote>;
+    roundDecisionStartTime?: number;
+    clueRound?: number;
+    postResultVotes?: Record<string, PostResultVote>;
+    postResultStartTime?: number;
+    eliminationChoiceVotes?: Record<string, EliminationChoiceVote>;
+    eliminationChoiceStartTime?: number;
+}
+
+export interface OnlineGameState {
+    roomCode: string | null;
+    playerId: string | null;
+    isHost: boolean;
+    room: OnlineRoom | null;
+    error: string | null;
+}

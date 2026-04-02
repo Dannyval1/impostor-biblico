@@ -31,7 +31,12 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+env.d.ts
+
+# Generado por scripts/sync-firebase-env.cjs
+src/config/firebase.runtime.json
 
 # typescript
 *.tsbuildinfo

@@ -3,10 +3,13 @@
   "version": "1.2.0",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web"
+    "postinstall": "node scripts/sync-firebase-env.cjs",
+    "eas-build-post-install": "node scripts/sync-firebase-env.cjs",
+    "sync-firebase-env": "node scripts/sync-firebase-env.cjs",
+    "start": "node scripts/sync-firebase-env.cjs && expo start",
+    "android": "node scripts/sync-firebase-env.cjs && expo run:android",
+    "ios": "node scripts/sync-firebase-env.cjs && expo run:ios",
+    "web": "node scripts/sync-firebase-env.cjs && expo start --web"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -21,17 +24,21 @@
     "expo-navigation-bar": "~5.0.10",
     "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",
+    "firebase": "^12.10.0",
     "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-google-mobile-ads": "^16.0.1",
     "react-native-purchases": "^9.7.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.12.1",
-    "react-native-version-check-expo": "^3.5.0"
+    "react-native-version-check-expo": "^3.5.0",
+    "react-native-web": "^0.21.0"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "dotenv": "^17.3.1",
     "typescript": "~5.9.2"
   },
   "private": true

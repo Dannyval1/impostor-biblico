@@ -7,6 +7,7 @@ import * as NavigationBar from 'expo-navigation-bar';
 import AppNavigator from './src/navigation/AppNavigator';
 import { GameProvider } from './src/context/GameContext';
 import { PurchaseProvider } from './src/context/PurchaseContext';
+import { OnlineGameProvider } from './src/context/OnlineGameContext';
 
 // Keep splash screen visible while loading
 SplashScreen.preventAutoHideAsync();
@@ -89,7 +90,9 @@ export default function App() {
     <SafeAreaProvider>
       <PurchaseProvider>
         <GameProvider>
-          <AppNavigator />
+          <OnlineGameProvider>
+            <AppNavigator />
+          </OnlineGameProvider>
         </GameProvider>
       </PurchaseProvider>
     </SafeAreaProvider>
