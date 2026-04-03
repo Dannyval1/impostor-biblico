@@ -1,6 +1,6 @@
 {
   "name": "impostor-cristiano",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "main": "index.ts",
   "scripts": {
     "postinstall": "node scripts/sync-firebase-env.cjs",

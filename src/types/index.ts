@@ -1,6 +1,6 @@
 export type GameMode = 'classic' | 'online';
 
-/** Por qué se cerró la sala online (modal informativo para no anfitriones). */
+/** Motivo de cierre de sala online (modal / reglas RTDB). */
 export type OnlineRoomCloseReason = 'host_left' | 'connection_lost' | 'room_removed';
 
 export type GamePhase = 'setup' | 'reveal' | 'discussion' | 'voting' | 'results';
@@ -174,18 +174,20 @@ export interface OnlineReaction {
 
 export interface OnlineRoom {
     id: string;
-    /** Conteo de jugadores; usado por reglas RTDB (no existe numChildren() en rules). */
-    playerCount?: number;
     hostId: string;
-    hostHeartbeat?: string | number;
     originalHostId: string;
-    originalHostName: string;
+    /** Nombre del anfitrión original (banner premium / UI). */
+    originalHostName?: string;
+    /** Conteo de jugadores; las reglas RTDB lo usan en lugar de numChildren() (no existe en reglas). */
+    playerCount?: number;
+    /** Latido del anfitrión para que los clientes detecten caída sin migrar host. */
+    hostHeartbeat?: string;
     status: RoomStatus;
     players: Record<string, OnlinePlayer>;
     settings: {
         impostorCount: number;
         gameDuration: number | null;
-        language: 'es' | 'en' | 'pt';
+        language: 'es' | 'en';
         categories: Category[];
         customCategories: CustomCategory[];
         isPremiumRoom: boolean;
@@ -202,7 +204,8 @@ export interface OnlineRoom {
     createdAt: number;
     lastActivity?: number;
     winner?: 'impostors' | 'civilians';
-    finishReason?: string;
+    /** Por qué terminó la partida en resultados (p. ej. jugadores insuficientes). */
+    finishReason?: 'impostor_disconnected' | 'not_enough_players';
     lastEliminatedId?: string | null;
     voteCounts?: Record<string, number>;
     isTie?: boolean;

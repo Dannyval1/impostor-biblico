@@ -4,17 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTranslation } from '../hooks/useTranslation';
-import type { OnlineRoomCloseReason } from '../types';
-
 export function RoomClosedModal() {
     const { roomClosed, roomCloseReason, clearRoomClosed } = useOnlineGame();
     const navigation = useNavigation<any>();
     const { t } = useTranslation();
 
-    const effectiveReason: OnlineRoomCloseReason = roomCloseReason ?? 'room_removed';
-
     const { title, subtitle } = useMemo(() => {
         const e = t.online.errors;
+        const effectiveReason = roomCloseReason ?? 'room_removed';
         switch (effectiveReason) {
             case 'host_left':
                 return {
@@ -33,7 +30,7 @@ export function RoomClosedModal() {
                     subtitle: e.room_closed_removed_desc,
                 };
         }
-    }, [effectiveReason, t]);
+    }, [roomCloseReason, t]);
 
     const handleDismiss = () => {
         clearRoomClosed();
@@ -43,7 +40,7 @@ export function RoomClosedModal() {
     };
 
     return (
-        <Modal visible={roomClosed} transparent animationType="fade" onRequestClose={handleDismiss}>
+        <Modal visible={roomClosed && roomCloseReason != null} transparent animationType="fade" onRequestClose={handleDismiss}>
             <View style={styles.overlay}>
                 <View style={styles.card}>
                     <View style={styles.iconWrapper}>

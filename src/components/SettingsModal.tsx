@@ -12,8 +12,12 @@ import {
     Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 type SettingsModalProps = {
     visible: boolean;
@@ -21,11 +25,7 @@ type SettingsModalProps = {
 };
 
 const { width } = Dimensions.get('window');
-const APP_VERSION = '1.2.0';
-
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/AppNavigator';
+const APP_VERSION = Constants.expoConfig?.version ?? '2.0.0';
 
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
     const { state, toggleMusic, toggleSounds, setLanguage, setDifficulty, playClick } = useGame();

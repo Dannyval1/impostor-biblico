@@ -2,8 +2,8 @@
   "rules": {
     "rooms": {
       "$roomCode": {
-        ".read": "data.child('players').child(auth != null ? auth.uid : '').exists() || !data.exists()",
-        ".write": "!data.exists() || data.child('hostId').val() === auth.uid || (auth != null && data.exists() && data.child('players').child(auth.uid).exists() && data.hasChild('playerCount') && ((!newData.exists() && data.child('playerCount').val() === 1) || (newData.exists() && newData.child('hostId').val() === data.child('hostId').val() && newData.child('status').val() === data.child('status').val() && newData.child('playerCount').val() === data.child('playerCount').val() - 1 && !newData.child('players').child(auth.uid).exists())))",
+        ".read": "(auth != null && data.exists() && data.child('status').val() === 'waiting') || data.child('players').child(auth != null ? auth.uid : '').exists() || !data.exists()",
+        ".write": "!data.exists() || data.child('hostId').val() === auth.uid || (auth != null && data.exists() && data.child('players').child(auth.uid).exists() && data.hasChild('playerCount') && ((!newData.exists() && data.child('playerCount').val() === 1) || (newData.exists() && newData.child('hostId').val() === data.child('hostId').val() && newData.child('status').val() === data.child('status').val() && newData.child('playerCount').val() === data.child('playerCount').val() - 1 && !newData.child('players').child(auth.uid).exists()))) || (auth != null && data.exists() && newData.exists() && data.hasChild('playerCount') && data.child('status').val() === 'waiting' && newData.child('status').val() === 'waiting' && newData.child('hostId').val() === data.child('hostId').val() && newData.child('playerCount').val() === data.child('playerCount').val() + 1 && !data.child('players').child(auth.uid).exists() && newData.child('players').child(auth.uid).exists())",
         "hostId": {
           ".write": "data.parent().child('hostId').val() === auth.uid || !data.exists()",
           ".validate": "newData.isString()"
