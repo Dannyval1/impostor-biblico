@@ -1,23 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Animated, Share } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Animated, Share } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useOnlineGame } from '../context/OnlineGameContext';
-import { AVATAR_ASSETS } from '../utils/avatarAssets';
+import { getAvatarSource } from '../utils/avatarAssets';
 import { GameModal } from '../components/GameModal';
 import { useTranslation } from '../hooks/useTranslation';
 import { OnlinePlayer } from '../types';
 import { PremiumRoomBanner } from '../components/PremiumRoomBanner';
+import { OnlineOnboardingModal } from '../components/OnlineOnboardingModal';
 import { useOnlineAd } from '../hooks/useOnlineAd';
 import { ref, get } from 'firebase/database';
 import { database } from '../config/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const IOS_STORE_URL = 'https://apps.apple.com/app/id6758225650';
+const ANDROID_STORE_URL = 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
+const LOBBY_STALE_CLEANUP_SAMPLE_RATE = 0.1;
+const LOBBY_STALE_CLEANUP_THROTTLE_MS = 8 * 60 * 60 * 1000;
+const LOBBY_STALE_CLEANUP_LAST_RUN_KEY = 'online_lobby_stale_cleanup_last_run_at';
 
 export default function OnlineLobbyScreen() {
     const navigation = useNavigation<any>(); // type appropriately
-    const { gameState, createRoom, joinRoom, leaveRoom } = useOnlineGame();
+    const { gameState, createRoom, joinRoom, leaveRoom, updateMyJoinState, cleanupStaleRooms } = useOnlineGame();
     const { t } = useTranslation();
     const { showInterstitialIfNeeded } = useOnlineAd();
+    const adFlowStartedRef = useRef(false);
 
     const [playerName, setPlayerName] = useState('');
     const [roomCodeInput, setRoomCodeInput] = useState('');
@@ -60,12 +69,100 @@ export default function OnlineLobbyScreen() {
     };
 
     // Navigation logic based on game state (sin roomCode = sesión terminada; no navegar con snapshot conservado)
+    // Handles all mid-game statuses so reconnecting after screen-off lands on the correct screen.
     useEffect(() => {
         if (!gameState.roomCode) return;
-        if (gameState.room?.status === 'playing') {
+        const status = gameState.room?.status;
+        if (!status || status === 'waiting') return;
+
+        if (status === 'playing') {
             navigation.replace('OnlineReveal');
+        } else if (
+            status === 'clues' ||
+            status === 'simultaneous_reveal' ||
+            status === 'clue_review' ||
+            status === 'deciding'
+        ) {
+            navigation.replace('OnlineClue');
+        } else if (status === 'voting') {
+            navigation.replace('OnlineVoting');
+        } else if (
+            status === 'results' ||
+            status === 'elimination_choice' ||
+            status === 'finished'
+        ) {
+            navigation.replace('OnlineResults');
         }
     }, [gameState.roomCode, gameState.room?.status]);
+
+    // Limpieza pasiva híbrida: muestreo + throttle + ejecución diferida en background.
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            void (async () => {
+                if (Math.random() >= LOBBY_STALE_CLEANUP_SAMPLE_RATE) return;
+                try {
+                    const now = Date.now();
+                    const lastRaw = await AsyncStorage.getItem(LOBBY_STALE_CLEANUP_LAST_RUN_KEY);
+                    const lastRun = lastRaw ? Number(lastRaw) : 0;
+                    if (Number.isFinite(lastRun) && lastRun > 0 && now - lastRun < LOBBY_STALE_CLEANUP_THROTTLE_MS) {
+                        return;
+                    }
+                    await cleanupStaleRooms();
+                    await AsyncStorage.setItem(LOBBY_STALE_CLEANUP_LAST_RUN_KEY, String(now));
+                } catch {
+                    // Silencioso por diseño: no impactar UX del lobby.
+                }
+            })();
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [cleanupStaleRooms]);
+
+    // Al entrar al lobby en espera, el propio jugador pasa joining -> watching_ad/ready.
+    useEffect(() => {
+        const room = gameState.room;
+        const myId = gameState.playerId;
+        if (!room || !gameState.roomCode || !myId) {
+            adFlowStartedRef.current = false;
+            return;
+        }
+        if (room.status !== 'waiting') {
+            adFlowStartedRef.current = false;
+            return;
+        }
+        const me = room.players[myId];
+        if (!me) return;
+        if (me.joinState === 'ready') {
+            adFlowStartedRef.current = false;
+            return;
+        }
+        if (adFlowStartedRef.current) return;
+        adFlowStartedRef.current = true;
+
+        const run = async () => {
+            try {
+                if (me.joinState !== 'watching_ad') {
+                    await updateMyJoinState('watching_ad');
+                }
+                await showInterstitialIfNeeded(room.settings.isPremiumRoom, () => {
+                    void updateMyJoinState('ready');
+                });
+            } catch {
+                await updateMyJoinState('ready');
+            } finally {
+                adFlowStartedRef.current = false;
+            }
+        };
+        void run();
+    }, [
+        gameState.roomCode,
+        gameState.playerId,
+        gameState.room?.status,
+        gameState.room?.players,
+        gameState.room?.settings?.isPremiumRoom,
+        showInterstitialIfNeeded,
+        updateMyJoinState,
+    ]);
 
     const handleCreateRoom = async () => {
         if (!playerName.trim()) {
@@ -73,19 +170,14 @@ export default function OnlineLobbyScreen() {
             return;
         }
         setIsLoading(true);
-        showInterstitialIfNeeded(false, async () => {
-            try {
-                await createRoom(playerName.trim());
-            } catch (error) {
-                showGameModal(t.common.error, t.online.errors.room_create_error, 'danger', 'OK');
-                console.error(error);
-            } finally {
-                setIsLoading(false);
-            }
-        }).catch(err => {
-            console.error(err);
+        try {
+            await createRoom(playerName.trim());
+        } catch (error) {
+            showGameModal(t.common.error, t.online.errors.room_create_error, 'danger', 'OK');
+            console.error(error);
+        } finally {
             setIsLoading(false);
-        });
+        }
     };
 
     const handleJoinRoom = async () => {
@@ -96,12 +188,25 @@ export default function OnlineLobbyScreen() {
 
         const code = roomCodeInput.trim().toUpperCase();
         const nameToCheck = playerName.trim().toLowerCase();
+        const currentPlayerId = gameState.playerId;
+        if (!currentPlayerId) {
+            showGameModal(
+                t.common.error,
+                t.online.errors.room_join_error,
+                'warning',
+                'OK'
+            );
+            return;
+        }
         try {
             const snap = await get(ref(database, `rooms/${code}/players`));
             if (snap.exists()) {
                 const players = snap.val();
                 const nameExists = Object.values(players).some(
-                    (p: any) => p.name?.toLowerCase() === nameToCheck && p.id !== gameState.playerId
+                    (p: any) =>
+                        p?.name?.toLowerCase() === nameToCheck &&
+                        p?.id !== currentPlayerId &&
+                        p?.isConnected !== false
                 );
                 if (nameExists) {
                     showGameModal(
@@ -115,29 +220,23 @@ export default function OnlineLobbyScreen() {
         } catch { /* proceed anyway */ }
 
         setIsLoading(true);
-        // Ad shows before joining (room premium status unknown yet, pass undefined)
-        showInterstitialIfNeeded(undefined, async () => {
-            try {
-                const success = await joinRoom(roomCodeInput.trim().toUpperCase(), playerName.trim());
-                if (!success) {
-                    showGameModal(t.common.error, t.online.errors.room_not_found, 'danger', 'OK');
-                }
-            } catch (error: any) {
-                if (error.message === 'Game already started') {
-                    showGameModal(t.common.error, t.online.errors.game_started_desc || t.online.errors.game_started, 'danger', 'OK');
-                } else if (error.message === 'Room full') {
-                    showGameModal(t.common.error, t.online.errors.room_full || 'Sala llena.', 'warning', 'OK');
-                } else {
-                    showGameModal(t.common.error, t.online.errors.room_join_error, 'danger', 'OK');
-                }
-                console.error(error);
-            } finally {
-                setIsLoading(false);
+        try {
+            const success = await joinRoom(code, playerName.trim());
+            if (!success) {
+                showGameModal(t.common.error, t.online.errors.room_not_found, 'danger', 'OK');
             }
-        }).catch(err => {
-            console.error(err);
+        } catch (error: any) {
+            if (error.message === 'Game already started') {
+                showGameModal(t.common.error, t.online.errors.game_started_desc || t.online.errors.game_started, 'danger', 'OK');
+            } else if (error.message === 'Room full') {
+                showGameModal(t.common.error, t.online.errors.room_full || 'Sala llena.', 'warning', 'OK');
+            } else {
+                showGameModal(t.common.error, t.online.errors.room_join_error, 'danger', 'OK');
+            }
+            console.error(error);
+        } finally {
             setIsLoading(false);
-        });
+        }
     };
 
     const handleLeaveRoom = async () => {
@@ -149,10 +248,12 @@ export default function OnlineLobbyScreen() {
 
     const shareCode = async () => {
         const code = gameState.roomCode || '';
+        const message = t.online.share_invite_full
+            .replace('{code}', code)
+            .replace('{iosUrl}', IOS_STORE_URL)
+            .replace('{androidUrl}', ANDROID_STORE_URL);
         try {
-            await Share.share({
-                message: code,
-            });
+            await Share.share({ message });
         } catch {
             // fallback
         }
@@ -160,21 +261,38 @@ export default function OnlineLobbyScreen() {
 
     const renderPlayerItem = ({ item }: { item: OnlinePlayer }) => {
         const isDisconnected = item.isConnected === false;
+        const joinState = item.joinState || 'ready';
+        const stateColor = isDisconnected
+            ? '#E53E3E'
+            : joinState === 'ready'
+                ? '#48BB78'
+                : joinState === 'watching_ad'
+                    ? '#F6AD55'
+                    : '#A0AEC0';
+        const stateText = isDisconnected
+            ? t.online.reconnecting
+            : joinState === 'ready'
+                ? t.online.lobby_state_ready
+                : joinState === 'watching_ad'
+                    ? t.online.lobby_state_watching_ad
+                    : t.online.lobby_state_joining;
         return (
             <View style={[styles.playerCard, isDisconnected && styles.playerCardDisconnected]}>
                 <View style={styles.avatarWrapper}>
                     <View style={styles.avatarContainer}>
-                        <Image source={AVATAR_ASSETS[item.avatar]} style={[styles.avatarImage, isDisconnected && { opacity: 0.4 }]} />
+                        <Image source={getAvatarSource(item.avatar)} style={[styles.avatarImage, isDisconnected && { opacity: 0.4 }]} />
                     </View>
-                    <View style={[styles.connectionDot, { backgroundColor: isDisconnected ? '#E53E3E' : '#48BB78' }]} />
                 </View>
                 <View style={styles.playerInfo}>
                     <Text style={styles.playerName}>{item.name} {item.id === gameState.playerId && t.online.you}</Text>
                     {item.isHost && <Text style={styles.hostBadge}>{t.online.host_badge}</Text>}
-                    {isDisconnected && <Text style={styles.disconnectedText}>{t.online.reconnecting}</Text>}
                 </View>
-                {!isDisconnected && <Ionicons name="checkmark-circle" size={24} color="#48BB78" />}
-                {isDisconnected && <Ionicons name="wifi-outline" size={22} color="#E53E3E" />}
+                <Ionicons
+                    name={isDisconnected ? 'wifi-outline' : (joinState === 'ready' ? 'checkmark-circle' : 'time-outline')}
+                    size={22}
+                    color={stateColor}
+                    accessibilityLabel={stateText}
+                />
             </View>
         );
     };
@@ -192,7 +310,18 @@ export default function OnlineLobbyScreen() {
 
     // 1. LOBBY VIEW (Inside a room)
     if (gameState.roomCode && gameState.room) {
-        const playersList = Object.values(gameState.room.players);
+        const playersList = Object.values(gameState.room.players).filter(
+            p =>
+                p != null &&
+                typeof p.id === 'string' &&
+                p.id.length > 0 &&
+                typeof p.name === 'string' &&
+                p.name.trim().length > 0
+        );
+        const connectedPlayers = playersList.filter(p => p.isConnected !== false);
+        const readyPlayers = connectedPlayers.filter(p => (p.joinState || 'ready') === 'ready');
+        const watchingAdPlayers = connectedPlayers.filter(p => p.joinState === 'watching_ad');
+        const canConfigure = connectedPlayers.length >= 3 && readyPlayers.length === connectedPlayers.length;
 
         return (
             <SafeAreaView style={styles.container}>
@@ -201,7 +330,9 @@ export default function OnlineLobbyScreen() {
                         <Ionicons name="arrow-back" size={24} color="#FFF" />
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>{t.online.lobby_title}</Text>
-                    <View style={{ width: 24 }} />
+                    <TouchableOpacity onPress={handleLeaveRoom} style={styles.leaveRoomTextBtn} hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}>
+                        <Text style={styles.leaveRoomTextBtnLabel}>{t.common.exit}</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.roomCodeContainer}>
@@ -216,30 +347,50 @@ export default function OnlineLobbyScreen() {
                 <PremiumRoomBanner />
 
                 <View style={styles.playersListContainer}>
-                    <Text style={styles.sectionTitle}>
-                        {t.online.players_list} ({playersList.length}/{gameState.room.settings.maxPlayers || 6})
-                    </Text>
-                    <FlatList
-                        data={playersList}
-                        keyExtractor={item => item.id}
-                        renderItem={renderPlayerItem}
+                    <View style={styles.readinessSummary}>
+                        <Text style={styles.readinessText}>
+                            {t.online.lobby_ready_progress
+                                .replace('{ready}', String(readyPlayers.length))
+                                .replace('{total}', String(connectedPlayers.length))}
+                        </Text>
+                        {watchingAdPlayers.length > 0 && (
+                            <Text style={styles.readinessSubtext}>
+                                {t.online.lobby_waiting_ads.replace('{count}', String(watchingAdPlayers.length))}
+                            </Text>
+                        )}
+                    </View>
+                    <ScrollView
+                        style={styles.playersScroll}
                         contentContainerStyle={styles.listContent}
-                    />
+                        keyboardShouldPersistTaps="handled"
+                        showsVerticalScrollIndicator={false}
+                    >
+                        {playersList.map(item => (
+                            <View key={item.id}>{renderPlayerItem({ item })}</View>
+                        ))}
+                    </ScrollView>
                 </View>
 
                 <View style={styles.footer}>
                     {gameState.isHost ? (
                         <View>
                             <TouchableOpacity
-                                style={[styles.actionButton, playersList.length < 3 && styles.actionButtonDisabled]}
+                                style={[styles.actionButton, !canConfigure && styles.actionButtonDisabled]}
                                 onPress={() => navigation.navigate('OnlineSetup')}
-                                disabled={playersList.length < 3}
+                                disabled={!canConfigure}
                             >
-                                <Text style={styles.actionButtonText}>{t.online.configure_game}</Text>
+                                <Text style={styles.actionButtonText}>
+                                    {canConfigure ? t.online.configure_game : t.online.lobby_waiting_ready_cta}
+                                </Text>
                             </TouchableOpacity>
-                            {playersList.length < 3 && (
+                            {connectedPlayers.length < 3 && (
                                 <Text style={styles.minPlayersHint}>
-                                    {t.online.min_players_hint} ({playersList.length}/3)
+                                    {t.online.min_players_hint} ({connectedPlayers.length}/3)
+                                </Text>
+                            )}
+                            {connectedPlayers.length >= 3 && !canConfigure && (
+                                <Text style={styles.minPlayersHint}>
+                                    {t.online.lobby_waiting_ready_hint}
                                 </Text>
                             )}
                         </View>
@@ -282,6 +433,7 @@ export default function OnlineLobbyScreen() {
                         <TextInput
                             style={styles.input}
                             placeholder={t.online.name_placeholder}
+                            placeholderTextColor="#718096"
                             value={playerName}
                             onChangeText={setPlayerName}
                             maxLength={12}
@@ -318,6 +470,7 @@ export default function OnlineLobbyScreen() {
                         <TextInput
                             style={[styles.input, styles.codeInput]}
                             placeholder={t.online.join_room_placeholder}
+                            placeholderTextColor="#718096"
                             value={roomCodeInput}
                             onChangeText={text => setRoomCodeInput(text.toUpperCase())}
                             maxLength={6}
@@ -350,6 +503,7 @@ export default function OnlineLobbyScreen() {
                 buttonText={modalConfig.buttonText}
                 onClose={modalConfig.onClose}
             />
+            <OnlineOnboardingModal />
         </SafeAreaView>
     );
 }
@@ -379,6 +533,15 @@ const styles = StyleSheet.create({
     },
     backButton: {
         padding: 5,
+    },
+    leaveRoomTextBtn: {
+        paddingVertical: 4,
+        paddingHorizontal: 4,
+    },
+    leaveRoomTextBtnLabel: {
+        color: 'rgba(255,255,255,0.75)',
+        fontSize: 15,
+        fontWeight: '600',
     },
     headerTitle: {
         fontSize: 20,
@@ -521,13 +684,43 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.1)',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
         padding: 20,
+        marginHorizontal: 20,
+        overflow: 'visible',
+    },
+    playersScroll: {
+        flex: 1,
     },
     sectionTitle: {
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 15,
+    },
+    sectionTitleInRow: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+        flex: 1,
+        flexShrink: 1,
+        marginBottom: 0,
+        marginRight: 4,
+    },
+    readinessSummary: {
+        marginBottom: 12,
+    },
+    readinessText: {
+        color: '#E2E8F0',
+        fontSize: 13,
+        fontWeight: '700',
+    },
+    readinessSubtext: {
+        color: '#F6AD55',
+        fontSize: 12,
+        fontWeight: '600',
+        marginTop: 2,
     },
     listContent: {
         paddingBottom: 20,
@@ -635,16 +828,6 @@ const styles = StyleSheet.create({
         opacity: 0.6,
         borderWidth: 1,
         borderColor: '#E53E3E',
-    },
-    connectionDot: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        borderWidth: 2,
-        borderColor: '#FFF',
     },
     disconnectedText: {
         fontSize: 10,

@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useRef, useCallback } from 'react';
-import { database, ensureAnonymousAuth } from '../config/firebase';
+import { database, ensureAnonymousAuth, auth } from '../config/firebase';
 import {
     ref, set, get, update, onValue, off, remove,
     onDisconnect, serverTimestamp, runTransaction, push, DataSnapshot
 } from 'firebase/database';
 import {
     OnlineGameState, OnlineRoom, OnlinePlayer, Category, CustomCategory,
-    Word, OnlinePlayerRole, Avatar, OnlineReaction, OnlineRoomCloseReason
+    Word, Avatar, OnlineReaction, OnlineMessage, OnlineRoomCloseReason, Language
 } from '../types';
 import { getLocales } from 'expo-localization';
 import { AppState, AppStateStatus, Platform, Alert } from 'react-native';
@@ -31,18 +31,24 @@ import generalPremiumWordsDataPt from '../data/words-general-premium-pt.json';
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
-const MAX_PLAYERS_FREE = 6;
-const MAX_PLAYERS_PREMIUM = 12;
-const HOST_GRACE_PERIOD_MS = 20_000;
+const MAX_PLAYERS_FREE = 7;
+const MAX_PLAYERS_PREMIUM = 15;
+const CLUE_REVIEW_TIMEOUT_MS = 10_000;
 const PLAYER_GRACE_PERIOD_MS = 60_000;
 const HEARTBEAT_INTERVAL_MS = 15_000;
 /** Intervalo de hostHeartbeat en Firebase (menos escrituras que 5s; el watchdog sigue en 20s de estancamiento). */
 const HOST_HEARTBEAT_INTERVAL_MS = 12_000;
+/** Sin cambios en `hostHeartbeat` durante este tiempo → cliente considera perdida la conexión con el anfitrión. */
+const HOST_HEARTBEAT_STAGNANT_MS = 20_000;
 const INACTIVITY_WAITING_MS = 30 * 60 * 1000;
 const INACTIVITY_PLAYING_MS = 2 * 60 * 60 * 1000;
+const MAX_STALE_SCAN_ROOMS_PER_RUN = 20;
 const REACTION_COOLDOWN_MS = 800;
 const VOTING_PHASE_TIMEOUT_MS = 30_000;
 const ELIMINATION_CHOICE_TIMEOUT_MS = 45_000;
+const WORD_HISTORY_LIMIT = 40;
+const IMPOSTOR_HISTORY_LIMIT = 60;
+const JOIN_AD_STUCK_TIMEOUT_MS = 60_000;
 
 // ─── Context interface ──────────────────────────────────────────────────────────
 
@@ -56,6 +62,8 @@ interface OnlineGameContextProps {
     clearInsufficientPlayers: () => void;
     hostMigrationNotice: string | null;
     clearHostMigrationNotice: () => void;
+    playerPresenceNotice: string | null;
+    clearPlayerPresenceNotice: () => void;
     createRoom: (playerName: string) => Promise<string>;
     joinRoom: (roomCode: string, playerName: string) => Promise<boolean>;
     /**
@@ -77,10 +85,18 @@ interface OnlineGameContextProps {
     advanceTurn: () => void;
     submitRoundDecision: (decision: 'go_vote' | 'another_round') => void;
     submitEliminationChoice: (choice: 'continue_same' | 'reveal_impostor') => void;
-    /** Tras ver todas las pistas en modo simultáneo: el host pasa a la votación grupal (modal). */
+    /** Tras ver todas las pistas en modo simultáneo: pasa a revisión grupal y luego al modal Votar / Otra ronda. */
     openRoundDecisionAfterSimultaneousReveal: () => Promise<void>;
+    /** Marca “listo” en la fase de revisión de pistas (antes de votar u otra ronda). */
+    submitClueReviewReady: () => Promise<void>;
+    /** Quita el flag de aviso tras empate en votación (solo anfitrión). */
+    clearVoteTieRecovery: () => Promise<void>;
+    /** Actualiza el estado de ingreso al lobby para sincronizar Ads y readiness. */
+    updateMyJoinState: (state: 'joining' | 'watching_ad' | 'ready') => Promise<void>;
     sendReaction: (emoji: string) => void;
+    sendQuickMessage: (messageKey: string, messageText?: string) => void;
     resetToLobby: () => Promise<void>;
+    cleanupStaleRooms: (codeToCheck?: string) => Promise<void>;
 }
 
 const OnlineGameContext = createContext<OnlineGameContextProps | null>(null);
@@ -109,6 +125,21 @@ const getPlayerId = async (): Promise<string> => {
     }
 };
 
+/** Descarta nodos nulos, vacíos o sin nombre (carreras al borrar / RTDB). Evita cards en blanco en el lobby. */
+function sanitizeOnlinePlayers(raw: Record<string, unknown> | null | undefined): Record<string, OnlinePlayer> {
+    if (!raw || typeof raw !== 'object') return {};
+    const out: Record<string, OnlinePlayer> = {};
+    for (const [key, val] of Object.entries(raw)) {
+        if (val == null || typeof val !== 'object') continue;
+        const v = val as OnlinePlayer;
+        const id = typeof v.id === 'string' && v.id.length > 0 ? v.id : key;
+        const name = typeof v.name === 'string' ? v.name.trim() : '';
+        if (!name) continue;
+        out[id] = { ...v, id };
+    }
+    return out;
+}
+
 function getNextAvatar(currentPlayers: OnlinePlayer[]): Avatar {
     const usedAvatars = new Set(currentPlayers.map(p => p.avatar));
     const available: Avatar[] = [];
@@ -118,6 +149,64 @@ function getNextAvatar(currentPlayers: OnlinePlayer[]): Avatar {
     }
     if (available.length === 0) return `avatar_${Math.floor(Math.random() * TOTAL_AVATARS) + 1}` as Avatar;
     return available[Math.floor(Math.random() * available.length)];
+}
+
+function defaultLanguageFromLocale(): Language {
+    const code = getLocales()[0]?.languageCode?.toLowerCase() ?? 'es';
+    if (code === 'es') return 'es';
+    if (code === 'pt') return 'pt';
+    return 'en';
+}
+
+/** Tras empate (o sin votos): misma palabra e impostores, nueva ronda de pistas sin pasar por resultados. */
+function buildVoteTieRecoveryUpdates(live: OnlineRoom, pl: OnlinePlayer[], nextStreak: number): Record<string, any> {
+    const shuffledOrder = [...pl].sort(() => Math.random() - 0.5).map(p => p.id);
+    const updates: Record<string, any> = {
+        status: 'clues',
+        turnOrder: shuffledOrder,
+        currentTurnIndex: 0,
+        cluePhaseStartTime: serverTimestamp(),
+        voteCounts: null,
+        isTie: null,
+        lastEliminatedId: null,
+        votingPhaseStartTime: null,
+        voteTieRecovery: true,
+        voteTieStreak: nextStreak,
+        clueReviewReady: null,
+        clueReviewStartTime: null,
+        lastActivity: serverTimestamp(),
+        clueRound: (live.clueRound || 1) + 1,
+    };
+    pl.forEach(p => {
+        updates[`players/${p.id}/vote`] = null;
+        updates[`players/${p.id}/clue`] = null;
+    });
+    return updates;
+}
+
+/** Tercer empate seguido (o tercer bloqueo de votación): partida terminada; la UI revela impostor/palabra en resultados. */
+function buildTechnicalTieFinishUpdates(_live: OnlineRoom, pl: OnlinePlayer[]): Record<string, any> {
+    const voteCounts: Record<string, number> = {};
+    pl.forEach(p => {
+        if (p.vote) voteCounts[p.vote] = (voteCounts[p.vote] || 0) + 1;
+    });
+    const hasVotes = Object.keys(voteCounts).length > 0;
+    const updates: Record<string, any> = {
+        status: 'finished',
+        finishReason: 'technical_tie',
+        winner: null,
+        votingPhaseStartTime: null,
+        voteCounts,
+        isTie: hasVotes ? true : null,
+        lastEliminatedId: null,
+        voteTieRecovery: null,
+        voteTieStreak: null,
+        lastActivity: serverTimestamp(),
+    };
+    pl.forEach(p => {
+        updates[`players/${p.id}/vote`] = null;
+    });
+    return updates;
 }
 
 function hasPlayableCategorySelection(
@@ -135,12 +224,24 @@ function hasPlayableCategorySelection(
     });
 }
 
+function normalizeCustomWordId(word: string): string {
+    return word
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80);
+}
+
 function getRandomWord(
     categories: Category[],
-    language: 'es' | 'en' | 'pt',
+    language: Language,
     customCategories: CustomCategory[] = [],
     difficulty: 'easy' | 'medium' | 'hard' | 'all' = 'all',
-    isPremiumRoom: boolean = false
+    isPremiumRoom: boolean = false,
+    recentWordIds: string[] = []
 ): Word {
     const standardCategories: Category[] = [];
     const activeCustomCategoryIds: string[] = [];
@@ -155,10 +256,10 @@ function getRandomWord(
         }
     });
 
-    const freeWords = (language === 'pt' ? freeWordsDataPt : language === 'en' ? freeWordsDataEn : freeWordsDataEs) as Word[];
-    const premiumWords = (language === 'pt' ? premiumWordsDataPt : language === 'en' ? premiumWordsDataEn : premiumWordsDataEs) as Word[];
-    const generalWords = (language === 'pt' ? generalWordsDataPt : language === 'en' ? generalWordsDataEn : generalWordsDataEs) as Word[];
-    const generalPremiumWords = (language === 'pt' ? generalPremiumWordsDataPt : language === 'en' ? generalPremiumWordsDataEn : generalPremiumWordsDataEs) as Word[];
+    const freeWords = (language === 'en' ? freeWordsDataEn : language === 'pt' ? freeWordsDataPt : freeWordsDataEs) as Word[];
+    const premiumWords = (language === 'en' ? premiumWordsDataEn : language === 'pt' ? premiumWordsDataPt : premiumWordsDataEs) as Word[];
+    const generalWords = (language === 'en' ? generalWordsDataEn : language === 'pt' ? generalWordsDataPt : generalWordsDataEs) as Word[];
+    const generalPremiumWords = (language === 'en' ? generalPremiumWordsDataEn : language === 'pt' ? generalPremiumWordsDataPt : generalPremiumWordsDataEs) as Word[];
 
     const allWords = isPremiumRoom
         ? [...freeWords, ...premiumWords, ...generalWords, ...generalPremiumWords]
@@ -174,7 +275,7 @@ function getRandomWord(
         const customCat = customCategories.find(c => c.id === id);
         if (customCat && customCat.words.length > 0) {
             const customWords: Word[] = customCat.words.map(w => ({
-                id: `${id}_${Math.random().toString(36).substr(2, 9)}`,
+                id: `${id}__${normalizeCustomWordId(w)}`,
                 word: w,
                 category: id as Category,
                 categoryDisplayName: customCat.name,
@@ -193,7 +294,72 @@ function getRandomWord(
         return freeWords[0];
     }
 
-    return availableWords[Math.floor(Math.random() * availableWords.length)];
+    const recentWindowSize = Math.min(
+        Math.max(4, Math.floor(availableWords.length * 0.35)),
+        20
+    );
+    const recentSet = new Set((recentWordIds || []).slice(-recentWindowSize));
+    const nonRecent = availableWords.filter(w => !recentSet.has(w.id));
+    const pool = nonRecent.length > 0 ? nonRecent : availableWords;
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function pickImpostorIds(
+    players: OnlinePlayer[],
+    impostorCount: number,
+    recentImpostorIds: string[] = []
+): string[] {
+    const activePlayers = players.filter(p => p.isConnected !== false);
+    const activeIds = activePlayers.map(p => p.id);
+    if (activeIds.length === 0 || impostorCount <= 0) return [];
+
+    const take = Math.min(impostorCount, activeIds.length);
+    const historyWindow = Math.max(activeIds.length * 3, 9);
+    const recentWindow = (recentImpostorIds || []).slice(-historyWindow);
+    const recentCounts = new Map<string, number>();
+    recentWindow.forEach(id => {
+        recentCounts.set(id, (recentCounts.get(id) || 0) + 1);
+    });
+
+    const selected: string[] = [];
+    const lastRound = new Set((recentImpostorIds || []).slice(-take));
+    const lastOne = (recentImpostorIds || []).at(-1) || null;
+    const lastTwo = (recentImpostorIds || []).slice(-2);
+
+    const candidates = [...activeIds];
+    while (selected.length < take && candidates.length > 0) {
+        // Aleatoriedad ponderada: siempre puede salir cualquiera, pero baja la probabilidad de repetidos recientes.
+        const weighted = candidates.map(id => {
+            const historyCount = recentCounts.get(id) || 0;
+            const isLastRound = lastRound.has(id);
+            const repeatedTwice = lastTwo.length === 2 && lastTwo[0] === id && lastTwo[1] === id;
+            const isImmediateRepeat = lastOne === id;
+
+            // Base aleatoria + penalizaciones suaves (no exclusión total para evitar patrón predecible).
+            let weight = 1;
+            weight /= 1 + historyCount * 0.65;
+            if (isLastRound) weight *= 0.45;
+            if (isImmediateRepeat) weight *= 0.35;
+            if (repeatedTwice) weight *= 0.2;
+            return { id, weight: Math.max(0.03, weight) };
+        });
+
+        const total = weighted.reduce((acc, w) => acc + w.weight, 0);
+        let roll = Math.random() * total;
+        let picked = weighted[weighted.length - 1].id;
+        for (const w of weighted) {
+            roll -= w.weight;
+            if (roll <= 0) {
+                picked = w.id;
+                break;
+            }
+        }
+        selected.push(picked);
+        const idx = candidates.indexOf(picked);
+        if (idx >= 0) candidates.splice(idx, 1);
+    }
+
+    return selected;
 }
 
 // ─── Provider ───────────────────────────────────────────────────────────────────
@@ -245,6 +411,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     };
     const [hostMigrationNotice, setHostMigrationNotice] = useState<string | null>(null);
     const clearHostMigrationNotice = () => setHostMigrationNotice(null);
+    const [playerPresenceNotice, setPlayerPresenceNotice] = useState<string | null>(null);
+    const clearPlayerPresenceNotice = () => setPlayerPresenceNotice(null);
 
     /** Tras pulsar OK en el modal de sala cerrada: ignorar onValue/AppState tardíos (evita segundo flash). */
     const sessionEndDismissedRef = useRef(false);
@@ -254,11 +422,19 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     const sessionEndCooldownUntilRef = useRef(0);
 
     const roomRef = useRef<any>(null);
+    /** Una sola transición clues → simultaneous_reveal por fase (evita updates repetidos). */
+    const simultaneousRevealCommittedRef = useRef<string | null>(null);
     const listenersRef = useRef(false);
     const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const hostMigrationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const roomDataRef = useRef<OnlineRoom | null>(null);
     const lastReactionTimeRef = useRef(0);
+    const lastMessageTimeRef = useRef(0);
+    const prevStatusRef = useRef<string | null>(null);
+    const prevPlayersRef = useRef<Record<string, OnlinePlayer>>({});
+    const disconnectTimersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+    /** Watchdog del latido del anfitrión (clientes): persiste entre re-renders de `room` por votos, etc. */
+    const hostClientWatchRef = useRef({ lastBeat: '', lastTime: 0 });
     const { state: globalState } = useGame();
     const isPremiumUser = globalState.isPremium;
     const { t } = useTranslation();
@@ -292,8 +468,32 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         roomRef.current = rRef;
 
         onValue(rRef, (snapshot: DataSnapshot) => {
-            const data = snapshot.val();
-            if (data) {
+            const raw = snapshot.val();
+            if (raw) {
+                const data =
+                    raw.players != null
+                        ? { ...raw, players: sanitizeOnlinePlayers(raw.players as Record<string, unknown>) }
+                        : raw;
+                const prevRoom = roomDataRef.current;
+                if (prevRoom && prevRoom.id === data.id && prevRoom.players && data.players) {
+                    const prevPlayers = prevRoom.players;
+                    Object.values(data.players as Record<string, OnlinePlayer>).forEach((nextP: OnlinePlayer) => {
+                        const prevP = prevPlayers[nextP.id];
+                        if (!prevP) return;
+                        const wasConnected = prevP.isConnected !== false;
+                        const isConnected = nextP.isConnected !== false;
+                        const label = nextP.name?.trim() || '?';
+                        if (wasConnected && !isConnected) {
+                            setPlayerPresenceNotice(
+                                t.online.player_reconnecting_notice.replace('{name}', label)
+                            );
+                        } else if (!wasConnected && isConnected) {
+                            setPlayerPresenceNotice(
+                                t.online.player_reconnected_notice.replace('{name}', label)
+                            );
+                        }
+                    });
+                }
                 setGameState(prev => ({
                     ...prev,
                     room: data,
@@ -375,6 +575,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
         // If Firebase already explicitly caught the disconnect (e.g. graceful exit or after 60s timeout)
         if (host.isConnected === false) {
+            const disconnectedAt = typeof host.disconnectedAt === 'number' ? host.disconnectedAt : Date.now();
+            const graceElapsed = Date.now() - disconnectedAt;
+            if (graceElapsed <= PLAYER_GRACE_PERIOD_MS) {
+                return;
+            }
+            setInsufficientPlayers(false);
             if (!tryCommitSessionEndModal('host_left')) return;
             leaveRoom({ clearLocalSnapshot: false }).catch(() => {});
             return;
@@ -390,19 +596,17 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
              const liveRoom = roomDataRef.current;
              if (!liveRoom) return;
 
-             const currentBeat = liveRoom.hostHeartbeat || '';
-             if (currentBeat !== lastObservedBeat) {
-                 lastObservedBeat = currentBeat;
-                 lastObservedLocalTime = Date.now();
-             } else {
-                 const stagnantMs = Date.now() - lastObservedLocalTime;
-                 // If the host hasn't proved to be alive in 20 seconds, they are dead to us.
-                 if (stagnantMs > 20000) {
-                    clearInterval(watchdog);
-                    if (!tryCommitSessionEndModal('connection_lost')) return;
-                    leaveRoom({ clearLocalSnapshot: false }).catch(() => {});
-                }
-             }
+            const currentBeat = String(liveRoom.hostHeartbeat ?? '');
+            const st = hostClientWatchRef.current;
+            if (currentBeat !== st.lastBeat) {
+                st.lastBeat = currentBeat;
+                st.lastTime = Date.now();
+            } else if (Date.now() - st.lastTime > Math.max(HOST_HEARTBEAT_STAGNANT_MS, PLAYER_GRACE_PERIOD_MS)) {
+                clearInterval(watchdog);
+                setInsufficientPlayers(false);
+                if (!tryCommitSessionEndModal('connection_lost')) return;
+                void leaveRoom({ clearLocalSnapshot: false });
+            }
         }, 5000);
 
         return () => clearInterval(watchdog);
@@ -416,6 +620,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         const interval = setInterval(() => {
             const room = roomDataRef.current;
             if (!room) return;
+            /** Solo en espera: borrar jugadores desconectados aquí durante la partida rompe roles / startCluePhase y deja nodos huérfanos. */
+            if (room.status !== 'waiting') return;
             const now = Date.now();
 
             Object.entries(room.players).forEach(([id, player]) => {
@@ -430,7 +636,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                             .then(snap => {
                                 if (!snap.exists()) return;
                                 const r = snap.val() as OnlineRoom;
-                                const cnt = Object.keys(r.players || {}).length;
+                                const cnt = Object.keys(sanitizeOnlinePlayers(r.players as Record<string, unknown>)).length;
                                 return update(ref(database, `rooms/${code}`), { playerCount: cnt });
                             })
                             .catch(() => {});
@@ -442,28 +648,90 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         return () => clearInterval(interval);
     }, [gameState.isHost, gameState.roomCode, gameState.playerId]);
 
-    // Track disconnections (with grace period for mobile app backgrounding)
-    const prevPlayersRef = useRef<Record<string, OnlinePlayer>>({});
-    const disconnectTimersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
-
-    const prevStatusRef = useRef<string | null>(null);
-
+    // ── Lobby waiting/ad fallback (host): evita bloqueo si alguien queda en watching_ad ──
     useEffect(() => {
+        if (!gameState.isHost || !gameState.roomCode) return;
+
+        const interval = setInterval(() => {
+            const room = roomDataRef.current;
+            if (!room || room.status !== 'waiting') return;
+
+            const now = Date.now();
+            const updates: Record<string, any> = {};
+            let changed = false;
+            Object.values(room.players).forEach(p => {
+                if (p.isConnected === false) return;
+                if (p.joinState !== 'watching_ad') return;
+                const since = p.joinStateSince || p.lastSeen || now;
+                if (now - since < JOIN_AD_STUCK_TIMEOUT_MS) return;
+                updates[`players/${p.id}/joinState`] = 'ready';
+                updates[`players/${p.id}/joinStateSince`] = serverTimestamp();
+                changed = true;
+            });
+
+            if (changed) {
+                updates.lastActivity = serverTimestamp();
+                update(ref(database, `rooms/${gameState.roomCode}`), updates).catch(() => {});
+            }
+        }, 10_000);
+
+        return () => clearInterval(interval);
+    }, [gameState.isHost, gameState.roomCode]);
+
+    // ── Insufficient players check during active game ─────────────────────────
+    // Cuenta solo conexión real al lobby/partida. Los eliminados por voto siguen
+    // en la sala (conectados) y NO deben reducir este conteo — si no, al pasar a
+    // `results` con 3 jugadores quedarían 2 "activos" y se dispararía por error.
+    useEffect(() => {
+        if (roomClosed) return;
+        // Mismo candado que el modal de fin de sesión: no mezclar con "mínimo 3 jugadores"
+        // cuando el anfitrión se fue o la sala se está cerrando.
+        if (sessionEndDismissedRef.current) return;
+
         const room = gameState.room;
         if (!room || !gameState.roomCode) return;
 
-        // Detect game-ending state changes (for ALL clients)
-        if (prevStatusRef.current !== 'finished' && room.status === 'finished') {
-            if (room.finishReason === 'not_enough_players') {
-                Alert.alert('Jugadores Insuficientes', 'Varios jugadores abandonaron y no hay suficientes para continuar.');
+        const activeStates: string[] = ['playing', 'clues', 'simultaneous_reveal', 'clue_review', 'deciding', 'voting', 'results', 'elimination_choice'];
+        if (!activeStates.includes(room.status)) return;
+
+        const hostPlayer = room.players[room.hostId];
+        // Anfitrión ausente o desconectado: el modal de cierre de sesión ya cubre el caso;
+        // no marcar "jugadores insuficientes" (evita falsos positivos al salir el host).
+        if (!hostPlayer || hostPlayer.isConnected === false) {
+            return;
+        }
+
+        const connectedInRoom = Object.values(room.players).filter(
+            p => p.isConnected !== false
+        );
+        const now = Date.now();
+        const gracePendingDisconnect = Object.values(room.players).some(p =>
+            p.isConnected === false &&
+            typeof p.disconnectedAt === 'number' &&
+            (now - p.disconnectedAt) <= PLAYER_GRACE_PERIOD_MS
+        );
+
+        if (connectedInRoom.length < 3) {
+            if (gracePendingDisconnect) {
+                setInsufficientPlayers(false);
+                return;
             }
-            // impostor_disconnected: sin Alert; la UI de resultados ya lo explica.
+            setInsufficientPlayers(true);
+
+            if (gameState.isHost) {
+                update(ref(database, `rooms/${gameState.roomCode}`), {
+                    status: 'finished' as const,
+                    lastActivity: serverTimestamp(),
+                }).catch(() => {});
+            }
+        } else {
+            setInsufficientPlayers(false);
         }
         prevStatusRef.current = room.status;
 
-        const activeStates: string[] = ['playing', 'clues', 'simultaneous_reveal', 'deciding', 'voting', 'results', 'elimination_choice'];
-        
-        if (activeStates.includes(room.status)) {
+        const activeStatesForDisconnect: string[] = ['playing', 'clues', 'simultaneous_reveal', 'deciding', 'voting', 'results', 'elimination_choice'];
+
+        if (activeStatesForDisconnect.includes(room.status)) {
             const oldPlayers = prevPlayersRef.current;
             const newPlayers = room.players || {};
 
@@ -529,7 +797,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             prevPlayersRef.current = room.players || {};
         }
 
-    }, [gameState.room?.players, gameState.room?.status, gameState.roomCode, gameState.isHost]);
+    }, [gameState.room?.players, gameState.room?.status, gameState.roomCode, gameState.isHost, roomClosed]);
 
     // ── AppState: reconnect on foreground ───────────────────────────────────────
     useEffect(() => {
@@ -564,25 +832,76 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         return () => sub.remove();
     }, [gameState.roomCode, gameState.playerId]);
 
-    // ── Auto-advance to deciding (simultaneous mode, host only) ─────────────────
+    // ── Auto-advance a revelación simultánea (host): una vez por fase de pistas ──
     useEffect(() => {
         if (
-            gameState.isHost &&
-            gameState.room?.status === 'clues' &&
-            gameState.room.settings.discussionMode === 'simultaneous'
+            !gameState.isHost ||
+            gameState.room?.status !== 'clues' ||
+            gameState.room.settings.discussionMode !== 'simultaneous' ||
+            !gameState.roomCode
         ) {
-            const players = Object.values(gameState.room.players).filter(p => !p.isEliminated && p.isConnected !== false);
-            const allSubmitted = players.length > 0 && players.every(p => p.clue != null);
-            if (allSubmitted) {
-                update(ref(database, `rooms/${gameState.roomCode}`), {
-                    status: 'simultaneous_reveal',
-                    lastActivity: serverTimestamp(),
-                });
-            }
+            return;
         }
-    }, [gameState.room?.players, gameState.room?.status]);
+        const phaseKey = `${gameState.roomCode}|${gameState.room.cluePhaseStartTime ?? 0}`;
+        const players = Object.values(gameState.room.players).filter(p => !p.isEliminated && p.isConnected !== false);
+        const allSubmitted = players.length > 0 && players.every(p => p.clue != null);
+        if (!allSubmitted) return;
+        if (simultaneousRevealCommittedRef.current === phaseKey) return;
+        simultaneousRevealCommittedRef.current = phaseKey;
+        update(ref(database, `rooms/${gameState.roomCode}`), {
+            status: 'simultaneous_reveal',
+            lastActivity: serverTimestamp(),
+        }).catch(() => {
+            simultaneousRevealCommittedRef.current = null;
+        });
+    }, [gameState.room?.players, gameState.room?.status, gameState.room?.cluePhaseStartTime, gameState.isHost, gameState.roomCode]);
 
-    // ── Resolve round decision (host only) ────────────────────────────────────
+    // ── Tras revisión de pistas: avance automático a votación en 10s ──
+    const clueReviewProceedingRef = useRef(false);
+    useEffect(() => {
+        if (!gameState.isHost || gameState.room?.status !== 'clue_review' || !gameState.roomCode) {
+            clueReviewProceedingRef.current = false;
+            return;
+        }
+
+        const room = gameState.room;
+        const startTime = room.clueReviewStartTime || Date.now();
+        const elapsed = Date.now() - startTime;
+
+        const proceedToVoting = () => {
+            if (clueReviewProceedingRef.current) return;
+            const live = roomDataRef.current;
+            const code = live?.id || gameState.roomCode;
+            if (!live || live.status !== 'clue_review' || !code) return;
+            clueReviewProceedingRef.current = true;
+            update(ref(database, `rooms/${code}`), {
+                status: 'voting',
+                votingPhaseStartTime: serverTimestamp(),
+                clueReviewReady: null,
+                clueReviewStartTime: null,
+                lastActivity: serverTimestamp(),
+            })
+                .catch(() => {
+                    clueReviewProceedingRef.current = false;
+                });
+        };
+
+        if (elapsed >= CLUE_REVIEW_TIMEOUT_MS) {
+            proceedToVoting();
+            return;
+        }
+
+        const remaining = Math.max(80, CLUE_REVIEW_TIMEOUT_MS - elapsed);
+        const timer = setTimeout(proceedToVoting, remaining);
+        return () => clearTimeout(timer);
+    }, [
+        gameState.isHost,
+        gameState.room?.status,
+        gameState.roomCode,
+        gameState.room?.clueReviewStartTime,
+    ]);
+
+    // ── Resolve round decision (host only): mayoría decide; si no, timeout con desempate ──
     useEffect(() => {
         if (!gameState.isHost || gameState.room?.status !== 'deciding' || !gameState.roomCode) return;
 
@@ -607,45 +926,78 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         const elapsed = Date.now() - startTime;
         const DECISION_TIMEOUT_MS = 10_000;
 
-        const resolve = () => {
-            if (anotherRoundCount > goVoteCount) {
-                const players = eligiblePlayers;
-                const shuffledOrder = [...players].sort(() => Math.random() - 0.5).map(p => p.id);
-                const updates: Record<string, any> = {
-                    status: 'clues',
-                    turnOrder: shuffledOrder,
-                    currentTurnIndex: 0,
-                    cluePhaseStartTime: serverTimestamp(),
-                    roundDecisionVotes: null,
-                    roundDecisionStartTime: null,
-                    clueRound: (room.clueRound || 1) + 1,
-                    lastActivity: serverTimestamp(),
-                };
-                players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
-                update(ref(database, `rooms/${gameState.roomCode}`), updates);
-            } else {
-                update(ref(database, `rooms/${gameState.roomCode}`), {
-                    status: 'voting',
-                    votingPhaseStartTime: serverTimestamp(),
-                    roundDecisionVotes: null,
-                    roundDecisionStartTime: null,
-                    lastActivity: serverTimestamp(),
-                });
-            }
+        let goVote = 0;
+        let anotherRound = 0;
+        Object.entries(votes).forEach(([id, v]) => {
+            if (!eligiblePlayers.some(p => p.id === id)) return;
+            if (v === 'go_vote') goVote++;
+            else if (v === 'another_round') anotherRound++;
+        });
+
+        const n = eligiblePlayers.length;
+        const majority = n > 0 ? Math.floor(n / 2) + 1 : 0;
+
+        const startCluesRound = () => {
+            const players = eligiblePlayers;
+            const shuffledOrder = [...players].sort(() => Math.random() - 0.5).map(p => p.id);
+            const updates: Record<string, any> = {
+                status: 'clues',
+                turnOrder: shuffledOrder,
+                currentTurnIndex: 0,
+                cluePhaseStartTime: serverTimestamp(),
+                roundDecisionVotes: null,
+                roundDecisionStartTime: null,
+                clueReviewReady: null,
+                clueReviewStartTime: null,
+                clueRound: (room.clueRound || 1) + 1,
+                lastActivity: serverTimestamp(),
+            };
+            players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
+            update(ref(database, `rooms/${gameState.roomCode}`), updates);
         };
 
-        if (allVoted || strictMajorityReached) {
-            resolve();
+        const startVotingPhase = () => {
+            update(ref(database, `rooms/${gameState.roomCode}`), {
+                status: 'voting',
+                votingPhaseStartTime: serverTimestamp(),
+                roundDecisionVotes: null,
+                roundDecisionStartTime: null,
+                lastActivity: serverTimestamp(),
+            });
+        };
+
+        const resolve = (forceTimeout: boolean) => {
+            if (majority > 0 && goVote >= majority) {
+                startVotingPhase();
+                return true;
+            }
+            if (majority > 0 && anotherRound >= majority) {
+                startCluesRound();
+                return true;
+            }
+            if (!forceTimeout) return false;
+            if (anotherRound > goVote) {
+                startCluesRound();
+            } else {
+                startVotingPhase();
+            }
+            return true;
+        };
+
+        if (resolve(false)) return;
+
+        if (allVoted) {
+            resolve(true);
             return;
         }
 
         const remaining = Math.max(100, DECISION_TIMEOUT_MS - elapsed);
-        const timer = setTimeout(resolve, remaining);
+        const timer = setTimeout(() => resolve(true), remaining);
         return () => clearTimeout(timer);
     }, [
         gameState.isHost, gameState.room?.status, gameState.roomCode,
         gameState.room?.roundDecisionVotes, gameState.room?.roundDecisionStartTime,
-        gameState.room?.players
+        gameState.room?.players,
     ]);
 
     // ── Resolver votación: todos votaron O se cumple el tiempo máximo (30s) ─────
@@ -683,14 +1035,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
             const castVotes = pl.map(p => p.vote).filter(v => v != null);
             if (castVotes.length === 0) {
-                update(ref(database, `rooms/${code}`), {
-                    status: 'results',
-                    voteCounts: {},
-                    isTie: true,
-                    lastEliminatedId: null,
-                    votingPhaseStartTime: null,
-                    lastActivity: serverTimestamp(),
-                });
+                const streak = live.voteTieStreak || 0;
+                if (streak >= 2) {
+                    update(ref(database, `rooms/${code}`), buildTechnicalTieFinishUpdates(live, pl));
+                } else {
+                    update(ref(database, `rooms/${code}`), buildVoteTieRecoveryUpdates(live, pl, streak + 1));
+                }
                 return;
             }
 
@@ -704,14 +1054,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             }
 
             if (tie) {
-                update(ref(database, `rooms/${code}`), {
-                    status: 'results',
-                    voteCounts,
-                    isTie: true,
-                    lastEliminatedId: null,
-                    votingPhaseStartTime: null,
-                    lastActivity: serverTimestamp(),
-                });
+                const streak = live.voteTieStreak || 0;
+                if (streak >= 2) {
+                    update(ref(database, `rooms/${code}`), buildTechnicalTieFinishUpdates(live, pl));
+                } else {
+                    update(ref(database, `rooms/${code}`), buildVoteTieRecoveryUpdates(live, pl, streak + 1));
+                }
                 return;
             }
 
@@ -727,6 +1075,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                 lastEliminatedId: eliminatedId,
                 votingPhaseStartTime: null,
                 lastActivity: serverTimestamp(),
+                voteTieStreak: null,
                 [`players/${eliminatedId}/isEliminated`]: true,
                 eliminationChoiceVotes: null,
             };
@@ -734,29 +1083,19 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             pl.forEach(p => { updates[`players/${p.id}/vote`] = null; });
 
             if (eliminatedIsImpostor) {
-                // Check if there are MORE active impostors remaining
-                const remainingImpostors = impostorIds.filter(
-                    id => id !== eliminatedId && !live.players[id]?.isEliminated
-                );
-                if (remainingImpostors.length === 0) {
-                    // All impostors eliminated — civilians win
-                    updates.status = 'results';
-                    updates.winner = 'civilians';
-                    updates.eliminationChoiceStartTime = null;
+                /** Solo impostores aún vivos; si no filtramos `isEliminated`, el primero ya expulsado cuenta y el segundo mal dispara otra ronda. */
+                const otherImpostorsStillInPlay = impostorIds.filter(id => {
+                    if (id === eliminatedId) return false;
+                    const p = live.players[id];
+                    return !!p && !p.isEliminated;
+                });
+                if (otherImpostorsStillInPlay.length > 0) {
+                    // Sigue habiendo impostores ocultos: misma fase que civil eliminado (votación continuar / revelar solo al terminar).
+                    updates.status = 'elimination_choice';
+                    updates.eliminationChoiceStartTime = serverTimestamp();
                 } else {
-                    // There are still active impostors — game continues
-                    // Show results briefly then decide: with 3 active players left game could be risky
-                    const activeAfter = activeBeforeElimination - 1;
-                    if (activeAfter <= 2) {
-                        // Too few players to continue meaningfully
-                        updates.status = 'results';
-                        updates.winner = 'civilians';
-                        updates.eliminationChoiceStartTime = null;
-                    } else {
-                        // Continue — let players decide next round or vote again
-                        updates.status = 'elimination_choice';
-                        updates.eliminationChoiceStartTime = serverTimestamp();
-                    }
+                    updates.status = 'results';
+                    updates.eliminationChoiceStartTime = null;
                 }
                 update(ref(database, `rooms/${code}`), updates);
                 return;
@@ -886,19 +1225,42 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
     // ── Stale room cleanup on any room access ───────────────────────────────────
     const cleanupStaleRooms = useCallback(async (codeToCheck?: string) => {
-        if (!codeToCheck) return;
-        try {
-            const snap = await get(ref(database, `rooms/${codeToCheck}`));
-            if (!snap.exists()) return;
-            const room = snap.val() as OnlineRoom;
+        const isRoomStale = (room: OnlineRoom): boolean => {
             const now = Date.now();
             const age = now - (room.lastActivity || room.createdAt || 0);
-            const isStale =
+            return (
                 (room.status === 'waiting' && age > INACTIVITY_WAITING_MS) ||
-                (room.status !== 'waiting' && age > INACTIVITY_PLAYING_MS);
-            if (isStale) {
-                await remove(ref(database, `rooms/${codeToCheck}`));
+                (room.status !== 'waiting' && age > INACTIVITY_PLAYING_MS)
+            );
+        };
+
+        try {
+            if (codeToCheck) {
+                const snap = await get(ref(database, `rooms/${codeToCheck}`));
+                if (!snap.exists()) return;
+                const room = snap.val() as OnlineRoom;
+                if (isRoomStale(room)) {
+                    await remove(ref(database, `rooms/${codeToCheck}`));
+                }
+                return;
             }
+
+            const roomsSnap = await get(ref(database, 'rooms'));
+            if (!roomsSnap.exists()) return;
+            const rooms = roomsSnap.val() as Record<string, OnlineRoom>;
+            const roomEntries = Object.entries(rooms).slice(0, MAX_STALE_SCAN_ROOMS_PER_RUN);
+
+            await Promise.all(
+                roomEntries.map(async ([roomCode, room]) => {
+                    try {
+                        if (!room || typeof room !== 'object') return;
+                        if (!isRoomStale(room)) return;
+                        await remove(ref(database, `rooms/${roomCode}`));
+                    } catch {
+                        // Ignore permisos/errores de red para no interrumpir la corrida pasiva.
+                    }
+                })
+            );
         } catch { /* ignore */ }
     }, []);
 
@@ -927,6 +1289,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                     isEliminated: false,
                     isConnected: true,
                     lastSeen: Date.now(),
+                    joinState: 'joining',
+                    joinStateSince: Date.now(),
                 };
 
                 const newRoom: any = {
@@ -939,7 +1303,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                     settings: {
                         impostorCount: 1,
                         gameDuration: null,
-                        language: (() => { const lc = getLocales()[0]?.languageCode; return lc === 'es' ? 'es' : lc === 'pt' ? 'pt' : 'en'; })(),
+                        language: defaultLanguageFromLocale(),
                         categories: ['personajes_biblicos', 'libros_biblicos', 'objetos_biblicos'],
                         customCategories: globalState.customCategories?.length
                             ? globalState.customCategories.map(c => ({ ...c }))
@@ -966,7 +1330,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                     createdAt: serverTimestamp(),
                     lastActivity: serverTimestamp(),
                     [`players/${gameState.playerId}/lastSeen`]: serverTimestamp(),
+                    [`players/${gameState.playerId}/joinStateSince`]: serverTimestamp(),
                 });
+                const roomNodeRef = ref(database, `rooms/${code}`);
+                onDisconnect(roomNodeRef).update({ hostDisconnectedAt: serverTimestamp() });
                 setGameState(prev => ({ ...prev, roomCode: code, isHost: true }));
                 return code;
             }
@@ -999,11 +1366,24 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
         // Re-join: player already exists in the room (e.g. reconnecting)
         if (preRoom.players && preRoom.players[playerId]) {
+            const players = Object.values(preRoom.players || {});
+            const existing = preRoom.players[playerId];
+            const avatarTakenByOther =
+                !!existing?.avatar &&
+                players.some(p => p.id !== playerId && p.avatar === existing.avatar);
+            const resolvedAvatar =
+                existing?.avatar && !avatarTakenByOther
+                    ? existing.avatar
+                    : getNextAvatar(players.filter(p => p.id !== playerId));
+
             await update(ref(database, `rooms/${roomCode}/players/${playerId}`), {
                 name: playerName,
+                avatar: resolvedAvatar,
                 isConnected: true,
                 disconnectedAt: null,
                 lastSeen: serverTimestamp(),
+                joinState: preRoom.status === 'waiting' ? 'joining' : (preRoom.players[playerId]?.joinState || 'ready'),
+                joinStateSince: serverTimestamp(),
             });
             await update(rRef, { lastActivity: serverTimestamp() });
             setGameState(prev => ({ ...prev, roomCode, isHost: preRoom.hostId === playerId }));
@@ -1013,8 +1393,6 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         // New player: must be in waiting status
         if (preRoom.status !== 'waiting') throw new Error("Game already started");
 
-        // Use transaction for atomic player count check
-        const avatar = getNextAvatar(Object.values(preRoom.players || {}));
         const result = await runTransaction(rRef, (currentRoom: any) => {
             if (!currentRoom) return currentRoom;
 
@@ -1025,7 +1403,9 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             const maxPlayers = currentRoom.settings?.maxPlayers || MAX_PLAYERS_FREE;
             if (playerCount >= maxPlayers) return; // abort
 
-            // Add player atomically
+            const currentPlayers = Object.values(players) as OnlinePlayer[];
+            const avatar = getNextAvatar(currentPlayers);
+            if (!currentRoom.players) currentRoom.players = {};
             currentRoom.players[playerId] = {
                 id: playerId,
                 name: playerName,
@@ -1036,6 +1416,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                 isEliminated: false,
                 isConnected: true,
                 lastSeen: Date.now(),
+                joinState: 'joining',
+                joinStateSince: Date.now(),
             };
             currentRoom.playerCount = Object.keys(currentRoom.players).length;
             return currentRoom;
@@ -1050,8 +1432,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             throw new Error("Room full");
         }
 
-        // Set server timestamps after transaction
-        await update(ref(database, `rooms/${roomCode}/players/${playerId}`), { lastSeen: serverTimestamp() });
+        await update(ref(database, `rooms/${roomCode}/players/${playerId}`), {
+            lastSeen: serverTimestamp(),
+            joinStateSince: serverTimestamp(),
+        });
         await update(rRef, { lastActivity: serverTimestamp() });
 
         setGameState(prev => ({ ...prev, roomCode, isHost: false }));
@@ -1066,6 +1450,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
         try {
             if (gameState.isHost) {
+                const roomNodeRef = ref(database, `rooms/${gameState.roomCode}`);
+                try {
+                    await onDisconnect(roomNodeRef).cancel();
+                } catch {
+                    // Mejor intentar cerrar la sala igual para evitar zombies por fallos transitorios.
+                }
                 await remove(ref(database, `rooms/${gameState.roomCode}`));
             } else {
                 const code = gameState.roomCode;
@@ -1123,6 +1513,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
         const players = Object.values(gameState.room.players).filter(p => p.isConnected !== false);
         if (players.length < 3) return;
+        const allReadyForStart = players.every(p => (p.joinState || 'ready') === 'ready');
+        if (!allReadyForStart) return;
 
         const settings: OnlineRoom['settings'] = {
             ...gameState.room.settings,
@@ -1134,8 +1526,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         }
 
         const impostorCount = settings.impostorCount;
-        const shuffled = [...players].sort(() => Math.random() - 0.5);
-        const impostorIds = shuffled.slice(0, impostorCount).map(p => p.id);
+        const impostorIds = pickImpostorIds(players, impostorCount, gameState.room.recentImpostorIds || []);
         const updates: Record<string, any> = {};
 
         players.forEach(p => {
@@ -1149,11 +1540,16 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             settings.language,
             settings.customCategories,
             'all',
-            settings.isPremiumRoom
+            settings.isPremiumRoom,
+            gameState.room.recentWordIds || []
         );
+        const nextRecentWordIds = [...(gameState.room.recentWordIds || []), word.id].slice(-WORD_HISTORY_LIMIT);
+        const nextRecentImpostorIds = [...(gameState.room.recentImpostorIds || []), ...impostorIds].slice(-IMPOSTOR_HISTORY_LIMIT);
 
         updates['currentWord'] = word;
         updates['currentImpostors'] = impostorIds;
+        updates['recentWordIds'] = nextRecentWordIds;
+        updates['recentImpostorIds'] = nextRecentImpostorIds;
         updates['status'] = 'playing';
         updates['currentRoundStartTime'] = serverTimestamp();
         updates['turnOrder'] = null;
@@ -1164,18 +1560,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['reactions'] = null;
         updates['eliminationChoiceVotes'] = null;
         updates['eliminationChoiceStartTime'] = null;
-        
-        updates['voteCounts'] = null;
-        updates['isTie'] = null;
-        updates['lastEliminatedId'] = null;
-        updates['winner'] = null;
-        updates['finishReason'] = null;
+        updates['clueReviewReady'] = null;
+        updates['clueReviewStartTime'] = null;
+        updates['voteTieRecovery'] = null;
+        updates['voteTieStreak'] = null;
         updates['roundDecisionVotes'] = null;
         updates['roundDecisionStartTime'] = null;
-        updates['postResultVotes'] = null;
-        updates['postResultStartTime'] = null;
-        updates['clueRound'] = null;
-
         players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
 
         // Save premium categories snapshot on first game start
@@ -1190,6 +1580,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     const startCluePhase = async () => {
         if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
         const players = Object.values(gameState.room.players).filter(p => !p.isEliminated && p.isConnected !== false);
+        if (players.length === 0) {
+            console.warn('startCluePhase: no hay jugadores conectados');
+            return;
+        }
         const shuffledOrder = [...players].sort(() => Math.random() - 0.5).map(p => p.id);
 
         const updates: Record<string, any> = {
@@ -1197,16 +1591,24 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             turnOrder: shuffledOrder,
             currentTurnIndex: 0,
             cluePhaseStartTime: serverTimestamp(),
+            clueReviewReady: null,
+            clueReviewStartTime: null,
             lastActivity: serverTimestamp(),
         };
         players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
 
-        await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+        try {
+            await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+        } catch (e) {
+            console.error('startCluePhase: falló el update en Firebase', e);
+        }
     };
 
     // ── submitClue ──────────────────────────────────────────────────────────────
     const submitClue = async (clue: string) => {
         if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        const self = gameState.room.players[gameState.playerId];
+        if (!self || self.isEliminated) return;
         await update(ref(database, `rooms/${gameState.roomCode}/players/${gameState.playerId}`), { clue });
         touchActivity();
     };
@@ -1214,15 +1616,16 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     // ── advanceTurn ─────────────────────────────────────────────────────────────
     const advanceTurn = async () => {
         if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
+        if (gameState.room.status !== 'clues') return;
         const turnOrder = gameState.room.turnOrder || [];
         const currentIndex = gameState.room.currentTurnIndex ?? 0;
         const nextIndex = currentIndex + 1;
 
         if (nextIndex >= turnOrder.length) {
             await update(ref(database, `rooms/${gameState.roomCode}`), {
-                status: 'deciding',
-                roundDecisionVotes: null,
-                roundDecisionStartTime: serverTimestamp(),
+                status: 'clue_review',
+                clueReviewReady: null,
+                clueReviewStartTime: serverTimestamp(),
                 lastActivity: serverTimestamp(),
             });
         } else {
@@ -1236,7 +1639,9 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
     // ── submitRoundDecision ──────────────────────────────────────────────────────
     const submitRoundDecision = async (decision: 'go_vote' | 'another_round') => {
-        if (!gameState.roomCode || !gameState.playerId) return;
+        if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        const self = gameState.room.players[gameState.playerId];
+        if (!self || self.isEliminated) return;
         await update(ref(database, `rooms/${gameState.roomCode}/roundDecisionVotes`), {
             [gameState.playerId]: decision,
         });
@@ -1257,10 +1662,34 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
         if (gameState.room.status !== 'simultaneous_reveal') return;
         await update(ref(database, `rooms/${gameState.roomCode}`), {
-            status: 'deciding',
-            roundDecisionVotes: null,
-            roundDecisionStartTime: serverTimestamp(),
+            status: 'clue_review',
+            clueReviewReady: null,
+            clueReviewStartTime: serverTimestamp(),
             lastActivity: serverTimestamp(),
+        });
+        touchActivity();
+    };
+
+    const submitClueReviewReady = async () => {
+        if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        if (gameState.room.status !== 'clue_review') return;
+        const self = gameState.room.players[gameState.playerId];
+        if (!self || self.isEliminated) return;
+        await set(ref(database, `rooms/${gameState.roomCode}/clueReviewReady/${gameState.playerId}`), true);
+        touchActivity();
+    };
+
+    const clearVoteTieRecovery = async () => {
+        if (!gameState.isHost || !gameState.roomCode) return;
+        await update(ref(database, `rooms/${gameState.roomCode}`), { voteTieRecovery: null });
+    };
+
+    const updateMyJoinState = async (state: 'joining' | 'watching_ad' | 'ready') => {
+        if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        if (gameState.room.status !== 'waiting') return;
+        await update(ref(database, `rooms/${gameState.roomCode}/players/${gameState.playerId}`), {
+            joinState: state,
+            joinStateSince: serverTimestamp(),
         });
         touchActivity();
     };
@@ -1277,7 +1706,9 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
     // ── submitVote ──────────────────────────────────────────────────────────────
     const submitVote = async (votedForId: string) => {
-        if (!gameState.roomCode || !gameState.playerId) return;
+        if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        const self = gameState.room.players[gameState.playerId];
+        if (!self || self.isEliminated) return;
         await update(ref(database, `rooms/${gameState.roomCode}/players/${gameState.playerId}`), {
             vote: votedForId
         });
@@ -1325,8 +1756,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         }
 
         const impostorCount = gameState.room.settings.impostorCount;
-        const shuffled = [...players].sort(() => Math.random() - 0.5);
-        const impostorIds = shuffled.slice(0, impostorCount).map(p => p.id);
+        const impostorIds = pickImpostorIds(players, impostorCount, gameState.room.recentImpostorIds || []);
         const updates: Record<string, any> = {};
 
         players.forEach(p => {
@@ -1341,11 +1771,16 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             gameState.room.settings.language,
             gameState.room.settings.customCategories,
             'all',
-            gameState.room.settings.isPremiumRoom
+            gameState.room.settings.isPremiumRoom,
+            gameState.room.recentWordIds || []
         );
+        const nextRecentWordIds = [...(gameState.room.recentWordIds || []), word.id].slice(-WORD_HISTORY_LIMIT);
+        const nextRecentImpostorIds = [...(gameState.room.recentImpostorIds || []), ...impostorIds].slice(-IMPOSTOR_HISTORY_LIMIT);
 
         updates['currentWord'] = word;
         updates['currentImpostors'] = impostorIds;
+        updates['recentWordIds'] = nextRecentWordIds;
+        updates['recentImpostorIds'] = nextRecentImpostorIds;
         updates['status'] = 'playing';
         updates['currentRoundStartTime'] = serverTimestamp();
         updates['turnOrder'] = null;
@@ -1364,8 +1799,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['votingPhaseStartTime'] = null;
         updates['eliminationChoiceVotes'] = null;
         updates['eliminationChoiceStartTime'] = null;
-        updates['winner'] = null;
-        updates['finishReason'] = null;
+        updates['clueReviewReady'] = null;
+        updates['clueReviewStartTime'] = null;
+        updates['voteTieRecovery'] = null;
+        updates['voteTieStreak'] = null;
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
     };
 
@@ -1380,6 +1817,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['status'] = 'playing';
         updates['currentRoundStartTime'] = serverTimestamp();
         updates['votingPhaseStartTime'] = null;
+        updates['clueReviewReady'] = null;
+        updates['clueReviewStartTime'] = null;
+        updates['voteTieRecovery'] = null;
+        updates['voteTieStreak'] = null;
         updates['lastActivity'] = serverTimestamp();
 
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
@@ -1411,6 +1852,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             votingPhaseStartTime: null,
             eliminationChoiceVotes: null,
             eliminationChoiceStartTime: null,
+            clueReviewReady: null,
+            clueReviewStartTime: null,
+            voteTieRecovery: null,
+            voteTieStreak: null,
+            recentWordIds: null,
+            recentImpostorIds: null,
             lastActivity: serverTimestamp(),
         };
 
@@ -1419,6 +1866,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             updates[`players/${p.id}/vote`] = null;
             updates[`players/${p.id}/clue`] = null;
             updates[`players/${p.id}/isEliminated`] = false;
+            updates[`players/${p.id}/joinState`] = 'ready';
+            updates[`players/${p.id}/joinStateSince`] = serverTimestamp();
         });
 
         await update(ref(database, `rooms/${gameState.roomCode}`), updates);
@@ -1459,6 +1908,43 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             .catch(() => {});
     };
 
+    // ── sendQuickMessage ─────────────────────────────────────────────────────────
+    const sendQuickMessage = async (messageKey: string, messageText?: string) => {
+        if (!gameState.roomCode || !gameState.room) return;
+
+        const uid = auth.currentUser?.uid;
+        if (!uid) return;
+
+        const now = Date.now();
+        if (now - lastMessageTimeRef.current < 2000) return;
+        lastMessageTimeRef.current = now;
+
+        const me = gameState.room.players[uid];
+        if (!me) return;
+
+        const messagesRef = ref(database, `rooms/${gameState.roomCode}/messages`);
+        const newRef = push(messagesRef);
+        const message: OnlineMessage = {
+            playerId: uid,
+            playerName: me.name,
+            messageKey,
+            ...(typeof messageText === 'string' && messageText.trim().length > 0
+                ? { messageText: messageText.trim().slice(0, 120) }
+                : {}),
+            timestamp: Date.now(),
+        };
+
+        void set(newRef, message)
+            .then(() => {
+                setTimeout(() => {
+                    remove(newRef).catch(() => {});
+                }, 6000);
+            })
+            .catch((e) => {
+                console.error('sendQuickMessage: no se pudo publicar mensaje', e);
+            });
+    };
+
     // ─── Provide context ────────────────────────────────────────────────────────
 
     return (
@@ -1471,6 +1957,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             clearInsufficientPlayers,
             hostMigrationNotice,
             clearHostMigrationNotice,
+            playerPresenceNotice,
+            clearPlayerPresenceNotice,
             createRoom,
             joinRoom,
             leaveRoom,
@@ -1488,8 +1976,13 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             submitRoundDecision,
             submitEliminationChoice,
             openRoundDecisionAfterSimultaneousReveal,
+            submitClueReviewReady,
+            clearVoteTieRecovery,
+            updateMyJoinState,
             sendReaction,
+            sendQuickMessage,
             resetToLobby,
+            cleanupStaleRooms,
         }}>
             {children}
         </OnlineGameContext.Provider>

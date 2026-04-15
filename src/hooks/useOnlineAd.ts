@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePurchase } from '../context/PurchaseContext';
 
 const ONLINE_AD_KEY = 'lastOnlineAdSeen';
-const AD_COOLDOWN_MS = 1 * 60 * 60 * 1000; // 1 hour
+const ONLINE_AD_FIRST_SEEN_KEY = 'hasSeenFirstOnlineAd';
+const AD_COOLDOWN_MS = 30 * 60 * 1000; // 30 min
 
 export function useOnlineAd() {
     const { isPremium } = usePurchase();
@@ -16,13 +17,15 @@ export function useOnlineAd() {
         if (isPremiumRoom) return false;
 
         try {
+            const firstSeen = await AsyncStorage.getItem(ONLINE_AD_FIRST_SEEN_KEY);
+            if (firstSeen !== '1') return true; // Primera vez: obligatorio.
             const lastSeen = await AsyncStorage.getItem(ONLINE_AD_KEY);
             if (lastSeen) {
                 const elapsed = Date.now() - parseInt(lastSeen, 10);
                 if (elapsed < AD_COOLDOWN_MS) return false;
             }
         } catch {
-            return false;
+            return true;
         }
 
         return true;
@@ -30,7 +33,10 @@ export function useOnlineAd() {
 
     const markAdSeen = useCallback(async () => {
         try {
-            await AsyncStorage.setItem(ONLINE_AD_KEY, Date.now().toString());
+            await AsyncStorage.multiSet([
+                [ONLINE_AD_KEY, Date.now().toString()],
+                [ONLINE_AD_FIRST_SEEN_KEY, '1'],
+            ]);
         } catch { /* ignore */ }
     }, []);
 

@@ -4,6 +4,7 @@ import { CustomCategory } from '../types';
 const CUSTOM_CATEGORIES_KEY = '@impostor_custom_categories';
 const GAMES_PLAYED_KEY = '@impostor_games_played';
 const REWARDED_UNLOCK_KEY = '@impostor_rewarded_unlock';
+const ONLINE_ONBOARDING_SEEN_KEY = '@impostor_online_onboarding_seen';
 
 export const saveCustomCategories = async (categories: CustomCategory[]): Promise<void> => {
     try {
@@ -107,4 +108,21 @@ export const saveRewardedHistory = async (history: RewardedUnlockHistory): Promi
     } catch (e) {
         console.error('Error saving rewarded history:', e);
     }
+};
+
+// ─── Online onboarding ──────────────────────────────────────────────────────
+
+export const hasSeenOnlineOnboarding = async (): Promise<boolean> => {
+    try {
+        const value = await AsyncStorage.getItem(ONLINE_ONBOARDING_SEEN_KEY);
+        return value === 'true';
+    } catch {
+        return false;
+    }
+};
+
+export const markOnlineOnboardingSeen = async (): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(ONLINE_ONBOARDING_SEEN_KEY, 'true');
+    } catch { /* silent */ }
 };

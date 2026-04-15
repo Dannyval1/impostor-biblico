@@ -17,6 +17,7 @@ import { RoomClosedModal } from '../components/RoomClosedModal';
 import { InsufficientPlayersModal } from '../components/InsufficientPlayersModal';
 import { RoundDecisionModal } from '../components/RoundDecisionModal';
 import { HostMigrationNotice } from '../components/HostMigrationNotice';
+import { PlayerPresenceNotice } from '../components/PlayerPresenceNotice';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -61,6 +62,7 @@ export default function AppNavigator() {
             <InsufficientPlayersModal />
             <RoundDecisionModal />
             <HostMigrationNotice />
+            <PlayerPresenceNotice />
         </NavigationContainer>
     );
 }
