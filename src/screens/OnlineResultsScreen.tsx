@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { EmojiReactionBar } from '../components/EmojiReactionBar';
 import { getWordCategoryDisplayLabel } from '../utils/wordCategoryLabel';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
+import { EliminatedSpectatorHeader } from '../components/EliminatedSpectatorHeader';
 
 export default function OnlineResultsScreen() {
     const navigation = useNavigation<any>();
@@ -53,7 +54,7 @@ export default function OnlineResultsScreen() {
         if (!room) return;
         if (!gameState.roomCode) return;
         if (room.status === 'playing') navigation.replace('OnlineReveal');
-        else if (room.status === 'clues' || room.status === 'simultaneous_reveal' || room.status === 'deciding') navigation.replace('OnlineClue');
+        else if (room.status === 'clues' || room.status === 'simultaneous_reveal' || room.status === 'clue_review' || room.status === 'deciding') navigation.replace('OnlineClue');
         else if (room.status === 'voting') navigation.replace('OnlineVoting');
         else if (room.status === 'waiting') navigation.replace('OnlineLobby');
     }, [gameState.roomCode, room?.status]);
@@ -70,25 +71,8 @@ export default function OnlineResultsScreen() {
 
     const players = Object.values(room.players);
     const me = room.players[myId];
+    const isEliminationSpectator = isEliminationChoicePhase && me?.isEliminated === true;
 
-    if (isEliminationChoicePhase && me?.isEliminated) {
-        return (
-            <SafeAreaView style={[styles.container, { backgroundColor: '#1A0000' }]}>
-                <View style={[styles.waitingHostBox, { flex: 1, justifyContent: 'center' }]}>
-                    {me?.avatar && (
-                        <Image
-                            source={AVATAR_ASSETS[me.avatar]}
-                            style={styles.eliminatedAvatar}
-                        />
-                    )}
-                    <Text style={[styles.waitingHostTitle, { fontSize: 28 }]}>{t.online.you_are_eliminated}</Text>
-                    <Text style={[styles.waitingHostHint, { marginTop: 12 }]}>{t.online.elimination_choice_eliminated_hint}</Text>
-                    <ActivityIndicator color="rgba(255,255,255,0.5)" size="large" style={{ marginTop: 30 }} />
-                </View>
-                <EmojiReactionBar />
-            </SafeAreaView>
-        );
-    }
     const voteCounts = room.voteCounts || {};
     const isTie = room.isTie;
     const eliminatedId = room.lastEliminatedId;
@@ -100,6 +84,9 @@ export default function OnlineResultsScreen() {
     const finishReason = room.finishReason;
     const isImpostorFled = finishReason === 'impostor_disconnected';
     const isNotEnoughPlayers = finishReason === 'not_enough_players';
+    const isTechnicalTie = finishReason === 'technical_tie';
+    /** Sin jugadores suficientes no hay revelación coherente; en empate técnico sí se revela al impostor. */
+    const hideRoleReveal = isNotEnoughPlayers;
 
     // Count remaining active impostors (excluding this newly eliminated one unless fled)
     const remainingImpostors = impostorIds.filter(
@@ -111,7 +98,7 @@ export default function OnlineResultsScreen() {
 
     if (isImpostorFled) {
         civiliansWon = true;
-    } else if (isNotEnoughPlayers) {
+    } else if (isNotEnoughPlayers || isTechnicalTie) {
         civiliansWon = false;
         impostorsWon = false;
     } else {
@@ -119,7 +106,7 @@ export default function OnlineResultsScreen() {
         impostorsWon = !isTie && !eliminatedIsImpostor;
     }
 
-    const iWon = isNotEnoughPlayers ? false : (amIImpostor ? impostorsWon : civiliansWon);
+    const iWon = (isNotEnoughPlayers || isTechnicalTie) ? false : (amIImpostor ? impostorsWon : civiliansWon);
 
     const choiceEligible = players.filter(p => !p.isEliminated && p.isConnected !== false);
     const myEliminationChoice = room.eliminationChoiceVotes?.[myId];
@@ -128,16 +115,18 @@ export default function OnlineResultsScreen() {
 
     // When an impostor is found but game continues, use positive styling
     const isImpostorFoundContinue = isEliminationChoicePhase && eliminatedIsImpostor;
+    /** Mientras quede otro impostor oculto, no se puede forzar revelación total desde esta fase. */
+    const showRevealEndOption = !(isImpostorFoundContinue && remainingImpostors.length > 0);
 
     const bgColor = isEliminationChoicePhase
         ? (isImpostorFoundContinue ? '#0F2027' : '#2C1A0E')
-        : (isNotEnoughPlayers ? '#2D3748' : (iWon ? '#0F2027' : '#1A0000'));
+        : ((isNotEnoughPlayers || isTechnicalTie) ? '#2D3748' : (iWon ? '#0F2027' : '#1A0000'));
     const accentColor = isEliminationChoicePhase
         ? (isImpostorFoundContinue ? '#48BB78' : '#F6AD55')
-        : (isNotEnoughPlayers ? '#A0AEC0' : (iWon ? '#48BB78' : '#E53E3E'));
+        : ((isNotEnoughPlayers || isTechnicalTie) ? '#A0AEC0' : (iWon ? '#48BB78' : '#E53E3E'));
     const titleEmoji = isEliminationChoicePhase
         ? (isImpostorFoundContinue ? '🎯' : '❓')
-        : (isNotEnoughPlayers ? '📉' : (isImpostorFled ? '💨' : (iWon ? '🎉' : '💀')));
+        : (isTechnicalTie ? '⚖️' : (isNotEnoughPlayers ? '📉' : (isImpostorFled ? '💨' : (iWon ? '🎉' : '💀'))));
     const isTieResult = isTie;
 
     const sortedPlayers = [...players].sort((a, b) =>
@@ -148,10 +137,13 @@ export default function OnlineResultsScreen() {
 
     const getTitle = () => {
         if (isNotEnoughPlayers) return t.online.results_game_cancelled_title;
+        if (isTechnicalTie) return t.online.technical_tie_title;
         if (isImpostorFled) return t.online.results_impostor_fled_title;
         if (isEliminationChoicePhase) {
             if (isImpostorFoundContinue) {
-                return t.online.civilian_caught_impostor;
+                return remainingImpostors.length > 0
+                    ? t.online.first_impostor_caught_title
+                    : t.online.civilian_caught_impostor;
             }
             return t.online.wrong_civilian_choice_title;
         }
@@ -162,6 +154,7 @@ export default function OnlineResultsScreen() {
 
     const getSubtitle = () => {
         if (isNotEnoughPlayers) return t.online.results_game_cancelled_subtitle;
+        if (isTechnicalTie) return t.online.technical_tie_subtitle;
         if (isImpostorFled) return t.online.results_impostor_fled_subtitle;
         if (isEliminationChoicePhase) {
             if (isImpostorFoundContinue) {
@@ -177,14 +170,21 @@ export default function OnlineResultsScreen() {
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
-            <ScrollView contentContainerStyle={styles.scroll}>
+            {isEliminationSpectator && (
+                <EliminatedSpectatorHeader
+                    title={t.online.spectator_watermark_title}
+                    bannerLabel={t.online.spectator_banner}
+                />
+            )}
+            <View style={styles.resultsLayer}>
+            <ScrollView style={styles.resultsScroll} contentContainerStyle={styles.scroll}>
 
                 <Animated.View style={[
                     styles.resultCard,
                     { borderColor: accentColor, transform: [{ scale: scaleAnim }] }
                 ]}>
                     <Text style={styles.resultEmoji}>
-                        {isTieResult && !isEliminationChoicePhase ? '🤝' : titleEmoji}
+                        {isTechnicalTie ? '⚖️' : (isTieResult && !isEliminationChoicePhase ? '🤝' : titleEmoji)}
                     </Text>
                     <Text style={[styles.resultTitle, { color: accentColor }]}>
                         {getTitle()}
@@ -193,7 +193,7 @@ export default function OnlineResultsScreen() {
                 </Animated.View>
 
                 <Animated.View style={{ opacity: fadeAnim }}>
-                    {!isTieResult && eliminatedPlayer && (
+                    {!hideRoleReveal && !isTieResult && eliminatedPlayer && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>
                                 {eliminatedIsImpostor
@@ -226,7 +226,7 @@ export default function OnlineResultsScreen() {
                         </View>
                     )}
 
-                    {!isEliminationChoicePhase && (
+                    {!isEliminationChoicePhase && !hideRoleReveal && (
                     <View style={styles.section}>
                         <Text style={styles.sectionLabel}>{t.online.the_impostor_was}</Text>
                         {impostors.map(imp => (
@@ -241,7 +241,7 @@ export default function OnlineResultsScreen() {
                     </View>
                     )}
 
-                    {!isEliminationChoicePhase && room.currentWord && (
+                    {!isEliminationChoicePhase && !hideRoleReveal && room.currentWord && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>{t.online.the_word_was}</Text>
                             <View style={styles.wordCard}>
@@ -257,7 +257,7 @@ export default function OnlineResultsScreen() {
                         </View>
                     )}
 
-                    {!isEliminationChoicePhase && players.some(p => p.clue) && (
+                    {!isEliminationChoicePhase && !hideRoleReveal && players.some(p => p.clue) && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>{t.online.clues_so_far}</Text>
                             {sortedPlayers.filter(p => p.clue).map(p => {
@@ -288,7 +288,7 @@ export default function OnlineResultsScreen() {
                         </View>
                     )}
 
-                    {!isEliminationChoicePhase && !room.settings.isPremiumRoom && (
+                    {!isEliminationChoicePhase && !hideRoleReveal && !room.settings.isPremiumRoom && (
                         <TouchableOpacity
                             style={styles.premiumCta}
                             onPress={() => navigation.navigate('Paywall')}
@@ -314,7 +314,12 @@ export default function OnlineResultsScreen() {
                             </View>
                         )}
                         {isEliminationChoicePhase ? (
-                            iCanVoteEliminationChoice && !myEliminationChoice ? (
+                            isEliminationSpectator ? (
+                                <View style={styles.waitingHostBox}>
+                                    <Text style={styles.waitingHostTitle}>{t.online.you_are_eliminated}</Text>
+                                    <Text style={styles.waitingHostHint}>{t.online.spectator_vote_hint}</Text>
+                                </View>
+                            ) : iCanVoteEliminationChoice && !myEliminationChoice ? (
                                 <View style={styles.eliminationChoiceRow}>
                                     <TouchableOpacity
                                         style={[styles.eliminationChoiceBtn, styles.eliminationChoiceBtnContinue]}
@@ -324,16 +329,18 @@ export default function OnlineResultsScreen() {
                                         <Ionicons name="play-forward" size={22} color="#1A202C" />
                                         <Text style={styles.eliminationChoiceBtnTextDark}>{t.online.continue_same_word_btn}</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[styles.eliminationChoiceBtn, styles.eliminationChoiceBtnReveal]}
-                                        onPress={() => submitEliminationChoice('reveal_impostor')}
-                                        activeOpacity={0.85}
-                                    >
-                                        <Ionicons name="eye" size={22} color="#FFF" />
-                                        <Text style={styles.eliminationChoiceBtnText}>{t.online.reveal_impostor_btn}</Text>
-                                    </TouchableOpacity>
+                                    {showRevealEndOption && (
+                                        <TouchableOpacity
+                                            style={[styles.eliminationChoiceBtn, styles.eliminationChoiceBtnReveal]}
+                                            onPress={() => submitEliminationChoice('reveal_impostor')}
+                                            activeOpacity={0.85}
+                                        >
+                                            <Ionicons name="eye" size={22} color="#FFF" />
+                                            <Text style={styles.eliminationChoiceBtnText}>{t.online.reveal_impostor_btn}</Text>
+                                        </TouchableOpacity>
+                                    )}
                                 </View>
-                            ) : isEliminationChoicePhase && !choiceEligible.some(p => p.id === myId) ? (
+                            ) : !choiceEligible.some(p => p.id === myId) ? (
                                 <View style={styles.waitingHostBox}>
                                     <Text style={styles.waitingHostTitle}>{t.online.elimination_choice_eliminated_title}</Text>
                                     <Text style={styles.waitingHostHint}>{t.online.elimination_choice_eliminated_hint}</Text>
@@ -374,12 +381,15 @@ export default function OnlineResultsScreen() {
                     </View>
                 </Animated.View>
             </ScrollView>
+            </View>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
+    resultsLayer: { flex: 1 },
+    resultsScroll: { flex: 1 },
     scroll: { padding: 20, paddingBottom: 40 },
     resultCard: {
         borderRadius: 24,

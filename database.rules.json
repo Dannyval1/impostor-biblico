@@ -18,7 +18,7 @@
         },
         "status": {
           ".write": "data.parent().child('hostId').val() === auth.uid",
-          ".validate": "newData.isString() && newData.val().matches(/^(waiting|playing|clues|simultaneous_reveal|deciding|voting|results|elimination_choice|finished)$/)"
+          ".validate": "newData.isString() && newData.val().matches(/^(waiting|playing|clues|simultaneous_reveal|clue_review|deciding|voting|results|elimination_choice|finished)$/)"
         },
         "settings": {
           "isPremiumRoom": {
@@ -27,7 +27,7 @@
           },
           "maxPlayers": {
             ".write": "!data.exists()",
-            ".validate": "newData.isNumber() && newData.val() >= 3 && newData.val() <= 20"
+            ".validate": "newData.isNumber() && newData.val() >= 3 && newData.val() <= 30"
           },
           "$other": {
             ".write": "data.parent().parent().child('hostId').val() === auth.uid",
@@ -61,6 +61,14 @@
             },
             "disconnectedAt": {
               ".write": "$playerId === auth.uid"
+            },
+            "joinState": {
+              ".write": "$playerId === auth.uid || data.parent().parent().parent().child('hostId').val() === auth.uid",
+              ".validate": "newData.isString() && newData.val().matches(/^(joining|watching_ad|ready)$/)"
+            },
+            "joinStateSince": {
+              ".write": "$playerId === auth.uid || data.parent().parent().parent().child('hostId').val() === auth.uid",
+              ".validate": "newData.isNumber()"
             }
           }
         },
@@ -68,6 +76,12 @@
           "$reactionId": {
             ".write": "auth != null && root.child('rooms').child($roomCode).child('players').child(auth.uid).exists() && ((newData.exists() && newData.child('playerId').val() === auth.uid) || (!newData.exists() && data.exists() && data.child('playerId').val() === auth.uid))",
             ".validate": "!newData.exists() || (newData.hasChildren(['emoji', 'playerName', 'playerId', 'timestamp']) && newData.child('playerId').val() === auth.uid)"
+          }
+        },
+        "messages": {
+          "$messageId": {
+            ".write": "auth != null && root.child('rooms').child($roomCode).child('players').child(auth.uid).exists() && ((newData.exists() && newData.child('playerId').val() === auth.uid) || (!newData.exists() && data.exists() && data.child('playerId').val() === auth.uid))",
+            ".validate": "!newData.exists() || (newData.hasChild('playerId') && newData.hasChild('playerName') && newData.hasChild('messageKey') && newData.hasChild('timestamp') && newData.child('playerId').val() === auth.uid && newData.child('playerId').isString() && newData.child('playerName').isString() && newData.child('messageKey').isString() && newData.child('messageKey').val().length <= 48 && newData.child('timestamp').isNumber() && (!newData.hasChild('messageText') || (newData.child('messageText').isString() && newData.child('messageText').val().length <= 120)))"
           }
         },
         "currentWord": {
@@ -113,6 +127,29 @@
         },
         "roundDecisionStartTime": {
           ".write": "data.parent().child('hostId').val() === auth.uid"
+        },
+        "clueReviewReady": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          "$playerId": {
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "clueReviewStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "voteTieRecovery": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || newData.isBoolean()"
+        },
+        "voteTieStreak": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0 && newData.val() <= 3)"
+        },
+        "finishReason": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^(impostor_disconnected|not_enough_players|technical_tie)$/))"
         },
         "clueRound": {
           ".write": "data.parent().child('hostId').val() === auth.uid",

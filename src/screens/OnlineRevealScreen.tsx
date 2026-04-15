@@ -67,7 +67,7 @@ function AutoStartBar({ isHost, onStart, label }: { isHost: boolean; onStart: ()
 
 export default function OnlineRevealScreen() {
     const navigation = useNavigation<any>();
-    const { gameState, startCluePhase } = useOnlineGame();
+    const { gameState, startCluePhase, leaveRoom } = useOnlineGame();
     const { t } = useTranslation();
 
     // Local state for countdown
@@ -77,14 +77,15 @@ export default function OnlineRevealScreen() {
     // In Online mode, since everyone has their own screen, we can show immediately or tap to reveal.
     // Let's do: Tap to Reveal, then static display.
 
-    const player = gameState.room?.players[gameState.playerId || ''];
+    const room = gameState.room;
+    const player = room && gameState.playerId ? room.players[gameState.playerId] : undefined;
     const role = player?.role;
     const isImpostor = role === 'impostor';
-    const word = gameState.room?.currentWord;
+    const word = room?.currentWord;
 
     useEffect(() => {
         if (!gameState.roomCode) return;
-        if (gameState.room?.status === 'clues' || gameState.room?.status === 'simultaneous_reveal') {
+        if (gameState.room?.status === 'clues' || gameState.room?.status === 'simultaneous_reveal' || gameState.room?.status === 'clue_review' || gameState.room?.status === 'deciding') {
             navigation.replace('OnlineClue');
         } else if (gameState.room?.status === 'voting') {
             navigation.replace('OnlineVoting');
@@ -118,7 +119,34 @@ export default function OnlineRevealScreen() {
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
-    if (!player) return <View style={styles.container}><Text style={styles.text}>{t.home.loading}</Text></View>;
+    if (!room || !gameState.playerId) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.text}>{t.home.loading}</Text>
+            </SafeAreaView>
+        );
+    }
+
+    if (!player) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.content}>
+                    <Text style={styles.roleTitle}>{t.online.errors.room_closed_removed_title}</Text>
+                    <Text style={styles.removedHint}>{t.online.removed_from_match_hint}</Text>
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => {
+                            void leaveRoom();
+                            navigation.replace('OnlineLobby');
+                        }}
+                        activeOpacity={0.85}
+                    >
+                        <Text style={styles.actionButtonText}>{t.common.ok}</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={[styles.container, isImpostor ? styles.impostorBg : styles.civilianBg]}>
@@ -157,6 +185,11 @@ export default function OnlineRevealScreen() {
                                     gameState.room?.settings.customCategories
                                 )}
                             </Text>
+                            {word?.hint && (
+                                <Text style={styles.civilianHintText}>
+                                    💡 {t.reveal.hint}: <Text style={styles.civilianHintValue}>{word.hint}</Text>
+                                </Text>
+                            )}
                         </View>
                     )}
                 </View>
@@ -276,6 +309,17 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginTop: 5,
     },
+    civilianHintText: {
+        fontSize: 15,
+        color: '#4A5568',
+        textAlign: 'center',
+        marginTop: 12,
+        lineHeight: 22,
+    },
+    civilianHintValue: {
+        fontWeight: '700',
+        color: '#2D3748',
+    },
     actionButton: {
         backgroundColor: '#E53E3E',
         paddingVertical: 15,
@@ -315,5 +359,13 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#FFF',
+    },
+    removedHint: {
+        color: 'rgba(255,255,255,0.85)',
+        fontSize: 16,
+        textAlign: 'center',
+        lineHeight: 24,
+        marginBottom: 28,
+        paddingHorizontal: 12,
     },
 });

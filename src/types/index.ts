@@ -144,6 +144,10 @@ export interface OnlinePlayer {
     lastSeen?: number;
     isConnected?: boolean;
     disconnectedAt?: number;
+    /** Estado de ingreso al lobby para sincronizar anuncios y habilitar inicio de partida. */
+    joinState?: 'joining' | 'watching_ad' | 'ready';
+    /** Timestamp local/servidor del último cambio de `joinState`. */
+    joinStateSince?: number;
 }
 
 export type DiscussionMode = 'turns' | 'simultaneous';
@@ -153,6 +157,8 @@ export type RoomStatus =
     | 'playing'
     | 'clues'
     | 'simultaneous_reveal'
+    /** Revisión de pistas antes del modal Votar / Otra ronda */
+    | 'clue_review'
     | 'deciding'
     | 'voting'
     | 'results'
@@ -172,6 +178,15 @@ export interface OnlineReaction {
     timestamp: number;
 }
 
+export interface OnlineMessage {
+    playerId: string;
+    playerName: string;
+    messageKey: string;
+    /** Texto libre opcional para mensajes dinámicos (p. ej. nombres de jugadores). */
+    messageText?: string;
+    timestamp: number;
+}
+
 export interface OnlineRoom {
     id: string;
     /** Conteo de jugadores; usado por reglas RTDB (no existe numChildren() en rules). */
@@ -185,7 +200,7 @@ export interface OnlineRoom {
     settings: {
         impostorCount: number;
         gameDuration: number | null;
-        language: 'es' | 'en' | 'pt';
+        language: Language;
         categories: Category[];
         customCategories: CustomCategory[];
         isPremiumRoom: boolean;
@@ -202,7 +217,8 @@ export interface OnlineRoom {
     createdAt: number;
     lastActivity?: number;
     winner?: 'impostors' | 'civilians';
-    finishReason?: string;
+    /** Por qué terminó la partida en resultados (p. ej. jugadores insuficientes). */
+    finishReason?: 'impostor_disconnected' | 'not_enough_players' | 'technical_tie';
     lastEliminatedId?: string | null;
     voteCounts?: Record<string, number>;
     isTie?: boolean;
@@ -212,6 +228,7 @@ export interface OnlineRoom {
     /** Inicio de la fase de votación (ms); el anfitrión cierra a los 30s aunque falten votos. */
     votingPhaseStartTime?: number;
     reactions?: Record<string, OnlineReaction>;
+    messages?: Record<string, OnlineMessage>;
     roundDecisionVotes?: Record<string, RoundDecisionVote>;
     roundDecisionStartTime?: number;
     clueRound?: number;
@@ -219,6 +236,17 @@ export interface OnlineRoom {
     postResultStartTime?: number;
     eliminationChoiceVotes?: Record<string, EliminationChoiceVote>;
     eliminationChoiceStartTime?: number;
+    /** Jugadores activos marcan listo tras revisar pistas (antes de `deciding`). */
+    clueReviewReady?: Record<string, boolean>;
+    clueReviewStartTime?: number;
+    /** Tras empate en votación: nueva ronda de pistas sin revelar impostor; la UI muestra aviso y el host limpia el flag. */
+    voteTieRecovery?: boolean;
+    /** Cuenta empates seguidos sin eliminación; al llegar a 3 → `finishReason: technical_tie`. */
+    voteTieStreak?: number;
+    /** Historial acotado de ids de palabra para reducir repeticiones entre rondas. */
+    recentWordIds?: string[];
+    /** Historial acotado de ids de impostor para balancear asignaciones. */
+    recentImpostorIds?: string[];
 }
 
 export interface OnlineGameState {

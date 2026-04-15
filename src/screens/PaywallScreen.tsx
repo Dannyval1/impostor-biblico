@@ -17,10 +17,8 @@ import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
 import { ScaleButton } from '../components/ScaleButton';
 
-// ==========================================
-// TOGGLE THIS FLAG AFTER HOLY WEEK:
-const IS_HOLY_WEEK = true;
-// ==========================================
+// Fuerza el paywall base sin campañas/promociones temporales.
+const IS_HOLY_WEEK = false;
 
 export default function PaywallScreen({ navigation }: { navigation: NativeStackNavigationProp<RootStackParamList, 'Paywall'> }) {
     if (IS_HOLY_WEEK) {

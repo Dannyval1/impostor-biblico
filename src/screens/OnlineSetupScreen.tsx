@@ -363,8 +363,10 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                     const connectedPlayers = gameState.room
                         ? Object.values(gameState.room.players).filter(p => p.isConnected !== false)
                         : [];
+                    const readyPlayers = connectedPlayers.filter(p => (p.joinState || 'ready') === 'ready');
                     const hasCategories = selectedCategories.length > 0;
-                    const canStart = connectedPlayers.length >= 3 && hasCategories;
+                    const allReady = readyPlayers.length === connectedPlayers.length;
+                    const canStart = connectedPlayers.length >= 3 && hasCategories && allReady;
                     return (
                         <>
                             <TouchableOpacity
@@ -385,6 +387,11 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                                         '{current}',
                                         String(connectedPlayers.length)
                                     )}
+                                </Text>
+                            )}
+                            {hasCategories && connectedPlayers.length >= 3 && !allReady && (
+                                <Text style={styles.minPlayersWarning}>
+                                    {t.online.lobby_waiting_ready_hint}
                                 </Text>
                             )}
                         </>
