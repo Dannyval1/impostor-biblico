@@ -21,6 +21,8 @@ interface GameModalProps {
     type?: 'success' | 'danger' | 'info' | 'warning';
     secondaryButtonText?: string;
     onSecondaryPress?: () => void;
+    /** Android back-button handler. Defaults to onClose. Pass onSecondaryPress for confirmation dialogs so back = cancel. */
+    onRequestClose?: () => void;
 }
 
 export const GameModal = ({
@@ -32,6 +34,7 @@ export const GameModal = ({
     type = 'info',
     secondaryButtonText,
     onSecondaryPress,
+    onRequestClose,
 }: GameModalProps) => {
     const getIcon = () => {
         switch (type) {
@@ -54,7 +57,7 @@ export const GameModal = ({
             visible={visible}
             transparent
             animationType="fade"
-            onRequestClose={onClose}
+            onRequestClose={onRequestClose ?? onClose}
         >
             <View style={styles.overlay}>
                 <View style={styles.modalContainer}>

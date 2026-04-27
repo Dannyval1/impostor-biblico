@@ -589,6 +589,7 @@ const GameContext = createContext<{
     deleteCustomCategory: (id: string) => void;
     incrementGamesPlayed: () => void;
     resetGamesPlayed: () => void;
+    setOnlineGameActive: (active: boolean) => void;
 } | null>(null);
 
 import { usePurchase } from './PurchaseContext';
@@ -597,6 +598,17 @@ import { usePurchase } from './PurchaseContext';
 export function GameProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(gameReducer, initialState);
     const { isPremium } = usePurchase();
+    const [onlineGameActive, setOnlineGameActiveState] = React.useState(false);
+    const onlineGameOffTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+    const setOnlineGameActive = React.useCallback((active: boolean) => {
+        if (onlineGameOffTimerRef.current) clearTimeout(onlineGameOffTimerRef.current);
+        if (active) {
+            setOnlineGameActiveState(true);
+        } else {
+            // Debounce the "off" so music doesn't cut when navigating between game screens
+            onlineGameOffTimerRef.current = setTimeout(() => setOnlineGameActiveState(false), 400);
+        }
+    }, []);
 
     // Sync Premium Status
     React.useEffect(() => {
@@ -623,19 +635,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
         gameMusicPlayer.loop = true;
 
         if (state.settings.musicEnabled) {
-            // Logic based on game phase
-            // Only play during 'voting' as requested by user
-            if (state.gamePhase === 'voting') {
+            if (state.gamePhase === 'voting' || onlineGameActive) {
                 try {
                     gameMusicPlayer.seekTo(0);
                     gameMusicPlayer.play();
                 } catch (e) {
                     console.log('Error playing game music:', e);
                 }
-            } else {
-                console.log('Stopping Game Music (Not in Voting Phase)');
-                // Music is already paused by default at start of effect, 
-                // but we rely on that pause call above.
             }
         } else {
             console.log('Music disabled in settings');
@@ -649,7 +655,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
                 // console.log('Error cleaning up music:', e);
             }
         };
-    }, [state.gamePhase, state.settings.musicEnabled]);
+    }, [state.gamePhase, state.settings.musicEnabled, onlineGameActive]);
 
     // Load custom categories on mount
     React.useEffect(() => {
@@ -773,6 +779,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         deleteCustomCategory: (id: string) => dispatch({ type: 'DELETE_CUSTOM_CATEGORY', payload: id }),
         incrementGamesPlayed: () => dispatch({ type: 'INCREMENT_GAMES_PLAYED' }),
         resetGamesPlayed: () => dispatch({ type: 'SET_GAMES_PLAYED', payload: 0 }),
+        setOnlineGameActive,
     };
 
     return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

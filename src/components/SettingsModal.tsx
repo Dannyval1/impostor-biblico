@@ -21,14 +21,14 @@ type SettingsModalProps = {
 };
 
 const { width } = Dimensions.get('window');
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '2.2.0';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
-    const { state, toggleMusic, toggleSounds, setLanguage, setDifficulty, playClick } = useGame();
+    const { state, toggleMusic, toggleSounds, setLanguage, playClick } = useGame();
     const { t } = useTranslation();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -154,55 +154,6 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
                         </View>
                     </View>
 
-
-                    <View style={styles.settingItemCol}>
-                        <View style={styles.settingLabelContainer}>
-                            <Ionicons name="speedometer-outline" size={24} color="#5B7FDB" />
-                            <Text style={styles.settingLabel}>{t.settings.difficulty_level}</Text>
-                        </View>
-                        <View style={styles.difficultyContainer}>
-                            <View style={styles.difficultyRow}>
-                                <TouchableOpacity
-                                    style={[styles.difficultyOption, state.settings.difficulty === 'easy' && styles.difficultyOptionSelected]}
-                                    onPress={() => {
-                                        playClick();
-                                        setDifficulty('easy');
-                                    }}
-                                >
-                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'easy' && styles.difficultyTextSelected]}>{t.settings.easy}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.difficultyOption, state.settings.difficulty === 'medium' && styles.difficultyOptionSelected]}
-                                    onPress={() => {
-                                        playClick();
-                                        setDifficulty('medium');
-                                    }}
-                                >
-                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'medium' && styles.difficultyTextSelected]}>{t.settings.medium}</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.difficultyRow}>
-                                <TouchableOpacity
-                                    style={[styles.difficultyOption, state.settings.difficulty === 'hard' && styles.difficultyOptionSelected]}
-                                    onPress={() => {
-                                        playClick();
-                                        setDifficulty('hard');
-                                    }}
-                                >
-                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'hard' && styles.difficultyTextSelected]}>{t.settings.hard}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.difficultyOption, state.settings.difficulty === 'all' && styles.difficultyOptionSelected]}
-                                    onPress={() => {
-                                        playClick();
-                                        setDifficulty('all');
-                                    }}
-                                >
-                                    <Text style={[styles.difficultyText, state.settings.difficulty === 'all' && styles.difficultyTextSelected]}>{t.settings.all}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
 
                     <View style={styles.divider} />
 

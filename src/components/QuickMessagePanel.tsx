@@ -16,16 +16,15 @@ import { useOnlineGame } from '../context/OnlineGameContext';
 import { useTranslation } from '../hooks/useTranslation';
 
 const BASE_KEYS = [
-    'im_ready',
-    'wait_me',
     'good_clue',
     'suspicious',
     'no_idea',
-    'gg',
     'thinking',
     'i_know',
     'think_about_it',
     'jajaja',
+    'who_is',
+    'already_said',
 ] as const;
 const ELIMINATED_KEYS = ['eliminated_angry', 'eliminated_innocent'] as const;
 const DYNAMIC_KEYS = ['dynamic_name'] as const;
@@ -45,15 +44,14 @@ function orderedKeys(variant: QuickMessageVariant, isEliminated: boolean): Messa
     switch (variant) {
         case 'lobby':
             return [
-                'im_ready',
-                'wait_me',
                 'good_clue',
                 'suspicious',
                 'thinking',
                 'i_know',
                 'think_about_it',
                 'no_idea',
-                'gg',
+                'who_is',
+                'already_said',
                 'jajaja',
             ];
         case 'clues':
@@ -61,25 +59,23 @@ function orderedKeys(variant: QuickMessageVariant, isEliminated: boolean): Messa
                 'good_clue',
                 'suspicious',
                 'i_know',
+                'who_is',
+                'already_said',
                 'think_about_it',
                 'no_idea',
                 'thinking',
-                'gg',
-                'wait_me',
-                'im_ready',
                 'jajaja',
             ];
         case 'voting':
             return [
+                'who_is',
+                'already_said',
                 'thinking',
-                'gg',
-                'wait_me',
-                'good_clue',
                 'suspicious',
                 'no_idea',
                 'i_know',
                 'think_about_it',
-                'im_ready',
+                'good_clue',
                 'jajaja',
             ];
     }
@@ -94,6 +90,8 @@ interface FloatingMessage {
     baseLeft: number;
     slideX: number;
     animation?: Animated.CompositeAnimation;
+    count: number;
+    countAnim: Animated.Value;
 }
 
 export type QuickMessagePanelProps = {
@@ -117,6 +115,7 @@ export function QuickMessagePanel({
     const insets = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState(false);
     const [floaters, setFloaters] = useState<FloatingMessage[]>([]);
+    const floatersRef = useRef<FloatingMessage[]>([]);
     const seenMessagesRef = useRef<Set<string>>(new Set());
     const hasOpenedOnceRef = useRef(false);
     const [showArrow, setShowArrow] = useState(false);
@@ -128,17 +127,21 @@ export function QuickMessagePanel({
 
     const keys = useMemo(() => orderedKeys(variant, isEliminated), [variant, isEliminated]);
     const playerNameOptions = useMemo(() => {
+        const prefix = (qm as Record<string, string>).name_accusation_prefix ?? 'Es';
         const roomPlayers = Object.values(gameState.room?.players || {}).filter(
             p =>
                 typeof p?.name === 'string' &&
                 p.name.trim().length > 0 &&
                 p.isConnected !== false
         );
-        return roomPlayers.map(p => ({ id: `name:${p.id}`, label: p.name.trim() }));
-    }, [gameState.room?.players]);
+        return roomPlayers.map(p => ({ id: `name:${p.id}`, label: `${prefix} ${p.name.trim()}` }));
+    }, [gameState.room?.players, qm]);
 
     const getMessageText = (key: string): string =>
         (qm as Record<string, string>)[key] ?? key;
+
+    // Keep floatersRef in sync for synchronous reads inside spawnFloater
+    useEffect(() => { floatersRef.current = floaters; }, [floaters]);
 
     useEffect(() => {
         if (!messages) return;
@@ -157,8 +160,25 @@ export function QuickMessagePanel({
     }, [messages, gameState.playerId]);
 
     const spawnFloater = (id: string, text: string, playerName: string) => {
+        // If an identical message is already visible, bump its count and bounce the badge
+        const existing = floatersRef.current.find(f => f.text === text);
+        if (existing) {
+            existing.countAnim.setValue(0);
+            Animated.spring(existing.countAnim, {
+                toValue: 1,
+                useNativeDriver: true,
+                speed: 40,
+                bounciness: 18,
+            }).start();
+            setFloaters(prev =>
+                prev.map(f => f.id === existing.id ? { ...f, count: f.count + 1 } : f)
+            );
+            return;
+        }
+
         const anim = new Animated.Value(0);
         const opacity = new Animated.Value(1);
+        const countAnim = new Animated.Value(1);
         const { width: W } = Dimensions.get('window');
         const margin = 14;
         const floaterSlot = 270;
@@ -174,6 +194,8 @@ export function QuickMessagePanel({
             opacity,
             baseLeft,
             slideX,
+            count: 1,
+            countAnim,
         };
         setFloaters(prev => {
             if (prev.length >= MAX_FLOATERS) {
@@ -321,6 +343,25 @@ export function QuickMessagePanel({
                 {f.playerName ? <Text style={styles.floaterName}>{f.playerName}</Text> : null}
                 <View style={styles.floaterBubble}>
                     <Text style={styles.floaterText}>{f.text}</Text>
+                    {f.count > 1 && (
+                        <Animated.View
+                            style={[
+                                styles.countBadge,
+                                {
+                                    transform: [
+                                        {
+                                            scale: f.countAnim.interpolate({
+                                                inputRange: [0, 0.5, 1],
+                                                outputRange: [0.6, 1.6, 1],
+                                            }),
+                                        },
+                                    ],
+                                },
+                            ]}
+                        >
+                            <Text style={styles.countText}>×{f.count}</Text>
+                        </Animated.View>
+                    )}
                 </View>
             </Animated.View>
         ));
@@ -506,11 +547,31 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.2)',
         maxWidth: 280,
+        overflow: 'visible',
     },
     floaterText: {
         color: '#FFF',
         fontSize: 15,
         fontWeight: '700',
         textAlign: 'center',
+    },
+    countBadge: {
+        position: 'absolute',
+        top: -10,
+        right: -10,
+        backgroundColor: '#FF6B35',
+        borderRadius: 12,
+        minWidth: 24,
+        paddingHorizontal: 5,
+        paddingVertical: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1.5,
+        borderColor: 'rgba(255,255,255,0.4)',
+    },
+    countText: {
+        color: '#FFF',
+        fontSize: 11,
+        fontWeight: '800',
     },
 });
