@@ -139,6 +139,8 @@ export interface OnlinePlayer {
     role?: OnlinePlayerRole;
     vote?: string | null;
     isEliminated: boolean;
+    /** Entra durante una partida activa: observa esta ronda y participa desde la siguiente. */
+    isSpectator?: boolean;
     score: number;
     clue?: string | null;
     lastSeen?: number;
@@ -154,6 +156,7 @@ export type DiscussionMode = 'turns' | 'simultaneous';
 
 export type RoomStatus =
     | 'waiting'
+    | 'ready_check'
     | 'playing'
     | 'clues'
     | 'simultaneous_reveal'
@@ -197,6 +200,10 @@ export interface OnlineRoom {
     originalHostName: string;
     status: RoomStatus;
     players: Record<string, OnlinePlayer>;
+    /** Nombre normalizado -> playerId; usado para bloquear duplicados sin leer datos sensibles. */
+    nameIndex?: Record<string, string>;
+    /** playerId -> nombre normalizado; permite limpiar nameIndex al salir. */
+    playerNameIndex?: Record<string, string>;
     settings: {
         impostorCount: number;
         gameDuration: number | null;
@@ -221,6 +228,7 @@ export interface OnlineRoom {
     finishReason?: 'impostor_disconnected' | 'not_enough_players' | 'technical_tie';
     lastEliminatedId?: string | null;
     voteCounts?: Record<string, number>;
+    voteTieDetails?: Array<{ playerId: string; name: string; votes: number }>;
     isTie?: boolean;
     turnOrder?: string[];
     currentTurnIndex?: number;
@@ -234,6 +242,9 @@ export interface OnlineRoom {
     clueRound?: number;
     postResultVotes?: Record<string, PostResultVote>;
     postResultStartTime?: number;
+    readyCheckReady?: Record<string, boolean>;
+    readyCheckStartTime?: number;
+    readyCheckPreviousStatus?: RoomStatus;
     eliminationChoiceVotes?: Record<string, EliminationChoiceVote>;
     eliminationChoiceStartTime?: number;
     /** Jugadores activos marcan listo tras revisar pistas (antes de `deciding`). */

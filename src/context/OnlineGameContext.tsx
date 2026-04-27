@@ -15,6 +15,7 @@ import { useGame } from './GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
+import { logOnlineAnalytics } from '../utils/onlineAnalytics';
 
 import freeWordsDataEs from '../data/words-free-es.json';
 import freeWordsDataEn from '../data/words-free-en.json';
@@ -35,6 +36,8 @@ const MAX_PLAYERS_FREE = 7;
 const MAX_PLAYERS_PREMIUM = 15;
 const CLUE_REVIEW_TIMEOUT_MS = 10_000;
 const PLAYER_GRACE_PERIOD_MS = 60_000;
+/** Grace period in the lobby (waiting): much longer to handle mobile background/reconnect. */
+const LOBBY_PLAYER_GRACE_PERIOD_MS = 5 * 60 * 1000;
 const HEARTBEAT_INTERVAL_MS = 15_000;
 /** Intervalo de hostHeartbeat en Firebase (menos escrituras que 5s; el watchdog sigue en 20s de estancamiento). */
 const HOST_HEARTBEAT_INTERVAL_MS = 12_000;
@@ -64,6 +67,8 @@ interface OnlineGameContextProps {
     clearHostMigrationNotice: () => void;
     playerPresenceNotice: string | null;
     clearPlayerPresenceNotice: () => void;
+    kickedFromRoom: boolean;
+    clearKickedFromRoom: () => void;
     createRoom: (playerName: string) => Promise<string>;
     joinRoom: (roomCode: string, playerName: string) => Promise<boolean>;
     /**
@@ -85,6 +90,8 @@ interface OnlineGameContextProps {
     advanceTurn: () => void;
     submitRoundDecision: (decision: 'go_vote' | 'another_round') => void;
     submitEliminationChoice: (choice: 'continue_same' | 'reveal_impostor') => void;
+    submitReadyCheck: () => Promise<void>;
+    cancelReadyCheck: () => Promise<void>;
     /** Tras ver todas las pistas en modo simultáneo: pasa a revisión grupal y luego al modal Votar / Otra ronda. */
     openRoundDecisionAfterSimultaneousReveal: () => Promise<void>;
     /** Marca “listo” en la fase de revisión de pistas (antes de votar u otra ronda). */
@@ -95,8 +102,12 @@ interface OnlineGameContextProps {
     updateMyJoinState: (state: 'joining' | 'watching_ad' | 'ready') => Promise<void>;
     sendReaction: (emoji: string) => void;
     sendQuickMessage: (messageKey: string, messageText?: string) => void;
+    kickPlayer: (playerId: string) => Promise<void>;
     resetToLobby: () => Promise<void>;
     cleanupStaleRooms: (codeToCheck?: string) => Promise<void>;
+    /** Draft local de configuración: persiste mientras el provider esté montado (no se pierde al navegar). */
+    settingsDraft: OnlineRoom['settings'] | null;
+    updateSettingsDraft: (patch: Partial<OnlineRoom['settings']>) => void;
 }
 
 const OnlineGameContext = createContext<OnlineGameContextProps | null>(null);
@@ -158,7 +169,27 @@ function defaultLanguageFromLocale(): Language {
     return 'en';
 }
 
+function normalizeOnlinePlayerName(name: string): string {
+    return name.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+}
+
 /** Tras empate (o sin votos): misma palabra e impostores, nueva ronda de pistas sin pasar por resultados. */
+function buildVoteTieDetails(live: OnlineRoom, pl: OnlinePlayer[]): Array<{ playerId: string; name: string; votes: number }> {
+    const voteCounts: Record<string, number> = {};
+    pl.forEach(p => {
+        if (p.vote) voteCounts[p.vote] = (voteCounts[p.vote] || 0) + 1;
+    });
+    const maxVotes = Math.max(0, ...Object.values(voteCounts));
+    if (maxVotes === 0) return [];
+    return Object.entries(voteCounts)
+        .filter(([, count]) => count === maxVotes)
+        .map(([playerId, votes]) => ({
+            playerId,
+            name: live.players[playerId]?.name?.trim() || '?',
+            votes,
+        }));
+}
+
 function buildVoteTieRecoveryUpdates(live: OnlineRoom, pl: OnlinePlayer[], nextStreak: number): Record<string, any> {
     const shuffledOrder = [...pl].sort(() => Math.random() - 0.5).map(p => p.id);
     const updates: Record<string, any> = {
@@ -167,6 +198,7 @@ function buildVoteTieRecoveryUpdates(live: OnlineRoom, pl: OnlinePlayer[], nextS
         currentTurnIndex: 0,
         cluePhaseStartTime: serverTimestamp(),
         voteCounts: null,
+        voteTieDetails: buildVoteTieDetails(live, pl),
         isTie: null,
         lastEliminatedId: null,
         votingPhaseStartTime: null,
@@ -197,6 +229,7 @@ function buildTechnicalTieFinishUpdates(_live: OnlineRoom, pl: OnlinePlayer[]): 
         winner: null,
         votingPhaseStartTime: null,
         voteCounts,
+        voteTieDetails: buildVoteTieDetails(_live, pl),
         isTie: hasVotes ? true : null,
         lastEliminatedId: null,
         voteTieRecovery: null,
@@ -413,6 +446,14 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     const clearHostMigrationNotice = () => setHostMigrationNotice(null);
     const [playerPresenceNotice, setPlayerPresenceNotice] = useState<string | null>(null);
     const clearPlayerPresenceNotice = () => setPlayerPresenceNotice(null);
+    const [kickedFromRoom, setKickedFromRoom] = useState(false);
+    const clearKickedFromRoom = () => setKickedFromRoom(false);
+
+    const [settingsDraft, setSettingsDraft] = useState<OnlineRoom['settings'] | null>(null);
+    const settingsDraftInitializedRef = useRef(false);
+    const updateSettingsDraft = useCallback((patch: Partial<OnlineRoom['settings']>) => {
+        setSettingsDraft(prev => prev ? { ...prev, ...patch } : prev);
+    }, []);
 
     /** Tras pulsar OK en el modal de sala cerrada: ignorar onValue/AppState tardíos (evita segundo flash). */
     const sessionEndDismissedRef = useRef(false);
@@ -431,6 +472,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     const lastReactionTimeRef = useRef(0);
     const lastMessageTimeRef = useRef(0);
     const prevStatusRef = useRef<string | null>(null);
+    const prevAnalyticsRoomStatusRef = useRef<string | null>(null);
     const prevPlayersRef = useRef<Record<string, OnlinePlayer>>({});
     const disconnectTimersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
     /** Watchdog del latido del anfitrión (clientes): persiste entre re-renders de `room` por votos, etc. */
@@ -441,6 +483,25 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
     // Keep roomDataRef in sync
     useEffect(() => { roomDataRef.current = gameState.room; }, [gameState.room]);
+
+    useEffect(() => {
+        const room = gameState.room;
+        if (!room) {
+            prevAnalyticsRoomStatusRef.current = null;
+            return;
+        }
+        if (!gameState.isHost) {
+            prevAnalyticsRoomStatusRef.current = room.status;
+            return;
+        }
+        const status = room.status;
+        if (status === 'finished' && prevAnalyticsRoomStatusRef.current !== 'finished') {
+            logOnlineAnalytics('online_game_finished', {
+                total_rounds: room.clueRound || 1,
+            });
+        }
+        prevAnalyticsRoomStatusRef.current = status;
+    }, [gameState.room?.status, gameState.room?.clueRound, gameState.room, gameState.isHost]);
 
     // Salas antiguas sin playerCount: el host escribe el conteo una vez (requerido por reglas RTDB).
     useEffect(() => {
@@ -459,6 +520,19 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         };
         init();
     }, []);
+
+    // ── Initialize settingsDraft when room is first loaded, clear on leave ────────
+    useEffect(() => {
+        if (!gameState.roomCode) {
+            settingsDraftInitializedRef.current = false;
+            setSettingsDraft(null);
+            return;
+        }
+        if (gameState.room?.settings && !settingsDraftInitializedRef.current) {
+            settingsDraftInitializedRef.current = true;
+            setSettingsDraft({ ...gameState.room.settings });
+        }
+    }, [gameState.roomCode, gameState.room?.settings]);
 
     // ── Subscribe to room updates ───────────────────────────────────────────────
     useEffect(() => {
@@ -494,6 +568,19 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                         }
                     });
                 }
+                // Detect kick: player WAS in the previous snapshot but is NOT in the current one.
+                // Only checking prevRoom (not first load) prevents false positives when rejoining.
+                const myId = gameState.playerId;
+                const isCurrentPlayerHost = myId != null && data.hostId === myId;
+                if (myId && !isCurrentPlayerHost && data.status === 'waiting' && prevRoom) {
+                    const wasInRoom = prevRoom.players != null && myId in prevRoom.players;
+                    const isInRoom = data.players != null && myId in data.players;
+                    if (wasInRoom && !isInRoom) {
+                        setKickedFromRoom(true);
+                        return;
+                    }
+                }
+
                 setGameState(prev => ({
                     ...prev,
                     room: data,
@@ -586,11 +673,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             return;
         }
 
-        // 3. CLIENT Heartbeat Watchdog: si el efecto se re-monta (p. ej. reconexión), lastObservedLocalTime
-        //    se reinicia aquí; si el beat del host ya estaba estancado, puede pasar ~20s extra antes de
-        //    detectar caída (caso benigno; el timeout de 20s es intencional).
-        let lastObservedBeat = roomDataRef.current?.hostHeartbeat || '';
-        let lastObservedLocalTime = Date.now();
+        // 3. CLIENT Heartbeat Watchdog: reiniciar el ref al montar el efecto para evitar falso positivo
+        //    cuando lastTime === 0 (estado inicial) y hostHeartbeat aún no existe en Firebase.
+        hostClientWatchRef.current = {
+            lastBeat: String(roomDataRef.current?.hostHeartbeat ?? ''),
+            lastTime: Date.now(),
+        };
 
         const watchdog = setInterval(() => {
              const liveRoom = roomDataRef.current;
@@ -629,7 +717,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                 if (player.isConnected === false && player.disconnectedAt) {
                     // Add 5s tolerance for clock skew between serverTimestamp and local Date.now()
                     const disconnectedAge = now - player.disconnectedAt;
-                    if (disconnectedAge > PLAYER_GRACE_PERIOD_MS || (disconnectedAge < -5000 && now - (player.lastSeen || 0) > PLAYER_GRACE_PERIOD_MS)) {
+                    if (disconnectedAge > LOBBY_PLAYER_GRACE_PERIOD_MS || (disconnectedAge < -5000 && now - (player.lastSeen || 0) > LOBBY_PLAYER_GRACE_PERIOD_MS)) {
                         const code = gameState.roomCode;
                         remove(ref(database, `rooms/${code}/players/${id}`))
                             .then(() => get(ref(database, `rooms/${code}`)))
@@ -702,7 +790,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         }
 
         const connectedInRoom = Object.values(room.players).filter(
-            p => p.isConnected !== false
+            p => p.isConnected !== false && p.isSpectator !== true
         );
         const now = Date.now();
         const gracePendingDisconnect = Object.values(room.players).some(p =>
@@ -711,27 +799,9 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             (now - p.disconnectedAt) <= PLAYER_GRACE_PERIOD_MS
         );
 
-        if (connectedInRoom.length < 3) {
-            if (gracePendingDisconnect) {
-                setInsufficientPlayers(false);
-                return;
-            }
-            setInsufficientPlayers(true);
-
-            if (gameState.isHost) {
-                update(ref(database, `rooms/${gameState.roomCode}`), {
-                    status: 'finished' as const,
-                    lastActivity: serverTimestamp(),
-                }).catch(() => {});
-            }
-        } else {
-            setInsufficientPlayers(false);
-        }
         prevStatusRef.current = room.status;
 
-        const activeStatesForDisconnect: string[] = ['playing', 'clues', 'simultaneous_reveal', 'deciding', 'voting', 'results', 'elimination_choice'];
-
-        if (activeStatesForDisconnect.includes(room.status)) {
+        if (activeStates.includes(room.status)) {
             const oldPlayers = prevPlayersRef.current;
             const newPlayers = room.players || {};
 
@@ -744,14 +814,17 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
                 // ── ALL CLIENTS: Detect when a player is finally marked as eliminated due to disconnect
                 if (!oldPlayer.isEliminated && newPlayer?.isEliminated && isConnectedNow === false) {
-                    Alert.alert('Jugador Desconectado', `El jugador ${oldPlayer.name} abandonó la partida.`);
+                    setPlayerPresenceNotice(
+                        t.online.player_eliminated_disconnect.replace('{name}', oldPlayer.name?.trim() || '?')
+                    );
                 }
 
-                // ── HOST ONLY: Manage the 15-second grace period to boot disconnected players
+                // ── HOST ONLY: Manage the grace period to boot disconnected players during active game
                 if (gameState.isHost) {
                     if (wasConnected && !isConnectedNow && !oldPlayer.isEliminated) {
                         if (!disconnectTimersRef.current[id]) {
                             disconnectTimersRef.current[id] = setTimeout(() => {
+
                                 get(ref(database, `rooms/${gameState.roomCode}/players/${id}`)).then(snap => {
                                     const p = snap.val();
                                     if (p && p.isConnected === false && !p.isEliminated) {
@@ -781,7 +854,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                                         }
                                     }
                                 });
-                            }, 15000);
+                            }, PLAYER_GRACE_PERIOD_MS);
                         }
                     } else if (!wasConnected && isConnectedNow) {
                         if (disconnectTimersRef.current[id]) {
@@ -797,7 +870,38 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             prevPlayersRef.current = room.players || {};
         }
 
+        if (connectedInRoom.length < 3) {
+            if (gracePendingDisconnect) {
+                setInsufficientPlayers(false);
+                return;
+            }
+            setInsufficientPlayers(true);
+
+            if (gameState.isHost) {
+                update(ref(database, `rooms/${gameState.roomCode}`), {
+                    status: 'finished' as const,
+                    lastActivity: serverTimestamp(),
+                }).catch(() => {});
+            }
+        } else {
+            setInsufficientPlayers(false);
+        }
+
     }, [gameState.room?.players, gameState.room?.status, gameState.roomCode, gameState.isHost, roomClosed]);
+
+    // ── Cleanup all disconnect grace-period timers when room closes or context unmounts ──
+    useEffect(() => {
+        if (gameState.roomCode) return;
+        Object.values(disconnectTimersRef.current).forEach(t => clearTimeout(t));
+        disconnectTimersRef.current = {};
+    }, [gameState.roomCode]);
+
+    useEffect(() => {
+        return () => {
+            Object.values(disconnectTimersRef.current).forEach(t => clearTimeout(t));
+            disconnectTimersRef.current = {};
+        };
+    }, []);
 
     // ── AppState: reconnect on foreground ───────────────────────────────────────
     useEffect(() => {
@@ -1028,6 +1132,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             const pl = Object.values(live.players).filter(p => !p.isEliminated && p.isConnected !== false);
             if (pl.length === 0) return;
 
+            const logRoundCompleted = () => {
+                logOnlineAnalytics('online_round_completed', { round_number: live.clueRound || 1 });
+            };
+
             const voteCounts: Record<string, number> = {};
             pl.forEach(p => {
                 if (p.vote) voteCounts[p.vote] = (voteCounts[p.vote] || 0) + 1;
@@ -1037,8 +1145,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             if (castVotes.length === 0) {
                 const streak = live.voteTieStreak || 0;
                 if (streak >= 2) {
+                    logRoundCompleted();
                     update(ref(database, `rooms/${code}`), buildTechnicalTieFinishUpdates(live, pl));
                 } else {
+                    logRoundCompleted();
                     update(ref(database, `rooms/${code}`), buildVoteTieRecoveryUpdates(live, pl, streak + 1));
                 }
                 return;
@@ -1056,8 +1166,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             if (tie) {
                 const streak = live.voteTieStreak || 0;
                 if (streak >= 2) {
+                    logRoundCompleted();
                     update(ref(database, `rooms/${code}`), buildTechnicalTieFinishUpdates(live, pl));
                 } else {
+                    logRoundCompleted();
                     update(ref(database, `rooms/${code}`), buildVoteTieRecoveryUpdates(live, pl, streak + 1));
                 }
                 return;
@@ -1097,6 +1209,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                     updates.status = 'results';
                     updates.eliminationChoiceStartTime = null;
                 }
+                logRoundCompleted();
                 update(ref(database, `rooms/${code}`), updates);
                 return;
             }
@@ -1111,6 +1224,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                 updates.eliminationChoiceStartTime = serverTimestamp();
             }
 
+            logRoundCompleted();
             update(ref(database, `rooms/${code}`), updates);
         };
 
@@ -1269,6 +1383,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         if (!gameState.playerId) throw new Error("No player ID");
         resetSessionEndGuards();
 
+        const normalizedName = normalizeOnlinePlayerName(playerName);
         const maxRetries = 10;
         for (let attempt = 0; attempt < maxRetries; attempt++) {
             const roomCode = generateRoomCode();
@@ -1300,6 +1415,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                     originalHostName: playerName,
                     status: 'waiting',
                     players: { [gameState.playerId!]: hostPlayer },
+                    nameIndex: { [normalizedName]: gameState.playerId },
+                    playerNameIndex: { [gameState.playerId!]: normalizedName },
                     settings: {
                         impostorCount: 1,
                         gameDuration: null,
@@ -1341,7 +1458,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         throw new Error("Could not create room after retries");
     };
 
-    // ── joinRoom (transaction-based for atomic maxPlayers check) ──────────────
+    // ── joinRoom ───────────────────────────────────────────────────────────────
     const joinRoom = async (roomCode: string, playerName: string): Promise<boolean> => {
         if (!gameState.playerId) throw new Error("No player ID");
         resetSessionEndGuards();
@@ -1350,93 +1467,119 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
 
         const playerId = gameState.playerId;
         const rRef = ref(database, `rooms/${roomCode}`);
+        const playerRef = ref(database, `rooms/${roomCode}/players/${playerId}`);
+        const nameKey = normalizeOnlinePlayerName(playerName);
 
-        // Pre-flight: check room exists
-        const preSnap = await get(rRef);
-        if (!preSnap.exists()) return false;
+        const [statusSnap, playerCountSnap, maxPlayersSnap, ownPlayerSnap, nameSnap] = await Promise.all([
+            get(ref(database, `rooms/${roomCode}/status`)),
+            get(ref(database, `rooms/${roomCode}/playerCount`)),
+            get(ref(database, `rooms/${roomCode}/settings/maxPlayers`)),
+            get(playerRef),
+            get(ref(database, `rooms/${roomCode}/nameIndex/${nameKey}`)),
+        ]);
+        if (!statusSnap.exists()) return false;
 
-        const preRoom = preSnap.val() as OnlineRoom;
+        const roomStatus = statusSnap.val() as OnlineRoom['status'];
+        const playerCount = typeof playerCountSnap.val() === 'number' ? playerCountSnap.val() as number : 0;
+        const maxPlayers = typeof maxPlayersSnap.val() === 'number' ? maxPlayersSnap.val() as number : MAX_PLAYERS_FREE;
+        const indexedPlayerId = nameSnap.exists() ? String(nameSnap.val()) : null;
+        if (indexedPlayerId && indexedPlayerId !== playerId) {
+            throw new Error("Name taken");
+        }
 
         // Expired check
         const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-        if (preRoom.createdAt && Date.now() - preRoom.createdAt > ONE_DAY_MS) {
-            await remove(rRef);
+        const createdAtSnap = await get(ref(database, `rooms/${roomCode}/createdAt`)).catch(() => null);
+        const createdAt = createdAtSnap?.exists() ? Number(createdAtSnap.val()) : 0;
+        if (createdAt && Date.now() - createdAt > ONE_DAY_MS) {
+            await remove(rRef).catch(() => {});
             return false;
         }
 
         // Re-join: player already exists in the room (e.g. reconnecting)
-        if (preRoom.players && preRoom.players[playerId]) {
-            const players = Object.values(preRoom.players || {});
-            const existing = preRoom.players[playerId];
-            const avatarTakenByOther =
-                !!existing?.avatar &&
-                players.some(p => p.id !== playerId && p.avatar === existing.avatar);
-            const resolvedAvatar =
-                existing?.avatar && !avatarTakenByOther
-                    ? existing.avatar
-                    : getNextAvatar(players.filter(p => p.id !== playerId));
+        if (ownPlayerSnap.exists()) {
+            const existing = ownPlayerSnap.val() as OnlinePlayer;
+            const previousNameKeySnap = await get(ref(database, `rooms/${roomCode}/playerNameIndex/${playerId}`)).catch(() => null);
+            const previousNameKey = previousNameKeySnap?.exists() ? String(previousNameKeySnap.val()) : normalizeOnlinePlayerName(existing.name || '');
+            if (previousNameKey !== nameKey) {
+                const nameResult = await runTransaction(ref(database, `rooms/${roomCode}/nameIndex/${nameKey}`), current => {
+                    if (current && current !== playerId) return current;
+                    return playerId;
+                });
+                if (!nameResult.committed || nameResult.snapshot.val() !== playerId) {
+                    throw new Error("Name taken");
+                }
+                await set(ref(database, `rooms/${roomCode}/playerNameIndex/${playerId}`), nameKey);
+                if (previousNameKey) {
+                    await remove(ref(database, `rooms/${roomCode}/nameIndex/${previousNameKey}`)).catch(() => {});
+                }
+            }
 
-            await update(ref(database, `rooms/${roomCode}/players/${playerId}`), {
+            await update(playerRef, {
                 name: playerName,
-                avatar: resolvedAvatar,
+                avatar: existing.avatar || (`avatar_${Math.floor(Math.random() * TOTAL_AVATARS) + 1}` as Avatar),
                 isConnected: true,
                 disconnectedAt: null,
                 lastSeen: serverTimestamp(),
-                joinState: preRoom.status === 'waiting' ? 'joining' : (preRoom.players[playerId]?.joinState || 'ready'),
+                joinState: roomStatus === 'waiting' ? 'joining' : (existing.joinState || 'ready'),
                 joinStateSince: serverTimestamp(),
             });
             await update(rRef, { lastActivity: serverTimestamp() });
-            setGameState(prev => ({ ...prev, roomCode, isHost: preRoom.hostId === playerId }));
+            const hostIdSnap = await get(ref(database, `rooms/${roomCode}/hostId`));
+            setGameState(prev => ({ ...prev, roomCode, isHost: hostIdSnap.val() === playerId }));
             return true;
         }
 
-        // New player: must be in waiting status
-        if (preRoom.status !== 'waiting') throw new Error("Game already started");
+        if (playerCount >= maxPlayers) throw new Error("Room full");
 
-        const result = await runTransaction(rRef, (currentRoom: any) => {
-            if (!currentRoom) return currentRoom;
+        const nameResult = await runTransaction(ref(database, `rooms/${roomCode}/nameIndex/${nameKey}`), current => {
+            if (current && current !== playerId) return current;
+            return playerId;
+        });
+        if (!nameResult.committed || nameResult.snapshot.val() !== playerId) {
+            throw new Error("Name taken");
+        }
 
-            // Re-validate inside transaction
-            if (currentRoom.status !== 'waiting') return; // abort
-            const players = currentRoom.players || {};
-            const playerCount = Object.keys(players).length;
-            const maxPlayers = currentRoom.settings?.maxPlayers || MAX_PLAYERS_FREE;
-            if (playerCount >= maxPlayers) return; // abort
+        let slotReserved = false;
+        try {
+            await set(ref(database, `rooms/${roomCode}/playerNameIndex/${playerId}`), nameKey);
+            const countResult = await runTransaction(ref(database, `rooms/${roomCode}/playerCount`), current => {
+                const count = typeof current === 'number' ? current : playerCount;
+                if (count >= maxPlayers) return;
+                return count + 1;
+            });
+            if (!countResult.committed || typeof countResult.snapshot.val() !== 'number') {
+                throw new Error("Room full");
+            }
+            slotReserved = true;
 
-            const currentPlayers = Object.values(players) as OnlinePlayer[];
-            const avatar = getNextAvatar(currentPlayers);
-            if (!currentRoom.players) currentRoom.players = {};
-            currentRoom.players[playerId] = {
+            const joinsAsSpectator = roomStatus !== 'waiting';
+            await set(playerRef, {
                 id: playerId,
                 name: playerName,
-                avatar,
+                avatar: `avatar_${Math.floor(Math.random() * TOTAL_AVATARS) + 1}` as Avatar,
                 isHost: false,
                 isReady: true,
                 score: 0,
-                isEliminated: false,
+                isEliminated: joinsAsSpectator,
+                isSpectator: joinsAsSpectator,
                 isConnected: true,
-                lastSeen: Date.now(),
-                joinState: 'joining',
-                joinStateSince: Date.now(),
-            };
-            currentRoom.playerCount = Object.keys(currentRoom.players).length;
-            return currentRoom;
-        });
-
-        if (!result.committed || !result.snapshot.val()) {
-            // Transaction aborted — determine reason
-            const freshSnap = await get(rRef);
-            if (!freshSnap.exists()) return false;
-            const freshRoom = freshSnap.val() as OnlineRoom;
-            if (freshRoom.status !== 'waiting') throw new Error("Game already started");
-            throw new Error("Room full");
+                lastSeen: serverTimestamp(),
+                joinState: joinsAsSpectator ? 'ready' : 'joining',
+                joinStateSince: serverTimestamp(),
+            });
+            await update(rRef, { lastActivity: serverTimestamp() });
+        } catch (error) {
+            if (slotReserved) {
+                await runTransaction(ref(database, `rooms/${roomCode}/playerCount`), current => {
+                    const count = typeof current === 'number' ? current : playerCount + 1;
+                    return Math.max(0, count - 1);
+                }).catch(() => {});
+            }
+            await remove(ref(database, `rooms/${roomCode}/nameIndex/${nameKey}`)).catch(() => {});
+            await remove(ref(database, `rooms/${roomCode}/playerNameIndex/${playerId}`)).catch(() => {});
+            throw error;
         }
-
-        await update(ref(database, `rooms/${roomCode}/players/${playerId}`), {
-            lastSeen: serverTimestamp(),
-            joinStateSince: serverTimestamp(),
-        });
-        await update(rRef, { lastActivity: serverTimestamp() });
 
         setGameState(prev => ({ ...prev, roomCode, isHost: false }));
         return true;
@@ -1467,18 +1610,24 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
                     if (!players[playerId]) {
                         return Object.keys(players).length === 0 ? null : current;
                     }
+                    const nameKey = current.playerNameIndex?.[playerId];
                     delete players[playerId];
+                    const nameIndex = { ...(current.nameIndex || {}) };
+                    const playerNameIndex = { ...(current.playerNameIndex || {}) };
+                    if (nameKey) delete nameIndex[nameKey];
+                    delete playerNameIndex[playerId];
                     const nextCount = Object.keys(players).length;
                     if (nextCount === 0) {
                         return null;
                     }
-                    return { ...current, players, playerCount: nextCount };
+                    return { ...current, players, nameIndex, playerNameIndex, playerCount: nextCount };
                 });
             }
         } catch (e) {
             console.error("Error leaving room:", e);
         }
 
+        setKickedFromRoom(false);
         setGameState(prev => ({
             ...prev,
             roomCode: null,
@@ -1486,6 +1635,28 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             ...(clearLocalSnapshot ? { room: null, error: null } : {}),
         }));
         listenersRef.current = false;
+    };
+
+    // ── kickPlayer (host only, lobby only) ───────────────────────────────────────
+    const kickPlayer = async (playerId: string) => {
+        if (!gameState.roomCode || !gameState.isHost) return;
+        const roomRef = ref(database, `rooms/${gameState.roomCode}`);
+        await runTransaction(roomRef, (current: any) => {
+            if (!current) return;
+            if (current.status !== 'waiting') return current;
+            if (playerId === current.hostId) return current;
+            if (!current.players?.[playerId]) return current;
+            const nameKey = current.playerNameIndex?.[playerId];
+            const players = { ...current.players };
+            delete players[playerId];
+            const nameIndex = { ...(current.nameIndex || {}) };
+            const playerNameIndex = { ...(current.playerNameIndex || {}) };
+            if (nameKey) delete nameIndex[nameKey];
+            delete playerNameIndex[playerId];
+            const nextCount = Object.keys(players).length;
+            if (nextCount === 0) return null;
+            return { ...current, players, nameIndex, playerNameIndex, playerCount: nextCount };
+        });
     };
 
     // ── updateSettings (respects premium immutability for migrated hosts) ────────
@@ -1507,18 +1678,45 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         touchActivity();
     };
 
-    // ── startGame ───────────────────────────────────────────────────────────────
-    const startGame = async (settingsJustSaved?: Partial<OnlineRoom['settings']>) => {
+    const requestReadyCheck = async (settingsJustSaved?: Partial<OnlineRoom['settings']>) => {
         if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
 
         const players = Object.values(gameState.room.players).filter(p => p.isConnected !== false);
         if (players.length < 3) return;
-        const allReadyForStart = players.every(p => (p.joinState || 'ready') === 'ready');
-        if (!allReadyForStart) return;
-
-        const settings: OnlineRoom['settings'] = {
+        if (gameState.room.status === 'waiting') {
+            const allReadyForStart = players.every(p => (p.joinState || 'ready') === 'ready');
+            if (!allReadyForStart) return;
+        }
+        const settings = {
             ...gameState.room.settings,
             ...(settingsJustSaved || {}),
+        };
+        if (!hasPlayableCategorySelection(
+            settings.categories,
+            settings.customCategories
+        )) {
+            return;
+        }
+
+        await update(ref(database, `rooms/${gameState.roomCode}`), {
+            status: 'ready_check',
+            readyCheckReady: null,
+            readyCheckStartTime: serverTimestamp(),
+            readyCheckPreviousStatus: gameState.room.status,
+            lastActivity: serverTimestamp(),
+        });
+    };
+
+    const launchReadyCheckedGame = async (roomSnapshot?: OnlineRoom | null) => {
+        const room = roomSnapshot || roomDataRef.current || gameState.room;
+        const code = gameState.roomCode || room?.id;
+        if (!code || !gameState.isHost || !room) return;
+
+        const players = Object.values(room.players).filter(p => p.isConnected !== false);
+        if (players.length < 3) return;
+
+        const settings: OnlineRoom['settings'] = {
+            ...room.settings,
         };
 
         if (!hasPlayableCategorySelection(settings.categories, settings.customCategories)) {
@@ -1526,12 +1724,13 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         }
 
         const impostorCount = settings.impostorCount;
-        const impostorIds = pickImpostorIds(players, impostorCount, gameState.room.recentImpostorIds || []);
+        const impostorIds = pickImpostorIds(players, impostorCount, room.recentImpostorIds || []);
         const updates: Record<string, any> = {};
 
         players.forEach(p => {
             updates[`players/${p.id}/role`] = impostorIds.includes(p.id) ? 'impostor' : 'civilian';
             updates[`players/${p.id}/isEliminated`] = false;
+            updates[`players/${p.id}/isSpectator`] = false;
             updates[`players/${p.id}/vote`] = null;
         });
 
@@ -1541,10 +1740,10 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             settings.customCategories,
             'all',
             settings.isPremiumRoom,
-            gameState.room.recentWordIds || []
+            room.recentWordIds || []
         );
-        const nextRecentWordIds = [...(gameState.room.recentWordIds || []), word.id].slice(-WORD_HISTORY_LIMIT);
-        const nextRecentImpostorIds = [...(gameState.room.recentImpostorIds || []), ...impostorIds].slice(-IMPOSTOR_HISTORY_LIMIT);
+        const nextRecentWordIds = [...(room.recentWordIds || []), word.id].slice(-WORD_HISTORY_LIMIT);
+        const nextRecentImpostorIds = [...(room.recentImpostorIds || []), ...impostorIds].slice(-IMPOSTOR_HISTORY_LIMIT);
 
         updates['currentWord'] = word;
         updates['currentImpostors'] = impostorIds;
@@ -1558,6 +1757,12 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['votingPhaseStartTime'] = null;
         updates['lastActivity'] = serverTimestamp();
         updates['reactions'] = null;
+        updates['voteCounts'] = null;
+        updates['voteTieDetails'] = null;
+        updates['isTie'] = null;
+        updates['lastEliminatedId'] = null;
+        updates['winner'] = null;
+        updates['finishReason'] = null;
         updates['eliminationChoiceVotes'] = null;
         updates['eliminationChoiceStartTime'] = null;
         updates['clueReviewReady'] = null;
@@ -1566,15 +1771,41 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['voteTieStreak'] = null;
         updates['roundDecisionVotes'] = null;
         updates['roundDecisionStartTime'] = null;
+        updates['postResultVotes'] = null;
+        updates['postResultStartTime'] = null;
+        updates['readyCheckReady'] = null;
+        updates['readyCheckStartTime'] = null;
+        updates['readyCheckPreviousStatus'] = null;
+        updates['clueRound'] = null;
         players.forEach(p => { updates[`players/${p.id}/clue`] = null; });
 
         // Save premium categories snapshot on first game start
-        if (!gameState.room.premiumCategoriesSnapshot && settings.isPremiumRoom) {
+        if (!room.premiumCategoriesSnapshot && settings.isPremiumRoom) {
             updates['premiumCategoriesSnapshot'] = settings.categories;
         }
 
-        await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+        await update(ref(database, `rooms/${code}`), updates);
+        logOnlineAnalytics('online_game_started', {
+            player_count: players.length,
+            is_premium_room: settings.isPremiumRoom,
+        });
     };
+
+    // ── startGame ───────────────────────────────────────────────────────────────
+    const startGame = async (settingsJustSaved?: Partial<OnlineRoom['settings']>) => {
+        await requestReadyCheck(settingsJustSaved);
+    };
+
+    useEffect(() => {
+        const room = gameState.room;
+        if (!gameState.isHost || !gameState.roomCode || room?.status !== 'ready_check') return;
+        const players = Object.values(room.players).filter(p => p.isConnected !== false);
+        if (players.length < 3) return;
+        const ready = room.readyCheckReady || {};
+        if (players.every(p => ready[p.id] === true)) {
+            void launchReadyCheckedGame(room);
+        }
+    }, [gameState.isHost, gameState.roomCode, gameState.room?.status, gameState.room?.players, gameState.room?.readyCheckReady]);
 
     // ── startCluePhase ──────────────────────────────────────────────────────────
     const startCluePhase = async () => {
@@ -1679,9 +1910,37 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         touchActivity();
     };
 
+    const submitReadyCheck = async () => {
+        if (!gameState.roomCode || !gameState.playerId || !gameState.room) return;
+        if (gameState.room.status !== 'ready_check') return;
+        const self = gameState.room.players[gameState.playerId];
+        if (!self || self.isConnected === false) return;
+        await update(ref(database, `rooms/${gameState.roomCode}`), {
+            [`readyCheckReady/${gameState.playerId}`]: true,
+            lastActivity: serverTimestamp(),
+        });
+        touchActivity();
+    };
+
+    const cancelReadyCheck = async () => {
+        if (!gameState.roomCode || !gameState.isHost || !gameState.room) return;
+        if (gameState.room.status !== 'ready_check') return;
+        const previous = gameState.room.readyCheckPreviousStatus;
+        const fallback = gameState.room.currentWord ? 'results' : 'waiting';
+        const nextStatus = previous && previous !== 'ready_check' ? previous : fallback;
+        await update(ref(database, `rooms/${gameState.roomCode}`), {
+            status: nextStatus,
+            readyCheckReady: null,
+            readyCheckStartTime: null,
+            readyCheckPreviousStatus: null,
+            lastActivity: serverTimestamp(),
+        });
+        touchActivity();
+    };
+
     const clearVoteTieRecovery = async () => {
         if (!gameState.isHost || !gameState.roomCode) return;
-        await update(ref(database, `rooms/${gameState.roomCode}`), { voteTieRecovery: null });
+        await update(ref(database, `rooms/${gameState.roomCode}`), { voteTieRecovery: null, voteTieDetails: null });
     };
 
     const updateMyJoinState = async (state: 'joining' | 'watching_ad' | 'ready') => {
@@ -1755,55 +2014,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             return;
         }
 
-        const impostorCount = gameState.room.settings.impostorCount;
-        const impostorIds = pickImpostorIds(players, impostorCount, gameState.room.recentImpostorIds || []);
-        const updates: Record<string, any> = {};
-
-        players.forEach(p => {
-            updates[`players/${p.id}/role`] = impostorIds.includes(p.id) ? 'impostor' : 'civilian';
-            updates[`players/${p.id}/isEliminated`] = false;
-            updates[`players/${p.id}/vote`] = null;
-            updates[`players/${p.id}/clue`] = null;
-        });
-
-        const word = getRandomWord(
-            gameState.room.settings.categories,
-            gameState.room.settings.language,
-            gameState.room.settings.customCategories,
-            'all',
-            gameState.room.settings.isPremiumRoom,
-            gameState.room.recentWordIds || []
-        );
-        const nextRecentWordIds = [...(gameState.room.recentWordIds || []), word.id].slice(-WORD_HISTORY_LIMIT);
-        const nextRecentImpostorIds = [...(gameState.room.recentImpostorIds || []), ...impostorIds].slice(-IMPOSTOR_HISTORY_LIMIT);
-
-        updates['currentWord'] = word;
-        updates['currentImpostors'] = impostorIds;
-        updates['recentWordIds'] = nextRecentWordIds;
-        updates['recentImpostorIds'] = nextRecentImpostorIds;
-        updates['status'] = 'playing';
-        updates['currentRoundStartTime'] = serverTimestamp();
-        updates['turnOrder'] = null;
-        updates['currentTurnIndex'] = null;
-        updates['cluePhaseStartTime'] = null;
-        updates['lastActivity'] = serverTimestamp();
-        updates['reactions'] = null;
-        updates['voteCounts'] = null;
-        updates['isTie'] = null;
-        updates['lastEliminatedId'] = null;
-        updates['roundDecisionVotes'] = null;
-        updates['roundDecisionStartTime'] = null;
-        updates['postResultVotes'] = null;
-        updates['postResultStartTime'] = null;
-        updates['clueRound'] = null;
-        updates['votingPhaseStartTime'] = null;
-        updates['eliminationChoiceVotes'] = null;
-        updates['eliminationChoiceStartTime'] = null;
-        updates['clueReviewReady'] = null;
-        updates['clueReviewStartTime'] = null;
-        updates['voteTieRecovery'] = null;
-        updates['voteTieStreak'] = null;
-        await update(ref(database, `rooms/${gameState.roomCode}`), updates);
+        await requestReadyCheck();
     };
 
     // ── continueRound ───────────────────────────────────────────────────────────
@@ -1820,6 +2031,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         updates['clueReviewReady'] = null;
         updates['clueReviewStartTime'] = null;
         updates['voteTieRecovery'] = null;
+        updates['voteTieDetails'] = null;
         updates['voteTieStreak'] = null;
         updates['lastActivity'] = serverTimestamp();
 
@@ -1855,7 +2067,11 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             clueReviewReady: null,
             clueReviewStartTime: null,
             voteTieRecovery: null,
+            voteTieDetails: null,
             voteTieStreak: null,
+            readyCheckReady: null,
+            readyCheckStartTime: null,
+            readyCheckPreviousStatus: null,
             recentWordIds: null,
             recentImpostorIds: null,
             lastActivity: serverTimestamp(),
@@ -1866,6 +2082,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             updates[`players/${p.id}/vote`] = null;
             updates[`players/${p.id}/clue`] = null;
             updates[`players/${p.id}/isEliminated`] = false;
+            updates[`players/${p.id}/isSpectator`] = false;
             updates[`players/${p.id}/joinState`] = 'ready';
             updates[`players/${p.id}/joinStateSince`] = serverTimestamp();
         });
@@ -1916,7 +2133,7 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
         if (!uid) return;
 
         const now = Date.now();
-        if (now - lastMessageTimeRef.current < 2000) return;
+        if (now - lastMessageTimeRef.current < 3000) return;
         lastMessageTimeRef.current = now;
 
         const me = gameState.room.players[uid];
@@ -1959,6 +2176,8 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             clearHostMigrationNotice,
             playerPresenceNotice,
             clearPlayerPresenceNotice,
+            kickedFromRoom,
+            clearKickedFromRoom,
             createRoom,
             joinRoom,
             leaveRoom,
@@ -1975,14 +2194,19 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             advanceTurn,
             submitRoundDecision,
             submitEliminationChoice,
+            submitReadyCheck,
+            cancelReadyCheck,
             openRoundDecisionAfterSimultaneousReveal,
             submitClueReviewReady,
             clearVoteTieRecovery,
             updateMyJoinState,
             sendReaction,
             sendQuickMessage,
+            kickPlayer,
             resetToLobby,
             cleanupStaleRooms,
+            settingsDraft,
+            updateSettingsDraft,
         }}>
             {children}
         </OnlineGameContext.Provider>

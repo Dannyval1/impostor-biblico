@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,46 +33,56 @@ const DURATIONS = [
 
 export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps) {
     const { t } = useTranslation();
-    const { gameState, updateSettings, startGame } = useOnlineGame();
+    const { gameState, updateSettings, startGame, settingsDraft, updateSettingsDraft } = useOnlineGame();
     const { state: globalState } = useGame();
     const { isCategoryUnlockedByAd } = usePurchase();
 
     const [premiumModal, setPremiumModal] = useState<'migrated' | 'paywall' | null>(null);
-
-    const [impostorCount, setImpostorCount] = useState(1);
-    const [gameDuration, setGameDuration] = useState<number | null>(null);
-    const [selectedCategories, setSelectedCategories] = useState<Category[]>(['personajes_biblicos']);
-    const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
-    const [impostorHint, setImpostorHint] = useState(false);
-    const [discussionMode, setDiscussionMode] = useState<'turns' | 'simultaneous'>('turns');
-    const [clueDuration, setClueDuration] = useState(30);
-
     const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
+
+    // Read settings from the persistent draft in context (survives back-navigation)
+    const impostorCount = settingsDraft?.impostorCount ?? 1;
+    const gameDuration = settingsDraft?.gameDuration ?? null;
+    const selectedCategories = settingsDraft?.categories ?? ['personajes_biblicos'];
+    const impostorHint = settingsDraft?.impostorHint ?? false;
+    const discussionMode = settingsDraft?.discussionMode ?? 'turns';
+    const clueDuration = settingsDraft?.clueDuration ?? 30;
+
+    useEffect(() => {
+        if (!gameState.roomCode) return;
+        const status = gameState.room?.status;
+        if (!status || status === 'waiting' || status === 'ready_check') return;
+
+        if (status === 'playing') {
+            navigation.replace('OnlineReveal');
+        } else if (
+            status === 'clues' ||
+            status === 'simultaneous_reveal' ||
+            status === 'clue_review' ||
+            status === 'deciding'
+        ) {
+            navigation.replace('OnlineClue');
+        } else if (status === 'voting') {
+            navigation.replace('OnlineVoting');
+        } else if (
+            status === 'results' ||
+            status === 'elimination_choice' ||
+            status === 'finished'
+        ) {
+            navigation.replace('OnlineResults');
+        }
+    }, [gameState.roomCode, gameState.room?.status, navigation]);
 
     const mergedCustomDefs = useMemo(() => {
         const map = new Map<string, CustomCategory>();
-        for (const c of gameState.room?.settings.customCategories || []) {
+        for (const c of settingsDraft?.customCategories || gameState.room?.settings.customCategories || []) {
             map.set(c.id, c);
         }
         for (const c of globalState.customCategories || []) {
             if (!map.has(c.id)) map.set(c.id, c);
         }
         return Array.from(map.values());
-    }, [gameState.room?.settings.customCategories, globalState.customCategories]);
-
-    const initializedRef = useRef(false);
-    useEffect(() => {
-        if (gameState.room && !initializedRef.current) {
-            initializedRef.current = true;
-            setImpostorCount(gameState.room.settings.impostorCount || 1);
-            setGameDuration(gameState.room.settings.gameDuration === undefined ? null : gameState.room.settings.gameDuration);
-            setSelectedCategories(gameState.room.settings.categories || []);
-            setCustomCategories(gameState.room.settings.customCategories || []);
-            setImpostorHint(gameState.room.settings.impostorHint || false);
-            setDiscussionMode(gameState.room.settings.discussionMode || 'turns');
-            setClueDuration(gameState.room.settings.clueDuration || 30);
-        }
-    }, [gameState.room]);
+    }, [settingsDraft?.customCategories, gameState.room?.settings.customCategories, globalState.customCategories]);
 
     const handleSaveAndStart = async () => {
         if (selectedCategories.length === 0) {
@@ -103,7 +113,6 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                 isConfigured: true,
             };
             await updateSettings(settingsPayload);
-            // Misma instantánea que acaba de ir a Firebase: el listener puede aún no haber actualizado gameState.
             await startGame(settingsPayload);
         } catch (error) {
             console.error('Failed to update settings and start', error);
@@ -112,20 +121,21 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
 
     const toggleCategory = (categoryId: Category) => {
         if (selectedCategories.includes(categoryId)) {
-            setSelectedCategories(selectedCategories.filter(id => id !== categoryId));
-            if (isCustomCategoryId(categoryId)) {
-                setCustomCategories(prev => prev.filter(c => c.id !== categoryId));
-            }
+            const nextCategories = selectedCategories.filter(id => id !== categoryId);
+            const nextCustom = isCustomCategoryId(categoryId)
+                ? (settingsDraft?.customCategories || []).filter(c => c.id !== categoryId)
+                : (settingsDraft?.customCategories || []);
+            updateSettingsDraft({ categories: nextCategories, customCategories: nextCustom });
         } else {
-            setSelectedCategories([...selectedCategories, categoryId]);
+            const nextCategories = [...selectedCategories, categoryId];
+            let nextCustom = settingsDraft?.customCategories || [];
             if (isCustomCategoryId(categoryId)) {
                 const def = mergedCustomDefs.find(c => c.id === categoryId);
-                if (def) {
-                    setCustomCategories(prev =>
-                        prev.some(c => c.id === categoryId) ? prev : [...prev, def]
-                    );
+                if (def && !nextCustom.some(c => c.id === categoryId)) {
+                    nextCustom = [...nextCustom, def];
                 }
             }
+            updateSettingsDraft({ categories: nextCategories, customCategories: nextCustom });
         }
     };
 
@@ -164,7 +174,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                     <View style={styles.impostorControlContainer}>
                         <TouchableOpacity
                             style={[styles.impostorControlButton, impostorCount <= 1 && styles.impostorControlButtonDisabled]}
-                            onPress={() => setImpostorCount(Math.max(1, impostorCount - 1))}
+                            onPress={() => updateSettingsDraft({ impostorCount: Math.max(1, impostorCount - 1) })}
                             disabled={impostorCount <= 1}
                         >
                             <Text style={styles.impostorControlButtonText}>-</Text>
@@ -176,7 +186,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
 
                         <TouchableOpacity
                             style={[styles.impostorControlButton, impostorCount >= maxImpostors && styles.impostorControlButtonDisabled]}
-                            onPress={() => setImpostorCount(Math.min(maxImpostors, impostorCount + 1))}
+                            onPress={() => updateSettingsDraft({ impostorCount: Math.min(maxImpostors, impostorCount + 1) })}
                             disabled={impostorCount >= maxImpostors}
                         >
                             <Text style={styles.impostorControlButtonText}>+</Text>
@@ -196,7 +206,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                         </View>
                         <Switch
                             value={impostorHint}
-                            onValueChange={setImpostorHint}
+                            onValueChange={v => updateSettingsDraft({ impostorHint: v })}
                             trackColor={{ false: '#CBD5E0', true: '#48BB78' }}
                             thumbColor="#FFF"
                         />
@@ -209,7 +219,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                     <Text style={styles.sectionTitle}>{t.online.discussion_mode}</Text>
                     <TouchableOpacity
                         style={[styles.modeOptionCard, discussionMode === 'turns' && styles.modeOptionCardSelected]}
-                        onPress={() => { setDiscussionMode('turns'); setClueDuration(30); }}
+                        onPress={() => updateSettingsDraft({ discussionMode: 'turns', clueDuration: 30 })}
                         activeOpacity={0.8}
                     >
                         <View style={styles.modeOptionContent}>
@@ -224,7 +234,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.modeOptionCard, discussionMode === 'simultaneous' && styles.modeOptionCardSelected]}
-                        onPress={() => { setDiscussionMode('simultaneous'); setClueDuration(60); }}
+                        onPress={() => updateSettingsDraft({ discussionMode: 'simultaneous', clueDuration: 60 })}
                         activeOpacity={0.8}
                     >
                         <View style={styles.modeOptionContent}>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Alert, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndicator, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useOnlineGame } from '../context/OnlineGameContext';
+import { useGame } from '../context/GameContext';
 import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { OnlinePlayer } from '../types';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +11,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { EmojiReactionBar } from '../components/EmojiReactionBar';
 import { QuickMessagePanel } from '../components/QuickMessagePanel';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
+import { GameModal } from '../components/GameModal';
 import { OnlineRoundAnswersModal } from '../components/OnlineRoundAnswersModal';
 import { EliminatedSpectatorHeader } from '../components/EliminatedSpectatorHeader';
 import { getRoundAnswerEntries } from '../utils/onlineRoundAnswers';
@@ -19,13 +21,20 @@ const VOTING_UI_TIMEOUT_MS = 30_000;
 
 export default function OnlineVotingScreen() {
     const navigation = useNavigation<any>();
-    const { gameState, submitVote } = useOnlineGame();
+    const { gameState, submitVote, leaveRoom } = useOnlineGame();
     const { t } = useTranslation();
+    const { setOnlineGameActive } = useGame()!;
+
+    useEffect(() => {
+        setOnlineGameActive(true);
+        return () => setOnlineGameActive(false);
+    }, []);
 
     const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
     const [hasVoted, setHasVoted] = useState(false);
     const [voteSecondsLeft, setVoteSecondsLeft] = useState(30);
     const [answersOpen, setAnswersOpen] = useState(false);
+    const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
     const room = gameState.room;
     const pid = gameState.playerId;
@@ -37,6 +46,9 @@ export default function OnlineVotingScreen() {
     const currentPlayer = room?.players[gameState.playerId || ''];
     const votePhaseStart = room?.votingPhaseStartTime;
     const isEliminated = currentPlayer?.isEliminated === true;
+    const secretReminderText = currentPlayer?.role === 'impostor'
+        ? t.online.word_reminder_impostor
+        : room?.currentWord?.word;
     const cluesFingerprint = room
         ? Object.values(room.players)
               .map(p => `${p.id}:${p.clue ?? ''}`)
@@ -81,6 +93,14 @@ export default function OnlineVotingScreen() {
     if (!room) {
         return <OnlineRoomPlaceholder />;
     }
+
+    const handleLeave = () => setShowLeaveConfirm(true);
+
+    const confirmLeave = async () => {
+        setShowLeaveConfirm(false);
+        await leaveRoom();
+        navigation.replace('Home');
+    };
 
     const handleVote = async () => {
         if (isEliminated) return;
@@ -142,19 +162,30 @@ export default function OnlineVotingScreen() {
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>{t.voting.vote_title}</Text>
                 <Text style={styles.subTitle}>{t.voting.vote_subtitle}</Text>
+                {secretReminderText && !isEliminated && (
+                    <View style={styles.secretReminderBar}>
+                        <Text style={styles.secretReminderLabel}>{t.online.word_reminder_label}</Text>
+                        <Text style={styles.secretReminderText} numberOfLines={1}>{secretReminderText}</Text>
+                    </View>
+                )}
                 {gameState.room?.status === 'voting' && votePhaseStart != null && (
                     <Text style={styles.voteTimerHint}>
                         {t.online.voting_time_left.replace('{s}', String(voteSecondsLeft))}
                     </Text>
                 )}
-                <TouchableOpacity
-                    style={styles.answersHeaderBtn}
-                    onPress={() => setAnswersOpen(true)}
-                    activeOpacity={0.85}
-                >
-                    <Ionicons name="document-text-outline" size={18} color="#FFF" />
-                    <Text style={styles.answersHeaderBtnText}>{t.online.round_answers_btn}</Text>
-                </TouchableOpacity>
+                <View style={styles.headerActionsRow}>
+                    <TouchableOpacity
+                        style={styles.answersHeaderBtn}
+                        onPress={() => setAnswersOpen(true)}
+                        activeOpacity={0.85}
+                    >
+                        <Ionicons name="document-text-outline" size={18} color="#FFF" />
+                        <Text style={styles.answersHeaderBtnText}>{t.online.round_answers_btn}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleLeave} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                        <Text style={styles.exitBtn}>{t.common.exit}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <FlatList
@@ -209,6 +240,17 @@ export default function OnlineVotingScreen() {
                 emptyLabel={t.online.round_answers_empty}
                 entries={roundAnswerEntries}
             />
+            <GameModal
+                visible={showLeaveConfirm}
+                title={t.voting.exit_confirm}
+                message={gameState.isHost ? t.online.exit_host_confirm : t.online.exit_player_game_msg}
+                type="warning"
+                buttonText={t.common.exit}
+                onClose={confirmLeave}
+                secondaryButtonText={t.common.cancel}
+                onSecondaryPress={() => setShowLeaveConfirm(false)}
+                onRequestClose={() => setShowLeaveConfirm(false)}
+            />
         </SafeAreaView>
     );
 }
@@ -229,17 +271,27 @@ const styles = StyleSheet.create({
         borderLeftColor: 'rgba(229,62,62,0.45)',
         zIndex: 1,
     },
+    headerActionsRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 12,
+        gap: 12,
+    },
     answersHeaderBtn: {
         flexDirection: 'row',
         alignItems: 'center',
-        alignSelf: 'center',
-        marginTop: 12,
         backgroundColor: 'rgba(91,127,219,0.45)',
         paddingHorizontal: 14,
         paddingVertical: 8,
         borderRadius: 16,
         borderWidth: 1,
         borderColor: 'rgba(91,127,219,0.6)',
+    },
+    exitBtn: {
+        color: 'rgba(255,255,255,0.5)',
+        fontSize: 12,
+        fontWeight: '600',
     },
     answersHeaderBtnText: {
         color: '#FFF',
@@ -289,6 +341,28 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'rgba(255,255,255,0.7)',
         marginTop: 5,
+    },
+    secretReminderBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 5,
+        borderRadius: 999,
+        backgroundColor: 'rgba(255,255,255,0.07)',
+        gap: 6,
+    },
+    secretReminderLabel: {
+        color: 'rgba(255,255,255,0.45)',
+        fontSize: 11,
+        fontWeight: '700',
+    },
+    secretReminderText: {
+        color: 'rgba(255,255,255,0.72)',
+        fontSize: 12,
+        fontWeight: '800',
+        maxWidth: 180,
     },
     voteTimerHint: {
         fontSize: 13,

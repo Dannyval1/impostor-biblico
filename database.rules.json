@@ -2,7 +2,7 @@
   "rules": {
     "rooms": {
       "$roomCode": {
-        ".read": "data.child('players').child(auth != null ? auth.uid : '').exists() || !data.exists()",
+        ".read": "auth != null && (!data.exists() || data.child('status').val() === 'waiting' || data.child('players').child(auth.uid).exists())",
         ".write": "!data.exists() || data.child('hostId').val() === auth.uid || (auth != null && data.exists() && data.child('players').child(auth.uid).exists() && data.hasChild('playerCount') && ((!newData.exists() && data.child('playerCount').val() === 1) || (newData.exists() && newData.child('hostId').val() === data.child('hostId').val() && newData.child('status').val() === data.child('status').val() && newData.child('playerCount').val() === data.child('playerCount').val() - 1 && !newData.child('players').child(auth.uid).exists())))",
         "hostId": {
           ".write": "data.parent().child('hostId').val() === auth.uid || !data.exists()",
@@ -17,8 +17,14 @@
           ".validate": "newData.isString()"
         },
         "status": {
+          ".read": "auth != null",
           ".write": "data.parent().child('hostId').val() === auth.uid",
-          ".validate": "newData.isString() && newData.val().matches(/^(waiting|playing|clues|simultaneous_reveal|clue_review|deciding|voting|results|elimination_choice|finished)$/)"
+          ".validate": "newData.isString() && newData.val().matches(/^(waiting|ready_check|playing|clues|simultaneous_reveal|clue_review|deciding|voting|results|elimination_choice|finished)$/)"
+        },
+        "playerCount": {
+          ".read": "auth != null",
+          ".write": "data.parent().child('hostId').val() === auth.uid || (auth != null && data.parent().exists() && data.parent().child('playerNameIndex').child(auth.uid).exists() && newData.isNumber() && ((newData.val() === data.val() + 1 && newData.val() <= data.parent().child('settings').child('maxPlayers').val()) || newData.val() === data.val() - 1))",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
         },
         "settings": {
           "isPremiumRoom": {
@@ -26,6 +32,7 @@
             ".validate": "newData.isBoolean()"
           },
           "maxPlayers": {
+            ".read": "auth != null",
             ".write": "!data.exists()",
             ".validate": "newData.isNumber() && newData.val() >= 3 && newData.val() <= 30"
           },
@@ -38,8 +45,23 @@
           ".write": "!data.exists()",
           ".validate": true
         },
+        "nameIndex": {
+          "$nameKey": {
+            ".read": "auth != null",
+            ".write": "auth != null && (!data.exists() || data.val() === auth.uid || data.parent().parent().child('hostId').val() === auth.uid) && (!newData.exists() || newData.val() === auth.uid || data.parent().parent().child('hostId').val() === auth.uid)",
+            ".validate": "!newData.exists() || newData.isString()"
+          }
+        },
+        "playerNameIndex": {
+          "$playerId": {
+            ".read": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": "!newData.exists() || newData.isString()"
+          }
+        },
         "players": {
           "$playerId": {
+            ".read": "$playerId === auth.uid || data.parent().parent().child('status').val() === 'waiting' || data.parent().parent().child('players').child(auth.uid).exists()",
             ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
             "clue": {
               ".write": "$playerId === auth.uid || data.parent().parent().parent().child('hostId').val() === auth.uid",
@@ -139,6 +161,21 @@
           ".write": "data.parent().child('hostId').val() === auth.uid",
           ".validate": "!newData.exists() || newData.isNumber()"
         },
+        "readyCheckReady": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          "$playerId": {
+            ".write": "$playerId === auth.uid || data.parent().parent().child('hostId').val() === auth.uid",
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "readyCheckStartTime": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "readyCheckPreviousStatus": {
+          ".write": "data.parent().child('hostId').val() === auth.uid",
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^(waiting|playing|clues|simultaneous_reveal|clue_review|deciding|voting|results|elimination_choice|finished)$/))"
+        },
         "voteTieRecovery": {
           ".write": "data.parent().child('hostId').val() === auth.uid",
           ".validate": "!newData.exists() || newData.isBoolean()"
@@ -179,6 +216,7 @@
           ".write": "auth != null && root.child('rooms').child($roomCode).child('players').child(auth.uid).exists()"
         },
         "createdAt": {
+          ".read": "auth != null",
           ".write": "!data.exists()"
         }
       }

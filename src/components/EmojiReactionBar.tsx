@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'reac
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { OnlineReaction } from '../types';
 
-const EMOJIS = ['😂', '🥲', '🤔', '🫣', '😱', '😎', '👏'];
+const EMOJIS = ['😂', '🤔', '😒', '🥲', '🙄'];
 
 interface FloatingReaction {
     id: string;
@@ -14,12 +14,22 @@ interface FloatingReaction {
     x: number;
 }
 
+const EMOJI_UI_COOLDOWN_MS = 1200;
+
 export function EmojiReactionBar() {
     const { sendReaction, gameState } = useOnlineGame();
     const [floaters, setFloaters] = useState<FloatingReaction[]>([]);
+    const [onCooldown, setOnCooldown] = useState(false);
+    const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const seenReactionsRef = useRef<Set<string>>(new Set());
 
     const reactions = gameState.room?.reactions;
+
+    useEffect(() => {
+        return () => {
+            if (cooldownTimerRef.current) clearTimeout(cooldownTimerRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         if (!reactions) return;
@@ -49,6 +59,12 @@ export function EmojiReactionBar() {
     }, [reactions]);
 
     const handlePress = (emoji: string) => {
+        if (onCooldown) return;
+
+        setOnCooldown(true);
+        if (cooldownTimerRef.current) clearTimeout(cooldownTimerRef.current);
+        cooldownTimerRef.current = setTimeout(() => setOnCooldown(false), EMOJI_UI_COOLDOWN_MS);
+
         const anim = new Animated.Value(0);
         const opacity = new Animated.Value(1);
         const x = 30 + Math.random() * 250;
@@ -86,9 +102,15 @@ export function EmojiReactionBar() {
                     {f.playerName ? <Text style={styles.floaterName}>{f.playerName}</Text> : null}
                 </Animated.View>
             ))}
-            <View style={styles.bar}>
+            <View style={[styles.bar, onCooldown && styles.barOnCooldown]}>
                 {EMOJIS.map(emoji => (
-                    <TouchableOpacity key={emoji} style={styles.emojiBtn} onPress={() => handlePress(emoji)} activeOpacity={0.6}>
+                    <TouchableOpacity
+                        key={emoji}
+                        style={[styles.emojiBtn, onCooldown && styles.emojiBtnDisabled]}
+                        onPress={() => handlePress(emoji)}
+                        activeOpacity={0.6}
+                        disabled={onCooldown}
+                    >
                         <Text style={styles.emojiText}>{emoji}</Text>
                     </TouchableOpacity>
                 ))}
@@ -116,6 +138,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.12)',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    emojiBtnDisabled: {
+        opacity: 0.35,
+    },
+    barOnCooldown: {
+        opacity: 0.7,
     },
     emojiText: {
         fontSize: 22,

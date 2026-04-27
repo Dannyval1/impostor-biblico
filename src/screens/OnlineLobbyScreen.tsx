@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Animated, Share } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -11,22 +11,33 @@ import { OnlinePlayer } from '../types';
 import { PremiumRoomBanner } from '../components/PremiumRoomBanner';
 import { OnlineOnboardingModal } from '../components/OnlineOnboardingModal';
 import { useOnlineAd } from '../hooks/useOnlineAd';
-import { ref, get } from 'firebase/database';
-import { database } from '../config/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { logOnlineAnalytics } from '../utils/onlineAnalytics';
 
-const IOS_STORE_URL = 'https://apps.apple.com/app/id6758225650';
-const ANDROID_STORE_URL = 'https://play.google.com/store/apps/details?id=com.dannyv12.impostorbiblico';
 const LOBBY_STALE_CLEANUP_SAMPLE_RATE = 0.1;
 const LOBBY_STALE_CLEANUP_THROTTLE_MS = 8 * 60 * 60 * 1000;
 const LOBBY_STALE_CLEANUP_LAST_RUN_KEY = 'online_lobby_stale_cleanup_last_run_at';
 
 export default function OnlineLobbyScreen() {
     const navigation = useNavigation<any>(); // type appropriately
-    const { gameState, createRoom, joinRoom, leaveRoom, updateMyJoinState, cleanupStaleRooms } = useOnlineGame();
+    const { gameState, createRoom, joinRoom, leaveRoom, kickPlayer, kickedFromRoom, clearKickedFromRoom, updateMyJoinState, cleanupStaleRooms } = useOnlineGame();
     const { t } = useTranslation();
     const { showInterstitialIfNeeded } = useOnlineAd();
-    const adFlowStartedRef = useRef(false);
+
+    const isPremium = gameState.room?.settings.isPremiumRoom ?? false;
+
+    // Premium palette — switches the entire lobby to a dark-gold theme visible on all devices.
+    const P = isPremium ? {
+        bg:            '#160D00' as const,
+        cardBg:        '#241500' as const,
+        listBg:        'rgba(255,200,0,0.055)' as const,
+        gold:          '#FFD700' as const,
+        goldMuted:     'rgba(255,215,0,0.65)' as const,
+        goldSubtle:    'rgba(255,215,0,0.14)' as const,
+        goldBorder:    'rgba(255,215,0,0.28)' as const,
+        actionBtn:     '#C8960C' as const,
+        actionBtnText: '#1A1000' as const,
+    } : null;
 
     const [playerName, setPlayerName] = useState('');
     const [roomCodeInput, setRoomCodeInput] = useState('');
@@ -123,34 +134,23 @@ export default function OnlineLobbyScreen() {
         const room = gameState.room;
         const myId = gameState.playerId;
         if (!room || !gameState.roomCode || !myId) {
-            adFlowStartedRef.current = false;
             return;
         }
         if (room.status !== 'waiting') {
-            adFlowStartedRef.current = false;
             return;
         }
         const me = room.players[myId];
         if (!me) return;
-        if (me.joinState === 'ready') {
-            adFlowStartedRef.current = false;
-            return;
-        }
-        if (adFlowStartedRef.current) return;
-        adFlowStartedRef.current = true;
+        if (me.joinState === 'ready' || me.joinState === 'watching_ad') return;
 
         const run = async () => {
             try {
-                if (me.joinState !== 'watching_ad') {
-                    await updateMyJoinState('watching_ad');
-                }
+                await updateMyJoinState('watching_ad');
                 await showInterstitialIfNeeded(room.settings.isPremiumRoom, () => {
                     void updateMyJoinState('ready');
                 });
             } catch {
                 await updateMyJoinState('ready');
-            } finally {
-                adFlowStartedRef.current = false;
             }
         };
         void run();
@@ -172,6 +172,7 @@ export default function OnlineLobbyScreen() {
         setIsLoading(true);
         try {
             await createRoom(playerName.trim());
+            logOnlineAnalytics('online_room_created');
         } catch (error) {
             showGameModal(t.common.error, t.online.errors.room_create_error, 'danger', 'OK');
             console.error(error);
@@ -187,49 +188,22 @@ export default function OnlineLobbyScreen() {
         }
 
         const code = roomCodeInput.trim().toUpperCase();
-        const nameToCheck = playerName.trim().toLowerCase();
-        const currentPlayerId = gameState.playerId;
-        if (!currentPlayerId) {
-            showGameModal(
-                t.common.error,
-                t.online.errors.room_join_error,
-                'warning',
-                'OK'
-            );
-            return;
-        }
-        try {
-            const snap = await get(ref(database, `rooms/${code}/players`));
-            if (snap.exists()) {
-                const players = snap.val();
-                const nameExists = Object.values(players).some(
-                    (p: any) =>
-                        p?.name?.toLowerCase() === nameToCheck &&
-                        p?.id !== currentPlayerId &&
-                        p?.isConnected !== false
-                );
-                if (nameExists) {
-                    showGameModal(
-                        t.online.errors.missing_info,
-                        t.online.errors.name_taken || 'Ya existe un jugador con ese nombre en la sala. Elige otro nombre.',
-                        'warning', 'OK'
-                    );
-                    return;
-                }
-            }
-        } catch { /* proceed anyway */ }
 
         setIsLoading(true);
         try {
             const success = await joinRoom(code, playerName.trim());
             if (!success) {
                 showGameModal(t.common.error, t.online.errors.room_not_found, 'danger', 'OK');
+            } else {
+                logOnlineAnalytics('online_room_joined');
             }
         } catch (error: any) {
             if (error.message === 'Game already started') {
                 showGameModal(t.common.error, t.online.errors.game_started_desc || t.online.errors.game_started, 'danger', 'OK');
             } else if (error.message === 'Room full') {
                 showGameModal(t.common.error, t.online.errors.room_full || 'Sala llena.', 'warning', 'OK');
+            } else if (error.message === 'Name taken') {
+                showGameModal(t.online.errors.missing_info, t.online.errors.name_taken, 'warning', 'OK');
             } else {
                 showGameModal(t.common.error, t.online.errors.room_join_error, 'danger', 'OK');
             }
@@ -239,21 +213,20 @@ export default function OnlineLobbyScreen() {
         }
     };
 
-    const handleLeaveRoom = async () => {
-        await leaveRoom();
-        if (!gameState.roomCode) {
-            // Already handled by context state update, just UI update effectively
-        }
+    const handleLeaveRoom = () => {
+        const message = gameState.isHost
+            ? t.online.exit_host_confirm
+            : t.voting.exit_confirm;
+        Alert.alert(message, undefined, [
+            { text: t.common.cancel, style: 'cancel' },
+            { text: t.common.exit, style: 'destructive', onPress: () => void leaveRoom() },
+        ]);
     };
 
     const shareCode = async () => {
         const code = gameState.roomCode || '';
-        const message = t.online.share_invite_full
-            .replace('{code}', code)
-            .replace('{iosUrl}', IOS_STORE_URL)
-            .replace('{androidUrl}', ANDROID_STORE_URL);
         try {
-            await Share.share({ message });
+            await Share.share({ message: code });
         } catch {
             // fallback
         }
@@ -277,22 +250,49 @@ export default function OnlineLobbyScreen() {
                     ? t.online.lobby_state_watching_ad
                     : t.online.lobby_state_joining;
         return (
-            <View style={[styles.playerCard, isDisconnected && styles.playerCardDisconnected]}>
+            <View style={[
+                styles.playerCard,
+                isDisconnected && styles.playerCardDisconnected,
+                P && { backgroundColor: P.cardBg, borderWidth: 1, borderColor: P.goldBorder },
+            ]}>
                 <View style={styles.avatarWrapper}>
-                    <View style={styles.avatarContainer}>
+                    <View style={[styles.avatarContainer, P && { backgroundColor: '#3A2800' }]}>
                         <Image source={getAvatarSource(item.avatar)} style={[styles.avatarImage, isDisconnected && { opacity: 0.4 }]} />
                     </View>
                 </View>
                 <View style={styles.playerInfo}>
-                    <Text style={styles.playerName}>{item.name} {item.id === gameState.playerId && t.online.you}</Text>
-                    {item.isHost && <Text style={styles.hostBadge}>{t.online.host_badge}</Text>}
+                    <Text style={[styles.playerName, P && { color: '#F5E6C0' }]}>{item.name} {item.id === gameState.playerId && t.online.you}</Text>
+                    {item.isHost && <Text style={[styles.hostBadge, P && { color: P.gold }]}>{t.online.host_badge}</Text>}
                 </View>
-                <Ionicons
-                    name={isDisconnected ? 'wifi-outline' : (joinState === 'ready' ? 'checkmark-circle' : 'time-outline')}
-                    size={22}
-                    color={stateColor}
-                    accessibilityLabel={stateText}
-                />
+                <View style={styles.playerCardRight}>
+                    <Ionicons
+                        name={isDisconnected ? 'wifi-outline' : (joinState === 'ready' ? 'checkmark-circle' : 'time-outline')}
+                        size={22}
+                        color={stateColor}
+                        accessibilityLabel={stateText}
+                    />
+                    {gameState.isHost &&
+                        gameState.room?.status === 'waiting' &&
+                        item.id !== gameState.playerId &&
+                        !item.isHost && (
+                        <TouchableOpacity
+                            onPress={async () => {
+                                const name = item.name.trim();
+                                await kickPlayer(item.id);
+                                showGameModal(
+                                    t.online.kick_confirm_title,
+                                    t.online.kick_confirm_msg.replace('{name}', name),
+                                    'info',
+                                    t.common.ok
+                                );
+                            }}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                            style={styles.kickBtn}
+                        >
+                            <Ionicons name="close-circle" size={20} color="rgba(229,62,62,0.7)" />
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
         );
     };
@@ -324,35 +324,59 @@ export default function OnlineLobbyScreen() {
         const canConfigure = connectedPlayers.length >= 3 && readyPlayers.length === connectedPlayers.length;
 
         return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.header}>
+            <SafeAreaView style={[styles.container, P && { backgroundColor: P.bg }]}>
+                <View style={[styles.header, P && { borderBottomWidth: 1, borderBottomColor: P.goldSubtle }]}>
                     <TouchableOpacity onPress={handleLeaveRoom} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color="#FFF" />
+                        <Ionicons name="arrow-back" size={24} color={P ? P.gold : '#FFF'} />
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>{t.online.lobby_title}</Text>
+                    <Text style={[styles.headerTitle, P && { color: P.gold }]}>
+                        {P ? `✨ ${t.online.lobby_title}` : t.online.lobby_title}
+                    </Text>
                     <TouchableOpacity onPress={handleLeaveRoom} style={styles.leaveRoomTextBtn} hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}>
-                        <Text style={styles.leaveRoomTextBtnLabel}>{t.common.exit}</Text>
+                        <Text style={[styles.leaveRoomTextBtnLabel, P && { color: P.goldMuted }]}>{t.common.exit}</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.roomCodeContainer}>
-                    <Text style={styles.roomCodeLabel}>{t.online.room_code}</Text>
-                    <TouchableOpacity onPress={shareCode} style={styles.codeBox}>
-                        <Text selectable style={styles.roomCodeText}>{gameState.roomCode}</Text>
-                        <Ionicons name="share-outline" size={20} color="#5B7FDB" />
+                    <Text style={[styles.roomCodeLabel, P && { color: P.goldMuted }]}>{t.online.room_code}</Text>
+                    <TouchableOpacity onPress={shareCode} style={[
+                        styles.codeBox,
+                        P && {
+                            backgroundColor: P.cardBg,
+                            borderWidth: 1.5,
+                            borderColor: P.gold,
+                            shadowColor: P.gold,
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0.45,
+                            shadowRadius: 10,
+                            elevation: 8,
+                        },
+                    ]}>
+                        <Text selectable style={[styles.roomCodeText, P && { color: P.gold }]}>{gameState.roomCode}</Text>
+                        <Ionicons name="share-outline" size={20} color={P ? P.gold : '#5B7FDB'} />
                     </TouchableOpacity>
-                    <Text style={styles.shareHint}>{t.online.share_hint}</Text>
+                    <Text style={[styles.shareHint, P && { color: P.goldMuted }]}>{t.online.share_hint}</Text>
                 </View>
 
                 <PremiumRoomBanner />
 
-                <View style={styles.playersListContainer}>
+                <View style={[
+                    styles.playersListContainer,
+                    P && { backgroundColor: P.listBg, borderWidth: 1, borderColor: P.goldBorder },
+                ]}>
                     <View style={styles.readinessSummary}>
-                        <Text style={styles.readinessText}>
-                            {t.online.lobby_ready_progress
-                                .replace('{ready}', String(readyPlayers.length))
-                                .replace('{total}', String(connectedPlayers.length))}
-                        </Text>
+                        <View style={styles.readinessRow}>
+                            <Text style={[styles.readinessText, P && { color: P.goldMuted }]}>
+                                {t.online.lobby_ready_progress
+                                    .replace('{ready}', String(readyPlayers.length))
+                                    .replace('{total}', String(connectedPlayers.length))}
+                            </Text>
+                            <Text style={[styles.readinessPlayerCount, P && { color: P.goldSubtle }]}>
+                                {t.online.lobby_players_count
+                                    .replace('{current}', String(connectedPlayers.length))
+                                    .replace('{max}', String(gameState.room.settings.maxPlayers))}
+                            </Text>
+                        </View>
                         {watchingAdPlayers.length > 0 && (
                             <Text style={styles.readinessSubtext}>
                                 {t.online.lobby_waiting_ads.replace('{count}', String(watchingAdPlayers.length))}
@@ -371,33 +395,44 @@ export default function OnlineLobbyScreen() {
                     </ScrollView>
                 </View>
 
-                <View style={styles.footer}>
+                <View style={[styles.footer, P && { backgroundColor: P.bg, borderTopWidth: 1, borderTopColor: P.goldSubtle }]}>
                     {gameState.isHost ? (
                         <View>
                             <TouchableOpacity
-                                style={[styles.actionButton, !canConfigure && styles.actionButtonDisabled]}
+                                style={[
+                                    styles.actionButton,
+                                    !canConfigure && styles.actionButtonDisabled,
+                                    P && canConfigure && {
+                                        backgroundColor: P.actionBtn,
+                                        shadowColor: P.gold,
+                                        shadowOffset: { width: 0, height: 4 },
+                                        shadowOpacity: 0.5,
+                                        shadowRadius: 10,
+                                        elevation: 8,
+                                    },
+                                ]}
                                 onPress={() => navigation.navigate('OnlineSetup')}
                                 disabled={!canConfigure}
                             >
-                                <Text style={styles.actionButtonText}>
+                                <Text style={[styles.actionButtonText, P && canConfigure && { color: P.actionBtnText }]}>
                                     {canConfigure ? t.online.configure_game : t.online.lobby_waiting_ready_cta}
                                 </Text>
                             </TouchableOpacity>
                             {connectedPlayers.length < 3 && (
-                                <Text style={styles.minPlayersHint}>
+                                <Text style={[styles.minPlayersHint, P && { color: P.goldMuted }]}>
                                     {t.online.min_players_hint} ({connectedPlayers.length}/3)
                                 </Text>
                             )}
                             {connectedPlayers.length >= 3 && !canConfigure && (
-                                <Text style={styles.minPlayersHint}>
+                                <Text style={[styles.minPlayersHint, P && { color: P.goldMuted }]}>
                                     {t.online.lobby_waiting_ready_hint}
                                 </Text>
                             )}
                         </View>
                     ) : (
                         <View style={styles.waitingMessage}>
-                            <Text style={styles.waitingText}>{t.online.waiting_host}</Text>
-                            <ActivityIndicator size="small" color="#FFF" style={{ marginTop: 8 }} />
+                            <Text style={[styles.waitingText, P && { color: P.goldMuted }]}>{t.online.waiting_host}</Text>
+                            <ActivityIndicator size="small" color={P ? P.gold : '#FFF'} style={{ marginTop: 8 }} />
                         </View>
                     )}
                 </View>
@@ -410,6 +445,18 @@ export default function OnlineLobbyScreen() {
                     buttonText={modalConfig.buttonText}
                     onClose={modalConfig.onClose}
                 />
+
+                <GameModal
+                    visible={kickedFromRoom}
+                    title={t.online.you_were_kicked_title}
+                    message={t.online.you_were_kicked_msg}
+                    type="warning"
+                    buttonText={t.common.ok}
+                    onClose={() => {
+                        clearKickedFromRoom();
+                        void leaveRoom();
+                    }}
+                />
             </SafeAreaView>
         );
     }
@@ -418,7 +465,7 @@ export default function OnlineLobbyScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={styles.scrollContent}>
+                <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                             <Ionicons name="arrow-back" size={24} color="#FFF" />
@@ -437,6 +484,10 @@ export default function OnlineLobbyScreen() {
                             value={playerName}
                             onChangeText={setPlayerName}
                             maxLength={12}
+                            returnKeyType="done"
+                            onSubmitEditing={() => {
+                                if (playerName.trim() && !roomCodeInput.trim()) handleCreateRoom();
+                            }}
                         />
 
                         <View style={styles.divider} />
@@ -475,6 +526,10 @@ export default function OnlineLobbyScreen() {
                             onChangeText={text => setRoomCodeInput(text.toUpperCase())}
                             maxLength={6}
                             autoCapitalize="characters"
+                            returnKeyType="go"
+                            onSubmitEditing={() => {
+                                if (playerName.trim() && roomCodeInput.trim()) handleJoinRoom();
+                            }}
                         />
                         <TouchableOpacity
                             style={[styles.primaryButton, (!playerName.trim() || !roomCodeInput.trim()) && styles.disabledButton]}
@@ -711,10 +766,20 @@ const styles = StyleSheet.create({
     readinessSummary: {
         marginBottom: 12,
     },
+    readinessRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     readinessText: {
         color: '#E2E8F0',
         fontSize: 13,
         fontWeight: '700',
+    },
+    readinessPlayerCount: {
+        color: 'rgba(255,255,255,0.55)',
+        fontSize: 12,
+        fontWeight: '600',
     },
     readinessSubtext: {
         color: '#F6AD55',
@@ -732,6 +797,15 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 12,
         marginBottom: 10,
+    },
+    playerCardRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginLeft: 'auto',
+    },
+    kickBtn: {
+        padding: 2,
     },
     avatarWrapper: {
         width: 50,

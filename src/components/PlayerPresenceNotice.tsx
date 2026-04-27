@@ -7,9 +7,18 @@ export function PlayerPresenceNotice() {
     const { playerPresenceNotice, clearPlayerPresenceNotice } = useOnlineGame();
     const slideAnim = useRef(new Animated.Value(-100)).current;
     const opacity = useRef(new Animated.Value(0)).current;
+    const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         if (!playerPresenceNotice) return;
+
+        if (clearTimerRef.current) {
+            clearTimeout(clearTimerRef.current);
+            clearTimerRef.current = null;
+        }
+
+        slideAnim.setValue(-100);
+        opacity.setValue(0);
 
         Animated.parallel([
             Animated.spring(slideAnim, { toValue: 50, tension: 80, friction: 12, useNativeDriver: true }),
@@ -18,13 +27,20 @@ export function PlayerPresenceNotice() {
 
         const timer = setTimeout(() => {
             Animated.parallel([
-                Animated.timing(slideAnim, { toValue: -100, duration: 250, useNativeDriver: true }),
-                Animated.timing(opacity, { toValue: 0, duration: 250, useNativeDriver: true }),
-            ]).start(() => clearPlayerPresenceNotice());
+                Animated.timing(slideAnim, { toValue: -100, duration: 300, useNativeDriver: true }),
+                Animated.timing(opacity, { toValue: 0, duration: 300, useNativeDriver: true }),
+            ]).start();
+            clearTimerRef.current = setTimeout(() => clearPlayerPresenceNotice(), 350);
         }, 3500);
 
-        return () => clearTimeout(timer);
-    }, [playerPresenceNotice, clearPlayerPresenceNotice, slideAnim, opacity]);
+        return () => {
+            clearTimeout(timer);
+            if (clearTimerRef.current) {
+                clearTimeout(clearTimerRef.current);
+                clearTimerRef.current = null;
+            }
+        };
+    }, [playerPresenceNotice]);
 
     if (!playerPresenceNotice) return null;
 

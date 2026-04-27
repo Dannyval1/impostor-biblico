@@ -1,11 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePurchase } from '../context/PurchaseContext';
-
-const ONLINE_AD_KEY = 'lastOnlineAdSeen';
-const ONLINE_AD_FIRST_SEEN_KEY = 'hasSeenFirstOnlineAd';
-const AD_COOLDOWN_MS = 30 * 60 * 1000; // 30 min
 
 export function useOnlineAd() {
     const { isPremium } = usePurchase();
@@ -15,29 +10,11 @@ export function useOnlineAd() {
         if (Platform.OS === 'web') return false;
         if (isPremium) return false;
         if (isPremiumRoom) return false;
-
-        try {
-            const firstSeen = await AsyncStorage.getItem(ONLINE_AD_FIRST_SEEN_KEY);
-            if (firstSeen !== '1') return true; // Primera vez: obligatorio.
-            const lastSeen = await AsyncStorage.getItem(ONLINE_AD_KEY);
-            if (lastSeen) {
-                const elapsed = Date.now() - parseInt(lastSeen, 10);
-                if (elapsed < AD_COOLDOWN_MS) return false;
-            }
-        } catch {
-            return true;
-        }
-
         return true;
     }, [isPremium]);
 
     const markAdSeen = useCallback(async () => {
-        try {
-            await AsyncStorage.multiSet([
-                [ONLINE_AD_KEY, Date.now().toString()],
-                [ONLINE_AD_FIRST_SEEN_KEY, '1'],
-            ]);
-        } catch { /* ignore */ }
+        // Online interstitials are intentionally per-entry; no cooldown is persisted.
     }, []);
 
     const showInterstitialIfNeeded = useCallback(async (
@@ -68,6 +45,8 @@ export function useOnlineAd() {
             });
 
             showingAdRef.current = true;
+            let cleanedUp = false;
+            let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
             const unsubLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
                 interstitial.show();
@@ -85,7 +64,10 @@ export function useOnlineAd() {
             });
 
             const cleanup = () => {
+                if (cleanedUp) return;
+                cleanedUp = true;
                 showingAdRef.current = false;
+                if (timeoutId) clearTimeout(timeoutId);
                 unsubLoaded();
                 unsubClosed();
                 unsubError();
@@ -93,7 +75,7 @@ export function useOnlineAd() {
 
             interstitial.load();
 
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 if (showingAdRef.current) {
                     cleanup();
                     onComplete();

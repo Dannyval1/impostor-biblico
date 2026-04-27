@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useOnlineGame } from '../context/OnlineGameContext';
+import { useGame } from '../context/GameContext';
 import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,6 +19,11 @@ export default function OnlineResultsScreen() {
     const navigation = useNavigation<any>();
     const { gameState, nextRound, resetToLobby, submitEliminationChoice } = useOnlineGame();
     const { t } = useTranslation();
+    const { setOnlineGameActive } = useGame()!;
+
+    useEffect(() => {
+        setOnlineGameActive(false);
+    }, []);
 
     const room = gameState.room;
     const myId = gameState.playerId!;

@@ -6,6 +6,7 @@ import { useOnlineGame } from '../context/OnlineGameContext';
 import { Ionicons } from '@expo/vector-icons';
 import { OnlinePlayerRole } from '../types';
 import { useTranslation } from '../hooks/useTranslation';
+import { useGame } from '../context/GameContext';
 import { getWordCategoryDisplayLabel } from '../utils/wordCategoryLabel';
 
 const AUTO_START_DELAY_S = 8;
@@ -69,6 +70,12 @@ export default function OnlineRevealScreen() {
     const navigation = useNavigation<any>();
     const { gameState, startCluePhase, leaveRoom } = useOnlineGame();
     const { t } = useTranslation();
+    const { setOnlineGameActive } = useGame()!;
+
+    useEffect(() => {
+        setOnlineGameActive(true);
+        return () => setOnlineGameActive(false);
+    }, []);
 
     // Local state for countdown
     const gameDuration = gameState.room?.settings.gameDuration;

@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useOnlineGame } from '../context/OnlineGameContext';
+import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { AVATAR_ASSETS } from '../utils/avatarAssets';
 import { Image } from 'react-native';
@@ -13,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { EmojiReactionBar } from '../components/EmojiReactionBar';
 import { QuickMessagePanel } from '../components/QuickMessagePanel';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
+import { GameModal } from '../components/GameModal';
 import { EliminatedSpectatorHeader } from '../components/EliminatedSpectatorHeader';
 import { getRoundAnswerEntries } from '../utils/onlineRoundAnswers';
 import { useEliminationIntro } from '../hooks/useEliminationIntro';
@@ -28,11 +30,19 @@ export default function OnlineClueScreen() {
         startVoting,
         openRoundDecisionAfterSimultaneousReveal,
         clearVoteTieRecovery,
+        leaveRoom,
     } = useOnlineGame();
     const { t } = useTranslation();
+    const { setOnlineGameActive } = useGame()!;
+
+    useEffect(() => {
+        setOnlineGameActive(true);
+        return () => setOnlineGameActive(false);
+    }, []);
 
     const [clueText, setClueText] = useState('');
     const [hasSubmitted, setHasSubmitted] = useState(false);
+    const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
     // Debe declararse antes de cualquier return: si no, al perderse `room` React rompe el orden de hooks.
     const [secondsLeft, setSecondsLeft] = useState(30);
     const [reviewSecondsLeft, setReviewSecondsLeft] = useState(10);
@@ -40,6 +50,7 @@ export default function OnlineClueScreen() {
     const [tieContinueSeconds, setTieContinueSeconds] = useState(3);
     const flashAnim = useRef(new Animated.Value(1)).current;
     const tieNoticeSeenRoundRef = useRef<number | null>(null);
+    const tieNoticeStartedAtRef = useRef<number | null>(null);
     const tiePauseStartedAtRef = useRef<number | null>(null);
     const tiePausedAccumulatedMsRef = useRef(0);
     /** Evita llamar advanceTurn/startVoting una vez por segundo cuando remaining === 0 */
@@ -62,76 +73,77 @@ export default function OnlineClueScreen() {
         return () => clearInterval(id);
     }, [isClueReviewPhase, gameState.room?.clueReviewStartTime, gameState.roomCode]);
 
-    const pidEarly = gameState.playerId;
-    const roomEarly = gameState.room;
-    const meEliminatedForIntro =
-        !!roomEarly &&
-        pidEarly != null &&
-        roomEarly.players[pidEarly]?.isEliminated === true;
-    const { introActive, slideY } = useEliminationIntro(meEliminatedForIntro);
-
-    if (!gameState.room) {
-        return <OnlineRoomPlaceholder />;
-    }
-
+    // Derived values with optional chaining — defined before any hook so the hook count
+    // never changes regardless of whether room is null (e.g. after leaveRoom()).
     const room = gameState.room;
-    const isClueReview = room.status === 'clue_review';
-    const mode = room.settings.discussionMode;
-    const isSimultaneousReveal = room.status === 'simultaneous_reveal' && mode === 'simultaneous';
-    const turnOrder = room.turnOrder || [];
-    const currentTurnIndex = room.currentTurnIndex ?? 0;
-    const currentTurnPlayerId = turnOrder[currentTurnIndex];
-    const myId = gameState.playerId!;
-    const isMyTurn = mode === 'turns' ? currentTurnPlayerId === myId : true;
+    const myId = gameState.playerId ?? '';
     const isHost = gameState.isHost;
-
-    const clueDuration = room.settings.clueDuration || (mode === 'turns' ? 30 : 60);
-
-    const players = Object.values(room.players).filter(p => !p.isEliminated);
+    const mode = room?.settings.discussionMode ?? 'turns';
+    const turnOrder = room?.turnOrder ?? [];
+    const currentTurnIndex = room?.currentTurnIndex ?? 0;
+    const currentTurnPlayerId = turnOrder[currentTurnIndex];
+    const currentTurnPlayer = room?.players[currentTurnPlayerId];
+    const players = Object.values(room?.players ?? {}).filter(p => !p.isEliminated);
     const cluesFingerprint = players.map(p => `${p.id}:${p.clue ?? ''}`).sort().join('|');
-    const me = room.players[myId];
-    const currentTurnPlayer = room.players[currentTurnPlayerId];
+    const me = room?.players[myId];
+    const tieRecoveryActive = room?.voteTieRecovery === true;
+    const clueDuration = room?.settings.clueDuration || (mode === 'turns' ? 30 : 60);
+    const isClueReview = room?.status === 'clue_review';
+    const isSimultaneousReveal = room?.status === 'simultaneous_reveal' && mode === 'simultaneous';
+    const isMyTurn = mode === 'turns' ? currentTurnPlayerId === myId : true;
     const isSpectator = me?.isEliminated === true;
-    const tieRecoveryActive = room.voteTieRecovery === true;
+    const secretReminderText = me?.role === 'impostor'
+        ? t.online.word_reminder_impostor
+        : room?.currentWord?.word;
+    const tieDetails = room?.voteTieDetails || [];
+
+    const meEliminatedForIntro =
+        !!room && myId !== '' && room.players[myId]?.isEliminated === true;
+    const { introActive, slideY } = useEliminationIntro(meEliminatedForIntro);
 
     useEffect(() => {
         if (!tieRecoveryActive) {
             setTieNoticeVisible(false);
             setTieContinueSeconds(3);
+            tieNoticeStartedAtRef.current = null;
             tiePauseStartedAtRef.current = null;
             return;
         }
-        const roundKey = room.clueRound || 0;
+        const roundKey = room?.clueRound || 0;
         if (tieNoticeSeenRoundRef.current === roundKey) return;
         tieNoticeSeenRoundRef.current = roundKey;
+        tieNoticeStartedAtRef.current = Date.now();
         setTieNoticeVisible(true);
         setTieContinueSeconds(3);
         tiePauseStartedAtRef.current = Date.now();
-    }, [tieRecoveryActive, room.clueRound]);
+    }, [tieRecoveryActive, room?.clueRound]);
 
     /** Cuenta atrás visual (3→1) y cierre automático; el host limpia `voteTieRecovery` en Firebase. */
     useEffect(() => {
         if (!tieNoticeVisible) return;
-        const started = Date.now();
-        setTieContinueSeconds(3);
-        const iv = setInterval(() => {
+        const started = tieNoticeStartedAtRef.current ?? Date.now();
+        tieNoticeStartedAtRef.current = started;
+        const syncSeconds = () => {
             const sec = Math.max(0, 3 - Math.floor((Date.now() - started) / 1000));
             setTieContinueSeconds(sec);
+        };
+        syncSeconds();
+        const iv = setInterval(() => {
+            syncSeconds();
         }, 200);
+        const remainingMs = Math.max(0, 3000 - (Date.now() - started));
         const dismiss = setTimeout(() => {
             setTieNoticeVisible(false);
+            tieNoticeStartedAtRef.current = null;
             if (gameState.isHost && gameState.roomCode) {
                 void clearVoteTieRecovery();
             }
-        }, 3000);
+        }, remainingMs);
         return () => {
             clearInterval(iv);
             clearTimeout(dismiss);
         };
-    }, [tieNoticeVisible, gameState.isHost, gameState.roomCode, clearVoteTieRecovery]);
-
-    // Clues collected so far (turns mode shows them as they come)
-    const submittedClues = players.filter(p => p.clue !== null && p.clue !== undefined);
+    }, [tieNoticeVisible, gameState.isHost, gameState.roomCode]);
 
     // Reset submission state when my clue is cleared (new clue round)
     useEffect(() => {
@@ -144,12 +156,12 @@ export default function OnlineClueScreen() {
     // Navigate when status changes (sin roomCode = sesión cerrada; no navegar con snapshot conservado)
     useEffect(() => {
         if (!gameState.roomCode) return;
-        if (room.status === 'voting') {
+        if (room?.status === 'voting') {
             navigation.replace('OnlineVoting');
-        } else if (room.status === 'results' || room.status === 'finished' || room.status === 'elimination_choice') {
+        } else if (room?.status === 'results' || room?.status === 'finished' || room?.status === 'elimination_choice') {
             navigation.replace('OnlineResults');
         }
-    }, [gameState.roomCode, room.status]);
+    }, [gameState.roomCode, room?.status]);
 
     // Reset my submission state when turn changes (turns mode)
     useEffect(() => {
@@ -163,6 +175,7 @@ export default function OnlineClueScreen() {
 
     // Timer per turn/phase (solo durante pistas activas, no en revisión ni modal de decisión)
     useEffect(() => {
+        if (!room) return;
         if (room.status !== 'clues' && room.status !== 'simultaneous_reveal') return;
         const startTime = room.cluePhaseStartTime;
         if (!startTime) return;
@@ -176,7 +189,6 @@ export default function OnlineClueScreen() {
             const remaining = Math.max(0, clueDuration - elapsed);
             setSecondsLeft(remaining);
 
-            // Flash when < 10 seconds
             if (remaining <= 10 && remaining > 0) {
                 Animated.sequence([
                     Animated.timing(flashAnim, { toValue: 0.3, duration: 300, useNativeDriver: true }),
@@ -184,7 +196,6 @@ export default function OnlineClueScreen() {
                 ]).start();
             }
 
-            // Auto-advance on timeout (host only) — una sola vez por fase (no spamear Firebase)
             if (remaining === 0 && isHost) {
                 if (clueTimerZeroHandledRef.current === phaseKey) return;
                 clueTimerZeroHandledRef.current = phaseKey;
@@ -205,10 +216,10 @@ export default function OnlineClueScreen() {
         update();
         const interval = setInterval(update, 1000);
         return () => clearInterval(interval);
-    }, [room.cluePhaseStartTime, room.status, mode, isHost, cluesFingerprint, gameState.roomCode, room.currentTurnIndex]);
+    }, [room?.cluePhaseStartTime, room?.status, mode, isHost, cluesFingerprint, gameState.roomCode, room?.currentTurnIndex]);
 
     useEffect(() => {
-        if (room.status !== 'clues' && room.status !== 'simultaneous_reveal') return;
+        if (room?.status !== 'clues' && room?.status !== 'simultaneous_reveal') return;
         if (tieNoticeVisible) {
             if (tiePauseStartedAtRef.current == null) {
                 tiePauseStartedAtRef.current = Date.now();
@@ -219,16 +230,16 @@ export default function OnlineClueScreen() {
             tiePausedAccumulatedMsRef.current += Date.now() - tiePauseStartedAtRef.current;
             tiePauseStartedAtRef.current = null;
         }
-    }, [tieNoticeVisible, room.status]);
+    }, [tieNoticeVisible, room?.status]);
 
     useEffect(() => {
         tiePausedAccumulatedMsRef.current = 0;
         tiePauseStartedAtRef.current = null;
-    }, [room.cluePhaseStartTime, room.status, room.currentTurnIndex, gameState.roomCode]);
+    }, [room?.cluePhaseStartTime, room?.status, room?.currentTurnIndex, gameState.roomCode]);
 
     // In turns mode, host auto-advances when the current turn player submits
     useEffect(() => {
-        if (mode !== 'turns' || !isHost || !currentTurnPlayer || room.status !== 'clues') return;
+        if (mode !== 'turns' || !isHost || !currentTurnPlayer || room?.status !== 'clues') return;
         if (currentTurnPlayer.clue != null) {
             const timeout = setTimeout(() => advanceTurn(), 1500);
             return () => clearTimeout(timeout);
@@ -237,18 +248,32 @@ export default function OnlineClueScreen() {
 
     // Si el jugador del turno se desconecta, no forzar al resto a esperar su pista.
     useEffect(() => {
-        if (mode !== 'turns' || !isHost || room.status !== 'clues') return;
+        if (mode !== 'turns' || !isHost || room?.status !== 'clues') return;
         if (!currentTurnPlayerId) return;
         if (!currentTurnPlayer || currentTurnPlayer.isConnected === false) {
             const timeout = setTimeout(() => advanceTurn(), 1200);
             return () => clearTimeout(timeout);
         }
-    }, [mode, isHost, room.status, currentTurnPlayerId, currentTurnPlayer?.isConnected]);
+    }, [mode, isHost, room?.status, currentTurnPlayerId, currentTurnPlayer?.isConnected]);
 
-    const handleSubmitClue = async () => {
+    // Early return AFTER all hooks — safe for React's hook count invariant.
+    if (!room) return <OnlineRoomPlaceholder />;
+
+    // From here room is guaranteed non-null.
+    const submittedClues = players.filter(p => p.clue !== null && p.clue !== undefined);
+
+    const handleLeave = () => setShowLeaveConfirm(true);
+
+    const confirmLeave = async () => {
+        setShowLeaveConfirm(false);
+        await leaveRoom();
+        navigation.replace('Home');
+    };
+
+    const handleSubmitClue = () => {
         const trimmed = clueText.trim();
         if (!trimmed) return;
-        await submitClue(trimmed);
+        submitClue(trimmed);
         setHasSubmitted(true);
     };
 
@@ -276,7 +301,7 @@ export default function OnlineClueScreen() {
                 >
                 {/* Header */}
                 <View style={styles.header}>
-                    <Text style={styles.phaseLabel}>
+                    <Text style={[styles.phaseLabel, { flex: 1 }]}>
                         {isClueReview
                             ? t.online.clue_review_title
                             : isSimultaneousReveal
@@ -290,10 +315,19 @@ export default function OnlineClueScreen() {
                               ? '—'
                               : formatTime(secondsLeft)}
                     </Animated.Text>
-                    <Text style={styles.modeLabel}>
-                        {mode === 'turns' ? t.online.mode_turns : t.online.mode_simultaneous}
-                    </Text>
+                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                        <TouchableOpacity onPress={handleLeave} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                            <Text style={styles.exitBtn}>{t.common.exit}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+
+                {secretReminderText && !isClueReview && !isSpectator && (
+                    <View style={styles.secretReminderBar}>
+                        <Text style={styles.secretReminderLabel}>{t.online.word_reminder_label}</Text>
+                        <Text style={styles.secretReminderText} numberOfLines={1}>{secretReminderText}</Text>
+                    </View>
+                )}
 
                 <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
 
@@ -436,24 +470,6 @@ export default function OnlineClueScreen() {
                     {/* SIMULTANEOUS MODE — escribir pistas */}
                     {!isClueReview && mode === 'simultaneous' && !isSimultaneousReveal && (
                         <>
-                            {/* My word reminder */}
-                            {me && (
-                                <View style={[styles.wordReminderCard, me.role === 'impostor' && styles.wordReminderImpostor]}>
-                                    {me.role === 'impostor' ? (
-                                        <>
-                                            <Ionicons name="skull-outline" size={32} color="#E53E3E" />
-                                            <Text style={styles.wordReminderLabel}>Eres el impostor</Text>
-                                            <Text style={styles.wordReminderSub}>Escribe algo que suene creíble</Text>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Text style={styles.wordReminderLabel}>{t.reveal.your_word}</Text>
-                                            <Text style={styles.wordReminderWord}>{room.currentWord?.word}</Text>
-                                        </>
-                                    )}
-                                </View>
-                            )}
-
                             {/* Progress of who has submitted */}
                             <View style={styles.progressRow}>
                                 {players.map(p => (
@@ -501,7 +517,7 @@ export default function OnlineClueScreen() {
                                     <Ionicons name="checkmark-circle" size={30} color="#48BB78" />
                                     <Text style={styles.submittedText}>{t.online.clue_submitted}</Text>
                                     <Text style={styles.waitingOthers}>
-                                        Esperando que los demás envíen su pista...
+                                        {t.online.waiting_others_clue}
                                     </Text>
                                 </View>
                             ) : (
@@ -535,12 +551,32 @@ export default function OnlineClueScreen() {
                         <Ionicons name="git-compare-outline" size={48} color="#F6E05E" />
                         <Text style={styles.tieTitle}>{t.online.vote_tie_title}</Text>
                         <Text style={styles.tieMessage}>{t.online.vote_tie_message}</Text>
+                        <View style={styles.tieDetailsBox}>
+                            {tieDetails.length > 0 ? tieDetails.map(item => (
+                                <Text key={item.playerId} style={styles.tieDetailText}>
+                                    {item.name} · {t.online.vote_tie_votes.replace('{count}', String(item.votes))}
+                                </Text>
+                            )) : (
+                                <Text style={styles.tieDetailText}>{t.online.vote_tie_no_votes}</Text>
+                            )}
+                        </View>
                         <View style={styles.tieCountdownChip}>
                             <Text style={styles.tieCountdownNumber}>{tieContinueSeconds}</Text>
                         </View>
                     </View>
                 </View>
             )}
+            <GameModal
+                visible={showLeaveConfirm}
+                title={t.voting.exit_confirm}
+                message={isHost ? t.online.exit_host_confirm : t.online.exit_player_game_msg}
+                type="warning"
+                buttonText={t.common.exit}
+                onClose={confirmLeave}
+                secondaryButtonText={t.common.cancel}
+                onSecondaryPress={() => setShowLeaveConfirm(false)}
+                onRequestClose={() => setShowLeaveConfirm(false)}
+            />
         </SafeAreaView>
     );
 }
@@ -607,6 +643,21 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         textAlign: 'center',
         marginTop: 10,
+    },
+    tieDetailsBox: {
+        width: '100%',
+        marginTop: 14,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        backgroundColor: 'rgba(255,255,255,0.07)',
+        gap: 4,
+    },
+    tieDetailText: {
+        color: 'rgba(255,255,255,0.86)',
+        fontSize: 13,
+        fontWeight: '700',
+        textAlign: 'center',
     },
     tieCountdownChip: {
         marginTop: 20,
@@ -692,6 +743,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    headerRight: {
+        alignItems: 'flex-end',
+        gap: 4,
+    },
+    exitBtn: {
+        color: 'rgba(255,255,255,0.5)',
+        fontSize: 12,
+        fontWeight: '600',
+    },
     phaseLabel: {
         color: '#A0AEC0',
         fontSize: 11,
@@ -703,6 +763,28 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: '900',
         fontVariant: ['tabular-nums'],
+    },
+    secretReminderBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 7,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255,255,255,0.06)',
+        backgroundColor: 'rgba(255,255,255,0.035)',
+        gap: 6,
+    },
+    secretReminderLabel: {
+        color: 'rgba(255,255,255,0.45)',
+        fontSize: 11,
+        fontWeight: '700',
+    },
+    secretReminderText: {
+        color: 'rgba(255,255,255,0.72)',
+        fontSize: 12,
+        fontWeight: '800',
+        maxWidth: 180,
     },
     modeLabel: {
         color: '#A0AEC0',
