@@ -132,7 +132,8 @@ export function QuickMessagePanel({
             p =>
                 typeof p?.name === 'string' &&
                 p.name.trim().length > 0 &&
-                p.isConnected !== false
+                p.isConnected !== false &&
+                p.isEliminated !== true
         );
         return roomPlayers.map(p => ({ id: `name:${p.id}`, label: `${prefix} ${p.name.trim()}` }));
     }, [gameState.room?.players, qm]);
@@ -159,10 +160,34 @@ export function QuickMessagePanel({
         });
     }, [messages, gameState.playerId]);
 
+    const startFloaterAnimation = (floater: FloatingMessage) => {
+        floater.animation?.stop();
+        floater.anim.setValue(0);
+        floater.opacity.setValue(1);
+        const animation = Animated.parallel([
+            Animated.timing(floater.anim, {
+                toValue: 1,
+                duration: 3000,
+                easing: Easing.out(Easing.quad),
+                useNativeDriver: true,
+            }),
+            Animated.sequence([
+                Animated.delay(1500),
+                Animated.timing(floater.opacity, { toValue: 0, duration: 1500, useNativeDriver: true }),
+            ]),
+        ]);
+        floater.animation = animation;
+        animation.start(({ finished }) => {
+            if (!finished) return;
+            setFloaters(prev => prev.filter(f => f.id !== floater.id));
+        });
+    };
+
     const spawnFloater = (id: string, text: string, playerName: string) => {
         // If an identical message is already visible, bump its count and bounce the badge
         const existing = floatersRef.current.find(f => f.text === text);
         if (existing) {
+            startFloaterAnimation(existing);
             existing.countAnim.setValue(0);
             Animated.spring(existing.countAnim, {
                 toValue: 1,
@@ -206,22 +231,7 @@ export function QuickMessagePanel({
             return [...trimmed, floater];
         });
 
-        const animation = Animated.parallel([
-            Animated.timing(anim, {
-                toValue: 1,
-                duration: 3000,
-                easing: Easing.out(Easing.quad),
-                useNativeDriver: true,
-            }),
-            Animated.sequence([
-                Animated.delay(1500),
-                Animated.timing(opacity, { toValue: 0, duration: 1500, useNativeDriver: true }),
-            ]),
-        ]);
-        floater.animation = animation;
-        animation.start(() => {
-            setFloaters(prev => prev.filter(f => f.id !== id));
-        });
+        startFloaterAnimation(floater);
     };
 
     // Arrow hint: shown the first time the panel opens, dismissed on scroll or after 2s

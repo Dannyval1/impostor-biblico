@@ -1433,15 +1433,15 @@
     },
     {
         "id": "mi_001",
-        "word": "División del Mar Rojo",
+        "word": "Mar Rojo",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Moisés extendió su mano y el mar se abrió",
+        "hint": "Moisés extendió su mano y las aguas se dividieron",
         "impostorHint": "Éxodo"
     },
     {
         "id": "mi_002",
-        "word": "Agua convertida en vino",
+        "word": "Agua en vino",
         "category": "milagros_biblicos",
         "difficulty": "easy",
         "hint": "Primer milagro de Jesús en una boda",
@@ -1449,114 +1449,114 @@
     },
     {
         "id": "mi_003",
-        "word": "Resurrección de Lázaro",
+        "word": "Resurrección Lázaro",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús lo llamó después de cuatro días",
+        "hint": "Jesús lo llamó fuera de la tumba tras cuatro días",
         "impostorHint": "Tumba"
     },
     {
         "id": "mi_004",
-        "word": "Multiplicación de los panes",
+        "word": "Multiplicación panes",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "5 panes y 2 peces alimentaron a 5000",
+        "hint": "Cinco panes y dos peces para cinco mil personas",
         "impostorHint": "Cesta"
     },
     {
         "id": "mi_005",
-        "word": "Maná del cielo",
+        "word": "Maná",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Alimento que Dios dio en el desierto",
+        "hint": "Alimento que Dios envió del cielo en el desierto",
         "impostorHint": "Pan"
     },
     {
         "id": "mi_006",
-        "word": "Caminar sobre el agua",
+        "word": "Caminar agua",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús y Pedro lo hicieron en el lago",
+        "hint": "Jesús y Pedro lo hicieron sobre el Mar de Galilea",
         "impostorHint": "Fe"
     },
     {
         "id": "mi_007",
-        "word": "Curación del ciego de nacimiento",
+        "word": "Ciego sanado",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Jesús hizo lodo y le dio la vista",
+        "hint": "Jesús usó lodo para devolverle la vista",
         "impostorHint": "Lodo"
     },
     {
         "id": "mi_008",
-        "word": "Resurrección de Jesús",
+        "word": "Resurrección Jesús",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Al tercer día la tumba quedó vacía",
+        "hint": "Al tercer día la tumba quedó vacía para siempre",
         "impostorHint": "Domingo"
     },
     {
         "id": "mi_009",
-        "word": "La transfiguración",
+        "word": "Transfiguración",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Jesús brilló como el sol en el monte",
+        "hint": "Jesús brilló como el sol en la cima de un monte",
         "impostorHint": "Luz"
     },
     {
         "id": "mi_010",
-        "word": "La tempestad calmada",
+        "word": "Tempestad calmada",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús ordenó al viento y al mar que se calmaran",
+        "hint": "Jesús ordenó al viento y al mar detenerse",
         "impostorHint": "Viento"
     },
     {
         "id": "mi_011",
-        "word": "Curación del leproso",
+        "word": "Leproso sanado",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Jesús lo tocó y quedó limpio",
+        "hint": "Jesús lo tocó y su piel quedó limpia",
         "impostorHint": "Piel"
     },
     {
         "id": "mi_012",
-        "word": "El diluvio universal",
+        "word": "Diluvio",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios inundó la tierra y salvó a Noé",
+        "hint": "Lluvia que cubrió la tierra para limpiar la maldad",
         "impostorHint": "Arco iris"
     },
     {
         "id": "mi_013",
-        "word": "Las diez plagas de Egipto",
+        "word": "Diez plagas",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios las envió para liberar a Israel",
+        "hint": "Juicios enviados sobre Egipto para liberar a Israel",
         "impostorHint": "Faraón"
     },
     {
         "id": "mi_014",
-        "word": "La columna de fuego",
+        "word": "Columna fuego",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Guiaba a Israel de noche en el desierto",
+        "hint": "Presencia divina que guiaba al pueblo de noche",
         "impostorHint": "Noche"
     },
     {
         "id": "mi_015",
-        "word": "La zarza ardiente",
+        "word": "Zarza ardiente",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios habló a Moisés desde ella",
+        "hint": "Arbusto que ardía sin consumirse frente a Moisés",
         "impostorHint": "Fuego"
     },
     {
         "id": "mi_016",
-        "word": "El sol detenido",
+        "word": "Sol detenido",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Josué pidió que se detuviera durante la batalla",
+        "hint": "El astro no se puso hasta que Josué ganó la batalla",
         "impostorHint": "Josué"
     },
     {
@@ -1564,191 +1564,191 @@
         "word": "Pentecostés",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "El Espíritu Santo descendió como lenguas de fuego",
+        "hint": "Descenso del Espíritu Santo sobre los apóstoles",
         "impostorHint": "Viento"
     },
     {
         "id": "mi_018",
-        "word": "Daniel en el foso de leones",
+        "word": "Foso leones",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Los leones no lo tocaron",
+        "hint": "Daniel fue protegido de las fieras hambrientas",
         "impostorHint": "Ángel"
     },
     {
         "id": "mi_019",
-        "word": "El horno de fuego ardiente",
+        "word": "Horno fuego",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Sadrac, Mesac y Abed-nego salieron ilesos",
+        "hint": "Tres jóvenes hebreos caminaron entre las llamas",
         "impostorHint": "Cuarto"
     },
     {
         "id": "mi_020",
-        "word": "Jonás y el gran pez",
+        "word": "Gran pez",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Estuvo tres días en el vientre del pez",
+        "hint": "Tragó a un profeta desobediente por tres días",
         "impostorHint": "Ballena"
     },
     {
         "id": "mi_021",
-        "word": "El aceite de la viuda",
+        "word": "Aceite viuda",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "El aceite no se acabó por el profeta Elías",
+        "hint": "No dejó de fluir hasta llenar todas las vasijas",
         "impostorHint": "Vasijas"
     },
     {
         "id": "mi_022",
-        "word": "Fuego del cielo de Elías",
+        "word": "Fuego Elías",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Consumió el altar empapado de agua",
+        "hint": "Bajó del cielo para consumir el sacrificio en el Carmelo",
         "impostorHint": "Baal"
     },
     {
         "id": "mi_023",
-        "word": "Ascensión de Elías",
+        "word": "Ascensión Elías",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Subió al cielo en un carro de fuego",
+        "hint": "Fue arrebatado al cielo sin ver la muerte",
         "impostorHint": "Carro"
     },
     {
         "id": "mi_024",
-        "word": "Resurrección del hijo de la sunamita",
+        "word": "Hijo sunamita",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "El profeta Eliseo la realizó",
+        "hint": "Niño resucitado por el profeta Eliseo",
         "impostorHint": "Niño"
     },
     {
         "id": "mi_025",
-        "word": "El hacha flotante",
+        "word": "Hacha flotante",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Eliseo hizo flotar un hacha de hierro",
+        "hint": "El hierro subió a la superficie del agua",
         "impostorHint": "Palo"
     },
     {
         "id": "mi_026",
-        "word": "Curación de Naamán",
+        "word": "Sanación Naamán",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "General sirio curado de lepra en el Jordán",
+        "hint": "Se lavó siete veces en el río Jordán",
         "impostorHint": "Siete"
     },
     {
         "id": "mi_027",
-        "word": "Pablo y Silas liberados de prisión",
+        "word": "Terremoto cárcel",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Un terremoto abrió las puertas de la cárcel",
+        "hint": "Liberó a Pablo y Silas mientras cantaban himnos",
         "impostorHint": "Cantos"
     },
     {
         "id": "mi_028",
-        "word": "Conversión de Pablo",
+        "word": "Ceguera Pablo",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Una gran luz lo derribó camino a Damasco",
-        "impostorHint": "Ceguera"
+        "hint": "Ocurrió tras ver una luz camino a Damasco",
+        "impostorHint": "Escamas"
     },
     {
         "id": "mi_029",
-        "word": "Curación del paralítico de Betsaida",
+        "word": "Paralítico bajado",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Sus amigos lo bajaron por el techo",
+        "hint": "Entró por el techo para ser sanado por Jesús",
         "impostorHint": "Techo"
     },
     {
         "id": "mi_030",
-        "word": "Curación del siervo del centurión",
+        "word": "Sanación a distancia",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Jesús sanó a distancia por la fe del oficial",
+        "hint": "Milagro realizado al siervo de un centurión romano",
         "impostorHint": "Autoridad"
     },
     {
         "id": "mi_031",
-        "word": "Ascensión de Jesús",
+        "word": "Ascensión Jesús",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Subió al cielo ante sus discípulos",
+        "hint": "Regreso del Salvador al Padre ante sus discípulos",
         "impostorHint": "Nube"
     },
     {
         "id": "mi_032",
-        "word": "El agua de la roca",
+        "word": "Agua roca",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Moisés golpeó una roca y brotó agua",
+        "hint": "Moisés golpeó la piedra y brotó un manantial",
         "impostorHint": "Sed"
     },
     {
         "id": "mi_033",
-        "word": "La caída de los muros de Jericó",
+        "word": "Muros Jericó",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Los israelitas marcharon y tocaron trompetas",
+        "hint": "Cayeron tras siete días de vueltas y trompetas",
         "impostorHint": "Trompeta"
     },
     {
         "id": "mi_034",
-        "word": "La creación del mundo",
+        "word": "Creación",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Dios hizo todo en seis días",
+        "hint": "El origen de todo hecho por la palabra de Dios",
         "impostorHint": "Génesis"
     },
     {
         "id": "mi_035",
-        "word": "La resurrección de Dorcas",
+        "word": "Resurrección Dorcas",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Pedro oró y la mujer volvió a la vida",
-        "impostorHint": "Pedro"
+        "hint": "Mujer bondadosa que Pedro volvió a la vida",
+        "impostorHint": "Túnicas"
     },
     {
         "id": "mi_036",
-        "word": "La estrella de Belén",
+        "word": "Estrella Belén",
         "category": "milagros_biblicos",
         "difficulty": "easy",
-        "hint": "Guió a los magos al niño Jesús",
+        "hint": "Señal en el cielo que anunció el nacimiento real",
         "impostorHint": "Magos"
     },
     {
         "id": "mi_037",
-        "word": "El vellón de Gedeón",
+        "word": "Vellón Gedeón",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Estaba húmedo mientras el suelo estaba seco",
+        "hint": "Lana húmeda sobre suelo seco (o viceversa)",
         "impostorHint": "Señal"
     },
     {
         "id": "mi_038",
-        "word": "El pez con la moneda",
+        "word": "Moneda pez",
         "category": "milagros_biblicos",
         "difficulty": "medium",
-        "hint": "Pedro lo pescó para pagar el impuesto del templo",
-        "impostorHint": "Moneda"
+        "hint": "Encontrada para pagar el impuesto de Jesús y Pedro",
+        "impostorHint": "Tributo"
     },
     {
         "id": "mi_039",
-        "word": "Resurrección del hijo de la viuda de Naín",
+        "word": "Hijo Naín",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Jesús detuvo el cortejo fúnebre",
-        "impostorHint": "Cortejo"
+        "hint": "Jesús resucitó al hijo único de una viuda",
+        "impostorHint": "Féretro"
     },
     {
         "id": "mi_040",
-        "word": "La mano lepra de Moisés",
+        "word": "Mano leprosa",
         "category": "milagros_biblicos",
         "difficulty": "hard",
-        "hint": "Dios le mostró su poder siendo una señal",
+        "hint": "Moisés puso su mano en su seno y se enfermó",
         "impostorHint": "Señal"
     },
     {

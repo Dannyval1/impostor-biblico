@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -17,27 +17,29 @@ const adUnitId = __DEV__
         ? 'ca-app-pub-4782245353460263/8334790472'
         : 'ca-app-pub-4782245353460263/7142735566'; // Android
 
-const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-    requestNonPersonalizedAdsOnly: true,
-});
-
 export default function AdScreen({ navigation }: AdScreenProps) {
     const { t } = useTranslation();
     const { startGame, resetGamesPlayed } = useGame();
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const interstitialRef = useRef<ReturnType<typeof InterstitialAd.createForAdRequest> | null>(null);
+    if (!interstitialRef.current) {
+        interstitialRef.current = InterstitialAd.createForAdRequest(adUnitId, {
+            requestNonPersonalizedAdsOnly: true,
+        });
+    }
 
     useEffect(() => {
-        const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+        const unsubscribeLoaded = interstitialRef.current!.addAdEventListener(AdEventType.LOADED, () => {
             setLoaded(true);
-            interstitial.show();
+            interstitialRef.current!.show();
         });
 
-        const unsubscribeClosed = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
+        const unsubscribeClosed = interstitialRef.current!.addAdEventListener(AdEventType.CLOSED, () => {
             handleComplete();
         });
 
-        const unsubscribeError = interstitial.addAdEventListener(AdEventType.ERROR, (err) => {
+        const unsubscribeError = interstitialRef.current!.addAdEventListener(AdEventType.ERROR, (err) => {
             console.log('Ad Error:', err);
             setError('Failed to load ad');
             // If ad fails, we should just let user proceed
@@ -45,7 +47,7 @@ export default function AdScreen({ navigation }: AdScreenProps) {
         });
 
         // Start loading the ad straight away
-        interstitial.load();
+        interstitialRef.current!.load();
 
         return () => {
             unsubscribeLoaded();

@@ -37,7 +37,10 @@ export default function OnlineClueScreen() {
 
     useEffect(() => {
         setOnlineGameActive(true);
-        return () => setOnlineGameActive(false);
+        return () => {
+            setOnlineGameActive(false);
+            if (firebaseClearTimerRef.current) clearTimeout(firebaseClearTimerRef.current);
+        };
     }, []);
 
     const [clueText, setClueText] = useState('');
@@ -52,6 +55,7 @@ export default function OnlineClueScreen() {
     const tieNoticeSeenRoundRef = useRef<number | null>(null);
     const tieNoticeStartedAtRef = useRef<number | null>(null);
     const tiePauseStartedAtRef = useRef<number | null>(null);
+    const firebaseClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const tiePausedAccumulatedMsRef = useRef(0);
     /** Evita llamar advanceTurn/startVoting una vez por segundo cuando remaining === 0 */
     const clueTimerZeroHandledRef = useRef<string | null>(null);
@@ -132,13 +136,22 @@ export default function OnlineClueScreen() {
             syncSeconds();
         }, 200);
         const remainingMs = Math.max(0, 3000 - (Date.now() - started));
+        // Dismiss the UI overlay at 3 s for everyone already on screen.
         const dismiss = setTimeout(() => {
             setTieNoticeVisible(false);
             tieNoticeStartedAtRef.current = null;
-            if (gameState.isHost && gameState.roomCode) {
-                void clearVoteTieRecovery();
-            }
         }, remainingMs);
+        // Host clears the Firebase flag after 8 s total, giving spectators/late-navigators
+        // enough time to arrive at the clue screen and still see the tie notice.
+        // Stored in a ref so it survives the re-render caused by setTieNoticeVisible(false).
+        if (gameState.isHost && gameState.roomCode) {
+            if (firebaseClearTimerRef.current) clearTimeout(firebaseClearTimerRef.current);
+            const firebaseClearDelay = Math.max(remainingMs, 8000 - (Date.now() - started));
+            firebaseClearTimerRef.current = setTimeout(() => {
+                void clearVoteTieRecovery();
+                firebaseClearTimerRef.current = null;
+            }, firebaseClearDelay);
+        }
         return () => {
             clearInterval(iv);
             clearTimeout(dismiss);

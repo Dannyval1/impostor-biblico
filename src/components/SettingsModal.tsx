@@ -21,7 +21,7 @@ type SettingsModalProps = {
 };
 
 const { width } = Dimensions.get('window');
-const APP_VERSION = '2.2.0';
+const APP_VERSION = '2.3.0';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

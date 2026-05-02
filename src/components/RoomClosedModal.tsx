@@ -38,7 +38,7 @@ export function RoomClosedModal() {
     const handleDismiss = () => {
         clearRoomClosed();
         navigation.dispatch(
-            CommonActions.reset({ index: 0, routes: [{ name: 'Setup' }] })
+            CommonActions.reset({ index: 0, routes: [{ name: 'OnlineLobby' }] })
         );
     };
 
