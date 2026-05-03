@@ -711,14 +711,28 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
             /** Solo en espera: borrar jugadores desconectados aquí durante la partida rompe roles / startCluePhase y deja nodos huérfanos. */
             if (room.status !== 'waiting') return;
             const now = Date.now();
-
             Object.entries(room.players).forEach(([id, player]) => {
                 if (id === gameState.playerId) return;
+                const code = gameState.roomCode!;
+
+                // Remove ghost nodes (onDisconnect-recreated entries with no name).
+                if (!player.name?.trim()) {
+                    remove(ref(database, `rooms/${code}/players/${id}`))
+                        .then(() => get(ref(database, `rooms/${code}`)))
+                        .then(snap => {
+                            if (!snap.exists()) return;
+                            const r = snap.val() as OnlineRoom;
+                            const cnt = Object.keys(sanitizeOnlinePlayers(r.players as Record<string, unknown>)).length;
+                            return update(ref(database, `rooms/${code}`), { playerCount: cnt });
+                        })
+                        .catch(() => {});
+                    return;
+                }
+
                 if (player.isConnected === false && player.disconnectedAt) {
                     // Add 5s tolerance for clock skew between serverTimestamp and local Date.now()
                     const disconnectedAge = now - player.disconnectedAt;
                     if (disconnectedAge > LOBBY_PLAYER_GRACE_PERIOD_MS || (disconnectedAge < -5000 && now - (player.lastSeen || 0) > LOBBY_PLAYER_GRACE_PERIOD_MS)) {
-                        const code = gameState.roomCode;
                         remove(ref(database, `rooms/${code}/players/${id}`))
                             .then(() => get(ref(database, `rooms/${code}`)))
                             .then(snap => {
@@ -907,6 +921,17 @@ export function OnlineGameProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const handler = (nextState: AppStateStatus) => {
             if (nextState === 'active' && gameState.roomCode && gameState.playerId) {
+                // Cancel stale disconnect timers that may have started from connection
+                // state changes while the app was in background. Without this, brief
+                // screen-off events cause players to be incorrectly evicted ~60s later.
+                Object.values(disconnectTimersRef.current).forEach(t => clearTimeout(t));
+                disconnectTimersRef.current = {};
+                // Reset the player-state baseline so the next effect run doesn't treat
+                // connection-state changes from the offline window as "new" disconnects.
+                if (roomDataRef.current?.players) {
+                    prevPlayersRef.current = { ...roomDataRef.current.players };
+                }
+
                 const playerRef = ref(database, `rooms/${gameState.roomCode}/players/${gameState.playerId}`);
                 get(ref(database, `rooms/${gameState.roomCode}`)).then(snap => {
                     if (!snap.exists()) {

@@ -328,6 +328,7 @@ export const translations = {
             lobby_ready_progress: 'Listos: {ready}/{total}',
             lobby_players_count: '{current}/{max} jugadores',
             lobby_waiting_ads: '{count} jugador(es) viendo anuncio',
+            lobby_not_ready_prefix: 'Falta: ',
             lobby_waiting_ready_hint: 'Esperando a que todos terminen de entrar/anuncio para iniciar.',
             lobby_waiting_ready_cta: 'ESPERANDO JUGADORES...',
             errors: {
@@ -355,7 +356,8 @@ export const translations = {
                 insufficient_players_desc: 'Se necesitan al menos 3 jugadores para continuar la partida. La partida ha sido terminada.',
                 name_and_code_required: 'Ingresa tu nombre y el código de sala',
                 name_taken: 'Ya existe un jugador con ese nombre en la sala. Elige otro nombre.',
-                select_player_alert: 'Selecciona un jugador para eliminar'
+                select_player_alert: 'Selecciona un jugador para eliminar',
+                kicked_from_room: 'El anfitrión te ha removido de esta sala.'
             },
             round_decision: {
                 title: '¿Qué hacemos?',
@@ -824,6 +826,7 @@ export const translations = {
             lobby_ready_progress: 'Ready: {ready}/{total}',
             lobby_players_count: '{current}/{max} players',
             lobby_waiting_ads: '{count} player(s) watching ad',
+            lobby_not_ready_prefix: 'Waiting: ',
             lobby_waiting_ready_hint: 'Waiting for everyone to finish joining/ad before starting.',
             lobby_waiting_ready_cta: 'WAITING FOR PLAYERS...',
             errors: {
@@ -851,7 +854,8 @@ export const translations = {
                 insufficient_players_desc: 'At least 3 players are needed to continue the game. The game has been ended.',
                 name_and_code_required: 'Enter your name and room code',
                 name_taken: 'A player with that name already exists in the room. Choose a different name.',
-                select_player_alert: 'Select a player to eliminate'
+                select_player_alert: 'Select a player to eliminate',
+                kicked_from_room: 'The host has removed you from this room.'
             },
             round_decision: {
                 title: 'What do we do?',
@@ -1218,6 +1222,7 @@ export const translations = {
             lobby_ready_progress: 'Prontos: {ready}/{total}',
             lobby_players_count: '{current}/{max} jogadores',
             lobby_waiting_ads: '{count} jogador(es) vendo anúncio',
+            lobby_not_ready_prefix: 'Faltando: ',
             lobby_waiting_ready_hint: 'Aguardando todos terminarem de entrar/anúncio para iniciar.',
             lobby_waiting_ready_cta: 'AGUARDANDO JOGADORES...',
             errors: {
@@ -1245,7 +1250,8 @@ export const translations = {
                 insufficient_players_desc: 'São necessários pelo menos 3 jogadores para continuar. A partida foi encerrada.',
                 name_and_code_required: 'Insira seu nome e o código da sala',
                 name_taken: 'Já existe um jogador com esse nome na sala. Escolha outro nome.',
-                select_player_alert: 'Selecione um jogador para eliminar'
+                select_player_alert: 'Selecione um jogador para eliminar',
+                kicked_from_room: 'O anfitrião removeu você desta sala.'
             },
             round_decision: {
                 title: 'O que fazemos?',

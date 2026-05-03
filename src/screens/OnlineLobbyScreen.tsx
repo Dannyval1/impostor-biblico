@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Animated, Share } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Share } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,17 +26,17 @@ export default function OnlineLobbyScreen() {
 
     const isPremium = gameState.room?.settings.isPremiumRoom ?? false;
 
-    // Premium palette — switches the entire lobby to a dark-gold theme visible on all devices.
+    // Premium palette — warm dark theme with muted amber tones (not neon gold).
     const P = isPremium ? {
-        bg:            '#160D00' as const,
-        cardBg:        '#241500' as const,
-        listBg:        'rgba(255,200,0,0.055)' as const,
-        gold:          '#FFD700' as const,
-        goldMuted:     'rgba(255,215,0,0.65)' as const,
-        goldSubtle:    'rgba(255,215,0,0.14)' as const,
-        goldBorder:    'rgba(255,215,0,0.28)' as const,
-        actionBtn:     '#C8960C' as const,
-        actionBtnText: '#1A1000' as const,
+        bg:            '#1C1308' as const,
+        cardBg:        '#261A0A' as const,
+        listBg:        'rgba(210,160,60,0.06)' as const,
+        gold:          '#D4A84B' as const,
+        goldMuted:     'rgba(212,168,75,0.75)' as const,
+        goldSubtle:    'rgba(212,168,75,0.12)' as const,
+        goldBorder:    'rgba(212,168,75,0.22)' as const,
+        actionBtn:     '#A07830' as const,
+        actionBtnText: '#FDF0D5' as const,
     } : null;
 
     const [playerName, setPlayerName] = useState('');
@@ -58,6 +58,7 @@ export default function OnlineLobbyScreen() {
         buttonText: 'OK',
         onClose: () => setModalVisible(false),
     });
+    const [leaveModalVisible, setLeaveModalVisible] = useState(false);
 
     const showGameModal = (
         title: string,
@@ -214,13 +215,7 @@ export default function OnlineLobbyScreen() {
     };
 
     const handleLeaveRoom = () => {
-        const message = gameState.isHost
-            ? t.online.exit_host_confirm
-            : t.voting.exit_confirm;
-        Alert.alert(message, undefined, [
-            { text: t.common.cancel, style: 'cancel' },
-            { text: t.common.exit, style: 'destructive', onPress: () => void leaveRoom() },
-        ]);
+        setLeaveModalVisible(true);
     };
 
     const shareCode = async () => {
@@ -256,7 +251,7 @@ export default function OnlineLobbyScreen() {
                 P && { backgroundColor: P.cardBg, borderWidth: 1, borderColor: P.goldBorder },
             ]}>
                 <View style={styles.avatarWrapper}>
-                    <View style={[styles.avatarContainer, P && { backgroundColor: '#3A2800' }]}>
+                    <View style={[styles.avatarContainer, P && { backgroundColor: '#2E1F0A' }]}>
                         <Image source={getAvatarSource(item.avatar)} style={[styles.avatarImage, isDisconnected && { opacity: 0.4 }]} />
                     </View>
                 </View>
@@ -382,6 +377,16 @@ export default function OnlineLobbyScreen() {
                                 {t.online.lobby_waiting_ads.replace('{count}', String(watchingAdPlayers.length))}
                             </Text>
                         )}
+                        {(() => {
+                            const notReady = connectedPlayers.filter(p => (p.joinState || 'ready') !== 'ready');
+                            if (notReady.length === 0 || connectedPlayers.length < 2) return null;
+                            return (
+                                <Text style={[styles.notReadyHint, P && { color: P.goldMuted }]}>
+                                    {t.online.lobby_not_ready_prefix ?? 'Falta: '}
+                                    {notReady.map(p => p.name.trim()).join(', ')}
+                                </Text>
+                            );
+                        })()}
                     </View>
                     <ScrollView
                         style={styles.playersScroll}
@@ -456,6 +461,21 @@ export default function OnlineLobbyScreen() {
                         clearKickedFromRoom();
                         void leaveRoom();
                     }}
+                />
+
+                <GameModal
+                    visible={leaveModalVisible}
+                    title={t.voting.exit_confirm}
+                    message={gameState.isHost ? t.online.exit_host_confirm : t.online.exit_player_game_msg}
+                    type="warning"
+                    buttonText={t.common.exit}
+                    onClose={() => {
+                        setLeaveModalVisible(false);
+                        void leaveRoom();
+                    }}
+                    secondaryButtonText={t.common.cancel}
+                    onSecondaryPress={() => setLeaveModalVisible(false)}
+                    onRequestClose={() => setLeaveModalVisible(false)}
                 />
             </SafeAreaView>
         );
@@ -786,6 +806,13 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '600',
         marginTop: 2,
+    },
+    notReadyHint: {
+        color: 'rgba(255,255,255,0.55)',
+        fontSize: 11,
+        fontWeight: '500',
+        marginTop: 4,
+        fontStyle: 'italic',
     },
     listContent: {
         paddingBottom: 20,

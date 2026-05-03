@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset';
 import * as NavigationBar from 'expo-navigation-bar';
+import mobileAds from 'react-native-google-mobile-ads';
 import AppNavigator from './src/navigation/AppNavigator';
 import { GameProvider } from './src/context/GameContext';
 import { PurchaseProvider } from './src/context/PurchaseContext';
@@ -71,6 +72,9 @@ export default function App() {
           await NavigationBar.setBehaviorAsync("overlay-swipe");
         }
         await loadResourcesAsync();
+        if (Platform.OS !== 'web') {
+          await mobileAds().initialize();
+        }
       } catch (e) {
         console.warn(e);
       } finally {

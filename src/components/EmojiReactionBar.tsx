@@ -3,7 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'reac
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { OnlineReaction } from '../types';
 
-const EMOJIS = ['😂', '🤔', '😒', '🥲', '🙄'];
+const EMOJIS = ['😂', '🤔', '😱', '😒', '🥲', '🙄'];
+const EMOJI_BURST_LIMIT = 3;
+const EMOJI_UI_COOLDOWN_MS = 1200;
 
 interface FloatingReaction {
     id: string;
@@ -14,12 +16,11 @@ interface FloatingReaction {
     x: number;
 }
 
-const EMOJI_UI_COOLDOWN_MS = 1200;
-
 export function EmojiReactionBar() {
     const { sendReaction, gameState } = useOnlineGame();
     const [floaters, setFloaters] = useState<FloatingReaction[]>([]);
     const [onCooldown, setOnCooldown] = useState(false);
+    const burstCountRef = useRef(0);
     const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const seenReactionsRef = useRef<Set<string>>(new Set());
 
@@ -61,9 +62,15 @@ export function EmojiReactionBar() {
     const handlePress = (emoji: string) => {
         if (onCooldown) return;
 
-        setOnCooldown(true);
-        if (cooldownTimerRef.current) clearTimeout(cooldownTimerRef.current);
-        cooldownTimerRef.current = setTimeout(() => setOnCooldown(false), EMOJI_UI_COOLDOWN_MS);
+        burstCountRef.current += 1;
+        if (burstCountRef.current >= EMOJI_BURST_LIMIT) {
+            setOnCooldown(true);
+            if (cooldownTimerRef.current) clearTimeout(cooldownTimerRef.current);
+            cooldownTimerRef.current = setTimeout(() => {
+                burstCountRef.current = 0;
+                setOnCooldown(false);
+            }, EMOJI_UI_COOLDOWN_MS);
+        }
 
         const anim = new Animated.Value(0);
         const opacity = new Animated.Value(1);

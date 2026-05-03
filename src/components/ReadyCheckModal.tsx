@@ -14,6 +14,7 @@ export function ReadyCheckModal() {
     const connectedPlayers = Object.values(room.players).filter(p => p.isConnected !== false);
     const ready = room.readyCheckReady || {};
     const readyCount = connectedPlayers.filter(p => ready[p.id]).length;
+    const pendingPlayers = connectedPlayers.filter(p => ready[p.id] !== true);
     const total = connectedPlayers.length;
     const myId = gameState.playerId || '';
     const meReady = !!ready[myId];
@@ -34,6 +35,15 @@ export function ReadyCheckModal() {
                                 .replace('{total}', String(total))}
                         </Text>
                     </View>
+
+                    {!allReady && pendingPlayers.length > 0 && (
+                        <View style={styles.pendingBox}>
+                            <Text style={styles.pendingLabel}>{t.online.lobby_not_ready_prefix}</Text>
+                            <Text style={styles.pendingNames}>
+                                {pendingPlayers.map(p => p.name.trim()).filter(Boolean).join(', ')}
+                            </Text>
+                        </View>
+                    )}
 
                     {!meReady ? (
                         <TouchableOpacity
@@ -109,6 +119,27 @@ const styles = StyleSheet.create({
         color: '#E2E8F0',
         fontSize: 14,
         fontWeight: '800',
+    },
+    pendingBox: {
+        width: '100%',
+        marginTop: 12,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        backgroundColor: 'rgba(255,255,255,0.07)',
+        alignItems: 'center',
+    },
+    pendingLabel: {
+        color: 'rgba(255,255,255,0.48)',
+        fontSize: 12,
+        fontWeight: '800',
+    },
+    pendingNames: {
+        color: 'rgba(255,255,255,0.84)',
+        fontSize: 13,
+        fontWeight: '800',
+        textAlign: 'center',
+        marginTop: 3,
     },
     readyButton: {
         width: '100%',
