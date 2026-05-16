@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -17,6 +17,27 @@ interface HowToPlayModalProps {
 
 export const HowToPlayModal = ({ visible, onClose }: HowToPlayModalProps) => {
     const { t } = useTranslation();
+    const [activeTab, setActiveTab] = useState<'classic' | 'online'>('classic');
+
+    useEffect(() => {
+        if (!visible) setActiveTab('classic');
+    }, [visible]);
+
+    const classicSteps = [
+        { icon: '⚙️', title: t.how_to_play_modal?.step1_title, desc: t.how_to_play_modal?.step1_desc },
+        { icon: '🤫', title: t.how_to_play_modal?.step2_title, desc: t.how_to_play_modal?.step2_desc },
+        { icon: '🗣️', title: t.how_to_play_modal?.step3_title, desc: t.how_to_play_modal?.step3_desc },
+        { icon: '🗳️', title: t.how_to_play_modal?.step4_title, desc: t.how_to_play_modal?.step4_desc },
+    ];
+
+    const onlineSteps = [
+        { icon: '🔗', title: t.how_to_play_modal?.online_step1_title, desc: t.how_to_play_modal?.online_step1_desc },
+        { icon: '⚙️', title: t.how_to_play_modal?.online_step2_title, desc: t.how_to_play_modal?.online_step2_desc },
+        { icon: '🤫', title: t.how_to_play_modal?.online_step3_title, desc: t.how_to_play_modal?.online_step3_desc },
+        { icon: '🗳️', title: t.how_to_play_modal?.online_step4_title, desc: t.how_to_play_modal?.online_step4_desc },
+    ];
+
+    const steps = activeTab === 'classic' ? classicSteps : onlineSteps;
 
     return (
         <Modal
@@ -34,71 +55,62 @@ export const HowToPlayModal = ({ visible, onClose }: HowToPlayModalProps) => {
                         </TouchableOpacity>
                     </View>
 
+                    {/* Tab selector */}
+                    <View style={styles.tabBar}>
+                        <TouchableOpacity
+                            style={[styles.tab, activeTab === 'classic' && styles.tabActive]}
+                            onPress={() => setActiveTab('classic')}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={[styles.tabText, activeTab === 'classic' && styles.tabTextActive]}>
+                                {t.how_to_play_modal?.classic_tab}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.tab, activeTab === 'online' && styles.tabActive]}
+                            onPress={() => setActiveTab('online')}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={[styles.tabText, activeTab === 'online' && styles.tabTextActive]}>
+                                {t.how_to_play_modal?.online_tab}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
                     <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
 
-                        <View style={styles.stepContainer}>
-                            <View style={styles.stepIconContainer}>
-                                <Text style={styles.stepIcon}>⚙️</Text>
+                        {steps.map((step, index) => (
+                            <View key={index}>
+                                <View style={styles.stepContainer}>
+                                    <View style={styles.stepIconContainer}>
+                                        <Text style={styles.stepIcon}>{step.icon}</Text>
+                                    </View>
+                                    <View style={styles.stepTextContainer}>
+                                        <Text style={styles.stepTitle}>{step.title}</Text>
+                                        <Text style={styles.stepDescription}>{step.desc}</Text>
+                                    </View>
+                                </View>
+                                {index < steps.length - 1 && <View style={styles.connector} />}
                             </View>
-                            <View style={styles.stepTextContainer}>
-                                <Text style={styles.stepTitle}>{t.how_to_play_modal?.step1_title}</Text>
-                                <Text style={styles.stepDescription}>
-                                    {t.how_to_play_modal?.step1_desc}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.connector} />
-
-                        <View style={styles.stepContainer}>
-                            <View style={styles.stepIconContainer}>
-                                <Text style={styles.stepIcon}>🤫</Text>
-                            </View>
-                            <View style={styles.stepTextContainer}>
-                                <Text style={styles.stepTitle}>{t.how_to_play_modal?.step2_title}</Text>
-                                <Text style={styles.stepDescription}>
-                                    {t.how_to_play_modal?.step2_desc}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.connector} />
-
-                        <View style={styles.stepContainer}>
-                            <View style={styles.stepIconContainer}>
-                                <Text style={styles.stepIcon}>🗣️</Text>
-                            </View>
-                            <View style={styles.stepTextContainer}>
-                                <Text style={styles.stepTitle}>{t.how_to_play_modal?.step3_title}</Text>
-                                <Text style={styles.stepDescription}>
-                                    {t.how_to_play_modal?.step3_desc}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.connector} />
-
-                        <View style={styles.stepContainer}>
-                            <View style={styles.stepIconContainer}>
-                                <Text style={styles.stepIcon}>🗳️</Text>
-                            </View>
-                            <View style={styles.stepTextContainer}>
-                                <Text style={styles.stepTitle}>{t.how_to_play_modal?.step4_title}</Text>
-                                <Text style={styles.stepDescription}>
-                                    {t.how_to_play_modal?.step4_desc}
-                                </Text>
-                            </View>
-                        </View>
+                        ))}
 
                         <View style={styles.winConditions}>
                             <Text style={styles.winTitle}>{t.how_to_play_modal?.win_title}</Text>
                             <View style={styles.winRow}>
                                 <Text style={styles.winIcon}>😇</Text>
-                                <Text style={styles.winText}>{t.how_to_play_modal?.win_civilians_prefix}<Text style={{ fontWeight: 'bold', color: '#5B7FDB' }}>{t.how_to_play_modal?.win_civilians_bold}</Text>{t.how_to_play_modal?.win_civilians_suffix}</Text>
+                                <Text style={styles.winText}>
+                                    {t.how_to_play_modal?.win_civilians_prefix}
+                                    <Text style={{ fontWeight: 'bold', color: '#5B7FDB' }}>{t.how_to_play_modal?.win_civilians_bold}</Text>
+                                    {t.how_to_play_modal?.win_civilians_suffix}
+                                </Text>
                             </View>
                             <View style={styles.winRow}>
                                 <Text style={styles.winIcon}>😈</Text>
-                                <Text style={styles.winText}>{t.how_to_play_modal?.win_impostors_prefix}<Text style={{ fontWeight: 'bold', color: '#E53E3E' }}>{t.how_to_play_modal?.win_impostors_bold}</Text>{t.how_to_play_modal?.win_impostors_suffix}</Text>
+                                <Text style={styles.winText}>
+                                    {t.how_to_play_modal?.win_impostors_prefix}
+                                    <Text style={{ fontWeight: 'bold', color: '#E53E3E' }}>{t.how_to_play_modal?.win_impostors_bold}</Text>
+                                    {t.how_to_play_modal?.win_impostors_suffix}
+                                </Text>
                             </View>
                         </View>
 
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 16,
     },
     title: {
         fontSize: 24,
@@ -147,11 +159,40 @@ const styles = StyleSheet.create({
     closeButton: {
         padding: 4,
     },
+    tabBar: {
+        flexDirection: 'row',
+        backgroundColor: '#F7FAFC',
+        borderRadius: 12,
+        padding: 4,
+        marginBottom: 20,
+    },
+    tab: {
+        flex: 1,
+        paddingVertical: 8,
+        alignItems: 'center',
+        borderRadius: 10,
+    },
+    tabActive: {
+        backgroundColor: '#FFF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    tabText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#A0AEC0',
+    },
+    tabTextActive: {
+        color: '#2D3748',
+    },
     content: {
         marginBottom: 20,
     },
     contentContainer: {
-        paddingBottom: 20,
+        paddingBottom: 4,
     },
     stepContainer: {
         flexDirection: 'row',
@@ -176,7 +217,7 @@ const styles = StyleSheet.create({
         paddingTop: 2,
     },
     stepTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
         color: '#2D3748',
         marginBottom: 4,
@@ -188,7 +229,7 @@ const styles = StyleSheet.create({
     },
     connector: {
         width: 2,
-        height: 20,
+        height: 16,
         backgroundColor: '#E2E8F0',
         marginLeft: 24,
         marginVertical: 4,

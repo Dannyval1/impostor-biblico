@@ -13,6 +13,8 @@ import OnlineVotingScreen from '../screens/OnlineVotingScreen';
 import OnlineResultsScreen from '../screens/OnlineResultsScreen';
 import OnlineSetupScreen from '../screens/OnlineSetupScreen';
 import OnlineClueScreen from '../screens/OnlineClueScreen';
+import CategoriesScreen from '../screens/CategoriesScreen';
+import OnlineCategoriesScreen from '../screens/OnlineCategoriesScreen';
 import { RoomClosedModal } from '../components/RoomClosedModal';
 import { InsufficientPlayersModal } from '../components/InsufficientPlayersModal';
 import { RoundDecisionModal } from '../components/RoundDecisionModal';
@@ -33,6 +35,8 @@ export type RootStackParamList = {
     OnlineResults: undefined;
     OnlineSetup: undefined;
     OnlineClue: undefined;
+    Categories: undefined;
+    OnlineCategories: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -58,6 +62,8 @@ export default function AppNavigator() {
                 <Stack.Screen name="OnlineResults" component={OnlineResultsScreen} />
                 <Stack.Screen name="OnlineSetup" component={OnlineSetupScreen} />
                 <Stack.Screen name="OnlineClue" component={OnlineClueScreen} />
+                <Stack.Screen name="Categories" component={CategoriesScreen} />
+                <Stack.Screen name="OnlineCategories" component={OnlineCategoriesScreen} />
             </Stack.Navigator>
             <RoomClosedModal />
             <InsufficientPlayersModal />

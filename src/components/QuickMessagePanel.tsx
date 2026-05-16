@@ -27,15 +27,13 @@ const BASE_KEYS = [
     'already_said',
 ] as const;
 const ELIMINATED_KEYS = ['eliminated_angry', 'eliminated_innocent'] as const;
-const DYNAMIC_KEYS = ['dynamic_name'] as const;
 const MAX_FLOATERS = 5;
 
 export type QuickMessageVariant = 'lobby' | 'clues' | 'voting';
 
 type MessageKey =
     | (typeof BASE_KEYS)[number]
-    | (typeof ELIMINATED_KEYS)[number]
-    | (typeof DYNAMIC_KEYS)[number];
+    | (typeof ELIMINATED_KEYS)[number];
 
 function orderedKeys(variant: QuickMessageVariant, isEliminated: boolean): MessageKey[] {
     if (isEliminated) {
@@ -126,17 +124,6 @@ export function QuickMessagePanel({
     const qm = t.online.quick_messages;
 
     const keys = useMemo(() => orderedKeys(variant, isEliminated), [variant, isEliminated]);
-    const playerNameOptions = useMemo(() => {
-        const prefix = (qm as Record<string, string>).name_accusation_prefix ?? 'Es';
-        const roomPlayers = Object.values(gameState.room?.players || {}).filter(
-            p =>
-                typeof p?.name === 'string' &&
-                p.name.trim().length > 0 &&
-                p.isConnected !== false &&
-                p.isEliminated !== true
-        );
-        return roomPlayers.map(p => ({ id: `name:${p.id}`, label: `${prefix} ${p.name.trim()}` }));
-    }, [gameState.room?.players, qm]);
 
     const getMessageText = (key: string): string =>
         (qm as Record<string, string>)[key] ?? key;
@@ -149,11 +136,9 @@ export function QuickMessagePanel({
 
         Object.entries(messages).forEach(([id, msg]) => {
             if (seenMessagesRef.current.has(id)) return;
-            if (msg.playerId === gameState.playerId) {
-                seenMessagesRef.current.add(id);
-                return;
-            }
             seenMessagesRef.current.add(id);
+            if (msg.messageKey === 'free_text') return;
+            if (msg.playerId === gameState.playerId) return;
 
             const resolvedText = msg.messageText?.trim() || getMessageText(msg.messageKey);
             spawnFloater(id, resolvedText, msg.playerName);
@@ -266,57 +251,22 @@ export function QuickMessagePanel({
     };
 
     const panelInner = (
-        <View style={styles.panelRow}>
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.scrollHorizontal}
-                contentContainerStyle={styles.scrollContent}
-                onScrollBeginDrag={dismissArrow}
-            >
-                {keys.map(key => (
-                    <TouchableOpacity
-                        key={key}
-                        style={styles.msgBtn}
-                        onPress={() => handlePress(key)}
-                        activeOpacity={0.7}
-                    >
-                        <Text style={styles.msgText}>{getMessageText(key)}</Text>
-                    </TouchableOpacity>
-                ))}
-                {playerNameOptions.map(opt => (
-                    <TouchableOpacity
-                        key={opt.id}
-                        style={[styles.msgBtn, styles.nameMsgBtn]}
-                        onPress={() => handlePress('dynamic_name', opt.label)}
-                        activeOpacity={0.7}
-                    >
-                        <Text style={styles.msgText}>{opt.label}</Text>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
-            {showArrow && (
-                <Animated.Text
-                    pointerEvents="none"
-                    style={[
-                        styles.arrowHint,
-                        {
-                            opacity: arrowAnim.interpolate({ inputRange: [0, 1], outputRange: [0.5, 1] }),
-                            transform: [
-                                {
-                                    translateX: arrowAnim.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [0, 5],
-                                    }),
-                                },
-                            ],
-                        },
-                    ]}
+        <ScrollView
+            style={styles.gridScroll}
+            contentContainerStyle={styles.grid}
+            showsVerticalScrollIndicator={false}
+        >
+            {keys.map(key => (
+                <TouchableOpacity
+                    key={key}
+                    style={styles.msgBtn}
+                    onPress={() => handlePress(key)}
+                    activeOpacity={0.7}
                 >
-                    ›
-                </Animated.Text>
-            )}
-        </View>
+                    <Text style={styles.msgText} numberOfLines={2}>{getMessageText(key)}</Text>
+                </TouchableOpacity>
+            ))}
+        </ScrollView>
     );
 
     /** Burbujas del lobby: ancladas al borde inferior de pantalla (como cuando el panel estaba sobre el footer) */
@@ -445,7 +395,6 @@ const styles = StyleSheet.create({
         maxWidth: '100%',
         alignSelf: 'stretch',
         flexGrow: 0,
-        maxHeight: 72,
     },
     wrapper: {
         alignItems: 'center',
@@ -457,57 +406,37 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.55)',
         borderRadius: 16,
         marginBottom: 6,
-        maxWidth: 340,
+        maxWidth: 360,
         overflow: 'hidden',
         alignSelf: 'center',
-        flexGrow: 0,
-        flexShrink: 1,
-        maxHeight: 72,
+        width: '92%',
     },
-    panelRow: {
+    gridScroll: {
+        maxHeight: 180,
+    },
+    grid: {
         flexDirection: 'row',
-        alignItems: 'center',
-        flexGrow: 0,
-        flexShrink: 1,
-        maxHeight: 68,
-    },
-    scrollHorizontal: {
-        flexGrow: 0,
-        flexShrink: 1,
-        maxHeight: 68,
-    },
-    arrowHint: {
-        color: '#FFF',
-        fontSize: 28,
-        fontWeight: '700',
-        paddingHorizontal: 6,
-        paddingVertical: 4,
-    },
-    scrollContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flexGrow: 0,
-        paddingHorizontal: 8,
-        paddingVertical: 8,
+        flexWrap: 'wrap',
+        padding: 8,
         gap: 6,
     },
     msgBtn: {
         backgroundColor: 'rgba(255,255,255,0.15)',
         borderRadius: 20,
-        paddingHorizontal: 14,
+        paddingHorizontal: 10,
         paddingVertical: 8,
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.2)',
-        alignSelf: 'center',
+        width: '31%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 40,
     },
     msgText: {
         color: '#FFF',
         fontSize: 13,
         fontWeight: '600',
-    },
-    nameMsgBtn: {
-        borderColor: 'rgba(91,127,219,0.65)',
-        backgroundColor: 'rgba(91,127,219,0.2)',
+        textAlign: 'center',
     },
     toggleBtn: {
         backgroundColor: 'rgba(0,0,0,0.4)',
@@ -558,6 +487,9 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(255,255,255,0.2)',
         maxWidth: 280,
         overflow: 'visible',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     floaterText: {
         color: '#FFF',

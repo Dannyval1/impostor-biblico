@@ -1,22 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Switch } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../hooks/useTranslation';
 import { useOnlineGame } from '../context/OnlineGameContext';
 import { useGame } from '../context/GameContext';
-import { usePurchase } from '../context/PurchaseContext';
-import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL, ONLINE_STANDARD_CATEGORY_IDS } from '../utils/categoryMetadata';
-import { Category, CustomCategory } from '../types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { isPremiumCategory } from '../data/categories';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
-import { GameModal } from '../components/GameModal';
-
-function isCustomCategoryId(id: Category): boolean {
-    return !ONLINE_STANDARD_CATEGORY_IDS.has(id as string);
-}
 
 type OnlineSetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'OnlineSetup'>;
@@ -35,10 +26,6 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
     const { t } = useTranslation();
     const { gameState, updateSettings, startGame, settingsDraft, updateSettingsDraft } = useOnlineGame();
     const { state: globalState } = useGame();
-    const { isCategoryUnlockedByAd } = usePurchase();
-
-    const [premiumModal, setPremiumModal] = useState<'migrated' | 'paywall' | null>(null);
-    const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
 
     // Read settings from the persistent draft in context (survives back-navigation)
     const impostorCount = settingsDraft?.impostorCount ?? 1;
@@ -73,27 +60,15 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
         }
     }, [gameState.roomCode, gameState.room?.status, navigation]);
 
-    const mergedCustomDefs = useMemo(() => {
-        const map = new Map<string, CustomCategory>();
-        for (const c of settingsDraft?.customCategories || gameState.room?.settings.customCategories || []) {
-            map.set(c.id, c);
-        }
-        for (const c of globalState.customCategories || []) {
-            if (!map.has(c.id)) map.set(c.id, c);
-        }
-        return Array.from(map.values());
-    }, [settingsDraft?.customCategories, gameState.room?.settings.customCategories, globalState.customCategories]);
-
     const handleSaveAndStart = async () => {
         if (selectedCategories.length === 0) {
             Alert.alert(t.common.error, t.setup.category_required_alert);
             return;
         }
+        const draftCustomDefs = settingsDraft?.customCategories || [];
         const hasPlayableCategory = selectedCategories.some(cat => {
-            const id = cat as string;
-            const def = mergedCustomDefs.find(c => c.id === id);
-            if (def) return def.words.length > 0;
-            return ONLINE_STANDARD_CATEGORY_IDS.has(id);
+            const def = draftCustomDefs.find(c => c.id === cat);
+            return def ? def.words.length > 0 : true; // standard categories are always playable
         });
         if (!hasPlayableCategory) {
             Alert.alert(t.common.error, t.setup.category_required_alert);
@@ -101,7 +76,7 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
         }
 
         try {
-            const customDefsToSave = mergedCustomDefs.filter(c => selectedCategories.includes(c.id as Category));
+            const customDefsToSave = draftCustomDefs.filter(c => selectedCategories.includes(c.id as any));
             const settingsPayload = {
                 impostorCount,
                 gameDuration,
@@ -119,43 +94,12 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
         }
     };
 
-    const toggleCategory = (categoryId: Category) => {
-        if (selectedCategories.includes(categoryId)) {
-            const nextCategories = selectedCategories.filter(id => id !== categoryId);
-            const nextCustom = isCustomCategoryId(categoryId)
-                ? (settingsDraft?.customCategories || []).filter(c => c.id !== categoryId)
-                : (settingsDraft?.customCategories || []);
-            updateSettingsDraft({ categories: nextCategories, customCategories: nextCustom });
-        } else {
-            const nextCategories = [...selectedCategories, categoryId];
-            let nextCustom = settingsDraft?.customCategories || [];
-            if (isCustomCategoryId(categoryId)) {
-                const def = mergedCustomDefs.find(c => c.id === categoryId);
-                if (def && !nextCustom.some(c => c.id === categoryId)) {
-                    nextCustom = [...nextCustom, def];
-                }
-            }
-            updateSettingsDraft({ categories: nextCategories, customCategories: nextCustom });
-        }
-    };
-
     if (!gameState.room) {
         return <OnlineRoomPlaceholder />;
     }
 
     const playerCount = Object.keys(gameState.room.players).length;
     const maxImpostors = Math.max(1, Math.min(2, Math.floor(playerCount / 2)));
-
-    const biblicalSelectedCount =
-        CATEGORIES_BIBLICAL.filter(c => selectedCategories.includes(c.id)).length +
-        mergedCustomDefs.filter(
-            c => selectedCategories.includes(c.id as Category) && (c.type === 'biblical' || !c.type)
-        ).length;
-    const genericSelectedCount =
-        CATEGORIES_GENERAL.filter(c => selectedCategories.includes(c.id)).length +
-        mergedCustomDefs.filter(
-            c => selectedCategories.includes(c.id as Category) && c.type === 'general'
-        ).length;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -251,119 +195,21 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
 
                 {/* Categories */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t.setup.categories}</Text>
-
-                    <View style={styles.tabContainer}>
-                        <TouchableOpacity
-                            style={[styles.tab, activeTab === 'biblical' && styles.activeTab]}
-                            onPress={() => setActiveTab('biblical')}
-                        >
-                            <Text style={[styles.tabText, activeTab === 'biblical' && styles.activeTabText]}>{t.setup.biblical_tab}</Text>
-                            <View style={styles.tabBadge}>
-                                <Text style={styles.tabBadgeText}>{biblicalSelectedCount}</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.tab, activeTab === 'general' && styles.activeTab]}
-                            onPress={() => setActiveTab('general')}
-                        >
-                            <Text style={[styles.tabText, activeTab === 'general' && styles.activeTabText]}>{t.setup.general_tab}</Text>
-                            <View style={styles.tabBadge}>
-                                <Text style={styles.tabBadgeText}>{genericSelectedCount}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.categoriesGrid}>
-                        {(activeTab === 'biblical' ? CATEGORIES_BIBLICAL : CATEGORIES_GENERAL).map(category => {
-                            const isSelected = selectedCategories.includes(category.id);
-
-                            const isPremium = isPremiumCategory(category.id);
-                            const room = gameState.room;
-                            const isOriginalHost = room?.originalHostId === gameState.playerId;
-                            const isPremiumRoom = room?.settings.isPremiumRoom;
-
-                            // Migrated free host: can't add new premium categories not in snapshot
-                            const snapshot = room?.premiumCategoriesSnapshot || [];
-                            const lockedForMigratedHost = isPremium && isPremiumRoom && !isOriginalHost && !snapshot.includes(category.id) && !isSelected;
-                            // Misma regla que modo clásico: sala premium, compra, o categoría desbloqueada con anuncio
-                            const canUsePremiumHere =
-                                isPremiumRoom ||
-                                globalState.isPremium ||
-                                (isPremium && isCategoryUnlockedByAd(category.id));
-                            const isLocked = (isPremium && !canUsePremiumHere) || lockedForMigratedHost;
-
-                            return (
-                                <TouchableOpacity
-                                    key={category.id}
-                                    style={[
-                                        styles.categoryCard,
-                                        { backgroundColor: isLocked ? '#E2E8F0' : CATEGORY_COLORS[category.id] },
-                                        isSelected && styles.categoryCardSelected
-                                    ]}
-                                    onPress={() => {
-                                        if (isLocked) {
-                                            setPremiumModal(lockedForMigratedHost ? 'migrated' : 'paywall');
-                                            return;
-                                        }
-                                        toggleCategory(category.id);
-                                    }}
-                                    activeOpacity={0.8}
-                                >
-                                    <Image source={CATEGORY_IMAGES[category.id]} style={[styles.categoryImage, isLocked && { opacity: 0.3 }]} resizeMode="contain" />
-                                    {!isSelected && !isLocked && <View style={styles.inactiveOverlay} />}
-                                    <View style={styles.categoryNamePill}>
-                                        <Text style={styles.categoryNameText} numberOfLines={2}>
-                                            {t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.label}
-                                        </Text>
-                                    </View>
-                                    {isSelected && (
-                                        <View style={styles.categoryCheckBadge}>
-                                            <Ionicons name="checkmark" size={12} color="#FFF" />
-                                        </View>
-                                    )}
-                                    {isLocked && <Image source={require('../../assets/blocked_level_1.png')} style={styles.lockedIcon} resizeMode="contain" />}
-                                </TouchableOpacity>
-                            );
-                        })}
-
-                        {mergedCustomDefs
-                            .filter(c =>
-                                activeTab === 'biblical'
-                                    ? c.type === 'biblical' || !c.type
-                                    : c.type === 'general'
-                            )
-                            .map(category => {
-                                const isSelected = selectedCategories.includes(category.id as Category);
-                                return (
-                                    <TouchableOpacity
-                                        key={category.id}
-                                        style={[
-                                            styles.categoryCard,
-                                            { backgroundColor: '#A0AEC0' },
-                                            isSelected && styles.categoryCardSelected,
-                                        ]}
-                                        onPress={() => toggleCategory(category.id as Category)}
-                                        activeOpacity={0.8}
-                                    >
-                                        <View style={styles.customIconContainer}>
-                                            <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
-                                        </View>
-                                        {!isSelected && <View style={styles.inactiveOverlay} />}
-                                        <View style={styles.categoryNamePill}>
-                                            <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                {category.name} ({category.words.length})
-                                            </Text>
-                                        </View>
-                                        {isSelected && (
-                                            <View style={styles.categoryCheckBadge}>
-                                                <Ionicons name="checkmark" size={12} color="#FFF" />
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
-                                );
-                            })}
-                    </View>
+                    <TouchableOpacity
+                        style={styles.categoriesRow}
+                        onPress={() => navigation.navigate('OnlineCategories')}
+                        activeOpacity={0.7}
+                    >
+                        <Text style={[styles.sectionTitle, { marginBottom: 0 }]}>{t.setup.categories}</Text>
+                        <View style={styles.categoriesTriggerRight}>
+                            {selectedCategories.length > 0 && (
+                                <View style={styles.categoriesCountBadge}>
+                                    <Text style={styles.categoriesCountText}>{selectedCategories.length}</Text>
+                                </View>
+                            )}
+                            <Ionicons name="chevron-forward" size={20} color="#666" />
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ height: 40 }} />
             </ScrollView>
@@ -409,18 +255,6 @@ export default function OnlineSetupScreen({ navigation }: OnlineSetupScreenProps
                 })()}
             </View>
 
-            <GameModal
-                visible={premiumModal !== null}
-                type="info"
-                title={t.online.premium_category_modal_title}
-                message={
-                    premiumModal === 'migrated'
-                        ? t.online.premium_migrated_category_note
-                        : t.setup.premium_category_alert
-                }
-                buttonText={t.common.ok}
-                onClose={() => setPremiumModal(null)}
-            />
         </SafeAreaView>
     );
 }
@@ -452,6 +286,35 @@ const styles = StyleSheet.create({
     },
     section: {
         marginBottom: 25,
+    },
+    categoriesRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#F7FAFF',
+        borderRadius: 14,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+    },
+    categoriesTriggerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    categoriesCountBadge: {
+        backgroundColor: '#5B7FDB',
+        borderRadius: 12,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        minWidth: 24,
+        alignItems: 'center',
+    },
+    categoriesCountText: {
+        color: '#FFF',
+        fontSize: 13,
+        fontWeight: 'bold',
     },
     sectionTitle: {
         fontSize: 18,
@@ -547,153 +410,6 @@ const styles = StyleSheet.create({
     },
     durationTabTextSelected: {
         color: '#FFF',
-    },
-    // Categories
-    tabContainer: {
-        flexDirection: 'row',
-        backgroundColor: '#F0F4FF',
-        borderRadius: 12,
-        padding: 4,
-        marginBottom: 15,
-    },
-    tab: {
-        flex: 1,
-        paddingVertical: 10,
-        alignItems: 'center',
-        borderRadius: 10,
-        position: 'relative',
-    },
-    activeTab: {
-        backgroundColor: '#FFF',
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    tabText: {
-        fontWeight: '600',
-        color: '#718096',
-    },
-    activeTabText: {
-        color: '#5B7FDB',
-    },
-    tabBadge: {
-        position: 'absolute',
-        top: 2,
-        right: 6,
-        backgroundColor: '#E53E3E',
-        borderRadius: 10,
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        minWidth: 20,
-        alignItems: 'center',
-    },
-    tabBadgeText: {
-        color: '#FFF',
-        fontSize: 10,
-        fontWeight: 'bold',
-    },
-    customIconContainer: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: 'rgba(255,255,255,0.3)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    customIconText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#FFF',
-    },
-    categoriesGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginTop: 10,
-    },
-    categoryCard: {
-        width: '48%',
-        aspectRatio: 1,
-        borderRadius: 20,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        marginBottom: 40,
-        position: 'relative',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-        elevation: 4,
-        borderWidth: 2,
-        borderColor: 'transparent',
-    },
-    categoryCardSelected: {
-        borderColor: '#5B7FDB',
-        borderWidth: 3,
-        transform: [{ scale: 1.02 }],
-    },
-    inactiveOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(255, 255, 255, 0.4)',
-        borderRadius: 20,
-        zIndex: 1,
-    },
-    categoryImage: {
-        width: '90%',
-        height: '90%',
-        position: 'absolute',
-        top: 20,
-    },
-    categoryNamePill: {
-        position: 'absolute',
-        bottom: -20,
-        backgroundColor: '#FFF',
-        paddingVertical: 6,
-        paddingHorizontal: 10,
-        borderRadius: 12,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-        zIndex: 10,
-        minHeight: 44,
-    },
-    categoryNameText: {
-        fontSize: 10,
-        fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center',
-    },
-    categoryCheckBadge: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-        backgroundColor: '#48BB78',
-        borderRadius: 10,
-        width: 20,
-        height: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 3,
-        borderWidth: 2,
-        borderColor: '#FFF',
-    },
-    lockedIcon: {
-        position: 'absolute',
-        width: 30,
-        height: 30,
-        top: 8,
-        left: 8,
-        opacity: 0.8,
-        zIndex: 3,
     },
     footer: {
         padding: 20,
