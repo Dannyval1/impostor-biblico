@@ -218,6 +218,14 @@ export default function OnlineLobbyScreen() {
         setLeaveModalVisible(true);
     };
 
+    const goBackFromOnlineLobby = () => {
+        if (navigation.canGoBack()) {
+            navigation.goBack();
+            return;
+        }
+        navigation.replace('Home');
+    };
+
     const shareCode = async () => {
         const code = gameState.roomCode || '';
         try {
@@ -400,7 +408,7 @@ export default function OnlineLobbyScreen() {
                     </ScrollView>
                 </View>
 
-                <View style={[styles.footer, P && { backgroundColor: P.bg, borderTopWidth: 1, borderTopColor: P.goldSubtle }]}>
+                <View style={[styles.footer, P && { backgroundColor: P.bg }]}>
                     {gameState.isHost ? (
                         <View>
                             <TouchableOpacity
@@ -487,7 +495,7 @@ export default function OnlineLobbyScreen() {
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                        <TouchableOpacity onPress={goBackFromOnlineLobby} style={styles.backButton}>
                             <Ionicons name="arrow-back" size={24} color="#FFF" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>{t.setup.online}</Text>

@@ -172,8 +172,8 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                 playSuccess();
                 setGameFinished(true);
                 setGamePhase('results');
-                // Show post-game paywall after 1.5s for non-premium users
-                if (!isPremium) setTimeout(() => setShowPostGamePaywall(true), 1500);
+                // Show post-game paywall on game 1, 5, 9, 13... (every 4 games)
+                if (!isPremium && state.gamesPlayed % 4 === 1) setTimeout(() => setShowPostGamePaywall(true), 1500);
             } else {
                 const remaining = state.settings.impostorCount - newEliminatedImpostors.length;
                 showGameModal(
@@ -210,8 +210,8 @@ export default function VotingScreen({ navigation }: VotingScreenProps) {
                         playFailure();
                         setGameFinished(true);
                         setGamePhase('results');
-                        // Show post-game paywall after 1.5s for non-premium users
-                        if (!isPremium) setTimeout(() => setShowPostGamePaywall(true), 1500);
+                        // Show post-game paywall on game 1, 5, 9, 13... (every 4 games)
+                        if (!isPremium && state.gamesPlayed % 4 === 1) setTimeout(() => setShowPostGamePaywall(true), 1500);
                         return;
                     }
 

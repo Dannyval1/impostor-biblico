@@ -29,6 +29,7 @@ interface RewardedCategoryModalProps {
     onBuyPremium: () => void;
     onClose: () => void;
     existingUnlockCategoryLabel?: string | null;
+    asOverlay?: boolean;
 }
 
 function formatCountdown(ms: number): string {
@@ -48,6 +49,7 @@ export function RewardedCategoryModal({
     onBuyPremium,
     onClose,
     existingUnlockCategoryLabel,
+    asOverlay = false,
 }: RewardedCategoryModalProps) {
     const { t } = useTranslation();
     const { rewardedUnlock, isCategoryUnlockedByAd, getAdUnlockStatus, getCooldownRemaining } = usePurchase();
@@ -232,57 +234,70 @@ export function RewardedCategoryModal({
         );
     };
 
+    const sheet = (
+        <Animated.View style={[styles.sheet, { transform: [{ translateY: slideAnim }] }]}>
+            <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                <Ionicons name="close" size={22} color="#718096" />
+            </TouchableOpacity>
+
+            <View style={styles.lockIconWrapper}>
+                <Ionicons
+                    name={adStatus === 'active' ? 'lock-open' : 'lock-closed'}
+                    size={32}
+                    color="#FFD700"
+                />
+            </View>
+
+            <Text style={styles.title}>{tr.title}</Text>
+            <Text style={styles.categoryName}>"{categoryLabel}"</Text>
+            <Text style={styles.subtitle}>{tr.subtitle}</Text>
+
+            {renderStatusBlock()}
+
+            {/* Show OR divider only when there's an ad option — not on full paywall states */}
+            {adStatus !== 'premium' && adStatus !== 'global_maxed' && (
+                <>
+                    <View style={styles.dividerRow}>
+                        <View style={styles.divider} />
+                        <Text style={styles.orText}>{tr.or}</Text>
+                        <View style={styles.divider} />
+                    </View>
+
+                    <ScaleButton style={styles.premiumBtn} onPress={onBuyPremium}>
+                        <Ionicons name="diamond" size={18} color="#1A202C" style={{ marginRight: 8 }} />
+                        <Text style={styles.premiumBtnText}>{tr.buy_premium}</Text>
+                    </ScaleButton>
+
+                    <Text style={styles.premiumDesc}>{tr.buy_premium_desc}</Text>
+                </>
+            )}
+
+            {/* On global_maxed: show premium button directly without the OR divider */}
+            {adStatus === 'global_maxed' && (
+                <>
+                    <ScaleButton style={[styles.premiumBtn, { marginTop: 4 }]} onPress={onBuyPremium}>
+                        <Ionicons name="diamond" size={18} color="#1A202C" style={{ marginRight: 8 }} />
+                        <Text style={styles.premiumBtnText}>{tr.buy_premium}</Text>
+                    </ScaleButton>
+                    <Text style={styles.premiumDesc}>{tr.buy_premium_desc}</Text>
+                </>
+            )}
+        </Animated.View>
+    );
+
+    if (asOverlay) {
+        if (!visible) return null;
+        return (
+            <View style={styles.overlayAbsolute}>
+                {sheet}
+            </View>
+        );
+    }
+
     return (
         <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
             <View style={styles.overlay}>
-                <Animated.View style={[styles.sheet, { transform: [{ translateY: slideAnim }] }]}>
-                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                        <Ionicons name="close" size={22} color="#718096" />
-                    </TouchableOpacity>
-
-                    <View style={styles.lockIconWrapper}>
-                        <Ionicons
-                            name={adStatus === 'active' ? 'lock-open' : 'lock-closed'}
-                            size={32}
-                            color="#FFD700"
-                        />
-                    </View>
-
-                    <Text style={styles.title}>{tr.title}</Text>
-                    <Text style={styles.categoryName}>"{categoryLabel}"</Text>
-                    <Text style={styles.subtitle}>{tr.subtitle}</Text>
-
-                    {renderStatusBlock()}
-
-                    {/* Show OR divider only when there's an ad option — not on full paywall states */}
-                    {adStatus !== 'premium' && adStatus !== 'global_maxed' && (
-                        <>
-                            <View style={styles.dividerRow}>
-                                <View style={styles.divider} />
-                                <Text style={styles.orText}>{tr.or}</Text>
-                                <View style={styles.divider} />
-                            </View>
-
-                            <ScaleButton style={styles.premiumBtn} onPress={onBuyPremium}>
-                                <Ionicons name="diamond" size={18} color="#1A202C" style={{ marginRight: 8 }} />
-                                <Text style={styles.premiumBtnText}>{tr.buy_premium}</Text>
-                            </ScaleButton>
-
-                            <Text style={styles.premiumDesc}>{tr.buy_premium_desc}</Text>
-                        </>
-                    )}
-
-                    {/* On global_maxed: show premium button directly without the OR divider */}
-                    {adStatus === 'global_maxed' && (
-                        <>
-                            <ScaleButton style={[styles.premiumBtn, { marginTop: 4 }]} onPress={onBuyPremium}>
-                                <Ionicons name="diamond" size={18} color="#1A202C" style={{ marginRight: 8 }} />
-                                <Text style={styles.premiumBtnText}>{tr.buy_premium}</Text>
-                            </ScaleButton>
-                            <Text style={styles.premiumDesc}>{tr.buy_premium_desc}</Text>
-                        </>
-                    )}
-                </Animated.View>
+                {sheet}
             </View>
         </Modal>
     );
@@ -293,6 +308,17 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.55)',
         justifyContent: 'flex-end',
+    },
+    overlayAbsolute: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.55)',
+        justifyContent: 'flex-end',
+        borderRadius: 24,
+        overflow: 'hidden',
     },
     sheet: {
         backgroundColor: '#FFFFFF',

@@ -19,6 +19,7 @@ interface RewardedCategoryModalProps {
     onBuyPremium: () => void;
     onClose: () => void;
     existingUnlockCategoryLabel?: string | null;
+    asOverlay?: boolean;
 }
 
 export function RewardedCategoryModal({

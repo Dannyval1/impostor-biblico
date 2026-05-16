@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
     View, Text, StyleSheet, TouchableOpacity, ScrollView,
-    Image, Animated, ActivityIndicator
+    Image, Animated, ActivityIndicator, NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -14,19 +14,58 @@ import { EmojiReactionBar } from '../components/EmojiReactionBar';
 import { getWordCategoryDisplayLabel } from '../utils/wordCategoryLabel';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
 import { EliminatedSpectatorHeader } from '../components/EliminatedSpectatorHeader';
+import { PostGamePaywallModal } from '../components/PostGamePaywallModal';
+import { usePurchase } from '../context/PurchaseContext';
+import { ChatPanel } from '../components/ChatPanel';
 
 export default function OnlineResultsScreen() {
     const navigation = useNavigation<any>();
     const { gameState, nextRound, resetToLobby, submitEliminationChoice } = useOnlineGame();
     const { t } = useTranslation();
-    const { setOnlineGameActive } = useGame()!;
+    const { setOnlineGameActive, state, incrementGamesPlayed } = useGame()!;
+    const { isPremium, isLoading: isPremiumLoading } = usePurchase();
+    const [showPostGamePaywall, setShowPostGamePaywall] = useState(false);
+    const paywallTriggeredRef = useRef(false);
 
     useEffect(() => {
         setOnlineGameActive(false);
     }, []);
 
+    useEffect(() => {
+        if (isPremiumLoading || isPremium || paywallTriggeredRef.current) return;
+        paywallTriggeredRef.current = true;
+        const nextCount = state.gamesPlayed + 1;
+        incrementGamesPlayed();
+        if (nextCount % 4 === 1) {
+            const timer = setTimeout(() => setShowPostGamePaywall(true), 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [isPremiumLoading, isPremium]);
+
     const room = gameState.room;
     const myId = gameState.playerId!;
+
+    const scrollRef = useRef<ScrollView>(null);
+    const [isAtBottom, setIsAtBottom] = useState(false);
+    const currentChatCount = useMemo(() => {
+        if (!room?.messages) return 0;
+        return Object.values(room.messages).filter(m => m.messageKey === 'free_text').length;
+    }, [room?.messages]);
+    const [chatCountAtBottom, setChatCountAtBottom] = useState(() => currentChatCount);
+
+    useEffect(() => {
+        if (isAtBottom) setChatCountAtBottom(currentChatCount);
+    }, [isAtBottom, currentChatCount]);
+
+    const newChatCount = currentChatCount - chatCountAtBottom;
+    const showChatArrow = !isAtBottom && newChatCount > 0;
+
+    const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
+        setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - 80);
+    };
+
+    const scrollToBottom = () => scrollRef.current?.scrollToEnd({ animated: true });
 
     const scaleAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -115,6 +154,7 @@ export default function OnlineResultsScreen() {
     const iWon = (isNotEnoughPlayers || isTechnicalTie) ? false : (amIImpostor ? impostorsWon : civiliansWon);
 
     const choiceEligible = players.filter(p => !p.isEliminated && p.isConnected !== false);
+    const choicePendingPlayers = choiceEligible.filter(p => !room.eliminationChoiceVotes?.[p.id]);
     const myEliminationChoice = room.eliminationChoiceVotes?.[myId];
     const iCanVoteEliminationChoice =
         isEliminationChoicePhase && choiceEligible.some(p => p.id === myId);
@@ -138,6 +178,7 @@ export default function OnlineResultsScreen() {
     const sortedPlayers = [...players].sort((a, b) =>
         (voteCounts[b.id] || 0) - (voteCounts[a.id] || 0)
     );
+    const tieDetails = room.voteTieDetails || [];
 
     const impostors = players.filter(p => impostorIds.includes(p.id));
 
@@ -183,7 +224,13 @@ export default function OnlineResultsScreen() {
                 />
             )}
             <View style={styles.resultsLayer}>
-            <ScrollView style={styles.resultsScroll} contentContainerStyle={styles.scroll}>
+            <ScrollView
+                ref={scrollRef}
+                style={styles.resultsScroll}
+                contentContainerStyle={styles.scroll}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+            >
 
                 <Animated.View style={[
                     styles.resultCard,
@@ -199,6 +246,21 @@ export default function OnlineResultsScreen() {
                 </Animated.View>
 
                 <Animated.View style={{ opacity: fadeAnim }}>
+                    {!isEliminationChoicePhase && (isTieResult || isTechnicalTie) && (
+                        <View style={styles.section}>
+                            <Text style={styles.sectionLabel}>{t.online.vote_tie_title}</Text>
+                            <View style={styles.tieDetailsCard}>
+                                {tieDetails.length > 0 ? tieDetails.map(item => (
+                                    <Text key={item.playerId} style={styles.tieDetailText}>
+                                        {item.name} · {t.online.vote_tie_votes.replace('{count}', String(item.votes))}
+                                    </Text>
+                                )) : (
+                                    <Text style={styles.tieDetailText}>{t.online.vote_tie_no_votes}</Text>
+                                )}
+                            </View>
+                        </View>
+                    )}
+
                     {!hideRoleReveal && !isTieResult && eliminatedPlayer && (
                         <View style={styles.section}>
                             <Text style={styles.sectionLabel}>
@@ -310,6 +372,8 @@ export default function OnlineResultsScreen() {
 
                     <EmojiReactionBar />
 
+                    <ChatPanel onUpgradePress={() => navigation.navigate('Paywall')} />
+
                     <View style={styles.footer}>
                         {isEliminationChoicePhase && (
                             <View style={styles.choiceTimerRow}>
@@ -323,7 +387,12 @@ export default function OnlineResultsScreen() {
                             isEliminationSpectator ? (
                                 <View style={styles.waitingHostBox}>
                                     <Text style={styles.waitingHostTitle}>{t.online.you_are_eliminated}</Text>
-                                    <Text style={styles.waitingHostHint}>{t.online.spectator_vote_hint}</Text>
+                                    <Text style={styles.waitingHostHint}>
+                                        {choicePendingPlayers.length > 0
+                                            ? (t.online.elimination_choice_missing_players ?? 'Falta decidir: {players}')
+                                                .replace('{players}', choicePendingPlayers.map(p => p.name.trim()).join(', '))
+                                            : t.online.spectator_vote_hint}
+                                    </Text>
                                 </View>
                             ) : iCanVoteEliminationChoice && !myEliminationChoice ? (
                                 <View style={styles.eliminationChoiceRow}>
@@ -354,7 +423,12 @@ export default function OnlineResultsScreen() {
                             ) : (
                                 <View style={styles.waitingHostBox}>
                                     <Text style={styles.waitingHostTitle}>{t.online.elimination_choice_waiting}</Text>
-                                    <Text style={styles.waitingHostHint}>{t.online.elimination_choice_waiting_hint}</Text>
+                                    <Text style={styles.waitingHostHint}>
+                                        {choicePendingPlayers.length > 0
+                                            ? (t.online.elimination_choice_missing_players ?? 'Falta decidir: {players}')
+                                                .replace('{players}', choicePendingPlayers.map(p => p.name.trim()).join(', '))
+                                            : t.online.elimination_choice_waiting_hint}
+                                    </Text>
                                 </View>
                             )
                         ) : gameState.isHost ? (
@@ -387,7 +461,28 @@ export default function OnlineResultsScreen() {
                     </View>
                 </Animated.View>
             </ScrollView>
+
+            {showChatArrow && (
+                <View style={styles.chatArrowContainer} pointerEvents="box-none">
+                    <TouchableOpacity style={styles.chatArrow} onPress={scrollToBottom} activeOpacity={0.85}>
+                        <Ionicons name="chatbubble-ellipses" size={13} color="#FFF" />
+                        <Text style={styles.chatArrowText}>{t.online.chat_scroll_hint}</Text>
+                        <View style={styles.chatArrowBadge}>
+                            <Text style={styles.chatArrowBadgeText}>{newChatCount}</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )}
             </View>
+
+            <PostGamePaywallModal
+                visible={showPostGamePaywall}
+                onClose={() => setShowPostGamePaywall(false)}
+                onBuyPremium={() => {
+                    setShowPostGamePaywall(false);
+                    navigation.navigate('Paywall');
+                }}
+            />
         </SafeAreaView>
     );
 }
@@ -427,6 +522,20 @@ const styles = StyleSheet.create({
         letterSpacing: 1.5,
         textTransform: 'uppercase',
         marginBottom: 10,
+    },
+    tieDetailsCard: {
+        backgroundColor: 'rgba(255,255,255,0.07)',
+        borderRadius: 14,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: 'rgba(246,224,94,0.25)',
+        gap: 6,
+    },
+    tieDetailText: {
+        color: '#E2E8F0',
+        fontSize: 14,
+        fontWeight: '700',
+        textAlign: 'center',
     },
     eliminatedCard: {
         flexDirection: 'row',
@@ -607,5 +716,45 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '900',
         fontVariant: ['tabular-nums'],
+    },
+    chatArrowContainer: {
+        position: 'absolute',
+        bottom: 24,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        pointerEvents: 'box-none',
+    },
+    chatArrow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        backgroundColor: '#5B7FDB',
+        borderRadius: 20,
+        paddingHorizontal: 14,
+        paddingVertical: 9,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.35,
+        shadowRadius: 6,
+        elevation: 6,
+    },
+    chatArrowText: {
+        color: '#FFF',
+        fontSize: 13,
+        fontWeight: '700',
+    },
+    chatArrowBadge: {
+        backgroundColor: 'rgba(255,255,255,0.3)',
+        borderRadius: 10,
+        minWidth: 20,
+        paddingHorizontal: 5,
+        paddingVertical: 1,
+        alignItems: 'center',
+    },
+    chatArrowBadgeText: {
+        color: '#FFF',
+        fontSize: 11,
+        fontWeight: '800',
     },
 });

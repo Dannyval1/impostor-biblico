@@ -16,6 +16,7 @@ import { QuickMessagePanel } from '../components/QuickMessagePanel';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
 import { GameModal } from '../components/GameModal';
 import { EliminatedSpectatorHeader } from '../components/EliminatedSpectatorHeader';
+import { ChatPanel } from '../components/ChatPanel';
 import { getRoundAnswerEntries } from '../utils/onlineRoundAnswers';
 import { useEliminationIntro } from '../hooks/useEliminationIntro';
 
@@ -547,6 +548,11 @@ export default function OnlineClueScreen() {
                     <QuickMessagePanel variant="clues" isEliminated={isSpectator} />
                 )}
                 {!(isSpectator && introActive) && <EmojiReactionBar />}
+                <ChatPanel
+                    defaultExpanded={false}
+                    style={{ marginHorizontal: 12, marginBottom: 4 }}
+                    onUpgradePress={() => navigation.navigate('Paywall')}
+                />
             </KeyboardAvoidingView>
             </View>
             {isSpectator && introActive && (
@@ -558,7 +564,7 @@ export default function OnlineClueScreen() {
                     <Text style={styles.eliminationIntroTitle}>{t.online.you_are_eliminated}</Text>
                 </Animated.View>
             )}
-            {tieNoticeVisible && !introActive && (
+            {tieNoticeVisible && (
                 <View style={styles.tieOverlay} pointerEvents="auto">
                     <View style={styles.tieCard}>
                         <Ionicons name="git-compare-outline" size={48} color="#F6E05E" />

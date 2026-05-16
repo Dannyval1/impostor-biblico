@@ -126,3 +126,22 @@ export const markOnlineOnboardingSeen = async (): Promise<void> => {
         await AsyncStorage.setItem(ONLINE_ONBOARDING_SEEN_KEY, 'true');
     } catch { /* silent */ }
 };
+
+// ─── Play hint ──────────────────────────────────────────────────────────────
+
+const PLAY_HINT_SEEN_KEY = '@impostor_play_hint_seen';
+
+export const hasSeenPlayHint = async (): Promise<boolean> => {
+    try {
+        const value = await AsyncStorage.getItem(PLAY_HINT_SEEN_KEY);
+        return value === 'true';
+    } catch {
+        return false;
+    }
+};
+
+export const markPlayHintSeen = async (): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(PLAY_HINT_SEEN_KEY, 'true');
+    } catch { /* silent */ }
+};

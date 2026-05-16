@@ -15,154 +15,47 @@ import {
     Animated,
     Switch,
 } from 'react-native';
+
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useGame } from '../context/GameContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Ionicons } from '@expo/vector-icons';
-import { Category, Player, CustomCategory, GenericCategory } from '../types';
+import { Player } from '../types';
 import { getAvatarSource, TOTAL_AVATARS } from '../utils/avatarAssets';
-import { CATEGORY_IMAGES, CATEGORY_COLORS, CATEGORIES_BIBLICAL, CATEGORIES_GENERAL } from '../utils/categoryMetadata';
 import { GameModal } from '../components/GameModal';
 import { SettingsModal } from '../components/SettingsModal';
 import { HowToPlayModal } from '../components/HowToPlayModal';
 import { ScaleButton } from '../components/ScaleButton';
-import { CreateCategoryModal } from '../components/CreateCategoryModal';
-import { RewardedCategoryModal } from '../components/RewardedCategoryModal';
-import { ExpiredAdUnlockModal } from '../components/ExpiredAdUnlockModal';
-import { AdUnlockTimerBadge } from '../components/AdUnlockTimerBadge';
 import { usePurchase } from '../context/PurchaseContext';
-import { CATEGORIES } from '../data/categories';
 
 type SetupScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Setup'>;
 };
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
 export default function SetupScreen({ navigation }: SetupScreenProps) {
-    const isFocused = useIsFocused();
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const {
         state,
         addPlayer,
         removePlayer,
-        toggleCategory,
         setImpostorCount,
         setGameDuration,
         startGame,
         loadNewWord,
         playClick,
-        deleteCustomCategory,
         updatePlayerName,
         toggleImpostorHint,
-        forceRemoveCategory,
     } = useGame();
-    const {
-        isPremium,
-        rewardedUnlock,
-        isCategoryUnlockedByAd,
-        activateRewardedUnlock,
-        clearExpiredUnlock,
-    } = usePurchase();
+    const { isPremium } = usePurchase();
 
-    // Rewarded modal state
-    const [rewardedModalVisible, setRewardedModalVisible] = useState(false);
-    const [rewardedModalCategory, setRewardedModalCategory] = useState<{ id: string; label: string } | null>(null);
-    const [expiredCategoryInfo, setExpiredCategoryInfo] = useState<{ id: string, name: string } | null>(null);
-
-    const prevRewardedUnlock = useRef(rewardedUnlock);
-
-    // Show expiry modal when a rewarded-unlocked category expires while setup is open
-    useEffect(() => {
-        if (prevRewardedUnlock.current && !rewardedUnlock && isFocused) {
-            const expired = prevRewardedUnlock.current;
-            if (Date.now() >= expired.expiryTimestamp) {
-                const expiredCat = CATEGORIES.find(c => c.id === expired.categoryId);
-                const label = expiredCat
-                    ? (t.setup.categories_list as any)[expired.categoryId] || expiredCat.label
-                    : expired.categoryId;
-
-                // Trigger New Expiration Modal
-                setExpiredCategoryInfo({
-                    id: expired.categoryId,
-                    name: label
-                });
-
-                // Auto-deselect the category if it was selected
-                if (state.settings.selectedCategories.includes(expired.categoryId as any)) {
-                    forceRemoveCategory(expired.categoryId as any);
-                }
-            }
-        }
-        prevRewardedUnlock.current = rewardedUnlock;
-    }, [rewardedUnlock, isFocused]);
-
-    /** Returns the label of the category currently unlocked via ad, or null */
-    const getExistingUnlockLabel = (): string | null => {
-        if (!rewardedUnlock) return null;
-        if (Date.now() >= rewardedUnlock.expiryTimestamp) return null;
-        const cat = CATEGORIES.find(c => c.id === rewardedUnlock.categoryId);
-        return cat
-            ? (t.setup.categories_list as any)[rewardedUnlock.categoryId] || cat.label
-            : rewardedUnlock.categoryId;
-    };
-
-    /** Called when user taps a locked themed category */
-    const handleLockedCategoryPress = (categoryId: string, categoryLabel: string) => {
-        playClick();
-        setRewardedModalCategory({ id: categoryId, label: categoryLabel });
-        setRewardedModalVisible(true);
-    };
     const [playerName, setPlayerName] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
-    const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<CustomCategory | null>(null);
     const [showHowToPlay, setShowHowToPlay] = useState(false);
-
-    const [selectedMode, setSelectedMode] = useState<'classic' | 'online'>('classic');
-    const onlineModeAnim = useRef(new Animated.Value(1)).current;
-
-    // Tab State
-    const [activeTab, setActiveTab] = useState<'biblical' | 'general'>('biblical');
-
-    const CATEGORIES_BIBLICAL: { id: Category; label: string }[] = [
-        { id: 'personajes_biblicos', label: t.setup.categories_list.personajes_biblicos },
-        { id: 'libros_biblicos', label: t.setup.categories_list.libros_biblicos },
-        { id: 'objetos_biblicos', label: t.setup.categories_list.objetos_biblicos },
-        { id: 'oficios_biblicos', label: t.setup.categories_list.oficios_biblicos },
-        { id: 'lugares_biblicos', label: t.setup.categories_list.lugares_biblicos },
-        { id: 'mujeres_biblicas', label: t.setup.categories_list.mujeres_biblicas },
-        { id: 'conceptos_teologicos', label: t.setup.categories_list.conceptos_teologicos },
-        { id: 'milagros_biblicos', label: t.setup.categories_list.milagros_biblicos },
-        { id: 'parabolas_jesus', label: t.setup.categories_list.parabolas_jesus },
-    ];
-
-    const CATEGORIES_GENERAL: { id: GenericCategory; label: string }[] = [
-        { id: 'acciones', label: t.setup.categories_list.acciones },
-        { id: 'objetos', label: t.setup.categories_list.objetos },
-        { id: 'deportes', label: t.setup.categories_list.deportes },
-        { id: 'animales', label: t.setup.categories_list.animales },
-        { id: 'comida', label: t.setup.categories_list.comida },
-        { id: 'profesiones', label: t.setup.categories_list.profesiones },
-        { id: 'herramientas', label: t.setup.categories_list.herramientas },
-        { id: 'marcas', label: t.setup.categories_list.marcas },
-        { id: 'famosos', label: t.setup.categories_list.famosos },
-    ];
-
-    // Calculate selected counts for badges
-    const biblicalSelectedCount =
-        CATEGORIES_BIBLICAL.filter(c => state.settings.selectedCategories.includes(c.id)).length +
-        state.customCategories.filter(c => state.settings.selectedCategories.includes(c.id) && (c.type === 'biblical' || !c.type)).length;
-
-    const genericSelectedCount =
-        CATEGORIES_GENERAL.filter(c => state.settings.selectedCategories.includes(c.id)).length +
-        state.customCategories.filter(c => state.settings.selectedCategories.includes(c.id) && c.type === 'general').length;
 
     // Player Name Editing
     const [showEditNameModal, setShowEditNameModal] = useState(false);
@@ -187,19 +80,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 Animated.timing(bounceAnim, { toValue: 1.0, duration: 150, useNativeDriver: true }),
             ]).start();
         }, 300);
-    };
-
-    const handleOnlinePress = () => {
-        if (selectedMode === 'online') return;
-        playClick();
-        setSelectedMode('online');
-        Animated.sequence([
-            Animated.timing(onlineModeAnim, { toValue: 0.95, duration: 80, useNativeDriver: true }),
-            Animated.spring(onlineModeAnim, { toValue: 1, friction: 5, tension: 80, useNativeDriver: true }),
-        ]).start(() => {
-            navigation.navigate('OnlineLobby');
-            setTimeout(() => setSelectedMode('classic'), 300);
-        });
     };
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -356,67 +236,19 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                             <Ionicons name="arrow-back" size={28} color="#333" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>{t.setup.title}</Text>
-                        <TouchableOpacity
-                            style={styles.settingsButton}
-                            onPress={() => {
-                                playClick();
-                                setShowSettings(true);
-                            }}
-                        >
-                            <Ionicons name="settings-outline" size={26} color="#333" />
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.section}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Text style={[styles.sectionTitle, { marginBottom: 0 }]}>{t.setup.mode}</Text>
+                        <View style={styles.headerActions}>
                             <TouchableOpacity
                                 style={styles.helpButtonInternal}
-                                onPress={() => {
-                                    playClick();
-                                    setShowHowToPlay(true);
-                                }}
+                                onPress={() => { playClick(); setShowHowToPlay(true); }}
                             >
-                                <Ionicons name="help-circle-outline" size={24} color="#5B7FDB" />
+                                <Ionicons name="help-circle-outline" size={26} color="#5B7FDB" />
                             </TouchableOpacity>
-                        </View>
-                        <View style={styles.modeContainer}>
                             <TouchableOpacity
-                                style={[styles.modeCard, selectedMode === 'classic' && styles.modeCardSelected]}
-                                activeOpacity={0.8}
-                                onPress={() => {
-                                    playClick();
-                                    setSelectedMode('classic');
-                                }}
+                                style={styles.settingsButton}
+                                onPress={() => { playClick(); setShowSettings(true); }}
                             >
-                                <Image source={require('../../assets/mode_1.png')} style={styles.modeImageStickOut} resizeMode="contain" />
-                                <View style={styles.modeContent}>
-                                    <Text style={styles.modeTitle}>{t.setup.classic}</Text>
-                                    <Text style={styles.modeSubtitle}>{t.setup.classic_desc}</Text>
-                                </View>
-                                {selectedMode === 'classic' && (
-                                    <View style={styles.checkmark}>
-                                        <Ionicons name="checkmark" size={14} color="#FFF" />
-                                    </View>
-                                )}
+                                <Ionicons name="settings-outline" size={26} color="#333" />
                             </TouchableOpacity>
-
-                            <AnimatedTouchableOpacity
-                                style={[styles.modeCard, selectedMode === 'online' && styles.modeCardSelected, { transform: [{ scale: onlineModeAnim }] }]}
-                                activeOpacity={0.8}
-                                onPress={handleOnlinePress}
-                            >
-                                <Image source={require('../../assets/mode_2.png')} style={styles.modeImageStickOut} resizeMode="contain" />
-                                <View style={styles.modeContent}>
-                                    <Text style={styles.modeTitle}>{t.setup.online}</Text>
-                                    <Text style={styles.modeSubtitle}>{t.setup.online_desc}</Text>
-                                </View>
-                                {selectedMode === 'online' && (
-                                    <View style={styles.checkmark}>
-                                        <Ionicons name="checkmark" size={14} color="#FFF" />
-                                    </View>
-                                )}
-                            </AnimatedTouchableOpacity>
                         </View>
                     </View>
 
@@ -491,375 +323,23 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                     </Animated.View>
 
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>{t.setup.categories}</Text>
-                        <View style={styles.tabContainer}>
-                            <TouchableOpacity
-                                style={[styles.tabButton, activeTab === 'biblical' && styles.tabButtonActive]}
-                                onPress={() => {
-                                    playClick();
-                                    setActiveTab('biblical');
-                                }}
-                            >
-                                <Text style={[styles.tabText, activeTab === 'biblical' && styles.tabTextActive]}>{t.setup.biblical_tab}</Text>
-                                {
-                                    <View style={styles.tabBadge}>
-                                        <Text style={styles.tabBadgeText}>{biblicalSelectedCount}</Text>
+                        <TouchableOpacity
+                            style={styles.settingRow}
+                            activeOpacity={0.7}
+                            onPress={() => { playClick(); navigation.navigate('Categories'); }}
+                        >
+                            <Text style={styles.settingTitle}>{t.setup.categories}</Text>
+                            <View style={styles.categoriesTriggerRight}>
+                                {state.settings.selectedCategories.length > 0 && (
+                                    <View style={styles.categoriesCountBadge}>
+                                        <Text style={styles.categoriesCountText}>
+                                            {state.settings.selectedCategories.length}
+                                        </Text>
                                     </View>
-                                }
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.tabButton, activeTab === 'general' && styles.tabButtonActive]}
-                                onPress={() => {
-                                    playClick();
-                                    setActiveTab('general');
-                                }}
-                            >
-                                <Text style={[styles.tabText, activeTab === 'general' && styles.tabTextActive]}>{t.setup.general_tab}</Text>
-                                {
-                                    <View style={styles.tabBadge}>
-                                        <Text style={styles.tabBadgeText}>{genericSelectedCount}</Text>
-                                    </View>
-                                }
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.categoriesGrid}>
-                            {activeTab === 'biblical' ? (
-                                <>
-                                    {CATEGORIES_BIBLICAL.map((category) => {
-                                        const isSelected = state.settings.selectedCategories.includes(category.id);
-                                        const isPremiumCategory = ['oficios_biblicos', 'lugares_biblicos', 'conceptos_teologicos', 'mujeres_biblicas', 'milagros_biblicos', 'parabolas_jesus'].includes(category.id);
-                                        const isLocked = isPremiumCategory && !state.isPremium && !isCategoryUnlockedByAd(category.id);
-
-                                        return (
-                                            <TouchableOpacity
-                                                key={category.id}
-                                                style={[
-                                                    styles.categoryCard,
-                                                    { backgroundColor: isLocked ? '#E2E8F0' : CATEGORY_COLORS[category.id] },
-                                                    isSelected && styles.categoryCardSelected,
-                                                ]}
-                                                onPress={() => {
-                                                    if (isLocked) {
-                                                        const label = t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.id;
-                                                        handleLockedCategoryPress(category.id, label);
-                                                        return;
-                                                    }
-                                                    playClick();
-                                                    toggleCategory(category.id);
-                                                }}
-                                                activeOpacity={isLocked ? 1 : 0.8}
-                                            >
-                                                <Image
-                                                    source={CATEGORY_IMAGES[category.id]}
-                                                    style={[
-                                                        styles.categoryImage,
-                                                        isLocked && { opacity: 0.3 }
-                                                    ]}
-                                                    resizeMode="contain"
-                                                />
-
-                                                {(!isSelected && !isLocked) && (
-                                                    <View style={styles.inactiveOverlay} />
-                                                )}
-
-                                                <View style={styles.categoryNamePill}>
-                                                    <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                        {t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.label}
-                                                    </Text>
-                                                </View>
-
-                                                {isSelected && (
-                                                    <View style={styles.categoryCheckBadge}>
-                                                        <Ionicons name="checkmark" size={12} color="#FFF" />
-                                                    </View>
-                                                )}
-
-                                                {(!isSelected || isLocked) && (
-                                                    <View style={styles.inactiveOverlay} />
-                                                )}
-
-                                                {isLocked && (
-                                                    <Image
-                                                        source={require('../../assets/blocked_level_1.png')}
-                                                        style={styles.lockedIcon}
-                                                        resizeMode="contain"
-                                                    />
-                                                )}
-
-                                                {/* Timer badge for ad-unlocked categories */}
-                                                {isPremiumCategory && !state.isPremium && isCategoryUnlockedByAd(category.id) && (
-                                                    <AdUnlockTimerBadge categoryId={category.id} />
-                                                )}
-                                            </TouchableOpacity>
-                                        );
-
-                                    })}
-
-                                    {/* Custom Categories Rendered in 'Biblical' Tab */}
-                                    {state.customCategories
-                                        .filter(c => c.type === 'biblical' || !c.type) // Treat undefined as biblical for legacy
-                                        .map((category) => {
-                                            const isSelected = state.settings.selectedCategories.includes(category.id);
-                                            return (
-                                                <TouchableOpacity
-                                                    key={category.id}
-                                                    style={[
-                                                        styles.categoryCard,
-                                                        { backgroundColor: '#A0AEC0' },
-                                                        isSelected && styles.categoryCardSelected,
-                                                    ]}
-                                                    onPress={() => {
-                                                        playClick();
-                                                        toggleCategory(category.id as any);
-                                                    }}
-                                                    activeOpacity={0.8}
-                                                >
-                                                    <View style={styles.customIconContainer}>
-                                                        <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
-                                                    </View>
-
-                                                    {!isSelected && (
-                                                        <View style={styles.inactiveOverlay} />
-                                                    )}
-
-                                                    <View style={styles.categoryNamePill}>
-                                                        <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                            {category.name} ({category.words.length})
-                                                        </Text>
-                                                    </View>
-
-                                                    {isSelected && (
-                                                        <View style={styles.categoryCheckBadge}>
-                                                            <Ionicons name="checkmark" size={12} color="#FFF" />
-                                                        </View>
-                                                    )}
-
-                                                    <TouchableOpacity
-                                                        style={styles.deleteCategoryButton}
-                                                        onPress={() => {
-                                                            playClick();
-                                                            showGameModal(
-                                                                t.custom_category.delete_title,
-                                                                t.custom_category.delete_confirm.replace('%{name}', category.name),
-                                                                'danger',
-                                                                t.custom_category.delete_button,
-                                                                () => deleteCustomCategory(category.id)
-                                                            );
-                                                        }}
-                                                    >
-                                                        <Ionicons name="trash-outline" size={16} color="#FFF" />
-                                                    </TouchableOpacity>
-
-                                                    <TouchableOpacity
-                                                        style={styles.editCategoryButton}
-                                                        onPress={() => {
-                                                            playClick();
-                                                            setEditingCategory(category);
-                                                            setShowCreateCategoryModal(true);
-                                                        }}
-                                                    >
-                                                        <Ionicons name="pencil" size={16} color="#FFF" />
-                                                    </TouchableOpacity>
-                                                </TouchableOpacity>
-                                            );
-                                        })}
-
-                                    <TouchableOpacity
-                                        style={[styles.categoryCard, styles.addCategoryCard]}
-                                        onPress={() => {
-                                            playClick();
-                                            const isPro = state.isPremium;
-
-                                            // Free users can create custom categories in Biblical tab (Limited to 1)
-                                            if (!isPro && state.customCategories.length >= 1) {
-                                                navigation.navigate('Paywall');
-                                                return;
-                                            }
-
-                                            setShowCreateCategoryModal(true);
-                                        }}
-                                    >
-                                        <Ionicons name="add-circle-outline" size={40} color="#CBD5E0" />
-                                        <Text style={styles.addCategoryText}>{t.setup.add}</Text>
-                                        {!state.isPremium && state.customCategories.length >= 1 && (
-                                            <Image
-                                                source={require('../../assets/blocked_level_1.png')}
-                                                style={styles.miniLockedIcon}
-                                                resizeMode="contain"
-                                            />
-                                        )}
-                                    </TouchableOpacity>
-                                </>
-                            ) : (
-                                <>
-                                    {CATEGORIES_GENERAL.map((category) => {
-                                        const isSelected = state.settings.selectedCategories.includes(category.id);
-                                        const isPremiumCategory = !['acciones', 'objetos', 'deportes'].includes(category.id);
-                                        const isLocked = isPremiumCategory && !state.isPremium && !isCategoryUnlockedByAd(category.id);
-
-                                        return (
-                                            <TouchableOpacity
-                                                key={category.id}
-                                                style={[
-                                                    styles.categoryCard,
-                                                    { backgroundColor: isLocked ? '#E2E8F0' : CATEGORY_COLORS[category.id] },
-                                                    isSelected && styles.categoryCardSelected,
-                                                ]}
-                                                onPress={() => {
-                                                    if (isLocked) {
-                                                        const label = t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.id;
-                                                        handleLockedCategoryPress(category.id, label);
-                                                        return;
-                                                    }
-                                                    playClick();
-                                                    toggleCategory(category.id);
-                                                }}
-                                                activeOpacity={isLocked ? 1 : 0.8}
-                                            >
-                                                {/* Use placeholder or specific image if available */}
-                                                <Image
-                                                    source={CATEGORY_IMAGES[category.id]}
-                                                    style={[
-                                                        styles.categoryImage,
-                                                        isLocked && { opacity: 0.3 }
-                                                    ]}
-                                                    resizeMode="contain"
-                                                />
-
-                                                {(!isSelected && !isLocked) && (
-                                                    <View style={styles.inactiveOverlay} />
-                                                )}
-
-                                                <View style={styles.categoryNamePill}>
-                                                    <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                        {t.setup.categories_list[category.id as keyof typeof t.setup.categories_list] || category.label}
-                                                    </Text>
-                                                </View>
-
-                                                {isSelected && (
-                                                    <View style={styles.categoryCheckBadge}>
-                                                        <Ionicons name="checkmark" size={12} color="#FFF" />
-                                                    </View>
-                                                )}
-
-                                                {(!isSelected || isLocked) && (
-                                                    <View style={styles.inactiveOverlay} />
-                                                )}
-
-                                                {isLocked && (
-                                                    <Image
-                                                        source={require('../../assets/blocked_level_1.png')}
-                                                        style={styles.lockedIcon}
-                                                        resizeMode="contain"
-                                                    />
-                                                )}
-
-                                                {/* Timer badge for ad-unlocked categories */}
-                                                {isPremiumCategory && !state.isPremium && isCategoryUnlockedByAd(category.id) && (
-                                                    <AdUnlockTimerBadge categoryId={category.id} />
-                                                )}
-                                            </TouchableOpacity>
-                                        );
-                                    })}
-
-                                    {/* Custom Categories Rendered in 'Generales' Tab */}
-                                    {state.customCategories
-                                        .filter(c => c.type === 'general')
-                                        .map((category) => {
-                                            const isSelected = state.settings.selectedCategories.includes(category.id);
-                                            return (
-                                                <TouchableOpacity
-                                                    key={category.id}
-                                                    style={[
-                                                        styles.categoryCard,
-                                                        { backgroundColor: '#A0AEC0' },
-                                                        isSelected && styles.categoryCardSelected,
-                                                    ]}
-                                                    onPress={() => {
-                                                        playClick();
-                                                        toggleCategory(category.id as any);
-                                                    }}
-                                                    activeOpacity={0.8}
-                                                >
-                                                    <View style={styles.customIconContainer}>
-                                                        <Text style={styles.customIconText}>{category.name.charAt(0).toUpperCase()}</Text>
-                                                    </View>
-
-                                                    {!isSelected && (
-                                                        <View style={styles.inactiveOverlay} />
-                                                    )}
-
-                                                    <View style={styles.categoryNamePill}>
-                                                        <Text style={styles.categoryNameText} numberOfLines={2}>
-                                                            {category.name} ({category.words.length})
-                                                        </Text>
-                                                    </View>
-
-                                                    {isSelected && (
-                                                        <View style={styles.categoryCheckBadge}>
-                                                            <Ionicons name="checkmark" size={12} color="#FFF" />
-                                                        </View>
-                                                    )}
-
-                                                    <TouchableOpacity
-                                                        style={styles.deleteCategoryButton}
-                                                        onPress={() => {
-                                                            playClick();
-                                                            showGameModal(
-                                                                t.custom_category.delete_title,
-                                                                t.custom_category.delete_confirm.replace('%{name}', category.name),
-                                                                'danger',
-                                                                t.custom_category.delete_button,
-                                                                () => deleteCustomCategory(category.id)
-                                                            );
-                                                        }}
-                                                    >
-                                                        <Ionicons name="trash-outline" size={16} color="#FFF" />
-                                                    </TouchableOpacity>
-
-                                                    <TouchableOpacity
-                                                        style={styles.editCategoryButton}
-                                                        onPress={() => {
-                                                            playClick();
-                                                            setEditingCategory(category);
-                                                            setShowCreateCategoryModal(true);
-                                                        }}
-                                                    >
-                                                        <Ionicons name="pencil" size={16} color="#FFF" />
-                                                    </TouchableOpacity>
-                                                </TouchableOpacity>
-                                            );
-                                        })}
-
-                                    <TouchableOpacity
-                                        style={[styles.categoryCard, styles.addCategoryCard]}
-                                        onPress={() => {
-                                            playClick();
-                                            const isPro = state.isPremium;
-
-                                            // STRICTLY LOCKED for Free Users in General Tab
-                                            if (!isPro) {
-                                                navigation.navigate('Paywall');
-                                                return;
-                                            }
-
-                                            setShowCreateCategoryModal(true);
-                                        }}
-                                    >
-                                        <Ionicons name="add-circle-outline" size={40} color={!state.isPremium ? "#A0AEC0" : "#CBD5E0"} />
-                                        <Text style={styles.addCategoryText}>{t.setup.add}</Text>
-                                        {!state.isPremium && (
-                                            <Image
-                                                source={require('../../assets/blocked_level_1.png')}
-                                                style={styles.miniLockedIcon}
-                                                resizeMode="contain"
-                                            />
-                                        )}
-                                    </TouchableOpacity>
-                                </>
-                            )}
-                        </View>
+                                )}
+                                <Ionicons name="chevron-forward" size={20} color="#666" />
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.section}>
@@ -992,56 +472,6 @@ export default function SetupScreen({ navigation }: SetupScreenProps) {
                 visible={showSettings}
                 onClose={() => setShowSettings(false)}
             />
-            <CreateCategoryModal
-                visible={showCreateCategoryModal}
-                onClose={() => {
-                    setShowCreateCategoryModal(false);
-                    setEditingCategory(null);
-                }}
-                initialCategory={editingCategory}
-                categoryType={activeTab}
-            />
-
-            {rewardedModalCategory && (
-                <RewardedCategoryModal
-                    visible={rewardedModalVisible}
-                    categoryId={rewardedModalCategory.id}
-                    categoryLabel={rewardedModalCategory.label}
-                    existingUnlockCategoryLabel={
-                        rewardedUnlock && rewardedModalCategory && rewardedUnlock.categoryId !== rewardedModalCategory.id
-                            ? getExistingUnlockLabel()
-                            : null
-                    }
-                    onUnlockGranted={async () => {
-                        if (rewardedModalCategory) {
-                            await activateRewardedUnlock(rewardedModalCategory.id);
-                            // Auto-select the just-unlocked category
-                            if (!state.settings.selectedCategories.includes(rewardedModalCategory.id as any)) {
-                                toggleCategory(rewardedModalCategory.id as any);
-                            }
-                        }
-                        setRewardedModalVisible(false);
-                    }}
-                    onBuyPremium={() => {
-                        setRewardedModalVisible(false);
-                        navigation.navigate('Paywall');
-                    }}
-                    onClose={() => setRewardedModalVisible(false)}
-                />
-            )}
-
-            {expiredCategoryInfo && (
-                <ExpiredAdUnlockModal
-                    visible={!!expiredCategoryInfo}
-                    categoryName={expiredCategoryInfo.name}
-                    onClose={() => setExpiredCategoryInfo(null)}
-                    onBuyPremium={() => {
-                        setExpiredCategoryInfo(null);
-                        navigation.navigate('Paywall');
-                    }}
-                />
-            )}
-
             <HowToPlayModal
                 visible={showHowToPlay}
                 onClose={() => setShowHowToPlay(false)}
@@ -1155,8 +585,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
     },
-    helpButton: {
-        padding: 4,
+    headerActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
     },
     helpButtonInternal: {
         padding: 4,
@@ -1190,115 +622,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#333',
     },
-    tabContainer: {
-        flexDirection: 'row',
-        backgroundColor: '#E2E8F0',
-        borderRadius: 12,
-        padding: 4,
-        marginBottom: 16,
-    },
-    tabButton: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        borderRadius: 10,
-    },
-    tabButtonActive: {
-        backgroundColor: '#FFF',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    tabText: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#718096',
-    },
-    tabTextActive: {
-        color: '#2D3748',
-        fontWeight: '700',
-    },
-    tabBadge: {
-        backgroundColor: '#E53E3E',
-        borderRadius: 10,
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        marginLeft: 6,
-        minWidth: 20,
-        alignItems: 'center',
-    },
-    tabBadgeText: {
-        color: '#FFF',
-        fontSize: 10,
-        fontWeight: 'bold',
-    },
-    modeContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20, // Space for the sticking out image
-    },
-    modeCard: {
-        width: '48%',
-        backgroundColor: '#FFF',
-        borderRadius: 20,
-        borderWidth: 2,
-        borderColor: '#E0E0E0',
-        paddingTop: 40,
-        paddingBottom: 16,
-        paddingHorizontal: 12,
-        alignItems: 'center',
-        position: 'relative',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 4,
-    },
-    modeCardSelected: {
-        borderColor: '#5B7FDB',
-        backgroundColor: '#EBF0FF',
-    },
-    modeImageStickOut: {
-        width: 80,
-        height: 80,
-        position: 'absolute',
-        top: -40,
-        alignSelf: 'center',
-        zIndex: 1,
-    },
-    modeContent: {
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    modeTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 4,
-        textAlign: 'center',
-    },
-    modeSubtitle: {
-        fontSize: 11,
-        color: '#666',
-        textAlign: 'center',
-        lineHeight: 14,
-    },
-    checkmark: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-        backgroundColor: '#5B7FDB',
-        width: 22,
-        height: 22,
-        borderRadius: 11,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
     playersHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -1385,164 +708,23 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#666',
     },
-    categoriesGrid: {
+    categoriesTriggerRight: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-    },
-    categoryCard: {
-        width: '48%',
-        aspectRatio: 1,
-        borderRadius: 20,
-        padding: 10,
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        marginBottom: 40,
-        position: 'relative',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-        elevation: 4,
-        borderWidth: 2,
-        borderColor: 'transparent',
+        gap: 8,
     },
-    categoryCardSelected: {
-        borderColor: '#5B7FDB',
-        borderWidth: 3,
-        transform: [{ scale: 1.02 }],
-    },
-    categoryCardUnselected: {},
-    inactiveOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(255, 255, 255, 0.4)',
-        borderRadius: 20,
-        zIndex: 1,
-    },
-    categoryImage: {
-        width: '90%',
-        height: '90%',
-        position: 'absolute',
-        top: 20,
-    },
-    categoryNamePill: {
-        position: 'absolute',
-        bottom: -20,
-        backgroundColor: '#FFF',
-        paddingVertical: 6,
-        paddingHorizontal: 10,
+    categoriesCountBadge: {
+        backgroundColor: '#5B7FDB',
         borderRadius: 12,
-        width: '100%',
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        minWidth: 24,
         alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-        zIndex: 10, // Ensure it sits above the overlay
-        minHeight: 44,
     },
-    categoryNameText: {
+    categoriesCountText: {
+        color: '#FFF',
         fontSize: 13,
         fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center',
-    },
-    categoryCheckBadge: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-        backgroundColor: '#5B7FDB',
-        width: 24,
-        height: 24,
-        borderRadius: 12,
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 10,
-        borderWidth: 2,
-        borderColor: '#FFF',
-    },
-    customIconContainer: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: 'rgba(255,255,255,0.3)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    customIconText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#FFF',
-    },
-    addCategoryCard: {
-        backgroundColor: '#F7FAFC',
-        borderWidth: 2,
-        borderColor: '#E2E8F0',
-        borderStyle: 'dashed',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingBottom: 0,
-    },
-    addCategoryText: {
-        marginTop: 8,
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#A0AEC0',
-    },
-    deleteCategoryButton: {
-        position: 'absolute',
-        top: 8,
-        left: 8,
-        backgroundColor: '#E53E3E',
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10,
-    },
-    editCategoryButton: {
-        position: 'absolute',
-        top: 8,
-        left: 44, // Offset from delete button
-        backgroundColor: '#4299E1',
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10,
-    },
-    miniLockedIcon: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-        width: 24,
-        height: 24,
-        zIndex: 10,
-    },
-    lockedIcon: {
-        position: 'absolute',
-        top: '20%',
-        width: '50%',
-        height: '50%',
-        zIndex: 10,
-        opacity: 0.9,
-    },
-    adUnlockBadge: {
-        position: 'absolute',
-        top: 6,
-        left: 6,
-        backgroundColor: 'rgba(91,127,219,0.85)',
-        borderRadius: 10,
-        width: 20,
-        height: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10,
     },
     // Word Preview
 
