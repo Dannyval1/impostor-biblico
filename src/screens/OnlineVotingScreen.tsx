@@ -13,6 +13,7 @@ import { QuickMessagePanel } from '../components/QuickMessagePanel';
 import { OnlineRoomPlaceholder } from '../components/OnlineRoomPlaceholder';
 import { GameModal } from '../components/GameModal';
 import { OnlineRoundAnswersModal } from '../components/OnlineRoundAnswersModal';
+import { ChatPanel } from '../components/ChatPanel';
 import { EliminatedSpectatorHeader } from '../components/EliminatedSpectatorHeader';
 import { getRoundAnswerEntries } from '../utils/onlineRoundAnswers';
 import { useEliminationIntro } from '../hooks/useEliminationIntro';
@@ -58,6 +59,10 @@ export default function OnlineVotingScreen() {
     const roundAnswerEntries = useMemo(
         () => (room ? getRoundAnswerEntries(room) : []),
         [room, cluesFingerprint]
+    );
+    const pendingVoters = useMemo(
+        () => players.filter(p => !p.isEliminated && p.isConnected !== false && !p.vote),
+        [players]
     );
 
     useEffect(() => {
@@ -169,9 +174,17 @@ export default function OnlineVotingScreen() {
                     </View>
                 )}
                 {gameState.room?.status === 'voting' && votePhaseStart != null && (
-                    <Text style={styles.voteTimerHint}>
-                        {t.online.voting_time_left.replace('{s}', String(voteSecondsLeft))}
-                    </Text>
+                    <>
+                        <Text style={styles.voteTimerHint}>
+                            {t.online.voting_time_left.replace('{s}', String(voteSecondsLeft))}
+                        </Text>
+                        {pendingVoters.length > 0 && (
+                            <Text style={styles.pendingVoteHint}>
+                                {(t.online.voting_missing_players ?? 'Falta votar: {players}')
+                                    .replace('{players}', pendingVoters.map(p => p.name.trim()).join(', '))}
+                            </Text>
+                        )}
+                    </>
                 )}
                 <View style={styles.headerActionsRow}>
                     <TouchableOpacity
@@ -197,6 +210,11 @@ export default function OnlineVotingScreen() {
 
             <QuickMessagePanel variant="voting" isEliminated={isEliminated} />
             <EmojiReactionBar />
+            <ChatPanel
+                defaultExpanded={false}
+                style={{ marginHorizontal: 12, marginBottom: 4 }}
+                onUpgradePress={() => navigation.navigate('Paywall')}
+            />
 
             <View style={styles.footer}>
                 {isEliminated && introActive ? null : isEliminated ? (
@@ -370,6 +388,14 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textAlign: 'center',
         paddingHorizontal: 16,
+        fontWeight: '600',
+    },
+    pendingVoteHint: {
+        color: 'rgba(255,255,255,0.58)',
+        fontSize: 12,
+        marginTop: 4,
+        paddingHorizontal: 18,
+        textAlign: 'center',
         fontWeight: '600',
     },
     listContent: {
